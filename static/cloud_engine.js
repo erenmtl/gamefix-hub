@@ -2,7 +2,7 @@
 // Automatically powers all /api/* endpoints when hosted on Cloudflare Pages or GitHub Pages.
 
 (function () {
-  const SEED = window.GAMEFIX_SEED_DATA || {
+  const SEED = window.GAMEFIX_SEED_DATA || window.GAMEFIX_SEED || {
     games: [],
     issues: [],
     threads: [],
@@ -12,14 +12,14 @@
   };
 
   const STORAGE_KEYS = {
-    games: 'gf_cloud_games_v3',
-    issues: 'gf_cloud_issues_v3',
-    threads: 'gf_cloud_threads_v3',
-    users: 'gf_cloud_users_v3',
-    sessions: 'gf_cloud_sessions_v3',
-    verifications: 'gf_cloud_verifications_v3',
-    votes: 'gf_cloud_votes_v3',
-    aiCache: 'gf_cloud_aicache_v3'
+    games: 'hc_cloud_games_v4',
+    issues: 'hc_cloud_issues_v4',
+    threads: 'hc_cloud_threads_v4',
+    users: 'hc_cloud_users_v4',
+    sessions: 'hc_cloud_sessions_v4',
+    verifications: 'hc_cloud_verifications_v4',
+    votes: 'hc_cloud_votes_v4',
+    aiCache: 'hc_cloud_aicache_v4'
   };
 
   function loadStore(key, fallback) {
@@ -705,7 +705,7 @@
           {
             id: Date.now(),
             thread_id: 1,
-            author_name: 'GameFix AI (Otomatik Forum Çözümleyici)',
+            author_name: 'HemenÇöz AI (Otomatik Forum Çözümleyici)',
             is_ai: 1,
             ai_mode: aiRes.mode,
             content: aiRes.markdown,

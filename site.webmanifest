@@ -1,10 +1,10 @@
 {
-  "name": "GameFix AI Hub - Oyun Sorunları & Yapay Zeka Çözüm Merkezi",
-  "short_name": "GameFix AI",
-  "description": "Valorant, CS2, LoL, GTA V, Minecraft ve 45+ popüler oyunun hata kodlarını, FPS düşüşlerini ve çökmelerini yapay zeka ve forum rehberleriyle çözen platform.",
+  "name": "HemenÇöz - Oyun Sorunları, Hata Kodları & Performans Çözüm Merkezi",
+  "short_name": "HemenÇöz",
+  "description": "Valorant, CS2, LoL, GTA V, Minecraft, RDR 2, Bannerlord ve 30+ popüler oyunun hata kodlarını, FPS düşüşlerini ve çökmelerini forum rehberleri ve yapay zeka ile çözen platform.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#161b24",
+  "background_color": "#141923",
   "theme_color": "#5e9c88",
   "lang": "tr-TR",
   "icons": [

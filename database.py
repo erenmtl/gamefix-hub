@@ -1454,6 +1454,56 @@ def seed_initial_data(cursor):
             )
         """, issue)
 
+    # Also seed all games and issues from WORLD_GAMES_CATALOG so the hub has 31+ games and 55+ issues out of the box
+    try:
+        from game_catalog import WORLD_GAMES_CATALOG
+        existing_slugs = {g["slug"] for g in games_data}
+        for idx, cg in enumerate(WORLD_GAMES_CATALOG):
+            if cg["slug"] not in existing_slugs:
+                cursor.execute("""
+                    INSERT INTO games (slug, name, short_name, category, developer, accent_color, secondary_color, engine, anticheat, banner_subtitle, common_tags)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    cg["slug"],
+                    cg["name"],
+                    cg["short_name"],
+                    cg["category"],
+                    cg["developer"],
+                    cg["accent_color"],
+                    cg["secondary_color"],
+                    cg["engine"],
+                    cg["anticheat"],
+                    cg["banner_subtitle"],
+                    json.dumps(cg.get("common_tags", []))
+                ))
+                existing_slugs.add(cg["slug"])
+
+            for iss_idx, c_iss in enumerate(cg.get("default_issues", [])):
+                cursor.execute("""
+                    INSERT INTO issues (
+                        game_slug, title, error_code, severity, category, symptom_summary,
+                        forum_sources, ai_root_cause, ai_solution_steps, verify_command,
+                        success_rate, views, helpful_votes, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    cg["slug"],
+                    c_iss["title"],
+                    c_iss["error_code"],
+                    c_iss["severity"],
+                    c_iss["category"],
+                    c_iss["symptom_summary"],
+                    json.dumps(c_iss.get("forum_sources", [])),
+                    c_iss["ai_root_cause"],
+                    json.dumps(c_iss.get("ai_solution_steps", [])),
+                    c_iss.get("verify_command", "sfc /verifyonly"),
+                    c_iss.get("success_rate", 95),
+                    6800 + (idx * 430) + (iss_idx * 250),
+                    520 + (idx * 35) + (iss_idx * 18),
+                    "2026-10-18"
+                ))
+    except Exception as e:
+        print("Catalog seed warning:", e)
+
     threads_data = [
         {
             "game_slug": "valorant",
@@ -1463,13 +1513,13 @@ def seed_initial_data(cursor):
             "error_code": "VAN 9003",
             "system_specs": "Windows 11 Pro 24H2 | Ryzen 5 5600X | RTX 4060 | ASUS TUF B550-PLUS",
             "content": "Arkadaşlar BIOS'a girdim OS Type kısmını Windows UEFI Mode yaptım ama oyuna girince 2. rauntta VAN 9003 verip atıyor. msinfo32'ye baktığımda Güvenli Önyükleme Durumu hala Kapalı görünüyor. Nasıl aktif ederim?",
-            "status": "AI Çözümledi",
+            "status": "HemenÇöz AI Çözümledi",
             "upvotes": 42,
             "views": 610,
             "created_at": "15 dakika önce",
             "replies": [
                 {
-                    "author_name": "GameFix AI (Teknik Analiz Motoru)",
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Merhaba **EmreK_VLR**! ASUS B550 serisi anakartlarda sadece `OS Type: Windows UEFI Mode` seçmek, eğer daha önce Key Management anahtarları silindiyse Secure Boot'u `Active` durumuna geçirmez.\n\n### Adım Adım Kesin Çözüm (ASUS BIOS):\n1. Bilgisayarı yeniden başlatıp `DEL` veya `F2` ile BIOS'a girin ve `F7` tuşuyla **Advanced Mode**'a geçin.\n2. **Boot** -> **CSM (Compatibility Support Module)** menüsüne girip `Launch CSM` ayarının **Disabled** olduğundan emin olun.\n3. **Boot** -> **Secure Boot** menüsüne dönün. `OS Type` değerini **Windows UEFI Mode** yapın.\n4. Hemen altındaki **Key Management** sekmesine girin ve **Install Default Secure Boot Keys** (veya *Restore Factory Keys*) seçeneğine tıklayıp onaylayın.\n5. `Secure Boot State` satırının **User / Active** olarak değiştiğini göreceksiniz. `F10` ile kaydedip çıkın.",
@@ -1494,13 +1544,13 @@ def seed_initial_data(cursor):
             "error_code": "CS2-STUTTER",
             "system_specs": "Windows 11 | i5-13400F | RX 6700 XT | 16GB DDR4 3200MHz",
             "content": "Özellikle Ancient ve Anubis haritalarında suya girince veya molotof/sis atıldığında oyun inanılmaz takılıyor. AMD Adrenalin sürücüm güncel, başlatma seçeneklerinde -high -threads 8 yazılı.",
-            "status": "AI Çözümledi",
+            "status": "HemenÇöz AI Çözümledi",
             "upvotes": 29,
             "views": 420,
             "created_at": "1 saat önce",
             "replies": [
                 {
-                    "author_name": "GameFix AI (Teknik Analiz Motoru)",
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Sistem özelliklerinize (**i5-13400F hibrit P/E çekirdek mimarisi + RX 6700 XT**) göre sorunun iki temel kaynağı tespit edildi:\n\n1. **`-high` ve `-threads 8` Başlatma Kodları:** i5-13400F işlemcinizde Performans (P) ve Verimlilik (E) çekirdekleri bulunur. `-threads 8` komutu Source 2 motorunun iş parçacıklarını yanlışlıkla E-Core çekirdeklerine sıkıştırarak su/parçacık fiziğinde ağır darboğaz yaratır. **Başlatma seçeneklerindeki tüm kodları silin.**\n2. **AMD DXNAVI Gölgelendirici Önbelleği:** AMD Software: Adrenalin Edition -> **Oyun** -> **Ekran Kartları** -> En alttaki **Gelişmiş** bölümünden **Gölgelendirici Önbelleğini Sıfırla (Reset Shader Cache)** işlemini uygulayın ve CS2 içinde **Parçacık Detayı: Düşük** yapın.",
@@ -1517,18 +1567,87 @@ def seed_initial_data(cursor):
             "error_code": "FIVEM-TEXTURE-LOSS",
             "system_specs": "Windows 10 | Ryzen 5 3600 | GTX 1660 Super 6GB | 16GB RAM",
             "content": "Sunucuda 150+ kişi varken şehir merkezine girdiğimde binalar kağıt gibi oluyor ve yollar yok oluyor. Tüm ayarlarım en düşükte olmasına rağmen düzelmedi.",
-            "status": "AI Çözümledi",
+            "status": "HemenÇöz AI Çözümledi",
             "upvotes": 35,
             "views": 530,
             "created_at": "3 saat önce",
             "replies": [
                 {
-                    "author_name": "GameFix AI (Teknik Analiz Motoru)",
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "FiveM'de tüm ayarları en düşüğe çekmek paradoksal olarak **Extended Texture Budget** değerini sıfırladığı için doku kaybına (Texture Loss) neden olur!\n\n### GTX 1660 Super (6GB VRAM) İçin Optimum FiveM Ayarları:\n1. **Ayarlar -> Grafikler** sekmesinde en altta yer alan **Extended Texture Budget** çubuğunu **%55 - %65** seviyesine (VRAM barı ~4200 MB civarına gelene kadar) yükseltin.\n2. **Texture Quality (Doku Kalitesi):** `Normal` veya `High` yapın, diğer gölge ve yansıma ayarlarını `Normal` bırakın.\n3. Görev Yöneticisi -> Ayrıntılar sekmesinden `FiveM_bxxxx_GTAProcess.exe` işlemine sağ tıklayıp **Öncelik Ayarla -> Yüksek** seçin.",
                     "helpful_count": 31,
                     "created_at": "3 saat önce"
+                }
+            ]
+        },
+        {
+            "game_slug": "mount-and-blade-2-bannerlord",
+            "author_name": "Alparslan_MB",
+            "author_avatar": "AM",
+            "title": "Bannerlord 500v500 kuşatma savaşında d3d_device_context_map hatası verip kapanıyor",
+            "error_code": "RGL-GPU-MAP-CRASH",
+            "system_specs": "Windows 11 | Ryzen 7 5800X3D | RTX 3070 | 32GB RAM",
+            "content": "Meydan savaşlarında hiçbir sorun yok ama büyük şehir kuşatmalarında merdivenler kurulurken d3d_device_context_map at rglGPU_device::lock_texture hatasıyla masaüstüne atıyor.",
+            "status": "HemenÇöz AI Çözümledi",
+            "upvotes": 51,
+            "views": 740,
+            "created_at": "4 saat önce",
+            "replies": [
+                {
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "is_ai": 1,
+                    "ai_mode": "Forum + AI Sentezi",
+                    "content": "Merhaba **Alparslan_MB**! Bu hata TaleWorlds motorunda kuşatma kuleleri/merdiven dokuları kilitlenirken bozuk gölgelendirici önbelleği (`C:\\ProgramData\\Mount and Blade II Bannerlord\\Shaders`) yüzünden tetiklenir.\n\n1. `Win + R` tuşlarına basıp `C:\\ProgramData\\Mount and Blade II Bannerlord` klasörünü açın ve içindeki **Shaders** klasörünü tamamen silin.\n2. Oyun içi Ses Ayarları'ndan **Ses Kanalları (Sound Channels)** değerini `Yüksek (512)` yerine `Orta (256)` yapın (kuşatma ses taşması da GPU senkronunu bozar).\n3. Grafik ayarlarından **Arazi Kalitesi (Terrain Quality)** ayarını Yüksek seviyesinde sabitleyin.",
+                    "helpful_count": 46,
+                    "created_at": "4 saat önce"
+                }
+            ]
+        },
+        {
+            "game_slug": "red-dead-redemption-2",
+            "author_name": "ArthurMorganTR",
+            "author_avatar": "AM",
+            "title": "RDR 2 Valentine kasabasına girerken ERR_GFX_STATE hatası alıyorum",
+            "error_code": "ERR_GFX_STATE",
+            "system_specs": "Windows 11 | Ryzen 5 7500F | RTX 4060 Ti | 32GB DDR5",
+            "content": "Oyunu Vulkan'da oynuyorum, son NVIDIA sürücü güncellemesinden sonra kasabaya atla girerken ERR_GFX_STATE verip çöküyor.",
+            "status": "HemenÇöz AI Çözümledi",
+            "upvotes": 64,
+            "views": 890,
+            "created_at": "6 saat önce",
+            "replies": [
+                {
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "is_ai": 1,
+                    "ai_mode": "Forum + AI Sentezi",
+                    "content": "Ekran kartı sürücüsü güncellendiğinde RDR 2'nin eski Vulkan boru hattı (`sga_vulkan_final_init`) dosyaları geçersiz kalır ve `ERR_GFX_STATE` çökmesine yol açar.\n\n### 1 Dakikada Kesin Çözüm:\n1. `Belgeler\\Rockstar Games\\Red Dead Redemption 2\\Settings` klasörünü açın.\n2. **`sga_`** ile başlayan 3 önbellek dosyasını silin (`system.xml` dosyasını silmeyin).\n3. Steam başlatma seçeneklerine `-ignorepipelinecache` parametresini ekleyin.",
+                    "helpful_count": 59,
+                    "created_at": "6 saat önce"
+                }
+            ]
+        },
+        {
+            "game_slug": "black-myth-wukong",
+            "author_name": "DestinedOne",
+            "author_avatar": "DO",
+            "title": "Black Myth: Wukong açılırken Shader Compilation %42'de Out of Video Memory veriyor",
+            "error_code": "UE5-SHADER-OOM",
+            "system_specs": "Windows 11 | i7-14700K | RTX 4070 Super 12GB | 32GB DDR5",
+            "content": "Ekran kartımda 12GB VRAM var ama daha oyunun menüsüne bile gelemeden gölgelendirici derlemesinde Out of Video Memory hatası alıyorum.",
+            "status": "HemenÇöz AI Çözümledi",
+            "upvotes": 48,
+            "views": 690,
+            "created_at": "8 saat önce",
+            "replies": [
+                {
+                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "is_ai": 1,
+                    "ai_mode": "Forum + AI Sentezi",
+                    "content": "**i7-14700K** işlemcinizde Unreal Engine 5 gölgelendirici derlemesi (Oodle decompression) sırasında oluşan yüksek AVX yükü, sahte `Out of Video Memory` hatası fırlatmaktadır (sorun RTX 4070 Super'de değildir!).\n\n### Çözüm:\n1. Denetim Masası -> **Güç Seçenekleri** menüsünden güç planını geçici olarak **Güç Tasarrufu (Power Saver)** moduna alın.\n2. Oyunu açıp %100 Shader Compilation işleminin tamamlanmasını bekleyin (yaklaşık 2 dakika sürer).\n3. Ana menü açıldıktan sonra güç planınızı tekrar **Dengeli / Yüksek Performans** moduna alabilirsiniz. Ayrıca anakartınızın en güncel `0x12B` mikro kodlu BIOS güncellemesini yapmanız kalıcı olarak bu hatayı önler.",
+                    "helpful_count": 44,
+                    "created_at": "8 saat önce"
                 }
             ]
         }

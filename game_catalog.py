@@ -648,6 +648,200 @@ WORLD_GAMES_CATALOG = [
                 ],
                 "verify_command": "Get-CimInstance Win32_PageFileUsage | Select-Object Name, AllocatedBaseSize",
                 "success_rate": 94
+            },
+            {
+                "title": "Sunucuya Bağlanırken 'Server Connection Lost' ve Yüksek Paket Kaybı",
+                "error_code": "EFT-CONN-LOST",
+                "severity": "Yüksek",
+                "category": "Ağ & Bağlantı",
+                "symptom_summary": "Raid'e girerken 'Awaiting Session Start' ekranında takılıp Server Connection Lost veriyor.",
+                "forum_sources": [
+                    {
+                        "forum": "Battlestate Games Forum & Reddit",
+                        "thread": "Fixing Server Connection Lost (IPv6 Dual-Stack DS-Lite & MTU 1472 Fix)",
+                        "quote": "BSG Launcher'dan sadece pingi 60ms altındaki Avrupa sunucularını (Central/South) manuel seçmek ve ağ bağdaştırıcısında IPv6'yı kapatmak kopmaları %95 engelledi.",
+                        "upvotes": 740
+                    }
+                ],
+                "ai_root_cause": "Otomatik sunucu seçimi yüksek jitter'lı rotalara bağlandığında Tarkov'un katı UDP paket zaman aşımı oturumu düşürür.",
+                "ai_solution_steps": [
+                    {
+                        "step": 1,
+                        "title": "BSG Launcher'dan Düşük Pingli Sunucuları Manuel Seçin",
+                        "detail": "BSG Launcher -> Change Server menüsünden 'Auto' işaretini kaldırıp yalnızca pingi 65ms altındaki 3-4 sunucuyu işaretleyin.",
+                        "difficulty": "Kolay"
+                    }
+                ],
+                "verify_command": "Get-NetAdapterBinding -ComponentID ms_tcpip6",
+                "success_rate": 93
+            }
+        ]
+    },
+    {
+        "slug": "the-witcher-3",
+        "name": "The Witcher 3: Wild Hunt (Next-Gen)",
+        "short_name": "The Witcher 3",
+        "aliases": ["witcher 3", "the witcher 3", "witcher", "tw3"],
+        "category": "Açık Dünya RPG",
+        "developer": "CD PROJEKT RED",
+        "accent_color": "#b05c52",
+        "secondary_color": "#241716",
+        "engine": "REDengine 3 (DX12 / DX11)",
+        "anticheat": "REDlauncher / DRM-Free",
+        "banner_subtitle": "Next-Gen DirectX 12 Ray Tracing Çökmesi, Novigrad/Hierarch Meydanı Stutter ve HairWorks FPS Kaybı Çözümleri",
+        "common_tags": ["DX12 Crash Fix", "Novigrad Stutter", "HairWorks Off", "REDlauncher Skip", "DLSS Frame Gen Crash"],
+        "default_issues": [
+            {
+                "title": "Next-Gen Güncellemesi Sonrası DirectX 12 Modunda Çökme ve Novigrad Takılması",
+                "error_code": "TW3-DX12-RT-CRASH",
+                "severity": "Kritik",
+                "category": "Çökme & Başlatma",
+                "symptom_summary": "DX12 ile başlatıldığında Ray Tracing veya DLSS Frame Generation açıkken oyun hızlı seyahat (Fast Travel) sonrası çöküyor.",
+                "forum_sources": [
+                    {
+                        "forum": "CDPR Forums & Reddit r/witcher",
+                        "thread": "Witcher 3 Next-Gen DX12 Crash & Stutter Fix: Switch to DX11 or delete d3d11on12 files",
+                        "quote": "Ray Tracing kullanmıyorsanız REDlauncher üzerinden DirectX 11 seçmek FPS'i %35 artırıyor ve tüm Novigrad takılmalarını kesiyor.",
+                        "upvotes": 1340
+                    }
+                ],
+                "ai_root_cause": "Next-Gen sürümündeki DX12 çeviri katmanı (`d3d11on12`) yoğun şehir içi çizim çağrılarında yüksek CPU ek yükü ve VRAM parçalanması oluşturur.",
+                "ai_solution_steps": [
+                    {
+                        "step": 1,
+                        "title": "REDlauncher Üzerinden DirectX 11 Moduna Geçin veya HairWorks Kapatın",
+                        "detail": "Ray Tracing kullanmıyorsanız oyunu başlatırken **DX11** seçin. DX12 kullanacaksanız NVIDIA HairWorks ayarını Kapalı konuma getirin.",
+                        "difficulty": "Kolay"
+                    }
+                ],
+                "verify_command": "Get-Process witcher3 -ErrorAction SilentlyContinue | Select-Object Name, WorkingSet64",
+                "success_rate": 96
+            }
+        ]
+    },
+    {
+        "slug": "god-of-war-ragnarok",
+        "name": "God of War Ragnarök (PC)",
+        "short_name": "GoW Ragnarök",
+        "aliases": ["god of war", "gow ragnarok", "god of war ragnarok", "ragnarok"],
+        "category": "Aksiyon Macera",
+        "developer": "Santa Monica Studio / Jetpack Interactive",
+        "accent_color": "#4f84ad",
+        "secondary_color": "#162029",
+        "engine": "Proprietary DX12 Engine",
+        "anticheat": "PlayStation PC SDK",
+        "banner_subtitle": "PlayStation PC SDK Başlatma Donması, Düşük VRAM / Ekran Kartı Algılanmama ve Diyalog Sesi Gelmeme Çözümleri",
+        "common_tags": ["PS PC SDK Crash", "VRAM Bypass", "Audio 5.1 Dialog Fix", "DLSS Stutter", "Realm Travel Drop"],
+        "default_issues": [
+            {
+                "title": "Oyun Açılışında Siyah Ekran (PlayStation PC SDK Runtime Hatası) ve Ses/Diyalog Gelmeme",
+                "error_code": "GOWR-PSSDK-AUDIO",
+                "severity": "Yüksek",
+                "category": "Çökme & Başlatma",
+                "symptom_summary": "Oyun açılırken siyah ekranda kalıyor veya ara sahnelerde Kratos ve Atreus'un konuşma sesleri hiç duyulmuyor.",
+                "forum_sources": [
+                    {
+                        "forum": "Steam Community & Technopat Sosyal",
+                        "thread": "God of War Ragnarök Siyah Ekran (PsPcSdk) ve Diyalog Sesi Çözümü",
+                        "quote": "Oyun klasöründeki PsPcSdkRuntimeInstaller.msi paketini manuel onarmak siyah ekranı çözüyor; Windows Ses ayarlarından Uzamsal Sesi kapatıp Stereo seçmek de diyalog seslerini geri getiriyor.",
+                        "upvotes": 870
+                    }
+                ],
+                "ai_root_cause": "PlayStation PC SDK arka plan servisi kurulmadığında kimlik doğrulama penceresi siyah ekranda asılı kalır; diyalog kaybı ise oyunun sanal 7.1 kulaklıkları gerçek merkez (Center) hoparlör sanmasından kaynaklanır.",
+                "ai_solution_steps": [
+                    {
+                        "step": 1,
+                        "title": "PsPcSdkRuntime Kurulumunu Onarın ve Ses Kanalını Stereo Yapın",
+                        "detail": "Oyun dizinindeki `PsPcSdkRuntimeInstaller.msi` dosyasını çalıştırıp Onar deyin. Ses sorunu için Windows Ses Denetim Masası -> Kulaklığınız -> Yapılandır -> **Stereo** seçin.",
+                        "difficulty": "Kolay"
+                    }
+                ],
+                "verify_command": "Get-Service -Name '*PlayStation*' -ErrorAction SilentlyContinue",
+                "success_rate": 95
+            }
+        ]
+    },
+    {
+        "slug": "overwatch-2",
+        "name": "Overwatch 2",
+        "short_name": "Overwatch 2",
+        "aliases": ["ow2", "ow 2", "overwatch", "overwatch2"],
+        "category": "Hero Shooter (FPS)",
+        "developer": "Blizzard Entertainment",
+        "accent_color": "#bd7b48",
+        "secondary_color": "#261d16",
+        "engine": "Overwatch Engine",
+        "anticheat": "Defense Matrix",
+        "banner_subtitle": "'Your Rendering Device Has Been Lost' GPU Çökmesi, Maç Başı Shader Derleme Takılması ve Yüksek SIM Gecikmesi",
+        "common_tags": ["Rendering Device Lost", "Shader Compiling Lag", "Reduce Buffering", "Dynamic Render Scale"],
+        "default_issues": [
+            {
+                "title": "'Your Rendering Device Has Been Lost! Application Closing' Ekran Kartı Çökmesi",
+                "error_code": "OW2-RENDER-LOST",
+                "severity": "Kritik",
+                "category": "Çökme & Başlatma",
+                "symptom_summary": "Rekabetçi maç ortasında 'Your rendering device has been lost!' uyarısı vererek oyun aniden kapanıyor.",
+                "forum_sources": [
+                    {
+                        "forum": "Blizzard Forums & Reddit r/Overwatch",
+                        "thread": "Fixed 'Your Rendering Device Has Been Lost' once and for all",
+                        "quote": "Oyun içi Dynamic Render Scale (Dinamik Ölçekleme) ayarını kapatmak, GPU fabrika hız aşırtmasını (Debug Mode) kısmak ve Razer Synapse Chroma entegrasyonunu silmek hatayı %100 çözdü.",
+                        "upvotes": 1190
+                    }
+                ],
+                "ai_root_cause": "Overwatch 2 motoru GPU saat hızı dalgalanmalarına ve `Razer Chroma SDK` bellek kancalarına karşı çok hassastır; TDR zaman aşımı oluştuğunda direkt `Rendering Device Lost` verir.",
+                "ai_solution_steps": [
+                    {
+                        "step": 1,
+                        "title": "Dynamic Render Scale Kapatın ve Belgelerim Settings_v0.ini Yenileyin",
+                        "detail": "Video Ayarları -> **Dynamic Render Scale: Off** yapın. `Belgeler\\Overwatch\\Settings` klasöründeki `Settings_v0.ini` dosyasını yedekleyip silerek temiz grafik profili oluşturun.",
+                        "difficulty": "Kolay"
+                    }
+                ],
+                "verify_command": "Test-Path \"$env:USERPROFILE\\Documents\\Overwatch\\Settings\\Settings_v0.ini\"",
+                "success_rate": 95
+            }
+        ]
+    },
+    {
+        "slug": "diablo-iv",
+        "name": "Diablo IV",
+        "short_name": "Diablo IV",
+        "aliases": ["diablo 4", "diablo iv", "d4", "diablo"],
+        "category": "Aksiyon RPG (ARPG)",
+        "developer": "Blizzard Entertainment",
+        "accent_color": "#9e4f4f",
+        "secondary_color": "#241616",
+        "engine": "Proprietary PBR Engine",
+        "anticheat": "Battle.net Warden",
+        "banner_subtitle": "Fenris Crash (Out of Memory), Şehir Işınlanmalarında (Town Portal) Ağır Takılma ve Cross-Network Stutter Çözümü",
+        "common_tags": ["Fenris Crash", "VRAM Leak Fix", "Disable Cross-Network Play", "DirectStorage Dll"],
+        "default_issues": [
+            {
+                "title": "Fenris Hatası (Bellek Sızıntısı / Out of Memory) ve Şehirde Aşırı Takılma (Rubberbanding)",
+                "error_code": "D4-FENRIS-VRAM",
+                "severity": "Yüksek",
+                "category": "Performans & FPS",
+                "symptom_summary": "1 saat oynadıktan sonra ışınlanırken oyun donuyor ve 'Diablo IV has run out of memory' (Fenris) hatası veriyor.",
+                "forum_sources": [
+                    {
+                        "forum": "Reddit r/diablo4 & Blizzard Forums",
+                        "thread": "PSA: Disable Cross-Network Play & set Textures to Medium to stop rubberbanding and Fenris crashes",
+                        "quote": "Sosyal ayarlardan 'Cross-Network Play (Çapraz Ağ Oyunu)' seçeneğini kapatmak açık dünyadaki tüm takılmaları (rubberbanding) kesiyor; Battle.net'te 'Disable browser hardware acceleration' yapmak da VRAM çökmesini önlüyor.",
+                        "upvotes": 1560
+                    }
+                ],
+                "ai_root_cause": "Diablo IV yakındaki her oyuncunun tüm kozmetik/sandık envanterini VRAM'e yükler; Çapraz Ağ açıkken farklı platform senkronizasyonu gecikme yaratır ve Yüksek çözünürlüklü dokular VRAM taşmasına yol açar.",
+                "ai_solution_steps": [
+                    {
+                        "step": 1,
+                        "title": "Çapraz Ağ Oyununu (Cross-Network Play) ve Tarayıcı İvmesini Kapatın",
+                        "detail": "Karakter seçme ekranında Seçenekler -> **Connect (Bağlantı)** sekmesinden **Cross-Network Play** işaretini kaldırın. Battle.net -> Ayarlar -> Uygulama altından 'Tarayıcı donanım ivmesini kullan' seçeneğini kapatın.",
+                        "difficulty": "Kolay"
+                    }
+                ],
+                "verify_command": "Get-Process 'Diablo IV' -ErrorAction SilentlyContinue | Select-Object Name, WorkingSet64",
+                "success_rate": 96
             }
         ]
     }
@@ -693,7 +887,9 @@ GAME_COVER_URLS = {
     "lol": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
     "league-of-legends": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
     "gtav": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
+    "gtav-fivem": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
     "gta-v": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
+    "god-of-war-ragnarok": "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/header.jpg",
     "minecraft": "https://cdn.cloudflare.steamstatic.com/steam/apps/1672970/header.jpg",
     "fc25": "https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/header.jpg",
     "ea-sports-fc-25": "https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/header.jpg",

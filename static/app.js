@@ -39,12 +39,14 @@ function getAuthHeaders(extra = {}) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initCookieConsent();
   await checkCurrentSession();
   await fetchStatus();
   await fetchGames();
   await refreshRandomSuggestions();
   await applyUrlSeoParams();
   await Promise.all([fetchIssues(), fetchThreads()]);
+  renderHomeShowcase();
   updateDynamicSEO();
 });
 
@@ -811,12 +813,12 @@ function updateDynamicSEO() {
 
     if (STATE.selectedGame === 'all') {
       document.title = STATE.searchQuery
-        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | GameFix AI Hub`
-        : 'GameFix AI Hub | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Yapay Zeka Arıza Çözümleyici';
+        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | HemenÇöz`
+        : 'HemenÇöz | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Akıllı Arıza Çözüm Merkezi';
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          'Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, Elden Ring ve 45+ popüler oyunun hata çözümleri ve Yapay Zeka arıza çözümleyici.'
+          'HemenÇöz ile Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, RDR 2, Bannerlord ve 30+ popüler oyunun hata çözümlerine saniyeler içinde ulaşın.'
         );
       }
       if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
@@ -830,11 +832,11 @@ function updateDynamicSEO() {
       const game = STATE.games.find(g => g.slug === STATE.selectedGame);
       if (game) {
         const tagSummary = (game.common_tags || []).slice(0, 4).join(', ');
-        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & AI Arıza Rehberi | GameFix AI Hub`;
+        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & Arıza Rehberi | HemenÇöz`;
         if (metaDesc) {
           metaDesc.setAttribute(
             'content',
-            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve Yapay Zeka destekli teknik rehber.`
+            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve HemenÇöz adım adım teknik rehberi.`
           );
         }
         const gameUrl = `${baseUrl}?game=${encodeURIComponent(game.slug)}`;
@@ -852,7 +854,7 @@ function updateDynamicSEO() {
         name: `${iss.game_name || ''} ${iss.title} (${iss.error_code || 'Çözüm'})`.trim(),
         acceptedAnswer: {
           '@type': 'Answer',
-          text: (iss.ai_solution || iss.forum_summary || '').replace(/[#*`>_~]/g, '').substring(0, 600)
+          text: (iss.ai_root_cause || iss.symptom_summary || '').replace(/[#*`>_~]/g, '').substring(0, 600)
         }
       }));
       schemaEl.textContent = JSON.stringify({
@@ -866,11 +868,182 @@ function updateDynamicSEO() {
   }
 }
 
+function renderHomeShowcase() {
+  try {
+    const totalGamesEl = document.getElementById('hudTotalGamesStat');
+    const totalIssuesEl = document.getElementById('hudTotalIssuesStat');
+    const gamesGrid = document.getElementById('homeGamesShowcaseGrid');
+    const trendingGrid = document.getElementById('homeTrendingIssuesGrid');
+
+    const totalIssuesCount = STATE.games.reduce((acc, g) => acc + (g.issue_count || 0), 0) || STATE.issues.length || 50;
+    if (totalGamesEl) totalGamesEl.textContent = `${STATE.games.length || 30}+ Oyun`;
+    if (totalIssuesEl) totalIssuesEl.textContent = `${totalIssuesCount}+ Rehber`;
+
+    if (gamesGrid && STATE.games.length > 0) {
+      const featuredGames = STATE.selectedGame === 'all'
+        ? STATE.games.slice(0, 12)
+        : [
+            ...STATE.games.filter(g => g.slug === STATE.selectedGame),
+            ...STATE.games.filter(g => g.slug !== STATE.selectedGame).slice(0, 11)
+          ];
+
+      gamesGrid.innerHTML = featuredGames.map(g => {
+        const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+        return `
+          <div
+            onclick="selectGame('${g.slug}'); switchTab('issues');"
+            class="showcase-card rounded-xl overflow-hidden cursor-pointer group flex flex-col justify-between"
+          >
+            <div class="relative h-20 w-full overflow-hidden bg-[#151b26]">
+              <img
+                src="${imgSrc}"
+                onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')"
+                alt="${g.name}"
+                class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#161c28] via-transparent to-transparent"></div>
+              <span class="absolute top-1.5 right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/75 text-[#a3d9c6] border border-white/10">
+                ${g.issue_count || 2} Çözüm
+              </span>
+            </div>
+            <div class="p-2.5">
+              <div class="text-xs font-bold text-white truncate group-hover:text-[#88c0a8] transition">${g.short_name}</div>
+              <div class="text-[10px] text-gray-400 truncate">${g.category}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    if (trendingGrid && STATE.issues.length > 0) {
+      const topIssues = STATE.issues.slice(0, 6);
+      trendingGrid.innerHTML = topIssues.map(iss => {
+        const imgSrc = iss.game_image_url || fallbackCover(iss.game_slug, iss.accent_color);
+        return `
+          <div
+            onclick="quickSearchTag('${(iss.error_code || iss.title).replace(/'/g, '')}')"
+            class="showcase-card rounded-xl p-3.5 cursor-pointer flex flex-col justify-between gap-2.5"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 min-w-0">
+                <img
+                  src="${imgSrc}"
+                  onerror="this.onerror=null;this.src=fallbackCover('${iss.game_slug}','${iss.accent_color}')"
+                  alt="${iss.game_short_name}"
+                  class="w-8 h-6 rounded object-cover border border-white/15 shrink-0"
+                />
+                <span class="text-xs font-bold text-gray-200 truncate">${iss.game_short_name}</span>
+              </div>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">
+                ${iss.error_code}
+              </span>
+            </div>
+            <div class="text-xs font-bold text-white line-clamp-2 leading-snug">${iss.title}</div>
+            <div class="flex items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
+              <span class="text-[#88c0a8] font-semibold">✓ %${iss.success_rate} Başarı</span>
+              <span>👍 ${iss.helpful_votes} Faydalı • Çözümü Gör →</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  } catch (e) {
+    console.warn('Home showcase render warning:', e);
+  }
+}
+
+function initCookieConsent() {
+  try {
+    const saved = localStorage.getItem('hemencoz_cookie_consent');
+    const banner = document.getElementById('cookieConsentBanner');
+    if (!saved && banner) {
+      banner.classList.remove('hidden');
+    } else if (saved) {
+      const parsed = JSON.parse(saved);
+      const funcEl = document.getElementById('cookiePrefFunctional');
+      const anaEl = document.getElementById('cookiePrefAnalytics');
+      if (funcEl) funcEl.checked = parsed.functional !== false;
+      if (anaEl) anaEl.checked = parsed.analytics !== false;
+    }
+  } catch (e) {}
+}
+
+function acceptCookies(mode = 'all') {
+  const prefs = {
+    essential: true,
+    functional: mode === 'all',
+    analytics: mode === 'all',
+    updated_at: new Date().toISOString()
+  };
+  try {
+    localStorage.setItem('hemencoz_cookie_consent', JSON.stringify(prefs));
+  } catch (e) {}
+  const banner = document.getElementById('cookieConsentBanner');
+  if (banner) banner.classList.add('hidden');
+  closeCookieSettingsModal();
+  showToast(mode === 'all' ? '🍪 Tüm çerez tercihleri kaydedildi.' : '🍪 Yalnızca zorunlu çerezler aktif edildi.');
+}
+
+function saveCustomCookiePrefs() {
+  const funcEl = document.getElementById('cookiePrefFunctional');
+  const anaEl = document.getElementById('cookiePrefAnalytics');
+  const prefs = {
+    essential: true,
+    functional: funcEl ? funcEl.checked : true,
+    analytics: anaEl ? anaEl.checked : true,
+    updated_at: new Date().toISOString()
+  };
+  try {
+    localStorage.setItem('hemencoz_cookie_consent', JSON.stringify(prefs));
+  } catch (e) {}
+  const banner = document.getElementById('cookieConsentBanner');
+  if (banner) banner.classList.add('hidden');
+  closeCookieSettingsModal();
+  showToast('🍪 Özel çerez tercihleriniz kaydedildi.');
+}
+
+function openCookieSettingsModal() {
+  const modal = document.getElementById('cookieSettingsModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeCookieSettingsModal() {
+  const modal = document.getElementById('cookieSettingsModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function openLegalModal(tab = 'kvkk') {
+  switchLegalTab(tab);
+  const modal = document.getElementById('legalModal');
+  if (modal) modal.classList.remove('hidden');
+}
+
+function closeLegalModal() {
+  const modal = document.getElementById('legalModal');
+  if (modal) modal.classList.add('hidden');
+}
+
+function switchLegalTab(tab) {
+  ['kvkk', 'privacy', 'terms', 'disclaimer'].forEach(t => {
+    const btn = document.getElementById(`legalTabBtn-${t}`);
+    const content = document.getElementById(`legalContent-${t}`);
+    if (!btn || !content) return;
+    if (t === tab) {
+      btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-[#5e9c88]/25 text-[#a3d9c6] border border-[#5e9c88]/40';
+      content.classList.remove('hidden');
+    } else {
+      btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-gray-300 border border-white/10 hover:text-white';
+      content.classList.add('hidden');
+    }
+  });
+}
+
 async function selectGame(slug) {
   STATE.selectedGame = slug;
   renderSidebarGames();
   updateHeroBanner();
   await Promise.all([fetchIssues(), fetchThreads()]);
+  renderHomeShowcase();
   updateDynamicSEO();
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Hub & AI Troubleshooter -->
+  <!-- Main Hub & HemenÇöz Troubleshooter -->
   <url>
     <loc>https://erenmtl.github.io/gamefix-hub/</loc>
     <lastmod>2026-10-21</lastmod>
@@ -8,7 +8,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Dedicated Game Troubleshooting Screens -->
+  <!-- Dedicated Game Troubleshooting Screens (30+ Popular Games) -->
   <url>
     <loc>https://erenmtl.github.io/gamefix-hub/?game=valorant</loc>
     <lastmod>2026-10-21</lastmod>
@@ -28,7 +28,7 @@
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=gtav</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=gtav-fivem</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
@@ -40,13 +40,49 @@
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=cyberpunk2077</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=fc25</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=mount-and-blade-2-bannerlord</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=red-dead-redemption-2</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=black-myth-wukong</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=eldenring</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=euro-truck-simulator-2</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=forza-horizon-5</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=cyberpunk-2077</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=elden-ring</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -58,13 +94,13 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=apex</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=warzone</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=rdr2</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=apex-legends</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -76,7 +112,7 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://erenmtl.github.io/gamefix-hub/?game=baldursgate3</loc>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=baldurs-gate-3</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -89,6 +125,42 @@
   </url>
   <url>
     <loc>https://erenmtl.github.io/gamefix-hub/?game=victoria-3</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=hearts-of-iron-4</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=football-manager-2024</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=the-witcher-3</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=god-of-war-ragnarok</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=overwatch-2</loc>
+    <lastmod>2026-10-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://erenmtl.github.io/gamefix-hub/?game=diablo-iv</loc>
     <lastmod>2026-10-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
