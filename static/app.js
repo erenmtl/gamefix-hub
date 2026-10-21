@@ -43,7 +43,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await fetchStatus();
   await fetchGames();
   await refreshRandomSuggestions();
+  await applyUrlSeoParams();
   await Promise.all([fetchIssues(), fetchThreads()]);
+  updateDynamicSEO();
 });
 
 function showToast(msg) {
@@ -771,19 +773,115 @@ function updateHeroBanner() {
   }
 }
 
+async function applyUrlSeoParams() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const gameParam = params.get('game');
+    const queryParam = params.get('q') || params.get('search');
+
+    if (gameParam) {
+      const exists = STATE.games.find(g => g.slug === gameParam);
+      if (exists) {
+        STATE.selectedGame = gameParam;
+        renderSidebarGames();
+        updateHeroBanner();
+        switchTab('issues');
+      }
+    }
+
+    if (queryParam) {
+      STATE.searchQuery = queryParam.trim();
+      const input = document.getElementById('globalSearchInput');
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (input) input.value = STATE.searchQuery;
+      if (clearBtn && STATE.searchQuery) clearBtn.classList.remove('hidden');
+      switchTab('issues');
+    }
+  } catch (e) {
+    console.warn('SEO URL param parse error:', e);
+  }
+}
+
+function updateDynamicSEO() {
+  try {
+    const baseUrl = 'https://erenmtl.github.io/gamefix-hub/';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    const canonicalEl = document.getElementById('canonicalLink');
+    const schemaEl = document.getElementById('dynamicSeoSchema');
+
+    if (STATE.selectedGame === 'all') {
+      document.title = STATE.searchQuery
+        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | GameFix AI Hub`
+        : 'GameFix AI Hub | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Yapay Zeka Arıza Çözümleyici';
+      if (metaDesc) {
+        metaDesc.setAttribute(
+          'content',
+          'Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, Elden Ring ve 45+ popüler oyunun hata çözümleri ve Yapay Zeka arıza çözümleyici.'
+        );
+      }
+      if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
+      if (window.history && window.history.replaceState) {
+        const nextUrl = STATE.searchQuery
+          ? `${window.location.pathname}?q=${encodeURIComponent(STATE.searchQuery)}`
+          : window.location.pathname;
+        window.history.replaceState({}, '', nextUrl);
+      }
+    } else {
+      const game = STATE.games.find(g => g.slug === STATE.selectedGame);
+      if (game) {
+        const tagSummary = (game.common_tags || []).slice(0, 4).join(', ');
+        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & AI Arıza Rehberi | GameFix AI Hub`;
+        if (metaDesc) {
+          metaDesc.setAttribute(
+            'content',
+            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve Yapay Zeka destekli teknik rehber.`
+          );
+        }
+        const gameUrl = `${baseUrl}?game=${encodeURIComponent(game.slug)}`;
+        if (canonicalEl) canonicalEl.setAttribute('href', gameUrl);
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, '', `${window.location.pathname}?game=${encodeURIComponent(game.slug)}`);
+        }
+      }
+    }
+
+    // Populate dynamic FAQPage Schema from current visible issues for Rich Search Snippets
+    if (schemaEl && Array.isArray(STATE.issues) && STATE.issues.length > 0) {
+      const faqEntities = STATE.issues.slice(0, 8).map(iss => ({
+        '@type': 'Question',
+        name: `${iss.game_name || ''} ${iss.title} (${iss.error_code || 'Çözüm'})`.trim(),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: (iss.ai_solution || iss.forum_summary || '').replace(/[#*`>_~]/g, '').substring(0, 600)
+        }
+      }));
+      schemaEl.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqEntities
+      });
+    }
+  } catch (e) {
+    console.warn('Dynamic SEO update warning:', e);
+  }
+}
+
 async function selectGame(slug) {
   STATE.selectedGame = slug;
   renderSidebarGames();
   updateHeroBanner();
   await Promise.all([fetchIssues(), fetchThreads()]);
+  updateDynamicSEO();
 }
 
 function switchTab(tabName) {
-  STATE.activeTab = tabName;
+  const normalized = tabName === 'ai' ? 'ai-lab' : tabName;
+  STATE.activeTab = normalized;
   ['issues', 'ai-lab', 'forum'].forEach(t => {
     const btn = document.getElementById(`tabBtn-${t}`);
     const section = document.getElementById(`tabContent-${t}`);
-    if (t === tabName) {
+    if (!btn || !section) return;
+    if (t === normalized) {
       btn.classList.add('active');
       section.classList.remove('hidden');
     } else {
@@ -793,11 +891,26 @@ function switchTab(tabName) {
   });
 
   const catWrapper = document.getElementById('categoryFilterWrapper');
-  if (tabName === 'issues') {
-    catWrapper.classList.remove('hidden');
-  } else {
-    catWrapper.classList.add('hidden');
+  if (catWrapper) {
+    if (normalized === 'issues') {
+      catWrapper.classList.remove('hidden');
+    } else {
+      catWrapper.classList.add('hidden');
+    }
   }
+}
+
+function switchMainTab(tabName) {
+  switchTab(tabName);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function quickSearchTag(tagText) {
+  STATE.selectedGame = 'all';
+  renderSidebarGames();
+  updateHeroBanner();
+  filterByTag(tagText);
+  window.scrollTo({ top: 180, behavior: 'smooth' });
 }
 
 function filterByTag(tagText) {
@@ -807,6 +920,7 @@ function filterByTag(tagText) {
   document.getElementById('clearSearchBtn').classList.remove('hidden');
   switchTab('issues');
   fetchIssues();
+  updateDynamicSEO();
 }
 
 function handleGlobalSearch(val) {

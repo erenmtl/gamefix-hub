@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#131822"/>
+      <stop offset="50%" stop-color="#18202c"/>
+      <stop offset="100%" stop-color="#0f141c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#88c0a8"/>
+      <stop offset="100%" stop-color="#5b84b1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1050" cy="120" r="280" fill="#5e9c88" fill-opacity="0.08"/>
+  <circle cx="150" cy="520" r="240" fill="#6b90b9" fill-opacity="0.08"/>
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#1d2430" fill-opacity="0.7" stroke="#88c0a8" stroke-opacity="0.25" stroke-width="2"/>
+  
+  <!-- Left Emblem -->
+  <g transform="translate(115, 175) scale(2.1)">
+    <path d="M60 6L107 32V88L60 114L13 88V32L60 6Z" fill="#151c28" stroke="url(#accent)" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M37 45C30 45 25 51 23.5 60L21 75C19.8 82.2 25.5 88 32.2 88C36.8 88 40.5 85.2 43.2 81.2L47.5 75H72.5L76.8 81.2C79.5 85.2 83.2 88 87.8 88C94.5 88 100.2 82.2 99 75L96.5 60C95 51 90 45 83 45H37Z" fill="#88c0a8" fill-opacity="0.16" stroke="#88c0a8" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M38 56V68M32 62H44" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="83" cy="57" r="3" fill="#88c0a8"/>
+    <circle cx="76" cy="63" r="3" fill="#6b90b9"/>
+    <circle cx="89" cy="63" r="3" fill="#ffffff"/>
+    <circle cx="83" cy="69" r="3" fill="#f6ad55"/>
+    <path d="M63 37L51 57H61L56 76L71 54H60.5L63 37Z" fill="#f6e05e"/>
+  </g>
+
+  <!-- Right Typography -->
+  <text x="410" y="235" fill="#88c0a8" font-family="Inter, Segoe UI, sans-serif" font-size="22" font-weight="700" letter-spacing="3">YAPAY ZEKA DESTEKLİ OYUN ÇÖZÜM MERKEZİ</text>
+  <text x="410" y="315" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="68" font-weight="800">GameFix AI Hub</text>
+  <text x="410" y="375" fill="#cbd5e1" font-family="Inter, Segoe UI, sans-serif" font-size="26" font-weight="500">Valorant • CS2 • LoL • GTA V • Minecraft • Elden Ring • 45+ Oyun</text>
+  <text x="410" y="425" fill="#94a3b8" font-family="Inter, Segoe UI, sans-serif" font-size="22" font-weight="400">Reddit, Steam, Riot &amp; Technopat Forum Çözümleri + Gemini AI Teşhis Motoru</text>
+
+  <!-- Pills -->
+  <rect x="410" y="460" width="210" height="46" rx="12" fill="#5e9c88" fill-opacity="0.2" stroke="#88c0a8" stroke-opacity="0.4"/>
+  <text x="515" y="490" text-anchor="middle" fill="#a3d9c6" font-family="Inter, Segoe UI, sans-serif" font-size="18" font-weight="700">⚡ Anında AI Çözüm</text>
+
+  <rect x="640" y="460" width="230" height="46" rx="12" fill="#6b90b9" fill-opacity="0.2" stroke="#6b90b9" stroke-opacity="0.4"/>
+  <text x="755" y="490" text-anchor="middle" fill="#bfdbfe" font-family="Inter, Segoe UI, sans-serif" font-size="18" font-weight="700">🛡️ Doğrulanmış Rehber</text>
+</svg>

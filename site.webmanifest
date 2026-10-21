@@ -1,0 +1,23 @@
+{
+  "name": "GameFix AI Hub - Oyun Sorunları & Yapay Zeka Çözüm Merkezi",
+  "short_name": "GameFix AI",
+  "description": "Valorant, CS2, LoL, GTA V, Minecraft ve 45+ popüler oyunun hata kodlarını, FPS düşüşlerini ve çökmelerini yapay zeka ve forum rehberleriyle çözen platform.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#161b24",
+  "theme_color": "#5e9c88",
+  "lang": "tr-TR",
+  "icons": [
+    {
+      "src": "static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "static/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}

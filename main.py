@@ -1128,11 +1128,27 @@ def upvote_thread(
     return {"upvotes": new_upvotes, "user_voted": voted_now}
 
 
-STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_DIR = os.path.join(ROOT_DIR, "static")
 os.makedirs(STATIC_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
+@app.get("/robots.txt")
+def serve_robots():
+    return FileResponse(os.path.join(ROOT_DIR, "robots.txt"), media_type="text/plain")
+
+
+@app.get("/sitemap.xml")
+def serve_sitemap():
+    return FileResponse(os.path.join(ROOT_DIR, "sitemap.xml"), media_type="application/xml")
+
+
+@app.get("/site.webmanifest")
+def serve_manifest():
+    return FileResponse(os.path.join(ROOT_DIR, "site.webmanifest"), media_type="application/manifest+json")
+
+
 @app.get("/")
 def serve_index():
-    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+    return FileResponse(os.path.join(ROOT_DIR, "index.html"))

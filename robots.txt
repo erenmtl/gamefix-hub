@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /api/auth/
+
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Yandex
+Allow: /
+
+Sitemap: https://erenmtl.github.io/gamefix-hub/sitemap.xml

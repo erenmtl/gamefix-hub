@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="50%" stop-color="#172130"/>
+      <stop offset="100%" stop-color="#0f1722"/>
+    </linearGradient>
+    <linearGradient id="rimGrad" x1="10" y1="8" x2="110" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#88c0a8"/>
+      <stop offset="50%" stop-color="#5e9c88"/>
+      <stop offset="100%" stop-color="#6b90b9"/>
+    </linearGradient>
+    <linearGradient id="padGrad" x1="26" y1="36" x2="94" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a3d9c6"/>
+      <stop offset="55%" stop-color="#6ca893"/>
+      <stop offset="100%" stop-color="#5b84b1"/>
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="50" y1="14" x2="72" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f6e05e"/>
+      <stop offset="100%" stop-color="#88c0a8"/>
+    </linearGradient>
+    <filter id="softGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Outer Cyber Hexagon Shield -->
+  <path d="M60 6L107 32V88L60 114L13 88V32L60 6Z" fill="url(#bgGrad)" stroke="url(#rimGrad)" stroke-width="4.5" stroke-linejoin="round"/>
+  
+  <!-- Inner Circuit Ring -->
+  <path d="M60 14L99 36V84L60 106L21 84V36L60 14Z" stroke="#88c0a8" stroke-opacity="0.22" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <!-- AI Neural Nodes Top -->
+  <circle cx="60" cy="22" r="3" fill="#88c0a8"/>
+  <circle cx="43" cy="29" r="2.2" fill="#6b90b9"/>
+  <circle cx="77" cy="29" r="2.2" fill="#6b90b9"/>
+  <path d="M43 29L60 22L77 29" stroke="#88c0a8" stroke-width="1.5" stroke-opacity="0.5"/>
+  <path d="M60 22V38" stroke="#88c0a8" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Gamepad Body -->
+  <path d="M37 45C30 45 25 51 23.5 60L21 75C19.8 82.2 25.5 88 32.2 88C36.8 88 40.5 85.2 43.2 81.2L47.5 75H72.5L76.8 81.2C79.5 85.2 83.2 88 87.8 88C94.5 88 100.2 82.2 99 75L96.5 60C95 51 90 45 83 45H37Z" fill="url(#padGrad)" fill-opacity="0.16" stroke="url(#padGrad)" stroke-width="3.8" stroke-linejoin="round"/>
+
+  <!-- D-Pad Left -->
+  <path d="M38 56V68M32 62H44" stroke="#e2e8f0" stroke-width="3.6" stroke-linecap="round"/>
+
+  <!-- Action Buttons Right -->
+  <circle cx="83" cy="57" r="2.8" fill="#88c0a8"/>
+  <circle cx="76" cy="63" r="2.8" fill="#6b90b9"/>
+  <circle cx="89" cy="63" r="2.8" fill="#e2e8f0"/>
+  <circle cx="83" cy="69" r="2.8" fill="#f6ad55"/>
+
+  <!-- Center AI Diagnostic Pulse / Fix Bolt -->
+  <path d="M63 39L52 57H61L57 74L70 54H60.5L63 39Z" fill="url(#sparkGrad)" filter="url(#softGlow)"/>
+</svg>
