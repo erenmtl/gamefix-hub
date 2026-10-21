@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameFix AI Hub | Popüler Oyun Sorunları, Forum Derlemeleri & Yapay Zeka Çözüm Merkezi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Shared Datalist for Autocomplete -->
+  <datalist id="allGamesDatalist"></datalist>
+
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-40 bg-[#161b24]/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-[1600px] mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="selectGame('all')">
+        <div class="w-10 h-10 rounded-xl accent-btn flex items-center justify-center shadow">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-white">GameFix <span class="text-[#88c0a8]">AI</span> Hub</span>
+            <span id="navTotalGamesPill" class="text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-gray-300 font-semibold border border-white/10">13 Oyun</span>
+          </div>
+          <p class="text-xs text-gray-400 hidden sm:block">Global Forum Tarayıcı & Yapay Zeka Arıza Çözüm Platformu</p>
+        </div>
+      </div>
+
+      <!-- Global Search -->
+      <div class="flex-1 max-w-xl hidden md:block">
+        <div class="relative">
+          <input
+            id="globalSearchInput"
+            type="text"
+            placeholder="Hata kodu veya sorun ara... (Örn: VAN 9003, VAC, Exit Code 1, Packet Burst, Texture Loss)"
+            class="w-full bg-[#1d2430] text-sm text-white placeholder-gray-400 rounded-xl pl-10 pr-20 py-2.5 border border-white/10 focus:outline-none focus:border-white/25 transition"
+            oninput="handleGlobalSearch(this.value)"
+          />
+          <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <button
+            onclick="clearGlobalSearch()"
+            id="clearSearchBtn"
+            class="hidden absolute right-3 top-2 text-xs px-2 py-1 rounded bg-white/10 text-gray-300 hover:text-white"
+          >
+            Temizle
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Controls: Auth Area, New Game & Ask Question Button -->
+      <div class="flex items-center gap-2">
+        <button
+          onclick="openAddGameModal()"
+          class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-xs font-semibold text-[#a3d9c6] transition"
+        >
+          <span>+ Oyun Ekle</span>
+        </button>
+
+        <!-- Guest Auth Buttons -->
+        <div id="guestAuthArea" class="flex items-center gap-2">
+          <button
+            onclick="openAuthModal('login')"
+            class="px-3.5 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-xs font-semibold text-gray-200 transition"
+          >
+            Giriş Yap
+          </button>
+          <button
+            onclick="openAuthModal('register')"
+            class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-xs font-semibold text-white transition"
+          >
+            Hesap Aç
+          </button>
+        </div>
+
+        <!-- Logged-In User Badge -->
+        <div id="userProfileArea" class="hidden flex items-center gap-2">
+          <button
+            onclick="openProfileModal()"
+            class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 transition"
+          >
+            <div id="navUserAvatar" class="w-7 h-7 rounded-lg accent-btn flex items-center justify-center text-xs font-bold">
+              OY
+            </div>
+            <div class="text-left hidden sm:block">
+              <div id="navUsername" class="text-xs font-bold text-white leading-tight">Oyuncu</div>
+              <div id="navUserRole" class="text-[10px] text-[#88c0a8] leading-tight">✓ Doğrulanmış Üye</div>
+            </div>
+          </button>
+        </div>
+
+        <button
+          onclick="openAskModal()"
+          class="accent-btn px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+          </svg>
+          <span>Foruma Soru Sor</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <div class="max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT SIDEBAR: DEDICATED GAME SCREENS -->
+    <aside class="lg:col-span-3 space-y-5">
+      <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between px-1">
+          <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400">Oyun Ekranları</h2>
+          <span id="sidebarTotalGamesBadge" class="text-[11px] text-[#88c0a8] font-semibold">13 Oyun Aktif</span>
+        </div>
+
+        <!-- Add Any Game Button in Sidebar -->
+        <button
+          onclick="openAddGameModal()"
+          class="w-full py-2.5 px-3 rounded-xl bg-[#212936] hover:bg-[#283242] border border-dashed border-[#5e9c88]/50 text-xs font-semibold text-[#a3d9c6] flex items-center justify-center gap-2 transition"
+        >
+          <span>✨ + Yeni Oyun Ekle / Sayfa Oluştur</span>
+        </button>
+
+        <!-- Game Selector List -->
+        <div id="gameNavList" class="space-y-1 max-h-[580px] overflow-y-auto pr-1">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+
+      <!-- Forum & Server AI Cache Info Card -->
+      <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 text-[#88c0a8] font-semibold text-xs uppercase tracking-wider">
+            <span id="aiStatusDot" class="w-2 h-2 rounded-full bg-[#88c0a8]"></span>
+            <span id="aiStatusLabel">Canlı Gemini 3.8 Flash + Önbellek</span>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Akıllı Önbellek (Smart Cache) devrede: Daha önce çözümlenen benzer sorular veritabanından <strong>0 token</strong> harcanarak anında yanıtlanır.
+        </p>
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Reddit TechSupport</span>
+          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Technopat Sosyal</span>
+          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Steam Guides</span>
+          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Paradox & Cfx.re</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT CONTENT AREA: GAME PORTAL SCREEN -->
+    <main class="lg:col-span-9 space-y-6">
+
+      <!-- DYNAMIC GAME HERO BANNER -->
+      <section id="gameHeroBanner" class="hero-banner rounded-2xl p-6 lg:p-7 shadow-lg">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="flex flex-col sm:flex-row sm:items-center gap-5 max-w-3xl">
+            <div id="heroGameCoverWrapper" class="hidden shrink-0">
+              <img
+                id="heroGameCoverImg"
+                src="/api/games/cover/valorant"
+                alt="Oyun Görseli"
+                class="w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-cover border border-white/15 shadow-xl"
+              />
+            </div>
+            <div class="space-y-2.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <span id="heroCategoryBadge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md accent-badge">
+                  Tüm Oyunlar Portalı
+                </span>
+                <span id="heroEngineBadge" class="text-xs px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/10">
+                  Motor: Çoklu Oyun Motoru
+                </span>
+                <span id="heroAnticheatBadge" class="text-xs px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/10">
+                  Koruma: Vanguard / VAC / EAC / RICOCHET
+                </span>
+              </div>
+              <h1 id="heroGameTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Popüler Oyun Sorunları & Yapay Zeka Çözüm Merkezi
+              </h1>
+              <p id="heroGameSubtitle" class="text-sm text-gray-300 leading-relaxed">
+                Sol menüden bir oyun seçebilir, istediğiniz yeni bir oyunu ekleyebilir veya AI Arıza Çözümleyici ile herhangi bir oyunu yazarak otomatik sayfa ve çözüm üretebilirsiniz.
+              </p>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons on Game Screen -->
+          <div class="flex sm:flex-row lg:flex-col gap-2.5 shrink-0">
+            <button
+              onclick="switchTab('issues')"
+              class="accent-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+              <span>Hazır Forum Çözümlerini Gör</span>
+            </button>
+            <button
+              onclick="switchTab('forum')"
+              class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 flex items-center justify-center gap-2 transition"
+            >
+              <svg class="w-4 h-4 text-[#88c0a8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
+              </svg>
+              <span>Topluluk Forumu & Soru Sor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Common Error Tags Bar -->
+        <div class="mt-5 pt-4 border-t border-white/10 flex flex-wrap items-center gap-2">
+          <span class="text-xs text-gray-400 font-medium mr-1">Popüler Hata Kodları:</span>
+          <div id="heroCommonTags" class="flex flex-wrap gap-1.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- NAVIGATION TABS FOR CURRENT GAME SCREEN -->
+      <div class="border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <button id="tabBtn-ai-lab" onclick="switchTab('ai-lab')" class="tab-btn active flex items-center gap-2">
+            <span>🤖 Yapay Zeka Arıza Çözümleyici</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30">Ana Ekran</span>
+          </button>
+          <button id="tabBtn-issues" onclick="switchTab('issues')" class="tab-btn flex items-center gap-2">
+            <span>📚 Forum Sorunları & AI Çözümleri</span>
+            <span id="issuesCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white">0</span>
+          </button>
+          <button id="tabBtn-forum" onclick="switchTab('forum')" class="tab-btn flex items-center gap-2">
+            <span>💬 Oyuncu Soru-Cevap Forumu</span>
+            <span id="threadsCountBadge" class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white">0</span>
+          </button>
+        </div>
+
+        <!-- Category Filter (shown on Issues Tab) -->
+        <div id="categoryFilterWrapper" class="hidden flex items-center gap-2 pb-2">
+          <span class="text-xs text-gray-400">Kategori:</span>
+          <select
+            id="categorySelect"
+            onchange="handleCategoryChange(this.value)"
+            class="bg-[#1d2430] text-xs text-white rounded-lg px-3 py-1.5 border border-white/10 focus:outline-none"
+          >
+            <option value="all">Tüm Kategoriler</option>
+            <option value="Anti-Cheat & Güvenlik">Anti-Cheat & Güvenlik</option>
+            <option value="Performans & FPS">Performans & FPS</option>
+            <option value="Ağ & Bağlantı">Ağ & Bağlantı</option>
+            <option value="Çökme & Başlatma">Çökme & Başlatma</option>
+            <option value="Ses & Donanım">Ses & Donanım</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- TAB 1 (DEFAULT): AI DIAGNOSTIC & TROUBLESHOOTING LAB -->
+      <section id="tabContent-ai-lab" class="space-y-6">
+
+        <!-- AI Diagnostic Form (Always visible as clean landing screen; submits redirect guests to Login/Register) -->
+        <div id="aiLabMemberArea" class="bg-[#1d2430] border border-white/10 rounded-2xl p-6 space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div>
+              <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🧠 Yapay Zeka Destekli Özel Arıza Çözümleyici & Otomatik Sayfa Oluşturucu</span>
+              </h2>
+              <p class="text-xs text-gray-400 mt-0.5">
+                İstediğiniz oyunun adını yazın (örn: <code>victorie 3</code>, <code>banerlord</code>, <code>rdr 2</code>) veya aşağıdaki rastgele oyun dünyası önerilerinden seçin; AI oyunu tanıyıp özel sayfasını ve çözümünü üretir!
+              </p>
+            </div>
+            <div id="aiLabGuestLock" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#5e9c88]/10 border border-[#5e9c88]/30 text-xs text-[#a3d9c6] shrink-0">
+              <span>🔒 Çözümleme için üyelik gerekir</span>
+              <button type="button" onclick="openAuthModal('login')" class="underline font-bold text-white hover:text-[#a3d9c6] ml-1">Giriş Yap</button>
+            </div>
+          </div>
+
+          <!-- Random World Games Picker Box -->
+          <div class="bg-[#181e29] border border-white/10 rounded-xl p-4 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-[#a3d9c6] flex items-center gap-1.5">
+                <span>🎲 Oyun Dünyasından Örnek Oyunlar (Tıklayıp Seçebilir veya Kendi Oyununuzu Yazabilirsiniz)</span>
+              </span>
+              <button
+                type="button"
+                onclick="refreshRandomSuggestions()"
+                class="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition"
+              >
+                🔄 Başka Oyunlar Öner
+              </button>
+            </div>
+            <div id="aiLabSuggestionsContainer" class="flex flex-wrap gap-2">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+
+          <form onsubmit="submitAiDiagnostic(event)" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Oyun Adı (Yazın veya Seçin)</label>
+                <input
+                  id="aiLabGameInput"
+                  list="allGamesDatalist"
+                  type="text"
+                  required
+                  placeholder="Örn: victorie 3, Valorant, Bannerlord..."
+                  oninput="previewSmartGameRecognition(this.value, 'aiLabSmartHint')"
+                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+                />
+                <div id="aiLabSmartHint" class="text-[11px] text-[#88c0a8] mt-1 min-h-[16px]"></div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Hata Kodu / Konu (Opsiyonel)</label>
+                <input
+                  id="aiLabErrorCode"
+                  type="text"
+                  placeholder="Örn: Late-Game Lag, VAN 9003, Exit Code 1"
+                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Sistem Özellikleriniz (GPU / CPU / Anakart)</label>
+                <input
+                  id="aiLabSpecs"
+                  type="text"
+                  placeholder="Örn: Win 11, Ryzen 5 5600, RTX 4060, 16GB RAM"
+                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1.5">Yaşadığınız Sorunun Detayları</label>
+              <textarea
+                id="aiLabDescription"
+                rows="3"
+                required
+                placeholder="Sorun ne zaman başlıyor? Hangi hata mesajını alıyorsunuz? Şimdiye kadar hangi adımları denediniz?"
+                class="w-full bg-[#212936] text-sm text-white rounded-xl p-3.5 border border-white/10 focus:outline-none focus:border-white/25"
+              ></textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-xs text-gray-400">
+                💡 Yazdığınız oyun sol menüde yoksa, AI analiziyle birlikte <strong>o oyunun özel sayfası da otomatik oluşturulur</strong>.
+              </span>
+              <button
+                type="submit"
+                id="aiAnalyzeSubmitBtn"
+                class="accent-btn px-6 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow"
+              >
+                <span>🔍 Yapay Zeka İle Çözümle & Sayfasını Aç</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- AI Diagnostic Output Box -->
+        <div id="aiLabResultCard" class="hidden bg-[#1d2430] border border-[#5e9c88]/35 rounded-2xl p-6 space-y-4 shadow-xl">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#88c0a8]"></span>
+              <h3 class="font-bold text-white text-base">Yapay Zeka Teknik Teşhis Raporu</h3>
+              <span id="aiResultModeBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 font-medium"></span>
+            </div>
+            <span id="aiResultConfidence" class="text-xs font-bold text-[#88c0a8]"></span>
+          </div>
+          <div id="aiLabResultContent" class="ai-markdown text-sm leading-relaxed"></div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CURATED FORUM ISSUES & AI SOLUTIONS (Hidden on initial load so screen stays clean) -->
+      <section id="tabContent-issues" class="hidden space-y-5">
+        <div id="issuesListContainer" class="space-y-5">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 3: COMMUNITY & AI Q&A FORUM -->
+      <section id="tabContent-forum" class="hidden space-y-5">
+        <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-base font-bold text-white">💬 Oyuncu Soru-Cevap & Yardımlaşma Forumu</h2>
+            <p class="text-xs text-gray-400 mt-0.5">
+              E-posta onaylı üyeler tarafından açılan her soruya <strong>GameFix AI</strong> saniyeler içinde otomatik teknik çözüm yanıtı yazar.
+            </p>
+          </div>
+          <button
+            onclick="openAskModal()"
+            class="accent-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm shrink-0"
+          >
+            + Yeni Konu / Soru Aç
+          </button>
+        </div>
+
+        <div id="threadsListContainer" class="space-y-4">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL 1: ASK NEW QUESTION IN FORUM -->
+  <div id="askQuestionModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1d2430] border border-white/15 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-white">Foruma Yeni Soru Sor (Otomatik AI Çözümlü)</h3>
+          <p class="text-xs text-gray-400">Listede olmayan bir oyun yazarsanız (örn: <code>victorie 3</code>) oyunu otomatik tanır ve sayfasını oluşturur.</p>
+        </div>
+        <button onclick="closeAskModal()" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <!-- Random Suggestions inside Modal -->
+      <div class="bg-[#181e29] border border-white/10 rounded-xl p-3 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-semibold text-[#a3d9c6]">🎲 Oyun Dünyasından Rastgele Öneriler (İsterseniz tıklayın veya kendi oyununuzu yazın):</span>
+          <button type="button" onclick="refreshRandomSuggestions()" class="text-[11px] px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-gray-300">🔄 Yenile</button>
+        </div>
+        <div id="modalSuggestionsContainer" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <form onsubmit="submitNewThread(event)" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Oyun Adı (Yazın veya Seçin)</label>
+            <input
+              id="modalThreadGameInput"
+              list="allGamesDatalist"
+              type="text"
+              required
+              placeholder="Örn: victorie 3, Valorant, RDR 2..."
+              oninput="previewSmartGameRecognition(this.value, 'modalGameSmartHint')"
+              class="w-full bg-[#212936] text-sm text-white rounded-xl px-3 py-2.5 border border-white/10"
+            />
+            <div id="modalGameSmartHint" class="text-[11px] text-[#88c0a8] mt-1 min-h-[16px]"></div>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Hata Kodu (Varsa)</label>
+            <input id="modalThreadErrorCode" type="text" placeholder="Örn: Late-Game Lag, VAN 9003, VAC" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3 py-2.5 border border-white/10" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Sistem Özellikleriniz</label>
+          <input id="modalThreadSpecs" type="text" placeholder="Örn: Win 11, RTX 4060, i5-13400F" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3 py-2.5 border border-white/10" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Konu Başlığı</label>
+          <input id="modalThreadTitle" type="text" required placeholder="Sorununuzu özetleyen net bir başlık yazın..." class="w-full bg-[#212936] text-sm text-white rounded-xl px-3 py-2.5 border border-white/10" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Sorun Açıklaması</label>
+          <textarea id="modalThreadContent" rows="4" required placeholder="Hatanın nasıl oluştuğunu ve denediğiniz yöntemleri detaylıca paylaşın..." class="w-full bg-[#212936] text-sm text-white rounded-xl p-3 border border-white/10"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <button type="button" onclick="closeAskModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 text-gray-300 hover:bg-white/10">
+            İptal
+          </button>
+          <button type="submit" id="modalThreadSubmitBtn" class="accent-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm">
+            🚀 Soruyu Yayınla ve AI İle Çözümle
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD NEW GAME / AUTOMATIC PAGE GENERATOR -->
+  <div id="addGameModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1d2430] border border-white/15 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div>
+          <h3 class="text-lg font-bold text-white">✨ Yeni Oyun Ekle & Özel Sayfa Oluştur</h3>
+          <p class="text-xs text-gray-400">Oyun adını yazın (örn: <code>victorie 3</code>) veya önerilerden seçin; AI doğru oyunu bulup forum sorunlarıyla birlikte sayfasını hazırlasın.</p>
+        </div>
+        <button onclick="closeAddGameModal()" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <!-- Random World Game Suggestions inside Add Game Modal -->
+      <div class="bg-[#181e29] border border-white/10 rounded-xl p-3.5 space-y-2">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-[#a3d9c6]">🎲 Oyun Dünyasından Öneriler:</span>
+          <button type="button" onclick="refreshRandomSuggestions()" class="text-xs px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-gray-300">🔄 Rastgele Getir</button>
+        </div>
+        <div id="addGameSuggestionsContainer" class="flex flex-wrap gap-1.5"></div>
+      </div>
+
+      <form onsubmit="submitAddNewGame(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Eklemek İstediğiniz Oyun Adı</label>
+          <input
+            id="newGameQueryInput"
+            type="text"
+            required
+            placeholder="Örn: victorie 3, Bannerlord, RDR 2, HOI4..."
+            oninput="previewSmartGameRecognition(this.value, 'addGameSmartHint')"
+            class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+          />
+          <div id="addGameSmartHint" class="text-xs text-[#88c0a8] mt-1.5 min-h-[20px]"></div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAddGameModal()" class="px-4 py-2 rounded-xl text-xs bg-white/5 text-gray-300">İptal</button>
+          <button type="submit" id="addGameSubmitBtn" class="accent-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm">
+            🚀 Oyun Sayfasını Oluştur ve Aç
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: USER AUTHENTICATION (LOGIN & 2-STEP EMAIL VERIFICATION REGISTER) -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1d2430] border border-white/15 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="flex gap-4">
+          <button type="button" id="authTabLogin" onclick="switchAuthTab('login')" class="text-sm font-bold text-white border-b-2 border-[#5e9c88] pb-1">
+            Giriş Yap
+          </button>
+          <button type="button" id="authTabRegister" onclick="switchAuthTab('register')" class="text-sm font-bold text-gray-400 border-b-2 border-transparent pb-1">
+            Yeni Hesap Aç
+          </button>
+        </div>
+        <button type="button" onclick="closeAuthModal()" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <!-- Inline Feedback / Error Box inside Modal -->
+      <div id="authModalAlert" class="hidden rounded-xl p-3 text-xs leading-relaxed border"></div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="submitLogin(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Kullanıcı Adı veya E-Posta</label>
+          <input id="loginIdentifier" type="text" required placeholder="Kullanıcı adınız veya e-posta adresiniz" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Şifre</label>
+          <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" onclick="switchAuthTab('register')" class="text-xs text-[#88c0a8] hover:underline font-medium">
+            Hesabınız yok mu? Yeni Hesap Açın →
+          </button>
+          <div class="flex gap-2">
+            <button type="button" onclick="closeAuthModal()" class="px-3.5 py-2 rounded-xl text-xs bg-white/5 text-gray-300">İptal</button>
+            <button type="submit" id="loginSubmitBtn" class="accent-btn px-5 py-2 rounded-xl text-xs">Giriş Yap</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Register Step 1: Enter Details & Request Verification Code -->
+      <form id="registerFormStep1" onsubmit="requestEmailVerificationCode(event)" class="hidden space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Kullanıcı Adı</label>
+          <input id="regUsername" type="text" required placeholder="Örn: MertFPS" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">E-Posta Adresi (Onay kodu gönderilecek)</label>
+          <input id="regEmail" type="email" required placeholder="ornek@mail.com" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Şifre</label>
+          <input id="regPassword" type="password" required placeholder="En az 4 karakter" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Sistem Özellikleriniz (Opsiyonel)</label>
+          <input id="regSpecs" type="text" placeholder="Örn: Win 11, Ryzen 5 5600, RTX 4060, 16GB RAM" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeAuthModal()" class="px-4 py-2 rounded-xl text-xs bg-white/5 text-gray-300">İptal</button>
+          <button type="submit" id="sendCodeBtn" class="accent-btn px-5 py-2 rounded-xl text-xs">
+            📩 E-Postaya Onay Kodu Gönder
+          </button>
+        </div>
+      </form>
+
+      <!-- Register Step 2: Enter 6-Digit Email Verification Code -->
+      <form id="registerFormStep2" onsubmit="verifyCodeAndCompleteRegister(event)" class="hidden space-y-4">
+        <div class="bg-[#181e29] border border-[#5e9c88]/40 rounded-xl p-3.5 space-y-2">
+          <div class="text-xs font-bold text-[#a3d9c6]">📩 E-Posta Onay Kodu Oluşturuldu</div>
+          <p id="verifyEmailTargetText" class="text-xs text-gray-300"></p>
+          <!-- Local Inbox Preview when SMTP is not configured -->
+          <div id="localInboxPreviewBox" class="hidden mt-2 pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+            <span class="text-[11px] text-gray-300">Gelen Kutusu Onay Kodunuz:</span>
+            <div class="flex items-center gap-2">
+              <span id="localInboxPreviewCode" class="font-mono font-extrabold text-sm px-2.5 py-0.5 rounded bg-[#5e9c88]/25 text-[#a3d9c6] tracking-widest"></span>
+              <button type="button" onclick="fillPreviewVerificationCode()" class="text-[11px] px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white font-semibold">
+                Kodu Doldur
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">6 Haneli Onay Kodu</label>
+          <input
+            id="regVerificationCodeInput"
+            type="text"
+            maxlength="6"
+            required
+            placeholder="Örn: 482915"
+            class="w-full bg-[#212936] text-center font-mono text-lg tracking-widest text-white rounded-xl px-3.5 py-2.5 border border-white/15 focus:outline-none focus:border-[#5e9c88]"
+          />
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" onclick="backToRegisterStep1()" class="text-xs text-gray-400 hover:text-white">
+            ← Bilgileri Düzenle
+          </button>
+          <button type="submit" id="verifyCodeSubmitBtn" class="accent-btn px-5 py-2.5 rounded-xl text-xs">
+            ✓ Kodu Doğrula ve Hesabı Aç
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: USER PROFILE -->
+  <div id="profileModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1d2430] border border-white/15 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div class="flex items-center gap-3">
+          <div id="profileModalAvatar" class="w-10 h-10 rounded-xl accent-btn flex items-center justify-center font-bold text-sm">OY</div>
+          <div>
+            <h3 id="profileModalUsername" class="text-base font-bold text-white">Oyuncu</h3>
+            <p id="profileModalEmail" class="text-xs text-gray-400">oyuncu@mail.com</p>
+          </div>
+        </div>
+        <button onclick="closeProfileModal()" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <form onsubmit="saveUserProfile(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Kayıtlı Bilgisayar / Sistem Özelliklerim</label>
+          <input id="profileSpecsInput" type="text" placeholder="Örn: Windows 11, Ryzen 5 5600, RTX 4060, 16GB RAM" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10" />
+          <p class="text-[11px] text-gray-400 mt-1">AI Çözümleyici ve Forum sorularında donanımınız otomatik olarak doldurulur.</p>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Favori Oyunum</label>
+          <select id="profileFavGameSelect" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10"></select>
+        </div>
+        <div class="flex justify-between items-center pt-1">
+          <button type="button" onclick="logoutUser()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-500/15 text-red-300 hover:bg-red-500/25 border border-red-500/25">
+            Çıkış Yap
+          </button>
+          <button type="submit" class="accent-btn px-4 py-2 rounded-xl text-xs">
+            Profili Güncelle
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="hidden fixed bottom-5 right-5 z-[70] bg-[#212936] border border-[#5e9c88]/50 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-medium flex items-center gap-2.5">
+    <span class="w-2.5 h-2.5 rounded-full bg-[#88c0a8]"></span>
+    <span id="toastMessage">İşlem tamamlandı</span>
+  </div>
+
+  <script src="static/seed_data.js"></script>
+  <script src="static/cloud_engine.js"></script>
+  <script src="static/app.js"></script>
+</body>
+</html>
