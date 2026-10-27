@@ -150,19 +150,23 @@
         </div>
       </a>
 
-      <!-- Global Search -->
-      <div class="flex-1 max-w-xl hidden md:block">
+      <!-- Global Search with Live Autocomplete (Desktop) -->
+      <div class="flex-1 max-w-xl hidden md:block" id="desktopSearchWrapper">
         <div class="relative">
           <input
             id="globalSearchInput"
             type="text"
-            placeholder="Hata kodu veya sorun ara... (Örn: VAN 9003, VAC, Exit Code 1, Packet Burst, Texture Loss)"
-            class="w-full bg-[#1d2430] text-sm text-white placeholder-gray-400 rounded-xl pl-10 pr-20 py-2.5 border border-white/10 focus:outline-none focus:border-white/25 transition"
-            oninput="handleGlobalSearch(this.value)"
+            autocomplete="off"
+            placeholder="Canlı ara: VAN 9003, CS2 VAC, D3D, FPS artırma veya oyun adı..."
+            class="w-full bg-[#1d2430] text-sm text-white placeholder-gray-400 rounded-xl pl-10 pr-24 py-2.5 border border-white/10 focus:outline-none focus:border-[#88c0a8]/60 transition"
+            onfocus="openLiveAutocomplete(this.value)"
+            oninput="handleLiveSearchInput(this.value)"
+            onkeydown="handleSearchKeydown(event)"
           />
-          <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-[#88c0a8] absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
+          <span class="hidden lg:inline-block absolute right-3 top-2.5 text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10 pointer-events-none" id="searchShortcutHint">Canlı Filtre</span>
           <button
             onclick="clearGlobalSearch()"
             id="clearSearchBtn"
@@ -170,11 +174,25 @@
           >
             Temizle
           </button>
+
+          <!-- Live Autocomplete Dropdown Panel -->
+          <div
+            id="liveSearchDropdown"
+            class="hidden absolute left-0 right-0 top-full mt-2 bg-[#171e2b]/98 backdrop-blur-xl border border-[#88c0a8]/40 rounded-2xl shadow-2xl z-50 max-h-[470px] overflow-y-auto divide-y divide-white/10"
+          ></div>
         </div>
       </div>
 
-      <!-- Right Controls: Auth Area, New Game & Ask Question Button -->
+      <!-- Right Controls: Hardware Detect, Auth Area, New Game & Ask Question Button -->
       <div class="flex items-center gap-2">
+        <button
+          onclick="triggerHardwareAutoDetect()"
+          title="WebGL ve Tarayıcı API ile GPU, CPU ve İşletim Sisteminizi Otomatik Tespit Edin"
+          class="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-[#88c0a8]/30 text-xs font-semibold text-[#a3d9c6] transition"
+        >
+          <span>🖥️ Donanımımı Algıla</span>
+        </button>
+
         <button
           onclick="openAddGameModal()"
           class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-xs font-semibold text-[#a3d9c6] transition"
@@ -223,6 +241,28 @@
           </svg>
           <span>Foruma Soru Sor</span>
         </button>
+      </div>
+    </div>
+
+    <!-- Mobile Live Search Bar (Responsive for Phones & Tablets) -->
+    <div class="md:hidden px-4 pb-3" id="mobileSearchWrapper">
+      <div class="relative">
+        <input
+          id="mobileSearchInput"
+          type="text"
+          autocomplete="off"
+          placeholder="Hata kodu veya oyun ara... (VAN 9003, CS2 VAC, D3D, FPS)"
+          class="w-full bg-[#1d2430] text-xs text-white placeholder-gray-400 rounded-xl pl-9 pr-16 py-2.5 border border-white/10 focus:outline-none focus:border-[#88c0a8]/60"
+          onfocus="openLiveAutocomplete(this.value, true)"
+          oninput="handleLiveSearchInput(this.value, true)"
+        />
+        <svg class="w-4 h-4 text-[#88c0a8] absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <div
+          id="mobileLiveSearchDropdown"
+          class="hidden absolute left-0 right-0 top-full mt-1.5 bg-[#171e2b]/98 backdrop-blur-xl border border-[#88c0a8]/40 rounded-2xl shadow-2xl z-50 max-h-[380px] overflow-y-auto divide-y divide-white/10"
+        ></div>
       </div>
     </div>
   </header>
@@ -439,12 +479,76 @@
                 />
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Sistem Özellikleriniz (GPU / CPU / Anakart)</label>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label class="block text-xs font-semibold text-gray-300">Sistem Özellikleriniz (GPU / CPU / OS)</label>
+                  <button
+                    type="button"
+                    onclick="triggerHardwareAutoDetect()"
+                    class="text-[11px] font-bold text-[#a3d9c6] hover:text-white px-2 py-0.5 rounded-md bg-[#5e9c88]/20 hover:bg-[#5e9c88]/35 border border-[#88c0a8]/35 transition flex items-center gap-1"
+                  >
+                    <span>🖥️ Otomatik Algıla</span>
+                  </button>
+                </div>
                 <input
                   id="aiLabSpecs"
                   type="text"
                   placeholder="Örn: Win 11, Ryzen 5 5600, RTX 4060, 16GB RAM"
                   class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+                />
+              </div>
+            </div>
+
+            <!-- Interactive Hardware Detection Confirmation Banner (KVKK Compliant Opt-In) -->
+            <div id="hardwareConfirmBox" class="hidden bg-[#161e2b] border border-[#88c0a8]/45 rounded-xl p-4 space-y-3 shadow-lg">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-8 h-8 rounded-lg bg-[#5e9c88]/20 border border-[#88c0a8]/40 flex items-center justify-center text-base">🖥️</span>
+                  <div>
+                    <div class="text-xs font-extrabold text-white">Tarayıcı (WebGL & Sistem API) Donanım Tespiti Tamamlandı</div>
+                    <p class="text-[11px] text-gray-400">Onay verirseniz aşağıdaki donanım profiliniz tüm arıza formlarına ve yerel profilinize otomatik doldurulacaktır.</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onclick="confirmAndApplyDetectedHardware()"
+                    class="accent-btn px-3.5 py-1.5 rounded-lg text-xs font-bold shadow"
+                  >
+                    ✓ Onayla ve Formlara Doldur
+                  </button>
+                  <button
+                    type="button"
+                    onclick="dismissHardwareConfirmBox()"
+                    class="px-2.5 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 text-gray-300"
+                  >
+                    Kapat
+                  </button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
+                  <div class="text-[10px] text-gray-400 uppercase font-semibold">Ekran Kartı (WebGL GPU)</div>
+                  <div id="hwDetectGpuText" class="font-bold text-[#a3d9c6] truncate mt-0.5">-</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
+                  <div class="text-[10px] text-gray-400 uppercase font-semibold">İşlemci (CPU Çekirdek)</div>
+                  <div id="hwDetectCpuText" class="font-bold text-white truncate mt-0.5">-</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
+                  <div class="text-[10px] text-gray-400 uppercase font-semibold">İşletim Sistemi (OS)</div>
+                  <div id="hwDetectOsText" class="font-bold text-white truncate mt-0.5">-</div>
+                </div>
+                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
+                  <div class="text-[10px] text-gray-400 uppercase font-semibold">Bellek (RAM Tahmini)</div>
+                  <div id="hwDetectRamText" class="font-bold text-white truncate mt-0.5">-</div>
+                </div>
+              </div>
+              <div>
+                <label class="block text-[11px] text-gray-400 mb-1">Doldurulacak Tam Donanım Metni (İsterseniz düzenleyebilirsiniz):</label>
+                <input
+                  id="hwDetectEditableSummary"
+                  type="text"
+                  class="w-full bg-[#212936] text-xs text-white rounded-lg px-3 py-2 border border-[#88c0a8]/35 focus:outline-none"
                 />
               </div>
             </div>
@@ -485,7 +589,11 @@
             </div>
             <span id="aiResultConfidence" class="text-xs font-bold text-[#88c0a8]"></span>
           </div>
+          <!-- Dynamic Safety Shield Banner for Critical AI Diagnostics -->
+          <div id="aiResultSafetyBanner" class="hidden"></div>
           <div id="aiLabResultContent" class="ai-markdown text-sm leading-relaxed"></div>
+          <!-- Solution Verification & Voting Bar for AI Diagnosis -->
+          <div id="aiResultVoteBar" class="pt-4 border-t border-white/10"></div>
         </div>
 
         <!-- GAMER TELEMETRY & LIVE STATS HUD -->
@@ -709,7 +817,12 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Sistem Özellikleriniz</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-gray-300">Sistem Özellikleriniz</label>
+            <button type="button" onclick="autoFillSingleSpecsInput('modalThreadSpecs')" class="text-[11px] font-bold text-[#a3d9c6] hover:text-white px-2 py-0.5 rounded bg-[#5e9c88]/20 border border-[#88c0a8]/35 transition">
+              🖥️ Otomatik Algıla ve Doldur
+            </button>
+          </div>
           <input id="modalThreadSpecs" type="text" placeholder="Örn: Win 11, RTX 4060, i5-13400F" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3 py-2.5 border border-white/10" />
         </div>
 
@@ -833,7 +946,12 @@
           <input id="regPassword" type="password" required placeholder="En az 4 karakter" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
         </div>
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Sistem Özellikleriniz (Opsiyonel)</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-gray-300">Sistem Özellikleriniz (Opsiyonel)</label>
+            <button type="button" onclick="autoFillSingleSpecsInput('regSpecs')" class="text-[11px] font-bold text-[#a3d9c6] hover:text-white px-2 py-0.5 rounded bg-[#5e9c88]/20 border border-[#88c0a8]/35 transition">
+              🖥️ Otomatik Algıla
+            </button>
+          </div>
           <input id="regSpecs" type="text" placeholder="Örn: Win 11, Ryzen 5 5600, RTX 4060, 16GB RAM" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
         </div>
         <div class="pt-1">
@@ -910,7 +1028,12 @@
 
       <form onsubmit="saveUserProfile(event)" class="space-y-3.5">
         <div>
-          <label class="block text-xs font-semibold text-gray-300 mb-1">Kayıtlı Bilgisayar / Sistem Özelliklerim</label>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-gray-300">Kayıtlı Bilgisayar / Sistem Özelliklerim</label>
+            <button type="button" onclick="autoFillSingleSpecsInput('profileSpecsInput')" class="text-[11px] font-bold text-[#a3d9c6] hover:text-white px-2 py-0.5 rounded bg-[#5e9c88]/20 border border-[#88c0a8]/35 transition">
+              🖥️ Otomatik Algıla
+            </button>
+          </div>
           <input id="profileSpecsInput" type="text" placeholder="Örn: Windows 11, Ryzen 5 5600, RTX 4060, 16GB RAM" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10" />
           <p class="text-[11px] text-gray-400 mt-1">AI Çözümleyici ve Forum sorularında donanımınız otomatik olarak doldurulur.</p>
         </div>

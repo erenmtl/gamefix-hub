@@ -497,34 +497,89 @@
           (i.ai_root_cause || '').toLowerCase().includes(search)
         );
       }
-      return jsonResponse(issues.map(i => ({
-        ...i,
-        game_image_url: getGameImageUrl(i.game_slug, i.accent_color),
-        user_voted: Boolean(votes[`${voterKey}:issue:${i.id}`])
-      })));
+      return jsonResponse(issues.map(i => {
+        const upCnt = Number(i.helpful_votes || 10);
+        const baseSr = Math.max(50, Math.min(99, Number(i.success_rate || 95)));
+        const baseDown = Math.max(2, Math.round(upCnt * (100 - baseSr) / Math.max(baseSr, 1)));
+        const downCnt = Number(i.unhelpful_votes != null ? i.unhelpful_votes : baseDown);
+        const totalCnt = Math.max(1, upCnt + downCnt);
+        const dynSr = Math.round((upCnt / totalCnt) * 100);
+        const rawVote = votes[`${voterKey}:issue:${i.id}`];
+        const userVote = rawVote === 'down' ? 'down' : (rawVote ? 'up' : null);
+        return {
+          ...i,
+          helpful_votes: upCnt,
+          unhelpful_votes: downCnt,
+          total_votes: totalCnt,
+          success_rate: dynSr,
+          game_image_url: getGameImageUrl(i.game_slug, i.accent_color),
+          user_voted: userVote === 'up',
+          user_vote: userVote
+        };
+      }));
     }
 
     const issueVoteMatch = path.match(/^\/api\/issues\/(\d+)\/vote$/);
     if (issueVoteMatch && method === 'POST') {
       const id = Number(issueVoteMatch[1]);
+      const voteType = (body && body.vote_type === 'down') ? 'down' : 'up';
       const voterKey = getVoterKey(headers);
       const votes = loadStore(STORAGE_KEYS.votes, {});
       const issues = loadStore(STORAGE_KEYS.issues, SEED.issues);
       const item = issues.find(i => i.id === id);
       if (!item) return jsonResponse({ detail: 'Sorun bulunamadı' }, 404);
-      const vKey = `${voterKey}:issue:${id}`;
-      let userVoted = false;
-      if (votes[vKey]) {
-        delete votes[vKey];
-        item.helpful_votes = Math.max(0, (item.helpful_votes || 1) - 1);
-      } else {
-        votes[vKey] = true;
-        item.helpful_votes = (item.helpful_votes || 0) + 1;
-        userVoted = true;
+
+      const upCntInit = Number(item.helpful_votes || 10);
+      const baseSr = Math.max(50, Math.min(99, Number(item.success_rate || 95)));
+      if (item.unhelpful_votes == null) {
+        item.unhelpful_votes = Math.max(2, Math.round(upCntInit * (100 - baseSr) / Math.max(baseSr, 1)));
       }
+
+      const vKey = `${voterKey}:issue:${id}`;
+      const prevVote = votes[vKey] === 'down' ? 'down' : (votes[vKey] ? 'up' : null);
+      let nextVote = null;
+
+      if (voteType === 'up') {
+        if (prevVote === 'up') {
+          delete votes[vKey];
+          item.helpful_votes = Math.max(0, (item.helpful_votes || 1) - 1);
+          nextVote = null;
+        } else {
+          if (prevVote === 'down') {
+            item.unhelpful_votes = Math.max(0, (item.unhelpful_votes || 1) - 1);
+          }
+          votes[vKey] = 'up';
+          item.helpful_votes = (item.helpful_votes || 0) + 1;
+          nextVote = 'up';
+        }
+      } else {
+        if (prevVote === 'down') {
+          delete votes[vKey];
+          item.unhelpful_votes = Math.max(0, (item.unhelpful_votes || 1) - 1);
+          nextVote = null;
+        } else {
+          if (prevVote === 'up') {
+            item.helpful_votes = Math.max(0, (item.helpful_votes || 1) - 1);
+          }
+          votes[vKey] = 'down';
+          item.unhelpful_votes = (item.unhelpful_votes || 0) + 1;
+          nextVote = 'down';
+        }
+      }
+
+      item.total_votes = Math.max(1, (item.helpful_votes || 0) + (item.unhelpful_votes || 0));
+      item.success_rate = Math.round(((item.helpful_votes || 0) / item.total_votes) * 100);
+
       saveStore(STORAGE_KEYS.votes, votes);
       saveStore(STORAGE_KEYS.issues, issues);
-      return jsonResponse({ helpful_votes: item.helpful_votes, user_voted: userVoted });
+      return jsonResponse({
+        helpful_votes: item.helpful_votes,
+        unhelpful_votes: item.unhelpful_votes,
+        total_votes: item.total_votes,
+        success_rate: item.success_rate,
+        user_voted: nextVote === 'up',
+        user_vote: nextVote
+      });
     }
 
     if (path === '/api/auth/send-code' && method === 'POST') {

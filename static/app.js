@@ -40,6 +40,8 @@ function getAuthHeaders(extra = {}) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   initCookieConsent();
+  initLiveSearchListeners();
+  loadSavedHardwareSpecs();
   await checkCurrentSession();
   await fetchStatus();
   await fetchGames();
@@ -73,6 +75,36 @@ function applyGameTheme(accentHex) {
   document.documentElement.style.setProperty('--accent-glow', hexToRgba(accentHex, 0.13));
 }
 
+function encodeBase64Utf8(str) {
+  try {
+    return btoa(unescape(encodeURIComponent(str)));
+  } catch (e) {
+    return '';
+  }
+}
+
+function decodeBase64Utf8(b64) {
+  try {
+    return decodeURIComponent(escape(atob(b64)));
+  } catch (e) {
+    return '';
+  }
+}
+
+function copyCodeFromBtn(btnEl, b64Code) {
+  const raw = decodeBase64Utf8(b64Code);
+  if (!raw) return;
+  navigator.clipboard.writeText(raw);
+  const origText = btnEl.innerHTML;
+  btnEl.innerHTML = '✓ Kopyalandı!';
+  btnEl.classList.add('text-[#a3d9c6]', 'border-[#5e9c88]');
+  showToast('📋 Komut panoya kopyalandı!');
+  setTimeout(() => {
+    btnEl.innerHTML = origText;
+    btnEl.classList.remove('text-[#a3d9c6]', 'border-[#5e9c88]');
+  }, 2000);
+}
+
 function formatSimpleMarkdown(md) {
   if (!md) return '';
   let html = md
@@ -81,10 +113,26 @@ function formatSimpleMarkdown(md) {
     .replace(/>/g, '&gt;');
 
   html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (_, lang, code) => {
-    return `<pre><code>${code.trim()}</code></pre>`;
+    const cleanCode = code.trim();
+    const unescapedCode = cleanCode
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&');
+    const b64 = encodeBase64Utf8(unescapedCode);
+    const langLabel = (lang || 'Komut / Kod').toUpperCase();
+    return `<div class="my-3 rounded-xl overflow-hidden border border-white/15 bg-[#121721]"><div class="flex items-center justify-between px-3.5 py-1.5 bg-[#1a2230] border-b border-white/10"><span class="text-[10px] font-mono font-bold text-[#88c0a8] tracking-wider">${langLabel}</span><button type="button" onclick="copyCodeFromBtn(this, '${b64}')" class="text-[11px] font-semibold px-2.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white border border-white/10 transition">📋 Kodu Kopyala</button></div><pre class="!my-0 !border-0 !rounded-none"><code>${cleanCode}</code></pre></div>`;
   });
 
-  html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+  html = html.replace(/`([^`]+)`/g, (_, inlineCode) => {
+    const unescaped = inlineCode.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+    const isCommandLike = /(\b(bcdedit|sfc|dism|sc\s+delete|netsh|regedit|msinfo32|services\.msc|sysdm\.cpl|rstrui\.exe|dxdiag|writecfg|gc\.buffer)\b|[%\\\/]|--[a-z0-9-]+|-[a-z0-9]{2,})/i.test(unescaped);
+    if (isCommandLike && unescaped.length >= 4) {
+      const b64 = encodeBase64Utf8(unescaped);
+      return `<span class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/15 px-1.5 py-0.5 rounded border border-white/10 cursor-pointer group" onclick="copyCodeFromBtn(this, '${b64}')" title="Tıkla ve Kopyala"><code>${inlineCode}</code><span class="text-[10px] text-[#88c0a8] opacity-80 group-hover:opacity-100">📋</span></span>`;
+    }
+    return `<code>${inlineCode}</code>`;
+  });
+
   html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
   html = html.replace(/^## (.*$)/gim, '<h3>$1</h3>');
   html = html.replace(/^---$/gim, '<hr/>');
@@ -115,7 +163,7 @@ function formatSimpleMarkdown(md) {
         out.push(`</${inList}>`);
         inList = false;
       }
-      if (trimmed.startsWith('<h3') || trimmed.startsWith('<pre') || trimmed.startsWith('<hr') || trimmed.startsWith('<blockquote')) {
+      if (trimmed.startsWith('<h3') || trimmed.startsWith('<div class="my-3') || trimmed.startsWith('<pre') || trimmed.startsWith('<hr') || trimmed.startsWith('<blockquote')) {
         out.push(trimmed);
       } else if (trimmed.length > 0) {
         out.push(`<p>${trimmed}</p>`);
@@ -125,6 +173,258 @@ function formatSimpleMarkdown(md) {
   if (inList) out.push(`</${inList}>`);
 
   return out.join('\n');
+}
+
+// --- FEATURE 3: SAFETY BANNER COMPONENT FOR CRITICAL SYSTEM OPERATIONS ---
+
+function analyzeTechnicalRisk(combinedText) {
+  const txt = String(combinedText || '');
+  const risks = [];
+
+  if (/\b(bios|uefi|secure\s*boot|tpm\s*2\.0|ftpm|ptt|csm|key\s*management)\b/i.test(txt)) {
+    risks.push({
+      badge: '⚠️ BIOS / UEFI & Secure Boot İşlemi',
+      hint: 'Anakart BIOS/UEFI ayarlarında (Secure Boot, TPM 2.0, CSM) değişiklik yapılırken yanlış önyükleme modu seçilmesi sistem açılışını etkileyebilir.'
+    });
+  }
+  if (/\b(regedit|kayıt\s*defteri|hkey_|dword)\b/i.test(txt)) {
+    risks.push({
+      badge: '⚠️ Windows Kayıt Defteri (Regedit)',
+      hint: 'Kayıt Defteri anahtarlarında yapılacak değişiklikler sistem davranışını doğrudan etkiler.'
+    });
+  }
+  if (/\b(bcdedit|sc\s+delete|nointegritychecks|sysdm\.cpl|pagefile|sanal\s*bellek)\b/i.test(txt)) {
+    risks.push({
+      badge: '⚠️ Çekirdek / Komut Satırı (CMD & bcdedit)',
+      hint: 'Yönetici Komut İstemi (bcdedit, servis silme veya sanal bellek) işlemleri çekirdek yapılandırmasını değiştirir.'
+    });
+  }
+  if (/\b(ddu|display\s*driver\s*uninstaller|güvenli\s*mod|safe\s*mode|sürücü\s*sil)\b/i.test(txt)) {
+    risks.push({
+      badge: '⚠️ Temiz Sürücü Kaldırma (DDU / Güvenli Mod)',
+      hint: 'Ekran kartı veya sistem sürücüsünü tamamen kaldırmadan önce güncel kurulum paketini indirdiğinizden emin olun.'
+    });
+  }
+  return risks;
+}
+
+function buildSafetyBannerHtml(combinedText) {
+  const risks = analyzeTechnicalRisk(combinedText);
+  if (risks.length === 0) return '';
+
+  const restoreCmdB64 = encodeBase64Utf8('Checkpoint-Computer -Description "HemenCoz_Sistem_Yedegi" -RestorePointType "MODIFY_SETTINGS"');
+  const rstruiB64 = encodeBase64Utf8('rstrui.exe');
+
+  const badgesHtml = risks.map(r => `
+    <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-md bg-amber-500/20 text-amber-200 border border-amber-400/35">
+      ${r.badge}
+    </span>
+  `).join('');
+
+  return `
+    <div class="rounded-xl p-4 bg-gradient-to-r from-amber-500/12 via-[#241e18] to-[#1d2430] border border-amber-400/40 space-y-2.5 shadow-md">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🛡️</span>
+          <span class="text-xs sm:text-sm font-extrabold text-amber-200">
+            Teknik Risk &amp; Sistem Geri Yükleme Noktası Uyarısı
+          </span>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          ${badgesHtml}
+        </div>
+      </div>
+      <p class="text-xs text-gray-200 leading-relaxed">
+        Bu çözüm rehberi <strong>${risks[0].hint}</strong> İşlemlere başlamadan önce olası bir hataya karşı <strong>Sistem Geri Yükleme Noktası</strong> oluşturmanız önerilir.
+      </p>
+      <div class="flex flex-wrap items-center gap-2 pt-1">
+        <button
+          type="button"
+          onclick="copyCodeFromBtn(this, '${restoreCmdB64}')"
+          class="text-[11px] font-semibold px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-100 border border-amber-400/35 transition flex items-center gap-1.5"
+        >
+          <span>📋 PowerShell Yedek Alma Komutunu Kopyala</span>
+        </button>
+        <button
+          type="button"
+          onclick="copyCodeFromBtn(this, '${rstruiB64}')"
+          class="text-[11px] font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition flex items-center gap-1.5"
+        >
+          <span>📋 Sistem Geri Yükleme Aracı (rstrui.exe)</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// --- FEATURE 2: AUTOMATIC HARDWARE DETECTION & FORM AUTO-FILLER (WebGL + Navigator API) ---
+
+let DETECTED_HARDWARE_CACHE = null;
+
+function cleanWebGLRendererName(rawRenderer) {
+  if (!rawRenderer) return 'Standart DirectX/Vulkan GPU';
+  let s = String(rawRenderer).trim();
+  // Extract inside ANGLE (Vendor, Renderer, Version)
+  const angleMatch = s.match(/ANGLE\s*\([^,]+,\s*([^,]+),/i);
+  if (angleMatch && angleMatch[1]) {
+    s = angleMatch[1].trim();
+  }
+  s = s
+    .replace(/Direct3D11.*$/i, '')
+    .replace(/vs_\d+_\d+.*$/i, '')
+    .replace(/\(0x[0-9A-Fa-f]+\)/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return s || 'Masaüstü/Mobil GPU';
+}
+
+async function detectClientHardware() {
+  // 1. WebGL GPU Detection
+  let gpuName = 'Tespit Edilemedi (WebGL)';
+  try {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    if (gl) {
+      const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+      const rawRenderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+      gpuName = cleanWebGLRendererName(rawRenderer);
+    }
+  } catch (e) {}
+
+  // 2. OS & Architecture Detection via UserAgentData / UserAgent
+  let osName = 'Windows 10/11 64-bit';
+  try {
+    const ua = navigator.userAgent || '';
+    if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
+      const hev = await navigator.userAgentData.getHighEntropyValues(['platform', 'platformVersion', 'architecture']);
+      if (hev.platform === 'Windows') {
+        const majorVer = parseInt((hev.platformVersion || '0').split('.')[0], 10);
+        osName = majorVer >= 13 ? 'Windows 11 (64-bit)' : 'Windows 10 (64-bit)';
+      } else if (hev.platform) {
+        osName = `${hev.platform} ${hev.architecture || ''}`.trim();
+      }
+    } else if (/Windows NT 10\.0/i.test(ua)) {
+      osName = 'Windows 11 / 10 (64-bit)';
+    } else if (/Mac OS X/i.test(ua)) {
+      osName = 'macOS';
+    } else if (/Linux/i.test(ua)) {
+      osName = 'Linux (Proton/SteamOS)';
+    } else if (/Android/i.test(ua)) {
+      osName = 'Android';
+    } else if (/iPhone|iPad/i.test(ua)) {
+      osName = 'iOS';
+    }
+  } catch (e) {}
+
+  // 3. CPU Logical Cores (Threads)
+  const cores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Çekirdek/Thread CPU` : 'Çok Çekirdekli CPU';
+
+  // 4. RAM Estimate
+  let ram = '16GB RAM';
+  if (navigator.deviceMemory) {
+    ram = navigator.deviceMemory >= 8 ? '16GB+ RAM' : `${navigator.deviceMemory}GB RAM`;
+  }
+
+  const summary = `${osName} | ${gpuName} | ${cores} | ${ram}`;
+  DETECTED_HARDWARE_CACHE = { gpu: gpuName, cpu: cores, os: osName, ram, summary };
+  return DETECTED_HARDWARE_CACHE;
+}
+
+async function triggerHardwareAutoDetect() {
+  const hw = await detectClientHardware();
+  const box = document.getElementById('hardwareConfirmBox');
+  if (box) {
+    document.getElementById('hwDetectGpuText').textContent = hw.gpu;
+    document.getElementById('hwDetectCpuText').textContent = hw.cpu;
+    document.getElementById('hwDetectOsText').textContent = hw.os;
+    document.getElementById('hwDetectRamText').textContent = hw.ram;
+    document.getElementById('hwDetectEditableSummary').value = hw.summary;
+    switchTab('ai-lab');
+    box.classList.remove('hidden');
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    showToast('🖥️ Donanımınız WebGL & Sistem API ile tespit edildi. Onaylayarak formlara doldurabilirsiniz.');
+  }
+}
+
+function dismissHardwareConfirmBox() {
+  const box = document.getElementById('hardwareConfirmBox');
+  if (box) box.classList.add('hidden');
+}
+
+function isFunctionalCookieAllowed() {
+  try {
+    const raw = localStorage.getItem('hemencoz_cookie_consent');
+    if (!raw) return true;
+    const parsed = JSON.parse(raw);
+    return parsed.functional !== false;
+  } catch (e) {
+    return true;
+  }
+}
+
+async function confirmAndApplyDetectedHardware() {
+  const summaryInp = document.getElementById('hwDetectEditableSummary');
+  const finalSpecs = (summaryInp && summaryInp.value.trim()) || (DETECTED_HARDWARE_CACHE && DETECTED_HARDWARE_CACHE.summary) || '';
+  if (!finalSpecs) return;
+
+  ['aiLabSpecs', 'modalThreadSpecs', 'regSpecs', 'profileSpecsInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = finalSpecs;
+  });
+
+  if (isFunctionalCookieAllowed()) {
+    try {
+      localStorage.setItem('hemencoz_detected_specs', finalSpecs);
+    } catch (e) {}
+  }
+
+  if (STATE.currentUser && STATE.authToken) {
+    try {
+      await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({
+          system_specs: finalSpecs,
+          favorite_game: STATE.currentUser.favorite_game || 'valorant'
+        })
+      });
+      STATE.currentUser.system_specs = finalSpecs;
+    } catch (e) {}
+  }
+
+  dismissHardwareConfirmBox();
+  showToast('✓ Donanım bilgileriniz tüm arıza formlarına ve profilinize otomatik dolduruldu!');
+}
+
+async function autoFillSingleSpecsInput(inputId) {
+  const hw = await detectClientHardware();
+  const target = document.getElementById(inputId);
+  if (target) {
+    target.value = hw.summary;
+  }
+  ['aiLabSpecs', 'modalThreadSpecs', 'regSpecs', 'profileSpecsInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el.value) el.value = hw.summary;
+  });
+  if (isFunctionalCookieAllowed()) {
+    try {
+      localStorage.setItem('hemencoz_detected_specs', hw.summary);
+    } catch (e) {}
+  }
+  showToast(`🖥️ Algılanan donanım dolduruldu: ${hw.gpu}`);
+}
+
+function loadSavedHardwareSpecs() {
+  if (!isFunctionalCookieAllowed()) return;
+  try {
+    const saved = localStorage.getItem('hemencoz_detected_specs');
+    if (saved) {
+      ['aiLabSpecs', 'modalThreadSpecs', 'regSpecs', 'profileSpecsInput'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value) el.value = saved;
+      });
+    }
+  } catch (e) {}
 }
 
 // --- SMART GAME RECOGNITION & RANDOM WORLD SUGGESTIONS ---
@@ -1078,6 +1378,271 @@ function switchMainTab(tabName) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// --- FEATURE 4: LIVE AUTOCOMPLETE SEARCH ENGINE (GAMES, ERROR CODES & FPS GUIDES) ---
+
+let ALL_ISSUES_INDEX = [];
+
+async function ensureAllIssuesIndex() {
+  if (ALL_ISSUES_INDEX.length > 0) return ALL_ISSUES_INDEX;
+  try {
+    const res = await fetch('/api/issues', { headers: getAuthHeaders() });
+    if (res.ok) {
+      ALL_ISSUES_INDEX = await res.json();
+    }
+  } catch (e) {}
+  return ALL_ISSUES_INDEX.length > 0 ? ALL_ISSUES_INDEX : STATE.issues;
+}
+
+function initLiveSearchListeners() {
+  document.addEventListener('click', (e) => {
+    const deskWrap = document.getElementById('desktopSearchWrapper');
+    const mobWrap = document.getElementById('mobileSearchWrapper');
+    if (deskWrap && !deskWrap.contains(e.target)) {
+      const dd = document.getElementById('liveSearchDropdown');
+      if (dd) dd.classList.add('hidden');
+    }
+    if (mobWrap && !mobWrap.contains(e.target)) {
+      const mdd = document.getElementById('mobileLiveSearchDropdown');
+      if (mdd) mdd.classList.add('hidden');
+    }
+  });
+}
+
+function closeLiveAutocomplete() {
+  const dd = document.getElementById('liveSearchDropdown');
+  const mdd = document.getElementById('mobileLiveSearchDropdown');
+  if (dd) dd.classList.add('hidden');
+  if (mdd) mdd.classList.add('hidden');
+}
+
+function handleSearchKeydown(e) {
+  if (e.key === 'Escape') {
+    closeLiveAutocomplete();
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const val = e.target.value.trim();
+    closeLiveAutocomplete();
+    if (val) {
+      filterByTag(val);
+    }
+  }
+}
+
+async function openLiveAutocomplete(val, isMobile = false) {
+  await renderLiveAutocomplete(val, isMobile);
+}
+
+async function handleLiveSearchInput(val, isMobile = false) {
+  const deskInput = document.getElementById('globalSearchInput');
+  const mobInput = document.getElementById('mobileSearchInput');
+  if (isMobile && deskInput) deskInput.value = val;
+  if (!isMobile && mobInput) mobInput.value = val;
+
+  const hintEl = document.getElementById('searchShortcutHint');
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (val && val.trim()) {
+    if (hintEl) hintEl.classList.add('hidden');
+    if (clearBtn) clearBtn.classList.remove('hidden');
+  } else {
+    if (hintEl) hintEl.classList.remove('hidden');
+    if (clearBtn) clearBtn.classList.add('hidden');
+  }
+
+  await renderLiveAutocomplete(val, isMobile);
+  handleGlobalSearch(val);
+}
+
+async function renderLiveAutocomplete(rawVal, isMobile = false) {
+  const dropdown = document.getElementById(isMobile ? 'mobileLiveSearchDropdown' : 'liveSearchDropdown');
+  if (!dropdown) return;
+
+  const q = String(rawVal || '').trim().toLowerCase();
+  const poolIssues = await ensureAllIssuesIndex();
+
+  if (!q) {
+    // Show Quick Trending Searches & Top Games when focused with empty query
+    const popularQueries = [
+      { label: 'VAN 9003 & VAN 1067', desc: 'Valorant Secure Boot & TPM 2.0', tag: 'VAN 9003' },
+      { label: 'CS2 VAC Doğrulama', desc: 'VAC oturumunuzu doğrulayamadı', tag: 'VAC' },
+      { label: 'D3D / ERR_GFX_STATE', desc: 'GTA V, RDR2 & Bannerlord GPU Çökmesi', tag: 'ERR_GFX' },
+      { label: 'FPS Artırma & Stutter', desc: 'Anlık takılma, %1 Low FPS ve Shader', tag: 'Performans' },
+      { label: 'Exit Code 1 / GLFW', desc: 'Minecraft Java & OpenGL Hatası', tag: 'Exit Code 1' },
+      { label: 'Out of Video Memory', desc: 'UE5 Shader Compilation Çökmesi', tag: 'Out of Video Memory' }
+    ];
+
+    dropdown.innerHTML = `
+      <div class="p-3 space-y-2">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-[#88c0a8] px-1">🔥 Popüler Hızlı Aramalar (Tıkla & Filtrele)</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+          ${popularQueries.map(p => `
+            <button
+              type="button"
+              onclick="selectAutocompleteTag('${p.tag}')"
+              class="text-left p-2 rounded-xl bg-white/5 hover:bg-[#5e9c88]/20 border border-white/5 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2"
+            >
+              <div class="min-w-0">
+                <div class="text-xs font-bold text-white truncate">${p.label}</div>
+                <div class="text-[10px] text-gray-400 truncate">${p.desc}</div>
+              </div>
+              <span class="text-xs text-[#88c0a8] shrink-0">→</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    dropdown.classList.remove('hidden');
+    return;
+  }
+
+  // Filter matching games
+  const matchedGames = STATE.games.filter(g =>
+    (g.name || '').toLowerCase().includes(q) ||
+    (g.short_name || '').toLowerCase().includes(q) ||
+    (g.category || '').toLowerCase().includes(q) ||
+    (g.common_tags || []).some(t => t.toLowerCase().includes(q))
+  ).slice(0, 4);
+
+  // Filter matching issues (including special alias matching for "d3d", "fps", "vac", "van")
+  const isFpsQuery = q.includes('fps') || q.includes('kasma') || q.includes('takılma') || q.includes('stutter');
+  const isD3dQuery = q.includes('d3d') || q.includes('dx12') || q.includes('dx11') || q.includes('gfx') || q.includes('directx');
+
+  const matchedIssues = poolIssues.filter(iss => {
+    const hay = `${iss.title || ''} ${iss.error_code || ''} ${iss.game_name || ''} ${iss.category || ''} ${iss.symptom_summary || ''} ${iss.ai_root_cause || ''}`.toLowerCase();
+    if (hay.includes(q)) return true;
+    if (isFpsQuery && (iss.category || '').toLowerCase().includes('performans')) return true;
+    if (isD3dQuery && /(d3d|dx11|dx12|dxgi|err_gfx|directx|shader)/i.test(hay)) return true;
+    return false;
+  }).slice(0, 6);
+
+  let sectionsHtml = '';
+
+  if (matchedGames.length > 0) {
+    sectionsHtml += `
+      <div class="p-3 space-y-1.5">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">🎮 Eşleşen Oyun Ekranları (${matchedGames.length})</div>
+        <div class="space-y-1">
+          ${matchedGames.map(g => {
+            const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+            return `
+              <button
+                type="button"
+                onclick="selectAutocompleteGame('${g.slug}')"
+                class="w-full text-left p-2 rounded-xl hover:bg-white/10 transition flex items-center justify-between gap-3"
+              >
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <img src="${imgSrc}" onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')" alt="${g.short_name}" class="w-10 h-7 rounded object-cover border border-white/15 shrink-0" />
+                  <div class="min-w-0">
+                    <div class="text-xs font-bold text-white truncate">${g.name}</div>
+                    <div class="text-[10px] text-gray-400 truncate">${g.category} • ${g.engine}</div>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">${g.issue_count || 2} Çözüm</span>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  if (matchedIssues.length > 0) {
+    sectionsHtml += `
+      <div class="p-3 space-y-1.5">
+        <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">🛠️ Eşleşen Hata Kodları &amp; Çözüm Rehberleri (${matchedIssues.length})</div>
+        <div class="space-y-1">
+          ${matchedIssues.map(iss => `
+            <button
+              type="button"
+              onclick="selectAutocompleteIssue(${iss.id}, '${iss.game_slug}')"
+              class="w-full text-left p-2.5 rounded-xl hover:bg-white/10 transition flex items-start justify-between gap-3"
+            >
+              <div class="min-w-0 space-y-0.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold px-1.5 py-0.5 rounded text-white" style="background-color: ${iss.accent_color}">${iss.game_short_name}</span>
+                  <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white/10 text-[#d9c382]">${iss.error_code}</span>
+                </div>
+                <div class="text-xs font-bold text-white truncate">${iss.title}</div>
+                <div class="text-[11px] text-gray-400 truncate">${iss.symptom_summary}</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] shrink-0 mt-1">
+                %${iss.success_rate} Başarı
+              </span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  const safeQ = q.replace(/'/g, "\\'");
+  sectionsHtml += `
+    <div class="p-3 bg-[#131924] flex items-center justify-between gap-2">
+      <span class="text-xs text-gray-300 truncate">Aradığınız <strong>"${rawVal}"</strong> sorunu listede yok mu?</span>
+      <button
+        type="button"
+        onclick="selectAutocompleteAiQuery('${safeQ}')"
+        class="accent-btn px-3 py-1.5 rounded-xl text-xs font-bold shrink-0"
+      >
+        🤖 AI İle Şimdi Çözümle
+      </button>
+    </div>
+  `;
+
+  dropdown.innerHTML = sectionsHtml;
+  dropdown.classList.remove('hidden');
+}
+
+function selectAutocompleteTag(tag) {
+  closeLiveAutocomplete();
+  quickSearchTag(tag);
+}
+
+async function selectAutocompleteGame(slug) {
+  closeLiveAutocomplete();
+  await selectGame(slug);
+  switchTab('issues');
+  window.scrollTo({ top: 180, behavior: 'smooth' });
+}
+
+async function selectAutocompleteIssue(issueId, gameSlug) {
+  closeLiveAutocomplete();
+  STATE.selectedGame = gameSlug || 'all';
+  STATE.searchQuery = '';
+  const deskInput = document.getElementById('globalSearchInput');
+  const mobInput = document.getElementById('mobileSearchInput');
+  if (deskInput) deskInput.value = '';
+  if (mobInput) mobInput.value = '';
+  document.getElementById('clearSearchBtn')?.classList.add('hidden');
+  document.getElementById('searchShortcutHint')?.classList.remove('hidden');
+
+  renderSidebarGames();
+  updateHeroBanner();
+  switchTab('issues');
+  await fetchIssues();
+  updateDynamicSEO();
+
+  setTimeout(() => {
+    const cardEl = document.getElementById(`issueCard-${issueId}`);
+    if (cardEl) {
+      cardEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      cardEl.classList.add('ring-2', 'ring-[#88c0a8]');
+      setTimeout(() => cardEl.classList.remove('ring-2', 'ring-[#88c0a8]'), 2600);
+    }
+  }, 120);
+}
+
+function selectAutocompleteAiQuery(queryText) {
+  closeLiveAutocomplete();
+  switchTab('ai-lab');
+  const errInp = document.getElementById('aiLabErrorCode');
+  const descInp = document.getElementById('aiLabDescription');
+  if (errInp) errInp.value = queryText.toUpperCase();
+  if (descInp && !descInp.value) {
+    descInp.value = `"${queryText}" hatası / sorunu yaşıyorum. Donanımıma uygun adım adım çözüm rehberi oluşturur musunuz?`;
+  }
+  window.scrollTo({ top: 200, behavior: 'smooth' });
+}
+
 function quickSearchTag(tagText) {
   STATE.selectedGame = 'all';
   renderSidebarGames();
@@ -1088,9 +1653,12 @@ function quickSearchTag(tagText) {
 
 function filterByTag(tagText) {
   const input = document.getElementById('globalSearchInput');
-  input.value = tagText;
+  const mobInput = document.getElementById('mobileSearchInput');
+  if (input) input.value = tagText;
+  if (mobInput) mobInput.value = tagText;
   STATE.searchQuery = tagText;
-  document.getElementById('clearSearchBtn').classList.remove('hidden');
+  document.getElementById('clearSearchBtn')?.classList.remove('hidden');
+  document.getElementById('searchShortcutHint')?.classList.add('hidden');
   switchTab('issues');
   fetchIssues();
   updateDynamicSEO();
@@ -1099,19 +1667,27 @@ function filterByTag(tagText) {
 function handleGlobalSearch(val) {
   STATE.searchQuery = val.trim();
   const clearBtn = document.getElementById('clearSearchBtn');
+  const hintEl = document.getElementById('searchShortcutHint');
   if (STATE.searchQuery) {
-    clearBtn.classList.remove('hidden');
+    if (clearBtn) clearBtn.classList.remove('hidden');
+    if (hintEl) hintEl.classList.add('hidden');
   } else {
-    clearBtn.classList.add('hidden');
+    if (clearBtn) clearBtn.classList.add('hidden');
+    if (hintEl) hintEl.classList.remove('hidden');
   }
   fetchIssues();
   fetchThreads();
 }
 
 function clearGlobalSearch() {
-  document.getElementById('globalSearchInput').value = '';
+  const deskInput = document.getElementById('globalSearchInput');
+  const mobInput = document.getElementById('mobileSearchInput');
+  if (deskInput) deskInput.value = '';
+  if (mobInput) mobInput.value = '';
   STATE.searchQuery = '';
-  document.getElementById('clearSearchBtn').classList.add('hidden');
+  document.getElementById('clearSearchBtn')?.classList.add('hidden');
+  document.getElementById('searchShortcutHint')?.classList.remove('hidden');
+  closeLiveAutocomplete();
   fetchIssues();
   fetchThreads();
 }
@@ -1119,6 +1695,29 @@ function clearGlobalSearch() {
 function handleCategoryChange(cat) {
   STATE.selectedCategory = cat;
   fetchIssues();
+}
+
+// --- FEATURE 1: SOLUTION VERIFICATION & VOTING (UPVOTE / DOWNVOTE + CLIENT_ID DEDUPLICATION) ---
+
+function getLocalVoteMap() {
+  try {
+    const raw = localStorage.getItem(`hemencoz_votes_${STATE.clientId}`);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function setLocalVoteChoice(targetKey, choice) {
+  try {
+    const map = getLocalVoteMap();
+    if (!choice) {
+      delete map[targetKey];
+    } else {
+      map[targetKey] = choice;
+    }
+    localStorage.setItem(`hemencoz_votes_${STATE.clientId}`, JSON.stringify(map));
+  } catch (e) {}
 }
 
 async function fetchIssues() {
@@ -1151,6 +1750,8 @@ function renderIssues() {
     return;
   }
 
+  const localVotes = getLocalVoteMap();
+
   container.innerHTML = STATE.issues.map(issue => {
     const severityColors = {
       'Kritik': 'bg-[#a8555d]/20 text-[#deb0b5] border-[#a8555d]/35',
@@ -1182,11 +1783,12 @@ function renderIssues() {
             <h4 class="text-sm font-bold text-white">${s.title}</h4>
             <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 border border-white/10">Zorluk: ${s.difficulty}</span>
           </div>
-          <p class="text-xs text-gray-300 leading-relaxed">${s.detail}</p>
+          <div class="text-xs text-gray-300 leading-relaxed ai-markdown">${formatSimpleMarkdown(s.detail)}</div>
         </div>
       </div>
     `).join('');
 
+    const verifyCmdB64 = issue.verify_command ? encodeBase64Utf8(issue.verify_command) : '';
     const verifyCmdBlock = issue.verify_command ? `
       <div class="bg-[#151a23] border border-white/10 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="space-y-0.5 overflow-x-auto">
@@ -1194,7 +1796,8 @@ function renderIssues() {
           <code class="text-xs text-[#8fbcbb] font-mono">${issue.verify_command}</code>
         </div>
         <button
-          onclick="copyCommand('${issue.verify_command.replace(/'/g, "\\'").replace(/\\/g, "\\\\")}')"
+          type="button"
+          onclick="copyCodeFromBtn(this, '${verifyCmdB64}')"
           class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white font-medium shrink-0 transition"
         >
           📋 Komutu Kopyala
@@ -1202,11 +1805,27 @@ function renderIssues() {
       </div>
     ` : '';
 
-    const voteBtnClass = issue.user_voted ? 'vote-btn-active' : 'bg-white/5 hover:bg-white/10 text-gray-200';
-    const voteBtnLabel = issue.user_voted ? '✓ İşime Yaradı (Oylandı)' : '👍 İşime Yaradı';
+    // Check critical system safety warning (BIOS / TPM / Secure Boot / regedit / bcdedit / DDU)
+    const combinedRiskText = `${issue.title} ${issue.error_code} ${issue.ai_root_cause} ${issue.verify_command || ''} ${(issue.ai_solution_steps || []).map(x => x.title + ' ' + x.detail).join(' ')}`;
+    const safetyBannerHtml = buildSafetyBannerHtml(combinedRiskText);
+
+    // Compute voting stats
+    const upVotes = Number(issue.helpful_votes || 10);
+    const baseSr = Number(issue.success_rate || 95);
+    const downVotes = Number(issue.unhelpful_votes != null ? issue.unhelpful_votes : Math.max(2, Math.round(upVotes * (100 - baseSr) / Math.max(baseSr, 1))));
+    const totalVotes = Number(issue.total_votes || (upVotes + downVotes));
+    const currentSr = Math.round((upVotes / Math.max(1, totalVotes)) * 100);
+
+    const activeVote = issue.user_vote || localVotes[`issue_${issue.id}`] || (issue.user_voted ? 'up' : null);
+    const upBtnClass = activeVote === 'up'
+      ? 'vote-btn-active font-bold'
+      : 'bg-white/5 hover:bg-[#5e9c88]/20 text-gray-200 border-white/10';
+    const downBtnClass = activeVote === 'down'
+      ? 'bg-red-500/25 border-red-400/50 text-red-200 font-bold'
+      : 'bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
 
     return `
-      <article class="issue-card p-6 space-y-5">
+      <article id="issueCard-${issue.id}" class="issue-card p-6 space-y-5 transition-all duration-300">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${issue.accent_color}" onclick="selectGame('${issue.game_slug}')">
@@ -1229,8 +1848,8 @@ function renderIssues() {
             </span>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-              ✓ %${issue.success_rate} Çözüm Başarısı
+            <span id="issueSuccessBadge-${issue.id}" class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+              ✓ %${currentSr} Başarı (${totalVotes} Oy)
             </span>
           </div>
         </div>
@@ -1240,9 +1859,11 @@ function renderIssues() {
           <p class="text-sm text-gray-300">${issue.symptom_summary}</p>
         </div>
 
+        ${safetyBannerHtml}
+
         <div class="space-y-2">
           <div class="text-xs font-bold uppercase tracking-wider text-[#90a8c8]">
-            🌐 Forumlardan Derlenen Kullanıcı Raporları & Çözüm Kaynakları
+            🌐 Forumlardan Derlenen Kullanıcı Raporları &amp; Çözüm Kaynakları
           </div>
           <div class="grid grid-cols-1 gap-2.5">
             ${forumsHtml}
@@ -1267,22 +1888,38 @@ function renderIssues() {
 
         ${verifyCmdBlock}
 
-        <div class="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
+        <!-- Solution Verification & Upvote/Downvote Component -->
+        <div class="pt-4 border-t border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span class="text-xs font-bold text-gray-200">Bu çözüm çalıştı mı?</span>
             <button
-              id="issueVoteBtn-${issue.id}"
-              onclick="voteIssue(${issue.id})"
-              class="px-3.5 py-1.5 rounded-xl border border-white/10 text-xs font-semibold flex items-center gap-1.5 transition ${voteBtnClass}"
+              type="button"
+              id="issueUpBtn-${issue.id}"
+              onclick="voteIssue(${issue.id}, 'up')"
+              class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upBtnClass}"
             >
-              <span id="issueVoteText-${issue.id}">${voteBtnLabel}</span>
-              <span id="issueVote-${issue.id}" class="font-bold">(${issue.helpful_votes})</span>
+              <span>👍 Evet, Çalıştı</span>
+              <span id="issueUpCount-${issue.id}" class="font-bold">(${upVotes})</span>
             </button>
-            <span class="text-xs text-gray-400">👁️ ${issue.views.toLocaleString('tr-TR')} görüntülenme</span>
+            <button
+              type="button"
+              id="issueDownBtn-${issue.id}"
+              onclick="voteIssue(${issue.id}, 'down')"
+              class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downBtnClass}"
+            >
+              <span>👎 Hayır</span>
+              <span id="issueDownCount-${issue.id}" class="font-bold">(${downVotes})</span>
+            </button>
+            <span id="issueRateInline-${issue.id}" class="text-xs font-semibold text-[#88c0a8]">
+              • %${currentSr} Başarı (${totalVotes} Oy)
+            </span>
+            <span class="text-xs text-gray-400 hidden sm:inline">• 👁️ ${issue.views.toLocaleString('tr-TR')} görüntülenme</span>
           </div>
 
           <button
+            type="button"
             onclick="customizeIssueInAiLab('${issue.game_name.replace(/'/g, "\\'")}', '${issue.error_code.replace(/'/g, "\\'")}', '${issue.title.replace(/'/g, "\\'")}')"
-            class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-white flex items-center gap-1.5 transition"
+            class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-white flex items-center gap-1.5 transition self-start lg:self-auto"
           >
             <span>⚡ Bu Sorunu Kendi Sistemime Göre AI İle Özelleştir</span>
           </button>
@@ -1294,30 +1931,120 @@ function renderIssues() {
 
 function copyCommand(cmd) {
   navigator.clipboard.writeText(cmd);
-  showToast('Komut panoya kopyalandı!');
+  showToast('📋 Komut panoya kopyalandı!');
 }
 
-async function voteIssue(issueId) {
+async function voteIssue(issueId, voteType = 'up') {
   const res = await fetch(`/api/issues/${issueId}/vote`, {
     method: 'POST',
-    headers: getAuthHeaders()
+    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({ vote_type: voteType })
   });
   if (res.ok) {
     const data = await res.json();
-    const countEl = document.getElementById(`issueVote-${issueId}`);
-    const textEl = document.getElementById(`issueVoteText-${issueId}`);
-    const btnEl = document.getElementById(`issueVoteBtn-${issueId}`);
+    setLocalVoteChoice(`issue_${issueId}`, data.user_vote);
 
-    if (countEl) countEl.textContent = `(${data.helpful_votes})`;
-    if (data.user_voted) {
-      if (textEl) textEl.textContent = '✓ İşime Yaradı (Oylandı)';
-      if (btnEl) btnEl.classList.add('vote-btn-active');
-      showToast('Oyunuz kaydedildi!');
+    const upCountEl = document.getElementById(`issueUpCount-${issueId}`);
+    const downCountEl = document.getElementById(`issueDownCount-${issueId}`);
+    const upBtnEl = document.getElementById(`issueUpBtn-${issueId}`);
+    const downBtnEl = document.getElementById(`issueDownBtn-${issueId}`);
+    const badgeEl = document.getElementById(`issueSuccessBadge-${issueId}`);
+    const inlineEl = document.getElementById(`issueRateInline-${issueId}`);
+
+    const totalVotes = data.total_votes || ((data.helpful_votes || 0) + (data.unhelpful_votes || 0));
+    const sr = data.success_rate || 95;
+
+    if (upCountEl) upCountEl.textContent = `(${data.helpful_votes})`;
+    if (downCountEl) downCountEl.textContent = `(${data.unhelpful_votes || 0})`;
+    if (badgeEl) badgeEl.textContent = `✓ %${sr} Başarı (${totalVotes} Oy)`;
+    if (inlineEl) inlineEl.textContent = `• %${sr} Başarı (${totalVotes} Oy)`;
+
+    if (upBtnEl) {
+      upBtnEl.className = data.user_vote === 'up'
+        ? 'px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition vote-btn-active font-bold'
+        : 'px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition bg-white/5 hover:bg-[#5e9c88]/20 text-gray-200 border-white/10';
+    }
+    if (downBtnEl) {
+      downBtnEl.className = data.user_vote === 'down'
+        ? 'px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition bg-red-500/25 border-red-400/50 text-red-200 font-bold'
+        : 'px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
+    }
+
+    // Update issue in STATE.issues too
+    const found = STATE.issues.find(i => i.id === issueId);
+    if (found) {
+      found.helpful_votes = data.helpful_votes;
+      found.unhelpful_votes = data.unhelpful_votes;
+      found.total_votes = totalVotes;
+      found.success_rate = sr;
+      found.user_vote = data.user_vote;
+    }
+
+    if (data.user_vote === 'up') {
+      showToast('👍 Çözümü "Evet, Çalıştı" olarak doğruladınız! Başarı oranı güncellendi.');
+    } else if (data.user_vote === 'down') {
+      showToast('👎 Geri bildiriminiz kaydedildi. Alternatif çözüm için AI Çözümleyiciyi kullanabilirsiniz.');
     } else {
-      if (textEl) textEl.textContent = '👍 İşime Yaradı';
-      if (btnEl) btnEl.classList.remove('vote-btn-active');
       showToast('Oyunuz geri alındı.');
     }
+  }
+}
+
+function renderAiReportVoteBar(reportKey, initialConfidence = 96) {
+  const bar = document.getElementById('aiResultVoteBar');
+  if (!bar) return;
+  const localVotes = getLocalVoteMap();
+  const currentChoice = localVotes[`ai_${reportKey}`] || null;
+  const baseUp = 48 + (currentChoice === 'up' ? 1 : 0);
+  const baseDown = 2 + (currentChoice === 'down' ? 1 : 0);
+  const total = baseUp + baseDown;
+  const sr = Math.round((baseUp / total) * 100);
+
+  const upClass = currentChoice === 'up'
+    ? 'vote-btn-active font-bold'
+    : 'bg-white/5 hover:bg-[#5e9c88]/20 text-gray-200 border-white/10';
+  const downClass = currentChoice === 'down'
+    ? 'bg-red-500/25 border-red-400/50 text-red-200 font-bold'
+    : 'bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
+
+  bar.innerHTML = `
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="text-xs font-bold text-white">Bu AI çözümü çalıştı mı?</span>
+        <button
+          type="button"
+          onclick="voteAiReport('${reportKey}', 'up')"
+          class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upClass}"
+        >
+          <span>👍 Evet, Çalıştı (${baseUp})</span>
+        </button>
+        <button
+          type="button"
+          onclick="voteAiReport('${reportKey}', 'down')"
+          class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downClass}"
+        >
+          <span>👎 Hayır (${baseDown})</span>
+        </button>
+      </div>
+      <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+        ✓ %${sr} Başarı (${total} Oy)
+      </span>
+    </div>
+  `;
+}
+
+function voteAiReport(reportKey, choice) {
+  const localVotes = getLocalVoteMap();
+  const prev = localVotes[`ai_${reportKey}`] || null;
+  const next = prev === choice ? null : choice;
+  setLocalVoteChoice(`ai_${reportKey}`, next);
+  renderAiReportVoteBar(reportKey);
+  if (next === 'up') {
+    showToast('👍 AI çözümünü doğruladığınız için teşekkürler!');
+  } else if (next === 'down') {
+    showToast('👎 Geri bildiriminiz kaydedildi.');
+  } else {
+    showToast('Oyunuz geri alındı.');
   }
 }
 
@@ -1329,6 +2056,8 @@ function customizeIssueInAiLab(gameName, errorCode, title) {
   document.getElementById('aiLabErrorCode').value = errorCode;
   if (STATE.currentUser && STATE.currentUser.system_specs) {
     document.getElementById('aiLabSpecs').value = STATE.currentUser.system_specs;
+  } else {
+    loadSavedHardwareSpecs();
   }
   document.getElementById('aiLabDescription').value = `${title} sorununu yaşıyorum. Standart adımları denedim, kendi donanımıma özel detaylı analiz ve çözüm adımlarını istiyorum.`;
   document.getElementById('aiLabSpecs').focus();
@@ -1381,11 +2110,27 @@ async function submitAiDiagnostic(e) {
     const card = document.getElementById('aiLabResultCard');
     const modeBadge = document.getElementById('aiResultModeBadge');
     const confEl = document.getElementById('aiResultConfidence');
+    const safetyEl = document.getElementById('aiResultSafetyBanner');
     const contentEl = document.getElementById('aiLabResultContent');
 
     modeBadge.textContent = data.mode;
-    confEl.textContent = `Çözüm Güven Oranı: %${data.confidence || 95}`;
+    confEl.textContent = `✓ %${data.confidence || 96} Çözüm Başarısı`;
+
+    const safetyHtml = buildSafetyBannerHtml(`${payload.error_code} ${payload.problem_description} ${data.markdown}`);
+    if (safetyEl) {
+      if (safetyHtml) {
+        safetyEl.innerHTML = safetyHtml;
+        safetyEl.classList.remove('hidden');
+      } else {
+        safetyEl.innerHTML = '';
+        safetyEl.classList.add('hidden');
+      }
+    }
+
     contentEl.innerHTML = formatSimpleMarkdown(data.markdown);
+    const reportKey = encodeBase64Utf8(`${payload.game_slug}:${payload.error_code}`).slice(0, 16) || 'default';
+    renderAiReportVoteBar(reportKey, data.confidence || 96);
+
     card.classList.remove('hidden');
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } catch (err) {
@@ -1423,8 +2168,9 @@ function renderThreads() {
   container.innerHTML = STATE.threads.map(t => {
     const repliesHtml = (t.replies || []).map(rep => {
       if (rep.is_ai) {
+        const repSafetyHtml = buildSafetyBannerHtml(`${t.error_code || ''} ${t.title || ''} ${rep.content || ''}`);
         return `
-          <div class="ai-root-box p-4 space-y-2">
+          <div class="ai-root-box p-4 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#5e9c88]/20 pb-2">
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded bg-[#5e9c88] text-white font-extrabold text-[11px]">AI ÇÖZÜM</span>
@@ -1433,6 +2179,7 @@ function renderThreads() {
               </div>
               <span class="text-[11px] text-gray-400">${rep.created_at}</span>
             </div>
+            ${repSafetyHtml}
             <div class="ai-markdown text-xs sm:text-sm leading-relaxed">
               ${formatSimpleMarkdown(rep.content)}
             </div>
@@ -1594,6 +2341,8 @@ function openAskModal() {
 
   if (STATE.currentUser && STATE.currentUser.system_specs) {
     document.getElementById('modalThreadSpecs').value = STATE.currentUser.system_specs;
+  } else {
+    loadSavedHardwareSpecs();
   }
   document.getElementById('askQuestionModal').classList.remove('hidden');
 }

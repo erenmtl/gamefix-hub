@@ -826,6 +826,10 @@ def create_or_open_game(req: CreateGameRequest, authorization: Optional[str] = H
 
 # --- ISSUES & THREADS ENDPOINTS ---
 
+class IssueVoteRequest(BaseModel):
+    vote_type: Optional[str] = "up"
+
+
 @app.get("/api/issues")
 def list_issues(
     game_slug: Optional[str] = Query(None),
@@ -866,13 +870,28 @@ def list_issues(
     rows = [dict(r) for r in cursor.fetchall()]
 
     cursor.execute("SELECT target_id FROM user_votes WHERE voter_key = ? AND target_type = 'issue'", (voter_key,))
-    voted_ids = {r["target_id"] for r in cursor.fetchall()}
+    upvoted_ids = {r["target_id"] for r in cursor.fetchall()}
+
+    cursor.execute("SELECT target_id FROM user_votes WHERE voter_key = ? AND target_type = 'issue_down'", (voter_key,))
+    downvoted_ids = {r["target_id"] for r in cursor.fetchall()}
+
+    cursor.execute("SELECT target_id, COUNT(*) as cnt FROM user_votes WHERE target_type = 'issue_down' GROUP BY target_id")
+    extra_down_counts = {r["target_id"]: r["cnt"] for r in cursor.fetchall()}
 
     for r in rows:
         r["forum_sources"] = json.loads(r["forum_sources"])
         r["ai_solution_steps"] = json.loads(r["ai_solution_steps"])
         r["game_image_url"] = get_game_image_url(r["game_slug"])
-        r["user_voted"] = r["id"] in voted_ids
+        base_sr = max(50, min(99, int(r.get("success_rate") or 95)))
+        up_cnt = int(r.get("helpful_votes") or 10)
+        base_down = max(2, int(round(up_cnt * (100 - base_sr) / max(base_sr, 1))))
+        down_cnt = base_down + extra_down_counts.get(r["id"], 0)
+        total_cnt = max(1, up_cnt + down_cnt)
+        r["unhelpful_votes"] = down_cnt
+        r["total_votes"] = total_cnt
+        r["success_rate"] = int(round((up_cnt / total_cnt) * 100))
+        r["user_voted"] = r["id"] in upvoted_ids
+        r["user_vote"] = "up" if r["id"] in upvoted_ids else ("down" if r["id"] in downvoted_ids else None)
 
     conn.close()
     return rows
@@ -881,15 +900,20 @@ def list_issues(
 @app.post("/api/issues/{issue_id}/vote")
 def vote_issue(
     issue_id: int,
+    payload: Optional[IssueVoteRequest] = None,
     authorization: Optional[str] = Header(None),
     x_client_id: Optional[str] = Header(None)
 ):
+    vote_type = (payload.vote_type if payload and payload.vote_type else "up").lower()
+    if vote_type not in ("up", "down"):
+        vote_type = "up"
+
     user = get_current_user(authorization)
     voter_key = resolve_voter_key(user, x_client_id)
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT id, helpful_votes FROM issues WHERE id = ?", (issue_id,))
+    cursor.execute("SELECT id, helpful_votes, success_rate FROM issues WHERE id = ?", (issue_id,))
     issue = cursor.fetchone()
     if not issue:
         conn.close()
@@ -898,26 +922,66 @@ def vote_issue(
     cursor.execute("""
         SELECT id FROM user_votes WHERE voter_key = ? AND target_type = 'issue' AND target_id = ?
     """, (voter_key, issue_id))
-    existing = cursor.fetchone()
+    existing_up = cursor.fetchone()
 
-    if existing:
-        cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing["id"],))
-        cursor.execute("UPDATE issues SET helpful_votes = MAX(0, helpful_votes - 1) WHERE id = ?", (issue_id,))
-        voted_now = False
+    cursor.execute("""
+        SELECT id FROM user_votes WHERE voter_key = ? AND target_type = 'issue_down' AND target_id = ?
+    """, (voter_key, issue_id))
+    existing_down = cursor.fetchone()
+
+    user_vote = None
+
+    if vote_type == "up":
+        if existing_up:
+            cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_up["id"],))
+            cursor.execute("UPDATE issues SET helpful_votes = MAX(0, helpful_votes - 1) WHERE id = ?", (issue_id,))
+            user_vote = None
+        else:
+            if existing_down:
+                cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_down["id"],))
+            cursor.execute("""
+                INSERT INTO user_votes (voter_key, target_type, target_id, created_at)
+                VALUES (?, 'issue', ?, ?)
+            """, (voter_key, issue_id, datetime.now().isoformat()))
+            cursor.execute("UPDATE issues SET helpful_votes = helpful_votes + 1 WHERE id = ?", (issue_id,))
+            user_vote = "up"
     else:
-        cursor.execute("""
-            INSERT INTO user_votes (voter_key, target_type, target_id, created_at)
-            VALUES (?, 'issue', ?, ?)
-        """, (voter_key, issue_id, datetime.now().isoformat()))
-        cursor.execute("UPDATE issues SET helpful_votes = helpful_votes + 1 WHERE id = ?", (issue_id,))
-        voted_now = True
+        if existing_down:
+            cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_down["id"],))
+            user_vote = None
+        else:
+            if existing_up:
+                cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_up["id"],))
+                cursor.execute("UPDATE issues SET helpful_votes = MAX(0, helpful_votes - 1) WHERE id = ?", (issue_id,))
+            cursor.execute("""
+                INSERT INTO user_votes (voter_key, target_type, target_id, created_at)
+                VALUES (?, 'issue_down', ?, ?)
+            """, (voter_key, issue_id, datetime.now().isoformat()))
+            user_vote = "down"
 
     conn.commit()
-    cursor.execute("SELECT helpful_votes FROM issues WHERE id = ?", (issue_id,))
-    new_count = cursor.fetchone()["helpful_votes"]
+    cursor.execute("SELECT helpful_votes, success_rate FROM issues WHERE id = ?", (issue_id,))
+    updated_issue = cursor.fetchone()
+    up_cnt = int(updated_issue["helpful_votes"] or 0)
+    base_sr = max(50, min(99, int(updated_issue["success_rate"] or 95)))
+    base_down = max(2, int(round(up_cnt * (100 - base_sr) / max(base_sr, 1))))
+
+    cursor.execute("SELECT COUNT(*) as cnt FROM user_votes WHERE target_type = 'issue_down' AND target_id = ?", (issue_id,))
+    extra_down = cursor.fetchone()["cnt"]
+    down_cnt = base_down + extra_down
+    total_cnt = max(1, up_cnt + down_cnt)
+    dynamic_sr = int(round((up_cnt / total_cnt) * 100))
+
     conn.close()
 
-    return {"helpful_votes": new_count, "user_voted": voted_now}
+    return {
+        "helpful_votes": up_cnt,
+        "unhelpful_votes": down_cnt,
+        "total_votes": total_cnt,
+        "success_rate": dynamic_sr,
+        "user_voted": user_vote == "up",
+        "user_vote": user_vote
+    }
 
 
 @app.post("/api/ai/analyze")
