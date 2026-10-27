@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /gamefix-hub/
 Disallow: /api/auth/
+Disallow: /gamefix-hub/api/auth/
 
 # Search Engine Crawlers
 User-agent: Googlebot

@@ -321,12 +321,12 @@
       <section id="gameHeroBanner" class="hero-banner rounded-2xl p-6 lg:p-7 shadow-lg">
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div class="flex flex-col sm:flex-row sm:items-center gap-5 max-w-3xl">
-            <div id="heroGameCoverWrapper" class="hidden shrink-0">
+            <div id="heroGameCoverWrapper" class="shrink-0">
               <img
                 id="heroGameCoverImg"
                 src="./static/logo.svg"
-                alt="Oyun Görseli"
-                class="w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-cover border border-white/15 shadow-xl"
+                alt="HemenÇöz Oyun Görseli"
+                class="w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-contain bg-[#151c27] p-2 border border-[#88c0a8]/35 shadow-xl transition-all duration-300"
               />
             </div>
             <div class="space-y-2.5">
@@ -472,7 +472,7 @@
               ondragover="handleCrashLogDragOver(event)"
               ondragleave="handleCrashLogDragLeave(event)"
               ondrop="handleCrashLogDrop(event)"
-              class="rounded-xl border-2 border-dashed border-[#88c0a8]/35 bg-[#171f2c]/90 hover:bg-[#1b2535] hover:border-[#88c0a8]/70 p-4 transition cursor-pointer"
+              class="rounded-2xl border-2 border-dashed border-[#88c0a8]/60 bg-[#151d2a] hover:bg-[#1b2536] hover:border-[#88c0a8] p-4 sm:p-5 transition cursor-pointer shadow-inner"
               onclick="document.getElementById('crashLogFileInput').click()"
             >
               <input
@@ -483,15 +483,15 @@
                 onchange="handleCrashLogFileSelect(event)"
               />
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex items-start sm:items-center gap-3">
-                  <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 flex items-center justify-center text-lg shrink-0">📄</div>
+                <div class="flex items-start sm:items-center gap-3.5">
+                  <div class="w-11 h-11 rounded-xl bg-[#5e9c88]/25 border border-[#88c0a8]/50 flex items-center justify-center text-xl shrink-0 shadow">📄</div>
                   <div>
-                    <div class="text-xs sm:text-sm font-bold text-white flex flex-wrap items-center gap-2">
-                      <span>Sürükle-Bırak Crash Log / Dump Analizcisi</span>
-                      <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30 font-semibold">🔒 %100 Tarayıcı İçi & KVKK Maskeli</span>
+                    <div class="text-xs sm:text-sm font-extrabold text-white flex flex-wrap items-center gap-2">
+                      <span>📄 Crash Log / Dump Dosyası (.log, .txt) Sürükle veya Seç</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/35 font-semibold">🔒 %100 Tarayıcı İçi &amp; KVKK Maskeli</span>
                     </div>
-                    <p class="text-[11px] text-gray-400 mt-0.5">
-                      <code>.log</code>, <code>.txt</code> veya <code>.crash</code> dosyanızı buraya sürükleyin; sunucuya yüklenmeden <code>Exception</code>, <code>0x...</code>, <code>.dll</code> hataları ayıklanır ve <code>C:\Users\KullaniciAdi</code> yolları <code>C:\Users\[USER]</code> olarak anonimleştirilir.
+                    <p class="text-[11px] text-gray-300 mt-1 leading-relaxed">
+                      Oyun çökme dosyanızı (<code>.log</code>, <code>.txt</code>, <code>.crash</code>) buraya sürükleyin veya tıklayıp seçin; <code>C:\Users\KullaniciAdi</code> yolları otomatik <code>C:\Users\[USER]</code> olarak gizlenir ve <code>Exception</code>, <code>0x...</code>, <code>.dll</code> hata satırları aşağıdaki sorun kutusuna aktarılır.
                     </p>
                   </div>
                 </div>
@@ -499,16 +499,16 @@
                   <button
                     type="button"
                     onclick="loadSampleCrashLog()"
-                    class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-semibold text-[#a3d9c6] transition"
+                    class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-semibold text-[#a3d9c6] transition"
                   >
                     🧪 Örnek Log Dene
                   </button>
                   <button
                     type="button"
                     onclick="document.getElementById('crashLogFileInput').click()"
-                    class="px-3 py-1.5 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 border border-[#88c0a8]/40 text-xs font-bold text-white transition"
+                    class="px-3.5 py-2 rounded-xl bg-[#5e9c88]/30 hover:bg-[#5e9c88]/45 border border-[#88c0a8]/50 text-xs font-extrabold text-white transition shadow"
                   >
-                    📂 Dosya Seç
+                    📂 Dosya Seç (.log / .txt)
                   </button>
                 </div>
               </div>
@@ -841,7 +841,7 @@
           <span>•</span>
           <button type="button" onclick="openCookieSettingsModal()" class="px-2 py-0.5 rounded bg-white/5 hover:bg-white/10 text-[#a3d9c6] border border-white/10 transition">🍪 Çerez Tercihleri</button>
           <span>•</span>
-          <a href="sitemap.xml" target="_blank" class="hover:text-gray-200 transition">Site Haritası</a>
+          <a href="./sitemap.xml" target="_blank" class="hover:text-gray-200 transition">Site Haritası</a>
         </div>
       </div>
     </div>

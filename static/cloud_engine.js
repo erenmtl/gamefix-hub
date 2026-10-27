@@ -164,22 +164,42 @@
     return norm.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'custom-game';
   }
 
-  window.makeGameCoverDataUri = function (slugOrName, accentColor) {
-    const title = String(slugOrName || 'Oyun').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).slice(0, 18);
-    const initials = title.split(/\s+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'GF';
-    const color = accentColor || '#5e9c88';
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180" viewBox="0 0 320 180">
+  window.makeGameCoverDataUri = function (slugOrName, accentColor, subtitleText) {
+    const found = (SEED.games || []).find(
+      g => g.slug === slugOrName || (g.name && g.name.toLowerCase() === String(slugOrName || '').toLowerCase())
+    );
+    const rawTitle = (found && (found.short_name || found.name)) || String(slugOrName || 'Oyun').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const cleanTitle = rawTitle.slice(0, 20).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const sub = ((found && `${found.category} • ${found.engine}`) || subtitleText || 'HemenÇöz Arıza &amp; Performans Merkezi')
+      .slice(0, 34)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    const initials = rawTitle.split(/[\s:&-]+/).filter(Boolean).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'HC';
+    const color = accentColor || (found && found.accent_color) || '#5e9c88';
+    const fontSize = rawTitle.length > 14 ? 19 : 23;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
       <defs>
         <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="${color}" stop-opacity="0.9"/>
-          <stop offset="100%" stop-color="#141821" stop-opacity="1"/>
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.95"/>
+          <stop offset="55%" stop-color="#192231" stop-opacity="0.98"/>
+          <stop offset="100%" stop-color="#0f141d" stop-opacity="1"/>
+        </linearGradient>
+        <linearGradient id="accentBar" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="${color}"/>
+          <stop offset="100%" stop-color="#88c0a8" stop-opacity="0.2"/>
         </linearGradient>
       </defs>
-      <rect width="320" height="180" rx="16" fill="url(#bg)"/>
-      <circle cx="270" cy="40" r="65" fill="#ffffff" fill-opacity="0.07"/>
-      <text x="24" y="78" fill="#ffffff" font-family="Inter, sans-serif" font-size="38" font-weight="800" opacity="0.25">${initials}</text>
-      <text x="24" y="136" fill="#ffffff" font-family="Inter, sans-serif" font-size="22" font-weight="800">${title}</text>
-      <text x="24" y="158" fill="#d8dee9" font-family="Inter, sans-serif" font-size="12" font-weight="600" opacity="0.85">GameFix AI Hub</text>
+      <rect width="360" height="200" rx="18" fill="url(#bg)"/>
+      <circle cx="305" cy="42" r="78" fill="${color}" fill-opacity="0.18"/>
+      <circle cx="320" cy="165" r="55" fill="#ffffff" fill-opacity="0.04"/>
+      <path d="M0 152 L360 112 L360 200 L0 200 Z" fill="#0b0f17" fill-opacity="0.45"/>
+      <rect x="22" y="20" width="118" height="22" rx="6" fill="#0f141d" fill-opacity="0.65" stroke="#ffffff" stroke-opacity="0.15"/>
+      <text x="32" y="35" fill="#a3d9c6" font-family="Inter, Segoe UI, sans-serif" font-size="10" font-weight="800" letter-spacing="0.8">HEMENÇÖZ PORTAL</text>
+      <text x="275" y="88" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="52" font-weight="900" opacity="0.14">${initials}</text>
+      <text x="22" y="136" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="${fontSize}" font-weight="900">${cleanTitle}</text>
+      <rect x="22" y="147" width="88" height="3" rx="1.5" fill="url(#accentBar)"/>
+      <text x="22" y="170" fill="#cbd5e1" font-family="Inter, Segoe UI, sans-serif" font-size="11.5" font-weight="600">${sub}</text>
     </svg>`;
     return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
   };

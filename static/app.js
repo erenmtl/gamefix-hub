@@ -696,11 +696,19 @@ async function refreshRandomSuggestions() {
   }
 }
 
-function fallbackCover(slug, color) {
+function fallbackCover(slug, color, subtitle) {
   if (window.makeGameCoverDataUri) {
-    return window.makeGameCoverDataUri(slug, color);
+    return window.makeGameCoverDataUri(slug, color, subtitle);
   }
   return './static/logo.svg';
+}
+
+function resolveSafeCoverUrl(rawUrl, slugOrName, accentColor, subtitle) {
+  const u = String(rawUrl || '').trim();
+  if (!u || u.includes('/api/games/cover/')) {
+    return fallbackCover(slugOrName, accentColor, subtitle);
+  }
+  return u;
 }
 
 function renderSuggestionChips() {
@@ -708,22 +716,26 @@ function renderSuggestionChips() {
   const modalContainer = document.getElementById('modalSuggestionsContainer');
   const addContainer = document.getElementById('addGameSuggestionsContainer');
 
-  const buildChips = (inputId, hintId, errorInputId) => STATE.suggestions.map(s => `
-    <button
-      type="button"
-      onclick="pickSuggestedGame('${s.name.replace(/'/g, "\\'")}', '${(s.hint || '').replace(/'/g, "\\'")}', '${inputId}', '${hintId}', '${errorInputId || ''}')"
-      class="text-xs px-2.5 py-1.5 rounded-xl bg-[#212936] hover:bg-[#2a3446] text-gray-200 border border-white/10 transition flex items-center gap-2"
-    >
-      <img
-        src="${s.image_url || fallbackCover(s.slug || 'game')}"
-        onerror="this.onerror=null;this.src=fallbackCover('${s.slug || 'game'}')"
-        alt="${s.name}"
-        class="w-7 h-5 rounded object-cover border border-white/10 shrink-0"
-      />
-      <span class="font-bold text-white">${s.name}</span>
-      <span class="text-[10px] text-gray-400">(${s.genre})</span>
-    </button>
-  `).join('');
+  const buildChips = (inputId, hintId, errorInputId) => STATE.suggestions.map(s => {
+    const safeSrc = resolveSafeCoverUrl(s.image_url, s.name || s.slug, '#5e9c88', s.genre);
+    const safeNameAttr = (s.name || s.slug || 'game').replace(/'/g, "\\'");
+    return `
+      <button
+        type="button"
+        onclick="pickSuggestedGame('${safeNameAttr}', '${(s.hint || '').replace(/'/g, "\\'")}', '${inputId}', '${hintId}', '${errorInputId || ''}')"
+        class="text-xs px-2.5 py-1.5 rounded-xl bg-[#212936] hover:bg-[#2a3446] text-gray-200 border border-white/10 transition flex items-center gap-2"
+      >
+        <img
+          src="${safeSrc}"
+          onerror="this.onerror=null;this.src=fallbackCover('${safeNameAttr}','#5e9c88')"
+          alt="${escapeHTML(s.name)}"
+          class="w-7 h-5 rounded object-cover border border-white/10 shrink-0"
+        />
+        <span class="font-bold text-white">${escapeHTML(s.name)}</span>
+        <span class="text-[10px] text-gray-400">(${escapeHTML(s.genre)})</span>
+      </button>
+    `;
+  }).join('');
 
   if (aiContainer) aiContainer.innerHTML = buildChips('aiLabGameInput', 'aiLabSmartHint', 'aiLabErrorCode');
   if (modalContainer) modalContainer.innerHTML = buildChips('modalThreadGameInput', 'modalGameSmartHint', 'modalThreadErrorCode');
@@ -1308,19 +1320,20 @@ function renderSidebarGames() {
 
   for (const g of STATE.games) {
     const isActive = STATE.selectedGame === g.slug;
-    const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+    const imgSrc = resolveSafeCoverUrl(g.image_url, g.short_name || g.name || g.slug, g.accent_color, g.category);
+    const safeTitle = (g.short_name || g.slug || '').replace(/'/g, "\\'");
     html += `
       <button onclick="selectGame('${g.slug}')" class="game-nav-item ${isActive ? 'active' : ''}">
         <div class="flex items-center gap-3 min-w-0">
           <img
             src="${imgSrc}"
-            onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')"
-            alt="${g.short_name}"
+            onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${g.accent_color}')"
+            alt="${escapeHTML(g.short_name)}"
             class="w-11 h-8 rounded-lg object-cover border border-white/15 shrink-0 shadow-sm"
           />
           <div class="truncate">
-            <div class="text-sm font-bold truncate">${g.short_name}</div>
-            <div class="text-[11px] text-gray-400 truncate">${g.category}</div>
+            <div class="text-sm font-bold truncate">${escapeHTML(g.short_name)}</div>
+            <div class="text-[11px] text-gray-400 truncate">${escapeHTML(g.category)}</div>
           </div>
         </div>
         <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-semibold shrink-0">${g.issue_count}</span>
@@ -1370,7 +1383,13 @@ function updateHeroBanner() {
 
   if (STATE.selectedGame === 'all') {
     applyGameTheme('#5e9c88');
-    if (coverWrapper) coverWrapper.classList.add('hidden');
+    if (coverWrapper && coverImg) {
+      coverWrapper.classList.remove('hidden');
+      coverImg.onerror = null;
+      coverImg.src = './static/logo.svg';
+      coverImg.alt = 'HemenÇöz Tüm Oyunlar';
+      coverImg.className = 'w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-contain bg-[#151c27] p-2 border border-[#88c0a8]/35 shadow-xl transition-all duration-300';
+    }
     catBadge.textContent = 'Tüm Oyunlar Portalı';
     engBadge.textContent = 'Motor: UE4/5 / Source 2 / Clausewitz / RAGE / LWJGL';
     acBadge.textContent = 'Koruma: Vanguard • VAC • EAC • RICOCHET';
@@ -1387,8 +1406,15 @@ function updateHeroBanner() {
     applyGameTheme(game.accent_color);
     if (coverWrapper && coverImg) {
       coverWrapper.classList.remove('hidden');
-      coverImg.src = game.image_url || fallbackCover(game.slug, game.accent_color);
-      coverImg.onerror = () => { coverImg.src = fallbackCover(game.slug, game.accent_color); };
+      const subLabel = `${game.category} • ${game.engine}`;
+      const dynamicFallback = fallbackCover(game.short_name || game.name || game.slug, game.accent_color, subLabel);
+      coverImg.className = 'w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-cover border border-white/20 shadow-xl transition-all duration-300';
+      coverImg.alt = game.name;
+      coverImg.onerror = () => {
+        coverImg.onerror = null;
+        coverImg.src = dynamicFallback;
+      };
+      coverImg.src = resolveSafeCoverUrl(game.image_url, game.short_name || game.name || game.slug, game.accent_color, subLabel);
     }
     catBadge.textContent = `${game.category} • ${game.developer}`;
     engBadge.textContent = `Motor: ${game.engine}`;
@@ -1521,7 +1547,8 @@ function renderHomeShowcase() {
           ];
 
       gamesGrid.innerHTML = featuredGames.map(g => {
-        const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+        const imgSrc = resolveSafeCoverUrl(g.image_url, g.short_name || g.name || g.slug, g.accent_color, g.category);
+        const safeTitle = (g.short_name || g.slug || '').replace(/'/g, "\\'");
         return `
           <div
             onclick="selectGame('${g.slug}'); switchTab('issues');"
@@ -1530,8 +1557,8 @@ function renderHomeShowcase() {
             <div class="relative h-20 w-full overflow-hidden bg-[#151b26]">
               <img
                 src="${imgSrc}"
-                onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')"
-                alt="${g.name}"
+                onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${g.accent_color}')"
+                alt="${escapeHTML(g.name)}"
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-[#161c28] via-transparent to-transparent"></div>
@@ -1540,8 +1567,8 @@ function renderHomeShowcase() {
               </span>
             </div>
             <div class="p-2.5">
-              <div class="text-xs font-bold text-white truncate group-hover:text-[#88c0a8] transition">${g.short_name}</div>
-              <div class="text-[10px] text-gray-400 truncate">${g.category}</div>
+              <div class="text-xs font-bold text-white truncate group-hover:text-[#88c0a8] transition">${escapeHTML(g.short_name)}</div>
+              <div class="text-[10px] text-gray-400 truncate">${escapeHTML(g.category)}</div>
             </div>
           </div>
         `;
@@ -1551,7 +1578,8 @@ function renderHomeShowcase() {
     if (trendingGrid && STATE.issues.length > 0) {
       const topIssues = STATE.issues.slice(0, 6);
       trendingGrid.innerHTML = topIssues.map(iss => {
-        const imgSrc = iss.game_image_url || fallbackCover(iss.game_slug, iss.accent_color);
+        const imgSrc = resolveSafeCoverUrl(iss.game_image_url, iss.game_short_name || iss.game_slug, iss.accent_color, iss.category);
+        const safeTitle = (iss.game_short_name || iss.game_slug || '').replace(/'/g, "\\'");
         return `
           <div
             onclick="quickSearchTag('${(iss.error_code || iss.title).replace(/'/g, '')}')"
@@ -1561,11 +1589,11 @@ function renderHomeShowcase() {
               <div class="flex items-center gap-2 min-w-0">
                 <img
                   src="${imgSrc}"
-                  onerror="this.onerror=null;this.src=fallbackCover('${iss.game_slug}','${iss.accent_color}')"
-                  alt="${iss.game_short_name}"
+                  onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${iss.accent_color}')"
+                  alt="${escapeHTML(iss.game_short_name)}"
                   class="w-8 h-6 rounded object-cover border border-white/15 shrink-0"
                 />
-                <span class="text-xs font-bold text-gray-200 truncate">${iss.game_short_name}</span>
+                <span class="text-xs font-bold text-gray-200 truncate">${escapeHTML(iss.game_short_name)}</span>
               </div>
               <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">
                 ${iss.error_code}
@@ -2680,6 +2708,8 @@ function parseAndApplyCrashLog(fileName, rawContent) {
 
   if (descInp) {
     descInp.value = summaryBlock;
+    descInp.classList.add('ring-2', 'ring-[#88c0a8]');
+    setTimeout(() => descInp.classList.remove('ring-2', 'ring-[#88c0a8]'), 2400);
   }
 
   // Show preview box
