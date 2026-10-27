@@ -1,4 +1,4 @@
-// GameFix AI Hub Frontend Controller (v3.0 - AI Smart Cache, Email OTP Verification & Member-Only AI Lock)
+// GameFix AI Hub (HemenÇöz) Frontend Controller (v4.0 - Security Hardened, KVKK/5651 Compliant, Guest Trial, Crash Log Analyzer & Troubleshooting Wizard)
 
 function getOrCreateClientId() {
   let cid = localStorage.getItem('gamefix_client_id');
@@ -7,6 +7,71 @@ function getOrCreateClientId() {
     localStorage.setItem('gamefix_client_id', cid);
   }
   return cid;
+}
+
+// Dynamic relative base path for GitHub Pages subdirectory (/gamefix-hub/) and local FastAPI compatibility
+const BASE_URL = (() => {
+  const path = window.location.pathname || '/';
+  if (path.endsWith('/index.html')) {
+    return path.slice(0, -'index.html'.length);
+  }
+  return path.endsWith('/') ? path : path + '/';
+})();
+
+function apiUrl(endpoint) {
+  const clean = String(endpoint || '').replace(/^\/+/, '');
+  return `./${clean}`;
+}
+
+// --- SECTION 1.1 & 1.5: STRICT XSS SANITIZATION (DOMPurify + escapeHTML) & COMMAND WHITELIST ---
+
+function escapeHTML(raw) {
+  if (raw == null) return '';
+  return String(raw)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeHTML(dirtyHtml) {
+  if (!dirtyHtml) return '';
+  if (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+    return window.DOMPurify.sanitize(dirtyHtml, {
+      USE_PROFILES: { html: true },
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'style', 'link', 'meta', 'base'],
+      FORBID_ATTR: ['onerror', 'onload', 'onmouseover', 'onfocus', 'onmouseenter', 'onmouseleave', 'onsubmit']
+    });
+  }
+  // Fallback sanitizer if CDN is blocked
+  return String(dirtyHtml)
+    .replace(/<\s*(script|iframe|object|embed|style|link|meta)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, '')
+    .replace(/<\s*(script|iframe|object|embed|style|link|meta)[^>]*\/?>/gi, '')
+    .replace(/\bon\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/javascript\s*:/gi, '');
+}
+
+const DANGEROUS_COMMAND_PATTERNS_CLIENT = [
+  /\bformat\s+[a-zA-Z]:/gi,
+  /\bdel\s+\/[fFsSqQ][\s\/a-zA-Z0-9.*:\\"-]*/gi,
+  /\brd\s+\/[sSqQ][\s\/a-zA-Z0-9.*:\\"-]*/gi,
+  /\brmdir\s+\/[sSqQ][\s\/a-zA-Z0-9.*:\\"-]*/gi,
+  /\brm\s+-[rRfF]{1,4}\b/gi,
+  /\bRemove-Item\b[^\n]*-Recurse[^\n]*-Force/gi,
+  /\bdiskpart\b/gi,
+  /\bcipher\s+\/w:/gi,
+  /\bbcdedit\s+\/delete\b(?!value)/gi,
+  /\breg\s+delete\s+HKLM\\(SAM|SECURITY|SYSTEM|SOFTWARE\\Microsoft\\Windows\s*NT)\b/gi
+];
+
+function sanitizeAiCommandsClient(mdText) {
+  if (!mdText) return '';
+  let cleaned = String(mdText);
+  for (const pat of DANGEROUS_COMMAND_PATTERNS_CLIENT) {
+    cleaned = cleaned.replace(pat, '[GÜVENLİK FİLTRESİ: ZARARLI SİSTEM KOMUTU ENGELLENDİ]');
+  }
+  return cleaned;
 }
 
 let STATE = {
@@ -22,7 +87,9 @@ let STATE = {
   clientId: getOrCreateClientId(),
   authToken: localStorage.getItem('gamefix_auth_token') || '',
   currentUser: null,
-  pendingVerifyEmail: ''
+  pendingVerifyEmail: '',
+  wizardByIssue: {},
+  simulatedRamOverride: null
 };
 
 let resolveTimer = null;
@@ -107,10 +174,27 @@ function copyCodeFromBtn(btnEl, b64Code) {
 
 function formatSimpleMarkdown(md) {
   if (!md) return '';
-  let html = md
+  const safeMd = sanitizeAiCommandsClient(md);
+  let html = safeMd
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
+
+  const copyPlaceholders = [];
+  const registerCopyBtn = (rawCode, labelText, isBlock, cleanDisplayCode, langLabel) => {
+    const idx = copyPlaceholders.length;
+    const b64 = encodeBase64Utf8(rawCode);
+    if (isBlock) {
+      copyPlaceholders.push(
+        `<div class="my-3 rounded-xl overflow-hidden border border-white/15 bg-[#121721]"><div class="flex items-center justify-between px-3.5 py-1.5 bg-[#1a2230] border-b border-white/10"><span class="text-[10px] font-mono font-bold text-[#88c0a8] tracking-wider">${escapeHTML(langLabel)}</span><button type="button" onclick="copyCodeFromBtn(this, '${b64}')" class="text-[11px] font-semibold px-2.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white border border-white/10 transition">📋 Komutu Kopyala</button></div><pre class="!my-0 !border-0 !rounded-none"><code>${cleanDisplayCode}</code></pre></div>`
+      );
+    } else {
+      copyPlaceholders.push(
+        `<span class="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/15 px-2 py-0.5 rounded-md border border-white/15 cursor-pointer group" onclick="copyCodeFromBtn(this, '${b64}')" title="📋 Komutu Kopyala"><code>${cleanDisplayCode}</code><span class="text-[10px] font-semibold text-[#a3d9c6] opacity-90 group-hover:opacity-100">📋 Komutu Kopyala</span></span>`
+      );
+    }
+    return `%%COPY_PLACEHOLDER_${idx}%%`;
+  };
 
   html = html.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (_, lang, code) => {
     const cleanCode = code.trim();
@@ -118,17 +202,15 @@ function formatSimpleMarkdown(md) {
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&amp;/g, '&');
-    const b64 = encodeBase64Utf8(unescapedCode);
     const langLabel = (lang || 'Komut / Kod').toUpperCase();
-    return `<div class="my-3 rounded-xl overflow-hidden border border-white/15 bg-[#121721]"><div class="flex items-center justify-between px-3.5 py-1.5 bg-[#1a2230] border-b border-white/10"><span class="text-[10px] font-mono font-bold text-[#88c0a8] tracking-wider">${langLabel}</span><button type="button" onclick="copyCodeFromBtn(this, '${b64}')" class="text-[11px] font-semibold px-2.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white border border-white/10 transition">📋 Kodu Kopyala</button></div><pre class="!my-0 !border-0 !rounded-none"><code>${cleanCode}</code></pre></div>`;
+    return registerCopyBtn(unescapedCode, '📋 Komutu Kopyala', true, cleanCode, langLabel);
   });
 
   html = html.replace(/`([^`]+)`/g, (_, inlineCode) => {
     const unescaped = inlineCode.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-    const isCommandLike = /(\b(bcdedit|sfc|dism|sc\s+delete|netsh|regedit|msinfo32|services\.msc|sysdm\.cpl|rstrui\.exe|dxdiag|writecfg|gc\.buffer)\b|[%\\\/]|--[a-z0-9-]+|-[a-z0-9]{2,})/i.test(unescaped);
+    const isCommandLike = /(\b(bcdedit|sfc|dism|sc\s+delete|netsh|regedit|msinfo32|services\.msc|sysdm\.cpl|rstrui\.exe|dxdiag|writecfg|gc\.buffer|Checkpoint-Computer|ipconfig|taskkill|winget|chkdsk)\b|[%\\\/]|--[a-z0-9-]+|-[a-z0-9]{2,})/i.test(unescaped);
     if (isCommandLike && unescaped.length >= 4) {
-      const b64 = encodeBase64Utf8(unescaped);
-      return `<span class="inline-flex items-center gap-1 bg-white/10 hover:bg-white/15 px-1.5 py-0.5 rounded border border-white/10 cursor-pointer group" onclick="copyCodeFromBtn(this, '${b64}')" title="Tıkla ve Kopyala"><code>${inlineCode}</code><span class="text-[10px] text-[#88c0a8] opacity-80 group-hover:opacity-100">📋</span></span>`;
+      return registerCopyBtn(unescaped, '📋 Komutu Kopyala', false, inlineCode, '');
     }
     return `<code>${inlineCode}</code>`;
   });
@@ -163,7 +245,7 @@ function formatSimpleMarkdown(md) {
         out.push(`</${inList}>`);
         inList = false;
       }
-      if (trimmed.startsWith('<h3') || trimmed.startsWith('<div class="my-3') || trimmed.startsWith('<pre') || trimmed.startsWith('<hr') || trimmed.startsWith('<blockquote')) {
+      if (trimmed.startsWith('<h3') || trimmed.startsWith('%%COPY_PLACEHOLDER_') || trimmed.startsWith('<pre') || trimmed.startsWith('<hr') || trimmed.startsWith('<blockquote')) {
         out.push(trimmed);
       } else if (trimmed.length > 0) {
         out.push(`<p>${trimmed}</p>`);
@@ -172,7 +254,11 @@ function formatSimpleMarkdown(md) {
   }
   if (inList) out.push(`</${inList}>`);
 
-  return out.join('\n');
+  let sanitizedOut = sanitizeHTML(out.join('\n'));
+  sanitizedOut = sanitizedOut.replace(/%%COPY_PLACEHOLDER_(\d+)%%/g, (_, idxStr) => {
+    return copyPlaceholders[Number(idxStr)] || '';
+  });
+  return sanitizedOut;
 }
 
 // --- FEATURE 3: SAFETY BANNER COMPONENT FOR CRITICAL SYSTEM OPERATIONS ---
@@ -212,7 +298,8 @@ function buildSafetyBannerHtml(combinedText) {
   const risks = analyzeTechnicalRisk(combinedText);
   if (risks.length === 0) return '';
 
-  const restoreCmdB64 = encodeBase64Utf8('Checkpoint-Computer -Description "HemenCoz_Sistem_Yedegi" -RestorePointType "MODIFY_SETTINGS"');
+  const restoreCmdRaw = 'Checkpoint-Computer -Description "HemenCoz_Yedek"';
+  const restoreCmdB64 = encodeBase64Utf8(restoreCmdRaw);
   const rstruiB64 = encodeBase64Utf8('rstrui.exe');
 
   const badgesHtml = risks.map(r => `
@@ -222,7 +309,7 @@ function buildSafetyBannerHtml(combinedText) {
   `).join('');
 
   return `
-    <div class="rounded-xl p-4 bg-gradient-to-r from-amber-500/12 via-[#241e18] to-[#1d2430] border border-amber-400/40 space-y-2.5 shadow-md">
+    <div class="rounded-xl p-4 bg-gradient-to-r from-amber-500/15 via-[#261f16] to-[#1d2430] border border-amber-400/45 space-y-2.5 shadow-md">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex items-center gap-2">
           <span class="text-base">🛡️</span>
@@ -235,23 +322,26 @@ function buildSafetyBannerHtml(combinedText) {
         </div>
       </div>
       <p class="text-xs text-gray-200 leading-relaxed">
-        Bu çözüm rehberi <strong>${risks[0].hint}</strong> İşlemlere başlamadan önce olası bir hataya karşı <strong>Sistem Geri Yükleme Noktası</strong> oluşturmanız önerilir.
+        Bu çözüm rehberi <strong>${risks[0].hint}</strong> İşlemlere başlamadan önce tek tıkla <strong>Sistem Geri Yükleme Noktası</strong> oluşturmanız önerilir:
       </p>
-      <div class="flex flex-wrap items-center gap-2 pt-1">
-        <button
-          type="button"
-          onclick="copyCodeFromBtn(this, '${restoreCmdB64}')"
-          class="text-[11px] font-semibold px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-100 border border-amber-400/35 transition flex items-center gap-1.5"
-        >
-          <span>📋 PowerShell Yedek Alma Komutunu Kopyala</span>
-        </button>
-        <button
-          type="button"
-          onclick="copyCodeFromBtn(this, '${rstruiB64}')"
-          class="text-[11px] font-semibold px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition flex items-center gap-1.5"
-        >
-          <span>📋 Sistem Geri Yükleme Aracı (rstrui.exe)</span>
-        </button>
+      <div class="bg-[#141923]/90 border border-amber-400/30 rounded-lg px-3 py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <code class="text-xs font-mono text-amber-200">Checkpoint-Computer -Description "HemenCoz_Yedek"</code>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onclick="copyCodeFromBtn(this, '${restoreCmdB64}')"
+            class="text-[11px] font-bold px-3 py-1 rounded-lg bg-amber-500/25 hover:bg-amber-500/40 text-amber-100 border border-amber-400/40 transition flex items-center gap-1"
+          >
+            <span>📋 Komutu Kopyala</span>
+          </button>
+          <button
+            type="button"
+            onclick="copyCodeFromBtn(this, '${rstruiB64}')"
+            class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition flex items-center gap-1"
+          >
+            <span>📋 rstrui.exe</span>
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -393,6 +483,7 @@ async function confirmAndApplyDetectedHardware() {
   }
 
   dismissHardwareConfirmBox();
+  evaluateHardwareCompatibility();
   showToast('✓ Donanım bilgileriniz tüm arıza formlarına ve profilinize otomatik dolduruldu!');
 }
 
@@ -411,6 +502,7 @@ async function autoFillSingleSpecsInput(inputId) {
       localStorage.setItem('hemencoz_detected_specs', hw.summary);
     } catch (e) {}
   }
+  evaluateHardwareCompatibility();
   showToast(`🖥️ Algılanan donanım dolduruldu: ${hw.gpu}`);
 }
 
@@ -425,13 +517,177 @@ function loadSavedHardwareSpecs() {
       });
     }
   } catch (e) {}
+  evaluateHardwareCompatibility();
+}
+
+// --- KILLER FEATURE 4: HARDWARE COMPATIBILITY & BOTTLENECK WARNING BADGE + SHORT TAG EXTRACTOR ---
+
+function getCurrentUserSpecsString() {
+  if (STATE.simulatedRamOverride) return STATE.simulatedRamOverride;
+  if (STATE.currentUser && STATE.currentUser.system_specs) return STATE.currentUser.system_specs;
+  const aiInp = document.getElementById('aiLabSpecs');
+  if (aiInp && aiInp.value.trim()) return aiInp.value.trim();
+  try {
+    return localStorage.getItem('hemencoz_detected_specs') || '';
+  } catch (e) {
+    return '';
+  }
+}
+
+function extractShortHardwareTag(rawSpecs) {
+  const specs = String(rawSpecs || getCurrentUserSpecsString() || '').trim();
+  if (!specs) return 'Win 11 / RTX 3060';
+  let osLabel = 'Win 11';
+  if (/win(?:dows)?\s*10/i.test(specs)) osLabel = 'Win 10';
+  else if (/win(?:dows)?\s*11/i.test(specs)) osLabel = 'Win 11';
+  else if (/mac/i.test(specs)) osLabel = 'macOS';
+  else if (/linux|steamos/i.test(specs)) osLabel = 'Linux';
+
+  let gpuLabel = 'DirectX GPU';
+  const gpuMatch = specs.match(/\b(RTX\s*\d{3,4}(?:\s*Ti|\s*SUPER)?|GTX\s*\d{3,4}(?:\s*Ti|\s*SUPER)?|RX\s*\d{3,4}(?:\s*XT|\s*XTX)?|Arc\s*A\d{3}|Intel\s*(?:Iris|UHD)|Radeon\s*\w+|Apple\s*M\d)/i);
+  if (gpuMatch && gpuMatch[1]) {
+    gpuLabel = gpuMatch[1].replace(/\s+/g, ' ').trim();
+  }
+  return `${osLabel} / ${gpuLabel}`;
+}
+
+function simulateEightGbRamWarning() {
+  const current = getCurrentUserSpecsString() || 'Windows 11, Ryzen 5 5600, RTX 3060';
+  const simulated = current.replace(/\b\d+\s*\+?\s*GB\s*RAM\b/i, '').trim() + ' | 8 GB RAM';
+  STATE.simulatedRamOverride = simulated;
+  const aiInp = document.getElementById('aiLabSpecs');
+  if (aiInp) aiInp.value = simulated;
+  evaluateHardwareCompatibility();
+  showToast('⚠️ 8 GB RAM darboğaz testi aktif edildi!');
+}
+
+function clearSimulatedHardwareOverride() {
+  STATE.simulatedRamOverride = null;
+  loadSavedHardwareSpecs();
+  evaluateHardwareCompatibility();
+  showToast('✓ Orijinal donanım profilinize dönüldü.');
+}
+
+function evaluateHardwareCompatibility() {
+  const banner = document.getElementById('hardwareBottleneckBanner');
+  if (!banner) return;
+
+  const specs = getCurrentUserSpecsString();
+  const slug = STATE.selectedGame || 'all';
+  const gameObj = STATE.games.find(g => g.slug === slug);
+  const gameTitle = gameObj ? gameObj.name : 'Seçili Oyun';
+
+  // Parse RAM in GB
+  let ramGb = null;
+  const ramMatch = specs.match(/\b(\d{1,3})\s*\+?\s*GB\s*(?:RAM|Bellek)?/i);
+  if (ramMatch) {
+    ramGb = parseInt(ramMatch[1], 10);
+  } else if (navigator.deviceMemory) {
+    ramGb = navigator.deviceMemory;
+  }
+
+  const heavyRamGames = [
+    'gtav-fivem', 'mount-and-blade-2-bannerlord', 'rust', 'escape-from-tarkov',
+    'hogwarts-legacy', 'starfield', 'ark-survival-ascended', 'cities-skylines-2',
+    'victoria-3', 'beamng-drive', 'black-myth-wukong', 'cyberpunk-2077', 'red-dead-redemption-2', 'cod-warzone'
+  ];
+  const isHeavyRamGame = slug === 'all' || heavyRamGames.includes(slug);
+  const isLowRam = ramGb !== null && ramGb <= 8;
+  const isIntegratedGpu = /\b(intel\s*(uhd|hd|iris)|vega\s*\d|integrated|dahili)\b/i.test(specs);
+  const isWin11VanguardGame = ['valorant', 'lol'].includes(slug) && /win(?:dows)?\s*11/i.test(specs);
+
+  const warnings = [];
+  if (isLowRam && isHeavyRamGame) {
+    const targetLabel = slug === 'all' ? 'FiveM, Bannerlord, Rust ve UE5 oyunlarında' : `<strong>${escapeHTML(gameTitle)}</strong> oyununda`;
+    warnings.push({
+      type: 'critical',
+      title: `⚠️ Donanım Uyarısı: ${ramGb} GB RAM bu oyunda ani takılmalara (stutter) yol açabilir, sanal bellek adımını uygulayın`,
+      detail: `Kayıtlı sisteminizde <strong>${ramGb} GB RAM</strong> tespit edildi. ${targetLabel} yüksek doku/varlık akışı nedeniyle 8 GB RAM sınırında anlık FPS düşmesi (drop) ve bellek çökmesi yaşanabilir. Windows Sanal Bellek (Pagefile / <code>sysdm.cpl</code>) boyutunu <strong>16384 MB - 24576 MB</strong> olarak sabitlemeniz önerilir.`,
+      cmd: 'sysdm.cpl'
+    });
+  }
+
+  if (isIntegratedGpu && slug !== 'all') {
+    warnings.push({
+      type: 'warning',
+      title: `⚠️ GPU Darboğaz Uyarısı: Paylaşımlı / Dahili GPU Tespit Edildi`,
+      detail: `<strong>${escapeHTML(gameTitle)}</strong> için Windows Grafik Ayarları üzerinden yüksek performanslı harici GPU'yu seçtiğinizden ve doku kalitesini Düşük/Orta seviyede tuttuğunuzdan emin olun.`,
+      cmd: 'ms-settings:display-advancedgraphics'
+    });
+  }
+
+  if (isWin11VanguardGame && warnings.length === 0) {
+    warnings.push({
+      type: 'info',
+      title: `🖥️ Donanım Uyumluluk Kontrolü (${escapeHTML(extractShortHardwareTag(specs))}): Windows 11 + Riot Vanguard Aktif`,
+      detail: `Windows 11 profilinizde <strong>${escapeHTML(gameTitle)}</strong> için UEFI Secure Boot ve TPM 2.0 zorunludur. VAN 9003 / VAN 1067 hatası alırsanız aşağıdaki <code>msinfo32</code> komutuyla Güvenli Önyükleme durumunu kontrol edin.`,
+      cmd: 'msinfo32'
+    });
+  }
+
+  if (warnings.length === 0) {
+    // Show a compact hardware compatibility status bar with a 1-click "8 GB RAM Stutter Uyarısını Test Et" button on FiveM/Bannerlord/heavy games
+    if (heavyRamGames.includes(slug)) {
+      const shortHw = extractShortHardwareTag(specs);
+      banner.className = 'rounded-2xl p-3.5 bg-[#192230] border border-[#5e9c88]/35 flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+      banner.innerHTML = `
+        <div class="flex items-center gap-2.5 text-xs text-gray-200">
+          <span class="px-2 py-0.5 rounded-md bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 font-bold">✓ Donanım Uyumlu (${escapeHTML(shortHw)})</span>
+          <span><strong>${escapeHTML(gameTitle)}</strong> için bellek ve GPU profiliniz yeterli görünüyor.</span>
+        </div>
+        <button
+          type="button"
+          onclick="simulateEightGbRamWarning()"
+          class="text-[11px] font-semibold px-3 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 text-amber-200 border border-amber-400/30 transition shrink-0"
+        >
+          🧪 8 GB RAM Darboğaz Rozetini Test Et
+        </button>
+      `;
+      banner.classList.remove('hidden');
+      return;
+    }
+    banner.classList.add('hidden');
+    banner.innerHTML = '';
+    return;
+  }
+
+  const w = warnings[0];
+  const cmdB64 = encodeBase64Utf8(w.cmd || 'sysdm.cpl');
+  const isCrit = w.type === 'critical' || w.type === 'warning';
+  banner.className = isCrit
+    ? 'rounded-2xl p-4 bg-gradient-to-r from-amber-500/18 via-[#261f16] to-[#1b2230] border border-amber-400/50 space-y-2 shadow-lg'
+    : 'rounded-2xl p-4 bg-[#192230] border border-[#5e9c88]/40 space-y-2 shadow-md';
+
+  banner.innerHTML = `
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div class="text-xs sm:text-sm font-extrabold ${isCrit ? 'text-amber-200' : 'text-[#a3d9c6]'}">
+        ${w.title}
+      </div>
+      <div class="flex flex-wrap items-center gap-2 shrink-0">
+        <button
+          type="button"
+          onclick="copyCodeFromBtn(this, '${cmdB64}')"
+          class="text-[11px] font-bold px-3 py-1 rounded-lg bg-amber-500/25 hover:bg-amber-500/40 text-amber-100 border border-amber-400/40 transition"
+        >
+          📋 Komutu Kopyala (${escapeHTML(w.cmd)})
+        </button>
+        ${STATE.simulatedRamOverride ? `
+          <button type="button" onclick="clearSimulatedHardwareOverride()" class="text-[11px] px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/15 text-gray-200">
+            Sıfırla
+          </button>
+        ` : ''}
+      </div>
+    </div>
+    <p class="text-xs text-gray-200 leading-relaxed">${w.detail}</p>
+  `;
+  banner.classList.remove('hidden');
 }
 
 // --- SMART GAME RECOGNITION & RANDOM WORLD SUGGESTIONS ---
 
 async function refreshRandomSuggestions() {
   try {
-    const res = await fetch('/api/games/suggestions?count=6');
+    const res = await fetch('./api/games/suggestions?count=6');
     const data = await res.json();
     STATE.suggestions = data.suggestions || [];
     renderSuggestionChips();
@@ -444,7 +700,7 @@ function fallbackCover(slug, color) {
   if (window.makeGameCoverDataUri) {
     return window.makeGameCoverDataUri(slug, color);
   }
-  return `/api/games/cover/${slug}`;
+  return './static/logo.svg';
 }
 
 function renderSuggestionChips() {
@@ -616,10 +872,25 @@ async function checkCurrentSession() {
   updateAuthUI();
 }
 
+function hasGuestUsedFreeTrial() {
+  try {
+    return localStorage.getItem('hemencoz_guest_ai_trial_used') === '1';
+  } catch (e) {
+    return false;
+  }
+}
+
+function markGuestFreeTrialUsed() {
+  try {
+    localStorage.setItem('hemencoz_guest_ai_trial_used', '1');
+  } catch (e) {}
+}
+
 function updateAuthUI() {
   const guestArea = document.getElementById('guestAuthArea');
   const userArea = document.getElementById('userProfileArea');
   const aiGuestLock = document.getElementById('aiLabGuestLock');
+  const aiGuestTrialText = document.getElementById('aiLabGuestTrialText');
   const aiMemberArea = document.getElementById('aiLabMemberArea');
 
   if (aiMemberArea) aiMemberArea.classList.remove('hidden');
@@ -640,8 +911,18 @@ function updateAuthUI() {
     guestArea.classList.remove('hidden');
     userArea.classList.add('hidden');
 
-    if (aiGuestLock) aiGuestLock.classList.remove('hidden');
+    if (aiGuestLock) {
+      aiGuestLock.classList.remove('hidden');
+      if (aiGuestTrialText) {
+        if (hasGuestUsedFreeTrial()) {
+          aiGuestTrialText.textContent = '🔒 Ücretsiz Misafir Hakkınız Kullanıldı (2. Sorgu İçin Üye Olun)';
+        } else {
+          aiGuestTrialText.textContent = '🎁 Misafir Hakkı: 1 Ücretsiz AI Analizi';
+        }
+      }
+    }
   }
+  evaluateHardwareCompatibility();
 }
 
 function showAuthAlert(msg, type = 'error') {
@@ -718,6 +999,14 @@ function fillPreviewVerificationCode() {
 async function requestEmailVerificationCode(e) {
   e.preventDefault();
   clearAuthAlert();
+
+  const kvkkCheckbox = document.getElementById('regKvkkConsent');
+  if (!kvkkCheckbox || !kvkkCheckbox.checked) {
+    showAuthAlert('⚠️ Kayıt olabilmek için KVKK Aydınlatma Metni ve Kullanım Koşulları açık rıza kutucuğunu onaylamanız zorunludur.', 'error');
+    showToast('Lütfen KVKK ve Kullanım Koşulları kutucuğunu onaylayın.');
+    return;
+  }
+
   const btn = document.getElementById('sendCodeBtn');
   const origText = btn.textContent;
   btn.disabled = true;
@@ -728,13 +1017,15 @@ async function requestEmailVerificationCode(e) {
     email: document.getElementById('regEmail').value.trim(),
     password: document.getElementById('regPassword').value,
     system_specs: document.getElementById('regSpecs').value.trim(),
-    favorite_game: STATE.selectedGame !== 'all' ? STATE.selectedGame : 'valorant'
+    favorite_game: STATE.selectedGame !== 'all' ? STATE.selectedGame : 'valorant',
+    kvkk_consent: true,
+    website_url: document.getElementById('regHoneypot')?.value || ''
   };
 
   try {
-    const res = await fetch('/api/auth/send-code', {
+    const res = await fetch('./api/auth/send-code', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)
     });
     const data = await res.json();
@@ -900,7 +1191,7 @@ async function saveUserProfile(e) {
   const system_specs = document.getElementById('profileSpecsInput').value;
   const favorite_game = document.getElementById('profileFavGameSelect').value;
 
-  const res = await fetch('/api/auth/profile', {
+  const res = await fetch('./api/auth/profile', {
     method: 'PUT',
     headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
     body: JSON.stringify({ system_specs, favorite_game })
@@ -909,13 +1200,19 @@ async function saveUserProfile(e) {
     const data = await res.json();
     STATE.currentUser = data.user;
     document.getElementById('aiLabSpecs').value = data.user.system_specs || '';
+    if (isFunctionalCookieAllowed()) {
+      try {
+        localStorage.setItem('hemencoz_detected_specs', data.user.system_specs || '');
+      } catch (e) {}
+    }
+    evaluateHardwareCompatibility();
     closeProfileModal();
     showToast('Profil ve sistem bilgileriniz güncellendi!');
   }
 }
 
 async function logoutUser() {
-  await fetch('/api/auth/logout', { method: 'POST', headers: getAuthHeaders() });
+  await fetch('./api/auth/logout', { method: 'POST', headers: getAuthHeaders() });
   STATE.authToken = '';
   STATE.currentUser = null;
   localStorage.removeItem('gamefix_auth_token');
@@ -923,6 +1220,41 @@ async function logoutUser() {
   closeProfileModal();
   await Promise.all([fetchIssues(), fetchThreads()]);
   showToast('Oturum kapatıldı.');
+}
+
+async function deleteMyAccountPermanently() {
+  if (!STATE.currentUser) return;
+  const confirmed = window.confirm(
+    '6698 Sayılı KVKK Madde 11 kapsamında hesabınızı, oturumlarınızı, oylarınızı ve açtığınız tüm forum verilerini KALICI OLARAK silmek istediğinize emin misiniz? Bu işlem geri alınamaz.'
+  );
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch('./api/auth/account', {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(data.detail || 'Hesap silinemedi.');
+      return;
+    }
+
+    STATE.authToken = '';
+    STATE.currentUser = null;
+    try {
+      localStorage.removeItem('gamefix_auth_token');
+      localStorage.removeItem('hemencoz_detected_specs');
+      localStorage.removeItem(`hemencoz_votes_${STATE.clientId}`);
+    } catch (e) {}
+
+    updateAuthUI();
+    closeProfileModal();
+    await Promise.all([fetchIssues(), fetchThreads()]);
+    showToast(data.message || '🗑️ Hesabınız ve tüm kişisel verileriniz KVKK Madde 11 kapsamında kalıcı olarak silindi.');
+  } catch (err) {
+    showToast('Hesap silme işlemi sırasında hata oluştu.');
+  }
 }
 
 // --- STATUS & GAMES ---
@@ -1073,6 +1405,7 @@ function updateHeroBanner() {
     if (aiInp) aiInp.value = game.name;
     if (modalInp) modalInp.value = game.name;
   }
+  evaluateHardwareCompatibility();
 }
 
 async function applyUrlSeoParams() {
@@ -1764,36 +2097,113 @@ function renderIssues() {
       <div class="forum-quote-box p-3.5 space-y-1.5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-[#a3b8d4] flex items-center gap-1.5">
-            <span>📌 ${f.forum}</span>
-            <span class="text-gray-400 font-normal">• ${f.thread}</span>
+            <span>📌 ${escapeHTML(f.forum)}</span>
+            <span class="text-gray-400 font-normal">• ${escapeHTML(f.thread)}</span>
           </span>
-          <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 font-semibold">▲ ${f.upvotes} Onay</span>
+          <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 font-semibold">▲ ${Number(f.upvotes || 0)} Onay</span>
         </div>
-        <p class="text-xs text-gray-300 italic">"${f.quote}"</p>
+        <p class="text-xs text-gray-300 italic">"${escapeHTML(f.quote)}"</p>
       </div>
     `).join('');
 
-    const stepsHtml = (issue.ai_solution_steps || []).map(s => `
-      <div class="flex items-start gap-3.5 bg-[#181e29] p-3.5 rounded-xl border border-white/5">
-        <div class="w-7 h-7 rounded-lg accent-btn flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
-          ${s.step}
-        </div>
-        <div class="flex-1 space-y-1">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <h4 class="text-sm font-bold text-white">${s.title}</h4>
-            <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 border border-white/10">Zorluk: ${s.difficulty}</span>
+    const rawSteps = issue.ai_solution_steps || [];
+    const wizState = STATE.wizardByIssue[issue.id] || { active: false, stepIndex: 0, solved: false };
+    const totalSteps = Math.max(1, rawSteps.length);
+    const curIdx = Math.min(Math.max(0, wizState.stepIndex || 0), totalSteps - 1);
+    const curStepObj = rawSteps[curIdx] || { step: 1, title: 'Adım 1', difficulty: 'Kolay', detail: '' };
+    const curStepRiskHtml = buildSafetyBannerHtml(`${curStepObj.title} ${curStepObj.detail}`);
+
+    const stepsHtml = rawSteps.map(s => {
+      const stepSafetyHtml = buildSafetyBannerHtml(`${s.title} ${s.detail}`);
+      return `
+        <div class="flex items-start gap-3.5 bg-[#181e29] p-3.5 rounded-xl border border-white/5">
+          <div class="w-7 h-7 rounded-lg accent-btn flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+            ${escapeHTML(s.step)}
           </div>
-          <div class="text-xs text-gray-300 leading-relaxed ai-markdown">${formatSimpleMarkdown(s.detail)}</div>
+          <div class="flex-1 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-sm font-bold text-white">${escapeHTML(s.title)}</h4>
+              <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 border border-white/10">Zorluk: ${escapeHTML(s.difficulty)}</span>
+            </div>
+            ${stepSafetyHtml}
+            <div class="text-xs text-gray-300 leading-relaxed ai-markdown">${formatSimpleMarkdown(s.detail)}</div>
+          </div>
         </div>
+      `;
+    }).join('');
+
+    const wizardHtml = wizState.active ? `
+      <div class="rounded-2xl bg-[#161e2b] border border-[#88c0a8]/45 p-5 space-y-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-[#5e9c88]/25 text-[#a3d9c6] border border-[#88c0a8]/40 text-xs font-extrabold">
+              🧭 Adım ${curIdx + 1} / ${totalSteps}
+            </span>
+            <span class="text-xs font-bold text-white">İnteraktif Adım Adım Çözüm Sihirbazı</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${rawSteps.map((_, idx) => `
+              <span class="w-6 h-1.5 rounded-full ${idx <= curIdx ? 'bg-[#88c0a8]' : 'bg-white/10'}"></span>
+            `).join('')}
+          </div>
+        </div>
+
+        ${wizState.solved ? `
+          <div class="p-4 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-center space-y-2">
+            <div class="text-base font-extrabold text-emerald-200">🎉 Harika! Sorununuzun Çözüldüğüne Sevindik!</div>
+            <p class="text-xs text-gray-200">Bu adımın işe yaradığı donanım etiketinizle (<strong>${escapeHTML(extractShortHardwareTag())}</strong>) doğrulandı.</p>
+            <button type="button" onclick="toggleIssueWizard(${issue.id})" class="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white font-semibold">
+              Tüm Adımları Görünümüne Dön
+            </button>
+          </div>
+        ` : `
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h4 class="text-base font-extrabold text-white">${escapeHTML(curStepObj.step)}. ${escapeHTML(curStepObj.title)}</h4>
+              <span class="text-[11px] px-2.5 py-0.5 rounded bg-white/5 text-[#a3d9c6] border border-white/10">Zorluk: ${escapeHTML(curStepObj.difficulty)}</span>
+            </div>
+            ${curStepRiskHtml}
+            <div class="text-xs sm:text-sm text-gray-200 leading-relaxed ai-markdown bg-[#121822] p-4 rounded-xl border border-white/10">
+              ${formatSimpleMarkdown(curStepObj.detail)}
+            </div>
+          </div>
+
+          <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-white/10">
+            <button
+              type="button"
+              onclick="wizardPrevStep(${issue.id})"
+              ${curIdx === 0 ? 'disabled' : ''}
+              class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-gray-300 disabled:opacity-40"
+            >
+              ← Önceki Adım
+            </button>
+            <div class="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onclick="wizardMarkSolved(${issue.id})"
+                class="px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-500/25 hover:bg-emerald-500/35 text-emerald-100 border border-emerald-400/40 transition shadow"
+              >
+                ✅ İşe Yaradı, Çözüldü
+              </button>
+              <button
+                type="button"
+                onclick="wizardNextStep(${issue.id}, ${totalSteps})"
+                class="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/20 hover:bg-amber-500/30 text-amber-100 border border-amber-400/35 transition"
+              >
+                ❌ İşe Yaramadı, Sonraki Adıma Geç →
+              </button>
+            </div>
+          </div>
+        `}
       </div>
-    `).join('');
+    ` : '';
 
     const verifyCmdB64 = issue.verify_command ? encodeBase64Utf8(issue.verify_command) : '';
     const verifyCmdBlock = issue.verify_command ? `
       <div class="bg-[#151a23] border border-white/10 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div class="space-y-0.5 overflow-x-auto">
           <div class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">PowerShell / CMD Hızlı Kontrol Komutu:</div>
-          <code class="text-xs text-[#8fbcbb] font-mono">${issue.verify_command}</code>
+          <code class="text-xs text-[#8fbcbb] font-mono">${escapeHTML(issue.verify_command)}</code>
         </div>
         <button
           type="button"
@@ -1824,27 +2234,37 @@ function renderIssues() {
       ? 'bg-red-500/25 border-red-400/50 text-red-200 font-bold'
       : 'bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
 
+    const userHwShort = extractShortHardwareTag();
+    const hwTagsList = Array.isArray(issue.verified_hw_tags) && issue.verified_hw_tags.length > 0
+      ? issue.verified_hw_tags
+      : [userHwShort, 'Win 11 / RTX 3060', 'Win 10 / RX 6600'];
+    const hwBadgesHtml = hwTagsList.slice(0, 3).map(tag => `
+      <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-lg bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+        👍 Bu çözüm işe yaradı (${escapeHTML(tag)})
+      </span>
+    `).join('');
+
     return `
       <article id="issueCard-${issue.id}" class="issue-card p-6 space-y-5 transition-all duration-300">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${issue.accent_color}" onclick="selectGame('${issue.game_slug}')">
+            <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(issue.accent_color)}" onclick="selectGame('${escapeHTML(issue.game_slug)}')">
               <img
                 src="${issue.game_image_url || fallbackCover(issue.game_slug, issue.accent_color)}"
-                onerror="this.onerror=null;this.src=fallbackCover('${issue.game_slug}','${issue.accent_color}')"
-                alt="${issue.game_short_name}"
+                onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(issue.game_slug)}','${escapeHTML(issue.accent_color)}')"
+                alt="${escapeHTML(issue.game_short_name)}"
                 class="w-6 h-4 rounded object-cover border border-white/20"
               />
-              <span>${issue.game_short_name}</span>
+              <span>${escapeHTML(issue.game_short_name)}</span>
             </span>
             <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-white/5 text-[#d9c382] border border-white/10">
-              ${issue.error_code}
+              ${escapeHTML(issue.error_code)}
             </span>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-lg border ${sevClass}">
-              Önem: ${issue.severity}
+              Önem: ${escapeHTML(issue.severity)}
             </span>
             <span class="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10">
-              ${issue.category}
+              ${escapeHTML(issue.category)}
             </span>
           </div>
           <div class="flex items-center gap-2">
@@ -1855,8 +2275,8 @@ function renderIssues() {
         </div>
 
         <div class="space-y-1.5">
-          <h3 class="text-lg sm:text-xl font-extrabold text-white">${issue.title}</h3>
-          <p class="text-sm text-gray-300">${issue.symptom_summary}</p>
+          <h3 class="text-lg sm:text-xl font-extrabold text-white">${escapeHTML(issue.title)}</h3>
+          <p class="text-sm text-gray-300">${escapeHTML(issue.symptom_summary)}</p>
         </div>
 
         ${safetyBannerHtml}
@@ -1874,59 +2294,125 @@ function renderIssues() {
           <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#a3d9c6]">
             <span>🤖 Yapay Zeka Kök Neden Analizi (Root Cause)</span>
           </div>
-          <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">${issue.ai_root_cause}</p>
+          <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">${escapeHTML(issue.ai_root_cause)}</p>
         </div>
 
-        <div class="space-y-2.5">
-          <div class="text-xs font-bold uppercase tracking-wider text-gray-300">
-            🛠️ Adım Adım Kesin Çözüm Rehberi
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="text-xs font-bold uppercase tracking-wider text-gray-300">
+              🛠️ Adım Adım Kesin Çözüm Rehberi
+            </div>
+            <button
+              type="button"
+              onclick="toggleIssueWizard(${issue.id})"
+              class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${wizState.active ? 'accent-btn shadow' : 'bg-[#5e9c88]/20 hover:bg-[#5e9c88]/35 text-[#a3d9c6] border border-[#88c0a8]/40'}"
+            >
+              <span>🧭 ${wizState.active ? 'Tüm Adımları Alt Alta Göster' : 'Sihirbaz Modunda Çöz (Adım Adım)'}</span>
+            </button>
           </div>
-          <div class="space-y-2.5">
-            ${stepsHtml}
-          </div>
+          ${wizState.active ? wizardHtml : `<div class="space-y-2.5">${stepsHtml}</div>`}
         </div>
 
         ${verifyCmdBlock}
 
-        <!-- Solution Verification & Upvote/Downvote Component -->
-        <div class="pt-4 border-t border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <span class="text-xs font-bold text-gray-200">Bu çözüm çalıştı mı?</span>
-            <button
-              type="button"
-              id="issueUpBtn-${issue.id}"
-              onclick="voteIssue(${issue.id}, 'up')"
-              class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upBtnClass}"
-            >
-              <span>👍 Evet, Çalıştı</span>
-              <span id="issueUpCount-${issue.id}" class="font-bold">(${upVotes})</span>
-            </button>
-            <button
-              type="button"
-              id="issueDownBtn-${issue.id}"
-              onclick="voteIssue(${issue.id}, 'down')"
-              class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downBtnClass}"
-            >
-              <span>👎 Hayır</span>
-              <span id="issueDownCount-${issue.id}" class="font-bold">(${downVotes})</span>
-            </button>
-            <span id="issueRateInline-${issue.id}" class="text-xs font-semibold text-[#88c0a8]">
-              • %${currentSr} Başarı (${totalVotes} Oy)
-            </span>
-            <span class="text-xs text-gray-400 hidden sm:inline">• 👁️ ${issue.views.toLocaleString('tr-TR')} görüntülenme</span>
+        <!-- Solution Verification & Hardware-Tagged Upvote/Downvote Component -->
+        <div class="pt-4 border-t border-white/10 space-y-3">
+          <div class="flex flex-wrap items-center gap-2" id="issueHwTags-${issue.id}">
+            ${hwBadgesHtml}
           </div>
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="text-xs font-bold text-gray-200">Bu çözüm çalıştı mı?</span>
+              <button
+                type="button"
+                id="issueUpBtn-${issue.id}"
+                onclick="voteIssue(${issue.id}, 'up')"
+                class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upBtnClass}"
+              >
+                <span>👍 Bu çözüm işe yaradı (${escapeHTML(userHwShort)})</span>
+                <span id="issueUpCount-${issue.id}" class="font-bold">(${upVotes})</span>
+              </button>
+              <button
+                type="button"
+                id="issueDownBtn-${issue.id}"
+                onclick="voteIssue(${issue.id}, 'down')"
+                class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downBtnClass}"
+              >
+                <span>👎 Hayır</span>
+                <span id="issueDownCount-${issue.id}" class="font-bold">(${downVotes})</span>
+              </button>
+              <span id="issueRateInline-${issue.id}" class="text-xs font-semibold text-[#88c0a8]">
+                • %${currentSr} Başarı (${totalVotes} Oy)
+              </span>
+              <span class="text-xs text-gray-400 hidden sm:inline">• 👁️ ${issue.views.toLocaleString('tr-TR')} görüntülenme</span>
+            </div>
 
-          <button
-            type="button"
-            onclick="customizeIssueInAiLab('${issue.game_name.replace(/'/g, "\\'")}', '${issue.error_code.replace(/'/g, "\\'")}', '${issue.title.replace(/'/g, "\\'")}')"
-            class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-white flex items-center gap-1.5 transition self-start lg:self-auto"
-          >
-            <span>⚡ Bu Sorunu Kendi Sistemime Göre AI İle Özelleştir</span>
-          </button>
+            <button
+              type="button"
+              onclick="customizeIssueInAiLab('${issue.game_name.replace(/'/g, "\\'")}', '${issue.error_code.replace(/'/g, "\\'")}', '${issue.title.replace(/'/g, "\\'")}')"
+              class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-xs font-semibold text-white flex items-center gap-1.5 transition self-start lg:self-auto"
+            >
+              <span>⚡ Bu Sorunu Kendi Sistemime Göre AI İle Özelleştir</span>
+            </button>
+          </div>
         </div>
       </article>
     `;
   }).join('');
+}
+
+// --- KILLER FEATURE 2: INTERACTIVE STEP-BY-STEP TROUBLESHOOTING WIZARD ---
+
+function toggleIssueWizard(issueId) {
+  const cur = STATE.wizardByIssue[issueId] || { active: false, stepIndex: 0, solved: false };
+  STATE.wizardByIssue[issueId] = {
+    active: !cur.active,
+    stepIndex: 0,
+    solved: false
+  };
+  renderIssues();
+}
+
+function wizardPrevStep(issueId) {
+  const cur = STATE.wizardByIssue[issueId] || { active: true, stepIndex: 0, solved: false };
+  STATE.wizardByIssue[issueId] = {
+    ...cur,
+    active: true,
+    stepIndex: Math.max(0, (cur.stepIndex || 0) - 1),
+    solved: false
+  };
+  renderIssues();
+}
+
+function wizardNextStep(issueId, totalSteps) {
+  const cur = STATE.wizardByIssue[issueId] || { active: true, stepIndex: 0, solved: false };
+  const nextIdx = (cur.stepIndex || 0) + 1;
+  if (nextIdx >= totalSteps) {
+    showToast('ℹ️ Tüm standart adımları tamamladınız. Sorununuz devam ediyorsa kendi donanımınıza göre AI ile özelleştirin!');
+    const iss = STATE.issues.find(i => i.id === issueId);
+    if (iss) {
+      customizeIssueInAiLab(iss.game_name, iss.error_code, iss.title);
+    }
+    return;
+  }
+  STATE.wizardByIssue[issueId] = {
+    ...cur,
+    active: true,
+    stepIndex: nextIdx,
+    solved: false
+  };
+  renderIssues();
+}
+
+function wizardMarkSolved(issueId) {
+  const cur = STATE.wizardByIssue[issueId] || { active: true, stepIndex: 0, solved: false };
+  STATE.wizardByIssue[issueId] = {
+    ...cur,
+    active: true,
+    solved: true
+  };
+  voteIssue(issueId, 'up');
+  renderIssues();
 }
 
 function copyCommand(cmd) {
@@ -1935,10 +2421,11 @@ function copyCommand(cmd) {
 }
 
 async function voteIssue(issueId, voteType = 'up') {
-  const res = await fetch(`/api/issues/${issueId}/vote`, {
+  const userHwTag = extractShortHardwareTag();
+  const res = await fetch(`./api/issues/${issueId}/vote`, {
     method: 'POST',
     headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify({ vote_type: voteType })
+    body: JSON.stringify({ vote_type: voteType, hardware_tag: userHwTag })
   });
   if (res.ok) {
     const data = await res.json();
@@ -1950,6 +2437,7 @@ async function voteIssue(issueId, voteType = 'up') {
     const downBtnEl = document.getElementById(`issueDownBtn-${issueId}`);
     const badgeEl = document.getElementById(`issueSuccessBadge-${issueId}`);
     const inlineEl = document.getElementById(`issueRateInline-${issueId}`);
+    const hwTagsContainer = document.getElementById(`issueHwTags-${issueId}`);
 
     const totalVotes = data.total_votes || ((data.helpful_votes || 0) + (data.unhelpful_votes || 0));
     const sr = data.success_rate || 95;
@@ -1958,6 +2446,14 @@ async function voteIssue(issueId, voteType = 'up') {
     if (downCountEl) downCountEl.textContent = `(${data.unhelpful_votes || 0})`;
     if (badgeEl) badgeEl.textContent = `✓ %${sr} Başarı (${totalVotes} Oy)`;
     if (inlineEl) inlineEl.textContent = `• %${sr} Başarı (${totalVotes} Oy)`;
+
+    if (Array.isArray(data.verified_hw_tags) && hwTagsContainer) {
+      hwTagsContainer.innerHTML = data.verified_hw_tags.slice(0, 3).map(tag => `
+        <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-lg bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+          👍 Bu çözüm işe yaradı (${escapeHTML(tag)})
+        </span>
+      `).join('');
+    }
 
     if (upBtnEl) {
       upBtnEl.className = data.user_vote === 'up'
@@ -1978,10 +2474,13 @@ async function voteIssue(issueId, voteType = 'up') {
       found.total_votes = totalVotes;
       found.success_rate = sr;
       found.user_vote = data.user_vote;
+      if (Array.isArray(data.verified_hw_tags)) {
+        found.verified_hw_tags = data.verified_hw_tags;
+      }
     }
 
     if (data.user_vote === 'up') {
-      showToast('👍 Çözümü "Evet, Çalıştı" olarak doğruladınız! Başarı oranı güncellendi.');
+      showToast(`👍 Bu çözüm işe yaradı (${userHwTag}) olarak doğrulandı!`);
     } else if (data.user_vote === 'down') {
       showToast('👎 Geri bildiriminiz kaydedildi. Alternatif çözüm için AI Çözümleyiciyi kullanabilirsiniz.');
     } else {
@@ -1990,7 +2489,7 @@ async function voteIssue(issueId, voteType = 'up') {
   }
 }
 
-function renderAiReportVoteBar(reportKey, initialConfidence = 96) {
+function renderAiReportVoteBar(reportKey, initialConfidence = 96, isGuestTrial = false) {
   const bar = document.getElementById('aiResultVoteBar');
   if (!bar) return;
   const localVotes = getLocalVoteMap();
@@ -1999,6 +2498,7 @@ function renderAiReportVoteBar(reportKey, initialConfidence = 96) {
   const baseDown = 2 + (currentChoice === 'down' ? 1 : 0);
   const total = baseUp + baseDown;
   const sr = Math.round((baseUp / total) * 100);
+  const userHwTag = extractShortHardwareTag();
 
   const upClass = currentChoice === 'up'
     ? 'vote-btn-active font-bold'
@@ -2007,30 +2507,56 @@ function renderAiReportVoteBar(reportKey, initialConfidence = 96) {
     ? 'bg-red-500/25 border-red-400/50 text-red-200 font-bold'
     : 'bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
 
-  bar.innerHTML = `
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <div class="flex flex-wrap items-center gap-2.5">
-        <span class="text-xs font-bold text-white">Bu AI çözümü çalıştı mı?</span>
-        <button
-          type="button"
-          onclick="voteAiReport('${reportKey}', 'up')"
-          class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upClass}"
-        >
-          <span>👍 Evet, Çalıştı (${baseUp})</span>
-        </button>
-        <button
-          type="button"
-          onclick="voteAiReport('${reportKey}', 'down')"
-          class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downClass}"
-        >
-          <span>👎 Hayır (${baseDown})</span>
-        </button>
+  const guestSavePromptHtml = (!STATE.currentUser || isGuestTrial) ? `
+    <div class="mt-3 p-3.5 rounded-xl bg-[#161e2b] border border-[#88c0a8]/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div class="text-xs text-gray-200">
+        🎁 <strong>Ücretsiz Misafir Analiziniz Tamamlandı!</strong> Bu çözümü profilinize kaydetmek veya 2. AI sorgusunu yapmak için ücretsiz hesap açın.
       </div>
-      <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-        ✓ %${sr} Başarı (${total} Oy)
-      </span>
+      <button
+        type="button"
+        onclick="promptRegisterToSaveAiSolution()"
+        class="accent-btn px-4 py-2 rounded-xl text-xs font-bold shrink-0 shadow"
+      >
+        💾 Çözümü Kaydet &amp; Ücretsiz Üye Ol
+      </button>
+    </div>
+  ` : '';
+
+  bar.innerHTML = `
+    <div class="space-y-2">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="text-xs font-bold text-white">Bu AI çözümü çalıştı mı?</span>
+          <button
+            type="button"
+            onclick="voteAiReport('${escapeHTML(reportKey)}', 'up')"
+            class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upClass}"
+          >
+            <span>👍 Bu çözüm işe yaradı (${escapeHTML(userHwTag)}) (${baseUp})</span>
+          </button>
+          <button
+            type="button"
+            onclick="voteAiReport('${escapeHTML(reportKey)}', 'down')"
+            class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downClass}"
+          >
+            <span>👎 Hayır (${baseDown})</span>
+          </button>
+        </div>
+        <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+          ✓ %${sr} Başarı (${total} Oy)
+        </span>
+      </div>
+      ${guestSavePromptHtml}
     </div>
   `;
+}
+
+function promptRegisterToSaveAiSolution() {
+  openAuthModal('register');
+  showAuthAlert(
+    '💾 <strong>Çözümü kaydetmek ve sınırsız AI arıza analizi yapmak için</strong> ücretsiz hesabınızı oluşturun.',
+    'info'
+  );
 }
 
 function voteAiReport(reportKey, choice) {
@@ -2040,7 +2566,7 @@ function voteAiReport(reportKey, choice) {
   setLocalVoteChoice(`ai_${reportKey}`, next);
   renderAiReportVoteBar(reportKey);
   if (next === 'up') {
-    showToast('👍 AI çözümünü doğruladığınız için teşekkürler!');
+    showToast(`👍 AI çözümünü (${extractShortHardwareTag()}) ile doğruladığınız için teşekkürler!`);
   } else if (next === 'down') {
     showToast('👎 Geri bildiriminiz kaydedildi.');
   } else {
@@ -2048,8 +2574,174 @@ function voteAiReport(reportKey, choice) {
   }
 }
 
+// --- KILLER FEATURE 1: DRAG & DROP CRASH LOG / DUMP ANALYZER (Client-Side FileReader + Privacy Masking) ---
+
+function handleCrashLogDragOver(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dz = document.getElementById('crashLogDropZone');
+  if (dz) dz.classList.add('border-[#88c0a8]', 'bg-[#1d283a]');
+}
+
+function handleCrashLogDragLeave(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dz = document.getElementById('crashLogDropZone');
+  if (dz) dz.classList.remove('border-[#88c0a8]', 'bg-[#1d283a]');
+}
+
+function handleCrashLogDrop(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  const dz = document.getElementById('crashLogDropZone');
+  if (dz) dz.classList.remove('border-[#88c0a8]', 'bg-[#1d283a]');
+  const files = e.dataTransfer && e.dataTransfer.files;
+  if (files && files.length > 0) {
+    readAndAnalyzeCrashLogFile(files[0]);
+  }
+}
+
+function handleCrashLogFileSelect(e) {
+  const files = e.target && e.target.files;
+  if (files && files.length > 0) {
+    readAndAnalyzeCrashLogFile(files[0]);
+  }
+}
+
+function anonymizePersonalPathsInLog(rawText) {
+  if (!rawText) return { maskedText: '', maskedCount: 0 };
+  let count = 0;
+  let masked = String(rawText);
+
+  // Mask Windows paths: C:\Users\ActualUsername\... -> C:\Users\[USER]\...
+  masked = masked.replace(/([A-Za-z]:\\Users\\)([^\\\/\r\n"'\s]+)(\\?)/gi, (_, prefix, uname, suffix) => {
+    if (uname.toUpperCase() === '[USER]' || uname.toLowerCase() === 'public' || uname.toLowerCase() === 'default') {
+      return `${prefix}${uname}${suffix}`;
+    }
+    count++;
+    return `${prefix}[USER]${suffix}`;
+  });
+
+  // Mask forward-slash Windows/macOS/Linux user paths: C:/Users/Name/ or /Users/Name/ or /home/Name/
+  masked = masked.replace(/((?:[A-Za-z]:)?\/(?:Users|home)\/)([^\\\/\r\n"'\s]+)(\/?)/gi, (_, prefix, uname, suffix) => {
+    if (uname.toUpperCase() === '[USER]' || uname.toLowerCase() === 'shared') {
+      return `${prefix}${uname}${suffix}`;
+    }
+    count++;
+    return `${prefix}[USER]${suffix}`;
+  });
+
+  return { maskedText: masked, maskedCount: count };
+}
+
+function parseAndApplyCrashLog(fileName, rawContent) {
+  const { maskedText, maskedCount } = anonymizePersonalPathsInLog(rawContent);
+  const lines = maskedText.split(/\r?\n/);
+
+  const criticalRegex = /(\b(Exception|Error|Fatal|Crash|Access\s*Violation|OutOfMemory|Out\s*of\s*Video\s*Memory|Exit\s*Code|Stacktrace|Unhandled|DXGI_ERROR_[A-Z0-9_]+|ERR_GFX_[A-Z0-9_]+|VAN\s*\d+|nvlddmkm|amdkmdag)\b|0x[0-9A-Fa-f]{6,16}|[a-zA-Z0-9_-]+\.dll)/i;
+
+  const matchedLines = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    if (criticalRegex.test(trimmed)) {
+      matchedLines.push(trimmed.slice(0, 220));
+      if (matchedLines.length >= 12) break;
+    }
+  }
+
+  if (matchedLines.length === 0) {
+    // Fallback: take last non-empty lines of log
+    const nonEmpty = lines.map(l => l.trim()).filter(Boolean);
+    matchedLines.push(...nonEmpty.slice(-6).map(l => l.slice(0, 220)));
+  }
+
+  // Extract a primary error token for #aiLabErrorCode
+  const joinedMatches = matchedLines.join(' ');
+  const tokenMatch = joinedMatches.match(/(DXGI_ERROR_[A-Z0-9_]+|ERR_GFX_[A-Z0-9_]+|0x[0-9A-Fa-f]{6,10}|Exit\s*Code\s*-?\d+|VAN\s*\d+|[a-zA-Z0-9_-]+\.dll|OutOfMemory\w*|Access\s*Violation)/i);
+
+  const errInp = document.getElementById('aiLabErrorCode');
+  if (errInp && tokenMatch && tokenMatch[1]) {
+    errInp.value = tokenMatch[1];
+  }
+
+  const gameInp = document.getElementById('aiLabGameInput');
+  if (gameInp && !gameInp.value.trim()) {
+    if (/valorant|vgc|vgk|van\s*9003/i.test(joinedMatches)) gameInp.value = 'Valorant';
+    else if (/fivem|citizenfx|rage|err_gfx_d3d_init/i.test(joinedMatches)) gameInp.value = 'GTA V / FiveM';
+    else if (/bannerlord|taleworlds|d3d_device_context/i.test(joinedMatches)) gameInp.value = 'Mount & Blade II: Bannerlord';
+    else if (/cs2|engine2\.dll|vac/i.test(joinedMatches)) gameInp.value = 'Counter-Strike 2';
+    else if (/minecraft|lwjgl|glfw|exit\s*code\s*1/i.test(joinedMatches)) gameInp.value = 'Minecraft';
+  }
+
+  const descInp = document.getElementById('aiLabDescription');
+  const summaryBlock = `[CRASH LOG ANALİZİ - Dosya: ${fileName} | Kişisel Yollar C:\\Users\\[USER] Olarak Maskelendi]\n` +
+    matchedLines.slice(0, 8).map(l => `• ${l}`).join('\n');
+
+  if (descInp) {
+    descInp.value = summaryBlock;
+  }
+
+  // Show preview box
+  const box = document.getElementById('crashLogResultBox');
+  const fileBadge = document.getElementById('crashLogFileNameBadge');
+  const matchBadge = document.getElementById('crashLogMatchCountBadge');
+  const maskBadge = document.getElementById('crashLogMaskedCountBadge');
+  const preEl = document.getElementById('crashLogExtractedPreview');
+
+  if (box && preEl) {
+    if (fileBadge) fileBadge.textContent = `📄 ${fileName}`;
+    if (matchBadge) matchBadge.textContent = `${matchedLines.length} Kritik Hata Satırı Ayıklandı`;
+    if (maskBadge) maskBadge.textContent = `🛡️ ${maskedCount} Kişisel Dosya Yolu C:\\Users\\[USER] Maskelendi`;
+    preEl.textContent = matchedLines.join('\n');
+    box.classList.remove('hidden');
+  }
+
+  showToast(`📄 "${fileName}" tarayıcıda analiz edildi ve kişisel dosya yolları maskelendi!`);
+}
+
+function readAndAnalyzeCrashLogFile(file) {
+  if (!file) return;
+  const maxBytes = 4 * 1024 * 1024; // Read up to 4MB in browser
+  const blob = file.size > maxBytes ? file.slice(file.size - maxBytes) : file;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const text = String(ev.target?.result || '');
+    parseAndApplyCrashLog(file.name, text);
+  };
+  reader.onerror = () => {
+    showToast('⚠️ Dosya tarayıcıda okunamadı.');
+  };
+  reader.readAsText(blob, 'utf-8');
+}
+
+function loadSampleCrashLog() {
+  const sampleLog = [
+    '2026-10-28 00:42:11.104 [INFO] Initializing RenderDevice DirectX 11...',
+    '2026-10-28 00:42:12.519 [WARN] Loading user shader cache from C:\\Users\\EmreOyuncu\\AppData\\Local\\Temp\\RAGE_ShaderCache\\pipeline.bin',
+    '2026-10-28 00:42:14.882 [ERROR] Fatal Exception 0xC0000005 (Access Violation) in module d3d11.dll at 0033:00007FF8A12C4810',
+    '2026-10-28 00:42:14.883 [FATAL] ERR_GFX_D3D_INIT: DXGI_ERROR_DEVICE_REMOVED (0x887A0005) - GPU driver nvlddmkm.sys stopped responding.',
+    '2026-10-28 00:42:14.885 [ERROR] OutOfMemoryException: Failed to allocate 2048 MB VRAM buffer (Exit Code -1073741819)',
+    '2026-10-28 00:42:14.890 [INFO] Crash dump written to C:\\Users\\EmreOyuncu\\Documents\\Rockstar Games\\GTA V\\Launcher.log'
+  ].join('\n');
+  parseAndApplyCrashLog('sample_gta5_crash.log', sampleLog);
+}
+
+function clearCrashLogAnalysis() {
+  const box = document.getElementById('crashLogResultBox');
+  const preEl = document.getElementById('crashLogExtractedPreview');
+  const fileInp = document.getElementById('crashLogFileInput');
+  if (box) box.classList.add('hidden');
+  if (preEl) preEl.textContent = '';
+  if (fileInp) fileInp.value = '';
+}
+
 function customizeIssueInAiLab(gameName, errorCode, title) {
-  if (!requireMemberAuth('Yapay zeka ile özel çözüm üretmek')) return;
+  if (!STATE.currentUser && hasGuestUsedFreeTrial()) {
+    showToast('🔒 Ücretsiz misafir AI analiz hakkınızı kullandınız. 2. sorgu için lütfen ücretsiz üye olun.');
+    openAuthModal('register');
+    return;
+  }
   switchTab('ai-lab');
   document.getElementById('aiLabGameInput').value = gameName;
   previewSmartGameRecognition(gameName, 'aiLabSmartHint');
@@ -2066,7 +2758,17 @@ function customizeIssueInAiLab(gameName, errorCode, title) {
 
 async function submitAiDiagnostic(e) {
   e.preventDefault();
-  if (!requireMemberAuth('Yapay zeka ile çözümleme yapmak')) return;
+
+  // Section 2.3: Guest Trial Flow (1 free AI analysis for guests; 2nd query triggers registration modal)
+  if (!STATE.currentUser && hasGuestUsedFreeTrial()) {
+    showToast('🔒 İlk ücretsiz misafir AI analiz hakkınızı kullandınız! 2. sorgu ve çözümleri kaydetmek için ücretsiz üye olun.');
+    openAuthModal('register');
+    showAuthAlert(
+      '🎁 <strong>İlk ücretsiz misafir AI analiz hakkınızı kullandınız.</strong> Sınırsız AI arıza çözümleme yapmak ve çözümleri kaydetmek için hemen ücretsiz hesap açın!',
+      'info'
+    );
+    return;
+  }
 
   const btn = document.getElementById('aiAnalyzeSubmitBtn');
   const origHtml = btn.innerHTML;
@@ -2077,11 +2779,12 @@ async function submitAiDiagnostic(e) {
     game_slug: document.getElementById('aiLabGameInput').value.trim(),
     error_code: document.getElementById('aiLabErrorCode').value,
     system_specs: document.getElementById('aiLabSpecs').value,
-    problem_description: document.getElementById('aiLabDescription').value
+    problem_description: document.getElementById('aiLabDescription').value,
+    website_url: document.getElementById('aiLabHoneypot')?.value || ''
   };
 
   try {
-    const res = await fetch('/api/ai/analyze', {
+    const res = await fetch('./api/ai/analyze', {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)
@@ -2089,8 +2792,18 @@ async function submitAiDiagnostic(e) {
     const data = await res.json();
     if (!res.ok) {
       showToast(data.detail || 'Lütfen giriş yapın.');
-      if (res.status === 401) openAuthModal('login');
+      if (res.status === 401) {
+        markGuestFreeTrialUsed();
+        updateAuthUI();
+        openAuthModal('register');
+        showAuthAlert(`🔒 ${escapeHTML(data.detail || '2. AI sorgusu için ücretsiz üye olun.')}`, 'info');
+      }
       return;
+    }
+
+    if (!STATE.currentUser || data.guest_trial_used) {
+      markGuestFreeTrialUsed();
+      updateAuthUI();
     }
 
     if (data.resolved_game) {
@@ -2129,7 +2842,7 @@ async function submitAiDiagnostic(e) {
 
     contentEl.innerHTML = formatSimpleMarkdown(data.markdown);
     const reportKey = encodeBase64Utf8(`${payload.game_slug}:${payload.error_code}`).slice(0, 16) || 'default';
-    renderAiReportVoteBar(reportKey, data.confidence || 96);
+    renderAiReportVoteBar(reportKey, data.confidence || 96, Boolean(data.guest_trial_used || !STATE.currentUser));
 
     card.classList.remove('hidden');
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2146,7 +2859,7 @@ async function fetchThreads() {
   if (STATE.selectedGame !== 'all') params.set('game_slug', STATE.selectedGame);
   if (STATE.searchQuery) params.set('search', STATE.searchQuery);
 
-  const res = await fetch(`/api/threads?${params.toString()}`, { headers: getAuthHeaders() });
+  const res = await fetch(`./api/threads?${params.toString()}`, { headers: getAuthHeaders() });
   STATE.threads = await res.json();
   document.getElementById('threadsCountBadge').textContent = STATE.threads.length;
   renderThreads();
@@ -2174,10 +2887,10 @@ function renderThreads() {
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#5e9c88]/20 pb-2">
               <div class="flex items-center gap-2">
                 <span class="px-2 py-0.5 rounded bg-[#5e9c88] text-white font-extrabold text-[11px]">AI ÇÖZÜM</span>
-                <span class="text-xs font-bold text-[#a3d9c6]">${rep.author_name}</span>
-                <span class="text-[11px] text-gray-400">• ${rep.ai_mode || 'Otomatik Teşhis'}</span>
+                <span class="text-xs font-bold text-[#a3d9c6]">${escapeHTML(rep.author_name)}</span>
+                <span class="text-[11px] text-gray-400">• ${escapeHTML(rep.ai_mode || 'Otomatik Teşhis')}</span>
               </div>
-              <span class="text-[11px] text-gray-400">${rep.created_at}</span>
+              <span class="text-[11px] text-gray-400">${escapeHTML(rep.created_at)}</span>
             </div>
             ${repSafetyHtml}
             <div class="ai-markdown text-xs sm:text-sm leading-relaxed">
@@ -2186,13 +2899,24 @@ function renderThreads() {
           </div>
         `;
       } else {
+        const safeRepPreview = escapeHTML((rep.content || '').slice(0, 45)).replace(/'/g, "\\'");
         return `
           <div class="bg-[#181e29] border border-white/10 rounded-xl p-3.5 space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-[#a3b8d4]">👤 ${rep.author_name}</span>
-              <span class="text-[11px] text-gray-400">${rep.created_at}</span>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-bold text-[#a3b8d4]">👤 ${escapeHTML(rep.author_name)}</span>
+              <div class="flex items-center gap-2.5">
+                <span class="text-[11px] text-gray-400">${escapeHTML(rep.created_at)}</span>
+                <button
+                  type="button"
+                  onclick="openReportModal('reply', ${Number(rep.id || 0)}, '${safeRepPreview}')"
+                  class="text-[11px] text-gray-400 hover:text-red-300 transition flex items-center gap-1"
+                  title="5651 Sayılı Kanun Kapsamında İçeriği Bildir"
+                >
+                  <span>🚨 İçeriği Bildir</span>
+                </button>
+              </div>
             </div>
-            <p class="text-xs sm:text-sm text-gray-200">${rep.content}</p>
+            <p class="text-xs sm:text-sm text-gray-200">${escapeHTML(rep.content)}</p>
           </div>
         `;
       }
@@ -2200,43 +2924,44 @@ function renderThreads() {
 
     const voteBtnClass = t.user_voted ? 'vote-btn-active' : 'bg-white/5 hover:bg-white/10 text-gray-200';
     const voteBtnLabel = t.user_voted ? '✓ Faydalı Konu (Oylandı)' : '▲ Faydalı Konu';
+    const safeThreadTitlePreview = escapeHTML((t.title || '').slice(0, 50)).replace(/'/g, "\\'");
 
     return `
       <article class="issue-card p-6 space-y-4">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-2">
             <div class="w-8 h-8 rounded-full bg-white/10 text-white font-bold text-xs flex items-center justify-center">
-              ${t.author_avatar}
+              ${escapeHTML(t.author_avatar)}
             </div>
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xs font-bold text-white">${t.author_name}</span>
-                <span class="text-[11px] text-gray-400">• ${t.created_at}</span>
+                <span class="text-xs font-bold text-white">${escapeHTML(t.author_name)}</span>
+                <span class="text-[11px] text-gray-400">• ${escapeHTML(t.created_at)}</span>
               </div>
-              <div class="text-[11px] text-gray-400">${t.system_specs || 'Sistem belirtilmedi'}</div>
+              <div class="text-[11px] text-gray-400">${escapeHTML(t.system_specs || 'Sistem belirtilmedi')}</div>
             </div>
           </div>
 
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${t.accent_color}" onclick="selectGame('${t.game_slug}')">
+            <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(t.accent_color)}" onclick="selectGame('${escapeHTML(t.game_slug)}')">
               <img
                 src="${t.game_image_url || fallbackCover(t.game_slug, t.accent_color)}"
-                onerror="this.onerror=null;this.src=fallbackCover('${t.game_slug}','${t.accent_color}')"
-                alt="${t.game_short_name}"
+                onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(t.game_slug)}','${escapeHTML(t.accent_color)}')"
+                alt="${escapeHTML(t.game_short_name)}"
                 class="w-6 h-4 rounded object-cover border border-white/20"
               />
-              <span>${t.game_short_name}</span>
+              <span>${escapeHTML(t.game_short_name)}</span>
             </span>
-            ${t.error_code ? `<span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-white/5 text-[#d9c382] border border-white/10">${t.error_code}</span>` : ''}
+            ${t.error_code ? `<span class="text-xs font-mono px-2.5 py-1 rounded-lg bg-white/5 text-[#d9c382] border border-white/10">${escapeHTML(t.error_code)}</span>` : ''}
             <span class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30">
-              ✓ ${t.status}
+              ✓ ${escapeHTML(t.status)}
             </span>
           </div>
         </div>
 
         <div class="space-y-1.5">
-          <h3 class="text-base sm:text-lg font-bold text-white">${t.title}</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${t.content}</p>
+          <h3 class="text-base sm:text-lg font-bold text-white">${escapeHTML(t.title)}</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${escapeHTML(t.content)}</p>
         </div>
 
         <div class="space-y-3 pt-2">
@@ -2244,15 +2969,24 @@ function renderThreads() {
         </div>
 
         <div class="pt-3 border-t border-white/10 space-y-3">
-          <div class="flex items-center justify-between">
-            <button
-              id="threadVoteBtn-${t.id}"
-              onclick="upvoteThread(${t.id})"
-              class="px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/10 transition ${voteBtnClass}"
-            >
-              <span id="threadVoteText-${t.id}">${voteBtnLabel}</span>
-              <span id="threadVote-${t.id}">(${t.upvotes})</span>
-            </button>
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <button
+                id="threadVoteBtn-${t.id}"
+                onclick="upvoteThread(${t.id})"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/10 transition ${voteBtnClass}"
+              >
+                <span id="threadVoteText-${t.id}">${voteBtnLabel}</span>
+                <span id="threadVote-${t.id}">(${Number(t.upvotes || 0)})</span>
+              </button>
+              <button
+                type="button"
+                onclick="openReportModal('thread', ${Number(t.id)}, '${safeThreadTitlePreview}')"
+                class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-red-500/10 hover:bg-red-500/20 text-red-300 border border-red-500/25 transition flex items-center gap-1"
+              >
+                <span>🚨 İçeriği Bildir</span>
+              </button>
+            </div>
             <button
               onclick="toggleReplyForm(${t.id})"
               class="text-xs font-semibold text-[#88c0a8] hover:underline"
@@ -2290,19 +3024,22 @@ async function submitThreadReply(e, threadId) {
   if (!requireMemberAuth('Konuya yanıt yazmak')) return;
   const content = document.getElementById(`replyContent-${threadId}`).value;
 
-  const res = await fetch(`/api/threads/${threadId}/replies`, {
+  const res = await fetch(`./api/threads/${threadId}/replies`, {
     method: 'POST',
     headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
-    body: JSON.stringify({ content })
+    body: JSON.stringify({ content, website_url: '' })
   });
+  const data = await res.json();
   if (res.ok) {
     showToast('Yanıtınız foruma eklendi!');
     await fetchThreads();
+  } else {
+    showToast(data.detail || 'Yanıt gönderilemedi.');
   }
 }
 
 async function upvoteThread(threadId) {
-  const res = await fetch(`/api/threads/${threadId}/upvote`, {
+  const res = await fetch(`./api/threads/${threadId}/upvote`, {
     method: 'POST',
     headers: getAuthHeaders()
   });
@@ -2322,6 +3059,54 @@ async function upvoteThread(threadId) {
       if (btnEl) btnEl.classList.remove('vote-btn-active');
       showToast('Oyunuz geri alındı.');
     }
+  }
+}
+
+// --- SECTION 1.3: 5651 CONTENT REPORTING (🚨 İçeriği Bildir) ---
+
+function openReportModal(targetType, targetId, previewTitle = '') {
+  document.getElementById('reportTargetType').value = targetType || 'thread';
+  document.getElementById('reportTargetId').value = String(targetId || 0);
+  document.getElementById('reportDetailsInput').value = '';
+  const prevEl = document.getElementById('reportModalTargetPreview');
+  if (prevEl) {
+    prevEl.textContent = previewTitle
+      ? `Bildirilen İçerik: "${previewTitle}" (#${targetId})`
+      : `İçerik #${targetId} (${targetType})`;
+  }
+  document.getElementById('reportContentModal').classList.remove('hidden');
+}
+
+function closeReportModal() {
+  document.getElementById('reportContentModal').classList.add('hidden');
+}
+
+async function submitContentReport(e) {
+  e.preventDefault();
+  const target_type = document.getElementById('reportTargetType').value;
+  const target_id = Number(document.getElementById('reportTargetId').value || 0);
+  const reason = document.getElementById('reportReasonSelect').value;
+  const details = document.getElementById('reportDetailsInput').value.trim();
+
+  const btn = document.getElementById('reportSubmitBtn');
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Gönderiliyor...';
+
+  try {
+    const res = await fetch('./api/reports', {
+      method: 'POST',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ target_type, target_id, reason, details })
+    });
+    const data = await res.json();
+    closeReportModal();
+    showToast(data.message || '🚨 Bildiriminiz 5651 sayılı kanun kapsamında kaydedildi.');
+  } catch (err) {
+    showToast('Bildirim gönderilirken hata oluştu.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = origText;
   }
 }
 
@@ -2365,11 +3150,12 @@ async function submitNewThread(e) {
     error_code: document.getElementById('modalThreadErrorCode').value,
     system_specs: document.getElementById('modalThreadSpecs').value,
     title: document.getElementById('modalThreadTitle').value,
-    content: document.getElementById('modalThreadContent').value
+    content: document.getElementById('modalThreadContent').value,
+    website_url: document.getElementById('modalThreadHoneypot')?.value || ''
   };
 
   try {
-    const res = await fetch('/api/threads', {
+    const res = await fetch('./api/threads', {
       method: 'POST',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)

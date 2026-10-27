@@ -1,14 +1,15 @@
 import os
 import re
+import html
 import json
 import time
 import hashlib
 import secrets
 import smtplib
 from email.mime.text import MIMEText
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
-from fastapi import FastAPI, HTTPException, Query, Header
+from fastapi import FastAPI, HTTPException, Query, Header, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
@@ -18,12 +19,177 @@ from database import init_db, get_db_connection, hash_password, verify_password
 from game_catalog import resolve_game_input, get_random_world_suggestions, get_game_image_url
 
 app = FastAPI(
-    title="GameFix AI Hub API",
+    title="HemenÇöz (GameFix Hub) API",
     description="Popüler Oyunların Forum Sorunları ve Yapay Zeka Destekli Çözüm Platformu",
-    version="3.0.0"
+    version="4.0.0"
 )
 
 init_db()
+
+# --- SECURITY, RATE LIMITING, 5651 LOGGING & CONTENT FILTERING ---
+
+RATE_LIMIT_BUCKETS: dict[str, list[float]] = {}
+
+PROHIBITED_PROFANITY = [
+    "amk", "aq", "sikik", "sikeyim", "siktir", "orospu", "piç", "pezevenk",
+    "yavşak", "götveren", "kahpe", "ibne", "ananı", "bacını", "oç"
+]
+
+PROHIBITED_WAREZ_TERMS = [
+    "crack indir", "torrent indir", "fitgirl repack", "dodi repack", "skidrow",
+    "codex crack", "kmspico", "keygen indir", "aimbot indir", "wallhack indir",
+    "hile indir", "bedava hile", "warez", "fulloyun indir", "serial key indir"
+]
+
+PROHIBITED_SHORT_LINKS = [
+    "bit.ly/", "tinyurl.com/", "t.co/", "goo.gl/", "bc.vc/", "ay.link/",
+    "tr.link/", "ouo.io/", "adf.ly/", "cut.ly/", "is.gd/", "shorte.st/"
+]
+
+DANGEROUS_COMMAND_PATTERNS = [
+    r"\bformat\s+[a-zA-Z]:",
+    r"\bdel\s+/[fFsSqQ]",
+    r"\brd\s+/[sSqQ]",
+    r"\brmdir\s+/[sSqQ]",
+    r"\brm\s+-rf\b",
+    r"\bcipher\s+/w",
+    r"\bdiskpart\b",
+    r"\bbcdedit\s+/delete\s+\{current\}",
+    r"\breg\s+delete\s+hklm\\(sam|system|security)",
+    r"\btakeown\s+/f\s+c:\\windows",
+    r"\bicacls\s+c:\\windows\s+/remove",
+    r"\bpowershell\s+-[eE][nN][cC]",
+    r"\binvoke-expression\b",
+    r"\biex\s*\("
+]
+
+
+def sanitize_user_text(raw: Optional[str]) -> str:
+    """Strips dangerous XSS tags/attributes and normalizes user input."""
+    if not raw:
+        return ""
+    s = str(raw).strip()
+    # Remove script/iframe/object/embed/style blocks completely
+    s = re.sub(r"<\s*(script|iframe|object|embed|style|applet|meta|link)[^>]*>[\s\S]*?<\s*/\s*\1\s*>", "", s, flags=re.IGNORECASE)
+    s = re.sub(r"<\s*/?\s*(script|iframe|object|embed|style|applet|meta|link)[^>]*>", "", s, flags=re.IGNORECASE)
+    # Remove inline event handlers like onload=, onerror=, onclick=
+    s = re.sub(r"\bon[a-z]+\s*=\s*(['\"].*?['\"]|[^\s>]+)", "", s, flags=re.IGNORECASE)
+    s = re.sub(r"javascript\s*:", "", s, flags=re.IGNORECASE)
+    # Escape remaining HTML tags
+    return html.escape(s, quote=True)
+
+
+def sanitize_ai_commands(markdown_text: str) -> str:
+    """Filters out any destructive system commands against our safe command policy."""
+    if not markdown_text:
+        return ""
+    cleaned = markdown_text
+    for pat in DANGEROUS_COMMAND_PATTERNS:
+        cleaned = re.sub(
+            pat,
+            "[GÜVENLİK KALKANI: Zararlı sistem komutu HemenÇöz Güvenli Komut Filtresi tarafından engellendi]",
+            cleaned,
+            flags=re.IGNORECASE
+        )
+    # Also strip raw <script> or <iframe> if ever present in markdown
+    cleaned = re.sub(r"<\s*/?\s*(script|iframe|object|embed)[^>]*>", "", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\bon(load|error|click|mouseover)\s*=", "data-blocked=", cleaned, flags=re.IGNORECASE)
+    return cleaned
+
+
+def check_prohibited_content(text: str):
+    """5651 Law & Community Filter: Blocks profanity, shortened links, and crack/warez/cheat sharing."""
+    if not text:
+        return
+    lower_txt = text.lower()
+    words = re.findall(r"[a-zçğıöşü0-9]+", lower_txt)
+    for bad in PROHIBITED_PROFANITY:
+        if bad in words:
+            raise HTTPException(
+                status_code=400,
+                detail="🛡️ 5651 İçerik Filtresi: Gönderinizde topluluk kurallarına aykırı argo/hakaret ifadeleri tespit edildi. Lütfen teknik ve saygılı bir dil kullanın."
+            )
+    for warez in PROHIBITED_WAREZ_TERMS:
+        if warez in lower_txt:
+            raise HTTPException(
+                status_code=400,
+                detail="🛡️ 5651 & Telif Filtresi: Forumda korsan oyun (crack/warez/torrent) ve hile yazılımı paylaşımı kesinlikle yasaktır."
+            )
+    for link in PROHIBITED_SHORT_LINKS:
+        if link in lower_txt:
+            raise HTTPException(
+                status_code=400,
+                detail="🛡️ Güvenlik Filtresi: Zararlı yazılım riskine karşı kısaltılmış link (bit.ly, tr.link vb.) paylaşımı engellenmiştir."
+            )
+
+
+def check_honeypot(hp_value: Optional[str]):
+    if hp_value and hp_value.strip():
+        raise HTTPException(status_code=400, detail="Güvenlik duvarı: Otomatik bot aktivitesi tespit edildi ve engellendi.")
+
+
+def check_rate_limit(bucket_key: str, max_calls: int, window_sec: int = 60, action_name: str = "işlem"):
+    now = time.time()
+    timestamps = RATE_LIMIT_BUCKETS.get(bucket_key, [])
+    timestamps = [t for t in timestamps if now - t < window_sec]
+    if len(timestamps) >= max_calls:
+        wait_sec = max(5, int(window_sec - (now - timestamps[0])))
+        raise HTTPException(
+            status_code=429,
+            detail=f"⏳ Rate Limit Koruması: Dakikada en fazla {max_calls} {action_name} yapabilirsiniz. Lütfen {wait_sec} saniye bekleyip tekrar deneyin."
+        )
+    timestamps.append(now)
+    RATE_LIMIT_BUCKETS[bucket_key] = timestamps
+
+
+def get_client_ip(request: Optional[Request]) -> str:
+    if not request:
+        return "127.0.0.1"
+    xff = request.headers.get("x-forwarded-for") or request.headers.get("cf-connecting-ip")
+    if xff:
+        return xff.split(",")[0].strip()[:64]
+    if request.client and request.client.host:
+        return request.client.host[:64]
+    return "127.0.0.1"
+
+
+def get_user_agent(request: Optional[Request]) -> str:
+    if not request:
+        return "Unknown"
+    return (request.headers.get("user-agent") or "Unknown")[:250]
+
+
+def log_5651_event(
+    action_type: str,
+    target_id: int,
+    user_id: int,
+    client_id: str,
+    ip_address: str,
+    user_agent: str,
+    content_summary: str
+):
+    """Records immutable 5651 legal audit log (IP, User-Agent, UTC Timestamp, Client ID)."""
+    try:
+        utc_now = datetime.now(timezone.utc).isoformat()
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO legal_5651_logs (action_type, target_id, user_id, client_id, ip_address, user_agent, content_summary, utc_timestamp)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            action_type,
+            int(target_id or 0),
+            int(user_id or 0),
+            (client_id or "")[:64],
+            (ip_address or "127.0.0.1")[:64],
+            (user_agent or "Unknown")[:250],
+            (content_summary or "")[:200],
+            utc_now
+        ))
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
 
 
 class SendVerificationCodeRequest(BaseModel):
@@ -32,6 +198,9 @@ class SendVerificationCodeRequest(BaseModel):
     password: str
     system_specs: Optional[str] = ""
     favorite_game: Optional[str] = "valorant"
+    kvkk_consent: Optional[bool] = True
+    website_hp: Optional[str] = ""
+    website_url: Optional[str] = ""
 
 
 class VerifyEmailRegisterRequest(BaseModel):
@@ -62,6 +231,8 @@ class AIAnalyzeRequest(BaseModel):
     error_code: Optional[str] = ""
     system_specs: Optional[str] = ""
     problem_description: str
+    website_hp: Optional[str] = ""
+    website_url: Optional[str] = ""
 
 
 class NewThreadRequest(BaseModel):
@@ -70,10 +241,21 @@ class NewThreadRequest(BaseModel):
     error_code: Optional[str] = ""
     system_specs: Optional[str] = ""
     content: str
+    website_hp: Optional[str] = ""
+    website_url: Optional[str] = ""
 
 
 class NewReplyRequest(BaseModel):
     content: str
+    website_hp: Optional[str] = ""
+    website_url: Optional[str] = ""
+
+
+class ContentReportRequest(BaseModel):
+    target_type: str
+    target_id: int
+    reason: str
+    details: Optional[str] = ""
 
 
 def get_current_user(authorization: Optional[str] = Header(None)) -> Optional[dict]:
@@ -330,7 +512,7 @@ def generate_ai_solution(
                 system_instruction=system_instruction,
                 input=prompt
             )
-            output_text = (interaction.output_text or "").strip()
+            output_text = sanitize_ai_commands((interaction.output_text or "").strip())
             if output_text:
                 # Save to SQLite AI Cache so future identical queries cost 0 tokens!
                 conn = get_db_connection()
@@ -354,6 +536,7 @@ def generate_ai_solution(
             fallback_res = build_smart_simulation_response(
                 game_name, engine, anticheat, error_code, system_specs, problem_description, matched_issue
             )
+            fallback_res["markdown"] = sanitize_ai_commands(fallback_res["markdown"])
             fallback_res["mode"] = "Akıllı AI Teşhis Motoru (Sunucu Yedek Modu)"
             conn = get_db_connection()
             cursor = conn.cursor()
@@ -368,6 +551,7 @@ def generate_ai_solution(
     sim_res = build_smart_simulation_response(
         game_name, engine, anticheat, error_code, system_specs, problem_description, matched_issue
     )
+    sim_res["markdown"] = sanitize_ai_commands(sim_res["markdown"])
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -448,9 +632,21 @@ def build_smart_simulation_response(
 # --- 2-STEP EMAIL VERIFICATION & AUTHENTICATION ENDPOINTS ---
 
 @app.post("/api/auth/send-code")
-def send_registration_verification_code(req: SendVerificationCodeRequest):
-    username = req.username.strip()
+def send_registration_verification_code(
+    req: SendVerificationCodeRequest,
+    request: Request,
+    x_client_id: Optional[str] = Header(None)
+):
+    check_honeypot(req.website_hp or req.website_url)
+    if req.kvkk_consent is False:
+        raise HTTPException(
+            status_code=400,
+            detail="Kayıt olabilmek için 6698 sayılı KVKK Aydınlatma Metni ve Kullanım Koşullarını onaylamanız zorunludur."
+        )
+
+    username = sanitize_user_text(req.username)
     email = req.email.strip().lower()
+    check_prohibited_content(username)
 
     if len(username) < 2:
         raise HTTPException(status_code=400, detail="Kullanıcı adı en az 2 karakter olmalıdır.")
@@ -503,7 +699,7 @@ def send_registration_verification_code(req: SendVerificationCodeRequest):
         email,
         username,
         pwd_hash,
-        (req.system_specs or "").strip(),
+        sanitize_user_text(req.system_specs or ""),
         req.favorite_game or "valorant",
         code,
         expires_at,
@@ -527,7 +723,11 @@ def send_registration_verification_code(req: SendVerificationCodeRequest):
 
 
 @app.post("/api/auth/verify-register")
-def verify_email_and_register(req: VerifyEmailRegisterRequest):
+def verify_email_and_register(
+    req: VerifyEmailRegisterRequest,
+    request: Request,
+    x_client_id: Optional[str] = Header(None)
+):
     email = req.email.strip().lower()
     code = req.code.strip()
 
@@ -585,6 +785,16 @@ def verify_email_and_register(req: VerifyEmailRegisterRequest):
     user_dict = dict(cursor.fetchone())
     conn.close()
 
+    log_5651_event(
+        action_type="user_register_kvkk",
+        target_id=user_id,
+        user_id=user_id,
+        client_id=x_client_id or "",
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        content_summary=f"Yeni üye kaydı ve KVKK açık rıza onayı: {username} ({email})"
+    )
+
     return {"token": token, "user": user_dict}
 
 
@@ -600,7 +810,6 @@ def login_user(req: LoginRequest):
     user_row = cursor.fetchone()
 
     if not user_row:
-        # Check if user started registration in email_verifications
         cursor.execute("SELECT * FROM email_verifications WHERE lower(email) = ? OR lower(username) = ?", (ident, ident))
         pending = cursor.fetchone()
         conn.close()
@@ -654,12 +863,54 @@ def update_profile(req: ProfileUpdateRequest, authorization: Optional[str] = Hea
     cursor = conn.cursor()
     cursor.execute("""
         UPDATE users SET system_specs = ?, favorite_game = ? WHERE id = ?
-    """, (req.system_specs.strip(), req.favorite_game.strip(), user["id"]))
+    """, (sanitize_user_text(req.system_specs), sanitize_user_text(req.favorite_game), user["id"]))
     conn.commit()
     cursor.execute("SELECT id, username, email, avatar_initials, system_specs, favorite_game, role, created_at FROM users WHERE id = ?", (user["id"],))
     updated = dict(cursor.fetchone())
     conn.close()
     return {"user": updated}
+
+
+@app.delete("/api/auth/account")
+def delete_user_account(
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_client_id: Optional[str] = Header(None)
+):
+    """KVKK Article 11 Compliance: Permanently deletes user account, sessions, votes, and personal data."""
+    user = get_current_user(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Hesap silme işlemi için oturum açmış olmalısınız.")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    uid = user["id"]
+    uname = user["username"]
+    uemail = user["email"]
+
+    cursor.execute("DELETE FROM sessions WHERE user_id = ?", (uid,))
+    cursor.execute("DELETE FROM user_votes WHERE voter_key = ?", (f"user:{uid}",))
+    cursor.execute("DELETE FROM email_verifications WHERE lower(email) = ?", (uemail.lower(),))
+    cursor.execute("DELETE FROM replies WHERE author_name = ? AND is_ai = 0", (uname,))
+    cursor.execute("DELETE FROM threads WHERE author_name = ?", (uname,))
+    cursor.execute("DELETE FROM users WHERE id = ?", (uid,))
+    conn.commit()
+    conn.close()
+
+    log_5651_event(
+        action_type="account_deleted_kvkk_m11",
+        target_id=uid,
+        user_id=uid,
+        client_id=x_client_id or "",
+        ip_address=get_client_ip(request),
+        user_agent=get_user_agent(request),
+        content_summary=f"KVKK Madde 11 kapsamında kullanıcı hesabı ve kişisel verileri kalıcı olarak silindi (ID: {uid})."
+    )
+
+    return {
+        "deleted": True,
+        "message": "6698 sayılı KVKK Madde 11 kapsamında hesabınız ve tüm kişisel verileriniz sistemden kalıcı olarak silindi."
+    }
 
 
 @app.post("/api/auth/logout")
@@ -756,11 +1007,11 @@ def serve_game_cover_svg(slug: str):
     conn.close()
 
     if row:
-        title = row["short_name"] or row["name"]
-        subtitle = row["category"]
+        title = html.escape(row["short_name"] or row["name"])
+        subtitle = html.escape(row["category"])
         color = row["accent_color"] or "#5e9c88"
     else:
-        title = slug.replace("-", " ").title()[:18]
+        title = html.escape(slug.replace("-", " ").title()[:18])
         subtitle = "PC Oyunu"
         color = "#5e9c88"
 
@@ -820,7 +1071,8 @@ def create_or_open_game(req: CreateGameRequest, authorization: Optional[str] = H
     user = get_current_user(authorization)
     if not user:
         raise HTTPException(status_code=401, detail="Yeni oyun sayfası eklemek için lütfen ücretsiz hesabınızla giriş yapın.")
-    game_obj = ensure_or_create_game_in_db(req.game_query)
+    check_prohibited_content(req.game_query)
+    game_obj = ensure_or_create_game_in_db(sanitize_user_text(req.game_query))
     return {"game": game_obj}
 
 
@@ -828,6 +1080,16 @@ def create_or_open_game(req: CreateGameRequest, authorization: Optional[str] = H
 
 class IssueVoteRequest(BaseModel):
     vote_type: Optional[str] = "up"
+    hardware_tag: Optional[str] = ""
+
+
+DEFAULT_VERIFIED_HW_TAGS = [
+    "Win 11 / RTX 4060",
+    "Win 11 / RTX 3060",
+    "Win 10 / RX 6700 XT",
+    "Win 11 / Ryzen 5 5600",
+    "Win 11 / RTX 4070 Super"
+]
 
 
 @app.get("/api/issues")
@@ -869,14 +1131,26 @@ def list_issues(
     cursor.execute(query, params)
     rows = [dict(r) for r in cursor.fetchall()]
 
-    cursor.execute("SELECT target_id FROM user_votes WHERE voter_key = ? AND target_type = 'issue'", (voter_key,))
-    upvoted_ids = {r["target_id"] for r in cursor.fetchall()}
+    cursor.execute("SELECT target_id, hardware_tag FROM user_votes WHERE voter_key = ? AND target_type = 'issue'", (voter_key,))
+    upvoted_rows = cursor.fetchall()
+    upvoted_ids = {r["target_id"] for r in upvoted_rows}
+    user_hw_map = {r["target_id"]: (r["hardware_tag"] or "") for r in upvoted_rows}
 
     cursor.execute("SELECT target_id FROM user_votes WHERE voter_key = ? AND target_type = 'issue_down'", (voter_key,))
     downvoted_ids = {r["target_id"] for r in cursor.fetchall()}
 
     cursor.execute("SELECT target_id, COUNT(*) as cnt FROM user_votes WHERE target_type = 'issue_down' GROUP BY target_id")
     extra_down_counts = {r["target_id"]: r["cnt"] for r in cursor.fetchall()}
+
+    cursor.execute("SELECT target_id, hardware_tag FROM user_votes WHERE target_type = 'issue' AND hardware_tag != '' ORDER BY id DESC")
+    hw_tags_by_issue: dict[int, list[str]] = {}
+    for hr in cursor.fetchall():
+        tid = hr["target_id"]
+        tag = hr["hardware_tag"]
+        if tid not in hw_tags_by_issue:
+            hw_tags_by_issue[tid] = []
+        if tag and tag not in hw_tags_by_issue[tid] and len(hw_tags_by_issue[tid]) < 4:
+            hw_tags_by_issue[tid].append(tag)
 
     for r in rows:
         r["forum_sources"] = json.loads(r["forum_sources"])
@@ -892,6 +1166,10 @@ def list_issues(
         r["success_rate"] = int(round((up_cnt / total_cnt) * 100))
         r["user_voted"] = r["id"] in upvoted_ids
         r["user_vote"] = "up" if r["id"] in upvoted_ids else ("down" if r["id"] in downvoted_ids else None)
+        r["user_hardware_tag"] = user_hw_map.get(r["id"], "")
+        default_hw = DEFAULT_VERIFIED_HW_TAGS[r["id"] % len(DEFAULT_VERIFIED_HW_TAGS)]
+        custom_hw = hw_tags_by_issue.get(r["id"], [])
+        r["verified_hw_tags"] = custom_hw if custom_hw else [default_hw]
 
     conn.close()
     return rows
@@ -907,6 +1185,7 @@ def vote_issue(
     vote_type = (payload.vote_type if payload and payload.vote_type else "up").lower()
     if vote_type not in ("up", "down"):
         vote_type = "up"
+    hw_tag = sanitize_user_text((payload.hardware_tag if payload and payload.hardware_tag else "")[:42])
 
     user = get_current_user(authorization)
     voter_key = resolve_voter_key(user, x_client_id)
@@ -940,9 +1219,9 @@ def vote_issue(
             if existing_down:
                 cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_down["id"],))
             cursor.execute("""
-                INSERT INTO user_votes (voter_key, target_type, target_id, created_at)
-                VALUES (?, 'issue', ?, ?)
-            """, (voter_key, issue_id, datetime.now().isoformat()))
+                INSERT INTO user_votes (voter_key, target_type, target_id, hardware_tag, created_at)
+                VALUES (?, 'issue', ?, ?, ?)
+            """, (voter_key, issue_id, hw_tag, datetime.now().isoformat()))
             cursor.execute("UPDATE issues SET helpful_votes = helpful_votes + 1 WHERE id = ?", (issue_id,))
             user_vote = "up"
     else:
@@ -954,8 +1233,8 @@ def vote_issue(
                 cursor.execute("DELETE FROM user_votes WHERE id = ?", (existing_up["id"],))
                 cursor.execute("UPDATE issues SET helpful_votes = MAX(0, helpful_votes - 1) WHERE id = ?", (issue_id,))
             cursor.execute("""
-                INSERT INTO user_votes (voter_key, target_type, target_id, created_at)
-                VALUES (?, 'issue_down', ?, ?)
+                INSERT INTO user_votes (voter_key, target_type, target_id, hardware_tag, created_at)
+                VALUES (?, 'issue_down', ?, '', ?)
             """, (voter_key, issue_id, datetime.now().isoformat()))
             user_vote = "down"
 
@@ -972,6 +1251,11 @@ def vote_issue(
     total_cnt = max(1, up_cnt + down_cnt)
     dynamic_sr = int(round((up_cnt / total_cnt) * 100))
 
+    cursor.execute("SELECT hardware_tag FROM user_votes WHERE target_type = 'issue' AND target_id = ? AND hardware_tag != '' ORDER BY id DESC LIMIT 4", (issue_id,))
+    verified_hw_tags = [r["hardware_tag"] for r in cursor.fetchall() if r["hardware_tag"]]
+    if not verified_hw_tags:
+        verified_hw_tags = [DEFAULT_VERIFIED_HW_TAGS[issue_id % len(DEFAULT_VERIFIED_HW_TAGS)]]
+
     conn.close()
 
     return {
@@ -980,33 +1264,81 @@ def vote_issue(
         "total_votes": total_cnt,
         "success_rate": dynamic_sr,
         "user_voted": user_vote == "up",
-        "user_vote": user_vote
+        "user_vote": user_vote,
+        "user_hardware_tag": hw_tag if user_vote == "up" else "",
+        "verified_hw_tags": verified_hw_tags
     }
 
 
 @app.post("/api/ai/analyze")
-def ai_analyze_issue(req: AIAnalyzeRequest, authorization: Optional[str] = Header(None)):
-    # Strict Auth Check: Only logged-in verified users can use AI troubleshooting!
+def ai_analyze_issue(
+    req: AIAnalyzeRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_client_id: Optional[str] = Header(None)
+):
+    check_honeypot(req.website_hp or req.website_url)
+    ip_addr = get_client_ip(request)
+    user_agent = get_user_agent(request)
     user = get_current_user(authorization)
-    if not user:
-        raise HTTPException(
-            status_code=401,
-            detail="Yapay zeka ile soru sormak ve özel arıza çözümlemek için lütfen e-posta onaylı hesabınızla giriş yapın."
-        )
+    voter_key = resolve_voter_key(user, x_client_id)
 
-    game = ensure_or_create_game_in_db(req.game_slug)
-    specs = (req.system_specs or "").strip() or (user.get("system_specs") or "")
+    # Rate Limiting: Max 3 AI queries per minute per IP and per user/client
+    check_rate_limit(f"ai_ip:{ip_addr}", max_calls=3, window_sec=60, action_name="AI arıza sorgusu")
+    check_rate_limit(f"ai_user:{voter_key}", max_calls=3, window_sec=60, action_name="AI arıza sorgusu")
+
+    check_prohibited_content(f"{req.game_slug} {req.error_code or ''} {req.problem_description}")
+
+    guest_trial_used = False
+    if not user:
+        # Guest Trial Check: Allow 1 free AI analysis per client_id / IP
+        trial_key = f"cid:{(x_client_id or 'anon').strip()[:48]}"
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT used_count FROM guest_ai_trials WHERE trial_key = ?",
+            (trial_key,)
+        )
+        trial_row = cursor.fetchone()
+        if trial_row and trial_row["used_count"] >= 1:
+            conn.close()
+            raise HTTPException(
+                status_code=401,
+                detail="🎁 1 adet ücretsiz Misafir AI Analiz hakkınızı kullandınız! Sınırsız AI arıza tespiti yapmak ve çözümleri kaydetmek için lütfen ücretsiz hesabınızı oluşturun."
+            )
+        cursor.execute("""
+            INSERT OR REPLACE INTO guest_ai_trials (trial_key, ip_address, client_id, used_count, utc_timestamp)
+            VALUES (?, ?, ?, 1, ?)
+        """, (trial_key, ip_addr, (x_client_id or "")[:64], datetime.now(timezone.utc).isoformat()))
+        conn.commit()
+        conn.close()
+        guest_trial_used = True
+
+    game = ensure_or_create_game_in_db(sanitize_user_text(req.game_slug))
+    specs = sanitize_user_text(req.system_specs or "") or (user.get("system_specs") if user else "") or ""
 
     result = generate_ai_solution(
         game_name=game["name"],
         game_slug=game["slug"],
         engine=game["engine"],
         anticheat=game["anticheat"],
-        error_code=req.error_code or "",
+        error_code=sanitize_user_text(req.error_code or ""),
         system_specs=specs,
-        problem_description=req.problem_description
+        problem_description=sanitize_user_text(req.problem_description)
     )
     result["resolved_game"] = game
+    result["guest_trial_used"] = guest_trial_used
+
+    log_5651_event(
+        action_type="ai_diagnostic_query",
+        target_id=game.get("id", 0),
+        user_id=user["id"] if user else 0,
+        client_id=x_client_id or "",
+        ip_address=ip_addr,
+        user_agent=user_agent,
+        content_summary=f"{game['name']} | {req.error_code or 'Genel'} | {req.problem_description[:90]}"
+    )
+
     return result
 
 
@@ -1058,8 +1390,13 @@ def list_threads(
 
 
 @app.post("/api/threads")
-def create_thread(req: NewThreadRequest, authorization: Optional[str] = Header(None)):
-    # Strict Auth Check: Only logged-in verified users can ask AI-answered forum questions!
+def create_thread(
+    req: NewThreadRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_client_id: Optional[str] = Header(None)
+):
+    check_honeypot(req.website_hp or req.website_url)
     user = get_current_user(authorization)
     if not user:
         raise HTTPException(
@@ -1067,10 +1404,25 @@ def create_thread(req: NewThreadRequest, authorization: Optional[str] = Header(N
             detail="Foruma soru sormak ve AI çözümü almak için lütfen e-posta onaylı hesabınızla giriş yapın."
         )
 
-    game = ensure_or_create_game_in_db(req.game_slug)
+    ip_addr = get_client_ip(request)
+    user_agent = get_user_agent(request)
+    voter_key = resolve_voter_key(user, x_client_id)
+
+    # Rate Limiting: Max 2 forum threads per minute
+    check_rate_limit(f"thread_ip:{ip_addr}", max_calls=2, window_sec=60, action_name="forum konusu açma işlemi")
+    check_rate_limit(f"thread_user:{voter_key}", max_calls=2, window_sec=60, action_name="forum konusu açma işlemi")
+
+    # 5651 Content Filter (Profanity, Shortened Links, Crack/Warez)
+    check_prohibited_content(f"{req.title} {req.error_code or ''} {req.content}")
+
+    clean_title = sanitize_user_text(req.title)
+    clean_error_code = sanitize_user_text(req.error_code or "")
+    clean_content = sanitize_user_text(req.content)
+    specs = sanitize_user_text(req.system_specs or "") or (user["system_specs"] or "")
+
+    game = ensure_or_create_game_in_db(sanitize_user_text(req.game_slug))
     author_name = user["username"]
     initials = user["avatar_initials"]
-    specs = (req.system_specs or "").strip() or (user["system_specs"] or "")
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -1081,31 +1433,42 @@ def create_thread(req: NewThreadRequest, authorization: Optional[str] = Header(N
         game["slug"],
         author_name,
         initials,
-        req.title.strip(),
-        (req.error_code or "").strip(),
+        clean_title,
+        clean_error_code,
         specs,
-        req.content.strip()
+        clean_content
     ))
     thread_id = cursor.lastrowid
     conn.commit()
     conn.close()
+
+    # 5651 Legal Audit Log
+    log_5651_event(
+        action_type="thread_create",
+        target_id=thread_id,
+        user_id=user["id"],
+        client_id=x_client_id or "",
+        ip_address=ip_addr,
+        user_agent=user_agent,
+        content_summary=f"[{game['slug']}] {clean_title[:120]}"
+    )
 
     ai_res = generate_ai_solution(
         game_name=game["name"],
         game_slug=game["slug"],
         engine=game["engine"],
         anticheat=game["anticheat"],
-        error_code=req.error_code or "",
+        error_code=clean_error_code,
         system_specs=specs,
-        problem_description=f"{req.title}\n{req.content}"
+        problem_description=f"{clean_title}\n{clean_content}"
     )
 
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO replies (thread_id, author_name, is_ai, ai_mode, content, helpful_count, created_at)
-        VALUES (?, 'GameFix AI (Otomatik Forum Çözümleyici)', 1, ?, ?, 1, 'Az önce')
-    """, (thread_id, ai_res["mode"], ai_res["markdown"]))
+        VALUES (?, 'HemenÇöz AI (Otomatik Forum Çözümleyici)', 1, ?, ?, 1, 'Az önce')
+    """, (thread_id, ai_res["mode"], sanitize_ai_commands(ai_res["markdown"])))
     conn.commit()
 
     cursor.execute("""
@@ -1126,10 +1489,29 @@ def create_thread(req: NewThreadRequest, authorization: Optional[str] = Header(N
 
 
 @app.post("/api/threads/{thread_id}/replies")
-def add_reply(thread_id: int, req: NewReplyRequest, authorization: Optional[str] = Header(None)):
+def add_reply(
+    thread_id: int,
+    req: NewReplyRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_client_id: Optional[str] = Header(None)
+):
+    check_honeypot(req.website_hp or req.website_url)
     user = get_current_user(authorization)
     if not user:
         raise HTTPException(status_code=401, detail="Yanıt yazmak için lütfen giriş yapın.")
+
+    ip_addr = get_client_ip(request)
+    user_agent = get_user_agent(request)
+    voter_key = resolve_voter_key(user, x_client_id)
+
+    check_rate_limit(f"reply_ip:{ip_addr}", max_calls=3, window_sec=60, action_name="forum yanıtı gönderme işlemi")
+    check_rate_limit(f"reply_user:{voter_key}", max_calls=3, window_sec=60, action_name="forum yanıtı gönderme işlemi")
+
+    check_prohibited_content(req.content)
+    clean_content = sanitize_user_text(req.content)
+    if not clean_content:
+        raise HTTPException(status_code=400, detail="Lütfen geçerli bir yanıt yazın.")
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -1141,13 +1523,78 @@ def add_reply(thread_id: int, req: NewReplyRequest, authorization: Optional[str]
     cursor.execute("""
         INSERT INTO replies (thread_id, author_name, is_ai, ai_mode, content, helpful_count, created_at)
         VALUES (?, ?, 0, NULL, ?, 1, 'Az önce')
-    """, (thread_id, user["username"], req.content.strip()))
+    """, (thread_id, user["username"], clean_content))
+    reply_id = cursor.lastrowid
     conn.commit()
 
     cursor.execute("SELECT * FROM replies WHERE thread_id = ? ORDER BY is_ai DESC, id ASC", (thread_id,))
     replies = [dict(r) for r in cursor.fetchall()]
     conn.close()
+
+    log_5651_event(
+        action_type="reply_create",
+        target_id=reply_id,
+        user_id=user["id"],
+        client_id=x_client_id or "",
+        ip_address=ip_addr,
+        user_agent=user_agent,
+        content_summary=f"Thread #{thread_id} yanıt: {clean_content[:120]}"
+    )
+
     return {"replies": replies}
+
+
+@app.post("/api/reports")
+def report_content(
+    req: ContentReportRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_client_id: Optional[str] = Header(None)
+):
+    """5651 Law Notice & Take-Down Content Reporting Endpoint."""
+    user = get_current_user(authorization)
+    reporter_key = resolve_voter_key(user, x_client_id)
+    ip_addr = get_client_ip(request)
+    user_agent = get_user_agent(request)
+    utc_now = datetime.now(timezone.utc).isoformat()
+
+    clean_reason = sanitize_user_text(req.reason)[:80]
+    clean_details = sanitize_user_text(req.details or "")[:300]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO content_reports (target_type, target_id, reason, details, reporter_key, ip_address, user_agent, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'İnceleniyor', ?)
+    """, (
+        sanitize_user_text(req.target_type)[:32],
+        int(req.target_id),
+        clean_reason,
+        clean_details,
+        reporter_key,
+        ip_addr,
+        user_agent,
+        utc_now
+    ))
+    report_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+
+    log_5651_event(
+        action_type="content_report_5651",
+        target_id=req.target_id,
+        user_id=user["id"] if user else 0,
+        client_id=x_client_id or "",
+        ip_address=ip_addr,
+        user_agent=user_agent,
+        content_summary=f"Bildirim #{report_id} ({req.target_type} #{req.target_id}): {clean_reason}"
+    )
+
+    return {
+        "reported": True,
+        "report_id": report_id,
+        "message": "🚨 Bildiriminiz 5651 sayılı Kanun (Uyar-Kaldır) kapsamında kayıt altına alındı ve moderasyon kuyruğuna iletildi."
+    }
 
 
 @app.post("/api/threads/{thread_id}/upvote")

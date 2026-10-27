@@ -62,8 +62,53 @@ def init_db():
         voter_key TEXT NOT NULL,
         target_type TEXT NOT NULL,
         target_id INTEGER NOT NULL,
+        hardware_tag TEXT DEFAULT '',
         created_at TEXT NOT NULL,
         UNIQUE(voter_key, target_type, target_id)
+    )
+    """)
+
+    try:
+        cursor.execute("ALTER TABLE user_votes ADD COLUMN hardware_tag TEXT DEFAULT ''")
+    except Exception:
+        pass
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS legal_5651_logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        action_type TEXT NOT NULL,
+        target_id INTEGER DEFAULT 0,
+        user_id INTEGER DEFAULT 0,
+        client_id TEXT DEFAULT '',
+        ip_address TEXT NOT NULL,
+        user_agent TEXT NOT NULL,
+        content_summary TEXT DEFAULT '',
+        utc_timestamp TEXT NOT NULL
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS content_reports (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        target_type TEXT NOT NULL,
+        target_id INTEGER NOT NULL,
+        reason TEXT NOT NULL,
+        details TEXT DEFAULT '',
+        reporter_key TEXT NOT NULL,
+        ip_address TEXT NOT NULL,
+        user_agent TEXT NOT NULL,
+        status TEXT DEFAULT 'İnceleniyor',
+        created_at TEXT NOT NULL
+    )
+    """)
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS guest_ai_trials (
+        trial_key TEXT PRIMARY KEY,
+        ip_address TEXT NOT NULL,
+        client_id TEXT NOT NULL,
+        used_count INTEGER DEFAULT 1,
+        utc_timestamp TEXT NOT NULL
     )
     """)
 

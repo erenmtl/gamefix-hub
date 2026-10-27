@@ -12,9 +12,9 @@
   <link rel="canonical" id="canonicalLink" href="https://erenmtl.github.io/gamefix-hub/" />
 
   <!-- Favicon & App Icons -->
-  <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
-  <link rel="apple-touch-icon" href="static/logo.svg" />
-  <link rel="manifest" href="site.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./static/favicon.svg" />
+  <link rel="apple-touch-icon" href="./static/logo.svg" />
+  <link rel="manifest" href="./site.webmanifest" />
 
   <!-- Open Graph / Facebook / Discord -->
   <meta property="og:type" content="website" />
@@ -120,10 +120,12 @@
   <script id="dynamicSeoSchema" type="application/ld+json"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- DOMPurify for Strict XSS HTML Sanitization -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/styles.css" />
+  <link rel="stylesheet" href="./static/styles.css" />
 </head>
 <body class="min-h-screen flex flex-col">
 
@@ -136,7 +138,7 @@
       <!-- Brand Logo & Identity -->
       <a href="./" onclick="event.preventDefault(); selectGame('all');" class="flex items-center gap-3.5 cursor-pointer group" aria-label="HemenÇöz Ana Sayfa">
         <div class="relative w-11 h-11 rounded-2xl bg-[#18212f] border border-[#88c0a8]/45 group-hover:border-[#88c0a8] flex items-center justify-center shadow-lg transition-all duration-200 group-hover:scale-105 overflow-hidden">
-          <img src="static/logo.svg" alt="HemenÇöz Logo" class="w-10 h-10 object-contain" />
+          <img src="./static/logo.svg" alt="HemenÇöz Logo" class="w-10 h-10 object-contain" />
         </div>
         <div>
           <div class="flex items-center gap-2">
@@ -275,7 +277,7 @@
       <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-4 space-y-3">
         <div class="flex items-center justify-between px-1">
           <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400">Oyun Ekranları</h2>
-          <span id="sidebarTotalGamesBadge" class="text-[11px] text-[#88c0a8] font-semibold">13 Oyun Aktif</span>
+          <span id="sidebarTotalGamesBadge" class="text-[11px] text-[#88c0a8] font-semibold">30 Oyun Aktif</span>
         </div>
 
         <!-- Add Any Game Button in Sidebar -->
@@ -322,7 +324,7 @@
             <div id="heroGameCoverWrapper" class="hidden shrink-0">
               <img
                 id="heroGameCoverImg"
-                src="/api/games/cover/valorant"
+                src="./static/logo.svg"
                 alt="Oyun Görseli"
                 class="w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-cover border border-white/15 shadow-xl"
               />
@@ -380,6 +382,9 @@
         </div>
       </section>
 
+      <!-- HARDWARE COMPATIBILITY & BOTTLENECK WARNING BANNER (Dynamic per Game & Saved User Specs) -->
+      <div id="hardwareBottleneckBanner" class="hidden"></div>
+
       <!-- NAVIGATION TABS FOR CURRENT GAME SCREEN -->
       <div class="border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
         <div class="flex items-center gap-2">
@@ -430,8 +435,8 @@
               </p>
             </div>
             <div id="aiLabGuestLock" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#5e9c88]/10 border border-[#5e9c88]/30 text-xs text-[#a3d9c6] shrink-0">
-              <span>🔒 Çözümleme için üyelik gerekir</span>
-              <button type="button" onclick="openAuthModal('login')" class="underline font-bold text-white hover:text-[#a3d9c6] ml-1">Giriş Yap</button>
+              <span id="aiLabGuestTrialText">🎁 Misafir Hakkı: 1 Ücretsiz AI Analizi</span>
+              <button type="button" onclick="openAuthModal('login')" class="underline font-bold text-white hover:text-[#a3d9c6] ml-1">Üye Girişi</button>
             </div>
           </div>
 
@@ -455,6 +460,73 @@
           </div>
 
           <form onsubmit="submitAiDiagnostic(event)" class="space-y-4">
+            <!-- Honeypot Bot Trap (Hidden from real users) -->
+            <div class="hidden" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
+              <label for="aiLabHoneypot">Website URL</label>
+              <input id="aiLabHoneypot" name="website_url" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <!-- KILLER FEATURE 1: DRAG & DROP CRASH LOG / DUMP ANALYZER (Client-Side FileReader + Privacy Masking) -->
+            <div
+              id="crashLogDropZone"
+              ondragover="handleCrashLogDragOver(event)"
+              ondragleave="handleCrashLogDragLeave(event)"
+              ondrop="handleCrashLogDrop(event)"
+              class="rounded-xl border-2 border-dashed border-[#88c0a8]/35 bg-[#171f2c]/90 hover:bg-[#1b2535] hover:border-[#88c0a8]/70 p-4 transition cursor-pointer"
+              onclick="document.getElementById('crashLogFileInput').click()"
+            >
+              <input
+                id="crashLogFileInput"
+                type="file"
+                accept=".log,.txt,.crash,.dmp,.xml,.ini"
+                class="hidden"
+                onchange="handleCrashLogFileSelect(event)"
+              />
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-start sm:items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 flex items-center justify-center text-lg shrink-0">📄</div>
+                  <div>
+                    <div class="text-xs sm:text-sm font-bold text-white flex flex-wrap items-center gap-2">
+                      <span>Sürükle-Bırak Crash Log / Dump Analizcisi</span>
+                      <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30 font-semibold">🔒 %100 Tarayıcı İçi & KVKK Maskeli</span>
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-0.5">
+                      <code>.log</code>, <code>.txt</code> veya <code>.crash</code> dosyanızı buraya sürükleyin; sunucuya yüklenmeden <code>Exception</code>, <code>0x...</code>, <code>.dll</code> hataları ayıklanır ve <code>C:\Users\KullaniciAdi</code> yolları <code>C:\Users\[USER]</code> olarak anonimleştirilir.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
+                  <button
+                    type="button"
+                    onclick="loadSampleCrashLog()"
+                    class="px-2.5 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-[11px] font-semibold text-[#a3d9c6] transition"
+                  >
+                    🧪 Örnek Log Dene
+                  </button>
+                  <button
+                    type="button"
+                    onclick="document.getElementById('crashLogFileInput').click()"
+                    class="px-3 py-1.5 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 border border-[#88c0a8]/40 text-xs font-bold text-white transition"
+                  >
+                    📂 Dosya Seç
+                  </button>
+                </div>
+              </div>
+
+              <!-- Parsed & Anonymized Crash Log Preview -->
+              <div id="crashLogResultBox" class="hidden mt-3 pt-3 border-t border-white/10 space-y-2" onclick="event.stopPropagation()">
+                <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[#88c0a8] font-bold" id="crashLogFileNameBadge">📄 crash.log</span>
+                    <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/30 font-semibold" id="crashLogMatchCountBadge">0 Kritik Satır</span>
+                    <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 font-semibold" id="crashLogMaskedCountBadge">🛡️ Kişisel Yollar Maskelendi</span>
+                  </div>
+                  <button type="button" onclick="clearCrashLogAnalysis()" class="text-[11px] text-gray-400 hover:text-white underline">Temizle</button>
+                </div>
+                <pre id="crashLogExtractedPreview" class="text-[11px] font-mono bg-[#11161f] text-amber-100/90 p-2.5 rounded-lg border border-white/10 overflow-x-auto max-h-36 whitespace-pre-wrap"></pre>
+              </div>
+            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label class="block text-xs font-semibold text-gray-300 mb-1.5">Oyun Adı (Yazın veya Seçin)</label>
@@ -707,7 +779,7 @@
         <!-- Brand Column -->
         <div class="md:col-span-4 space-y-3">
           <div class="flex items-center gap-3">
-            <img src="static/logo.svg" alt="HemenÇöz Logo" class="w-9 h-9 rounded-xl border border-[#88c0a8]/30 bg-[#18212f] p-0.5" />
+            <img src="./static/logo.svg" alt="HemenÇöz Logo" class="w-9 h-9 rounded-xl border border-[#88c0a8]/30 bg-[#18212f] p-0.5" />
             <div>
               <div class="font-extrabold text-base text-white">Hemen<span class="text-[#88c0a8]">Çöz</span></div>
               <div class="text-[11px] text-gray-400">Oyun Sorunları & Performans Çözüm Merkezi</div>
@@ -796,6 +868,10 @@
       </div>
 
       <form onsubmit="submitNewThread(event)" class="space-y-4">
+        <!-- Honeypot Bot Trap -->
+        <div class="hidden" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
+          <input id="modalThreadHoneypot" name="website_url" type="text" tabindex="-1" autocomplete="off" />
+        </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-semibold text-gray-300 mb-1">Oyun Adı (Yazın veya Seçin)</label>
@@ -933,6 +1009,10 @@
 
       <!-- Register Step 1: Enter Details & Request Verification Code -->
       <form id="registerFormStep1" onsubmit="requestEmailVerificationCode(event)" class="hidden space-y-3.5">
+        <!-- Honeypot Bot Trap -->
+        <div class="hidden" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
+          <input id="regHoneypot" name="website_url" type="text" tabindex="-1" autocomplete="off" />
+        </div>
         <div>
           <label class="block text-xs font-semibold text-gray-300 mb-1">Kullanıcı Adı</label>
           <input id="regUsername" type="text" required placeholder="Örn: MertFPS" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-[#5e9c88]" />
@@ -956,10 +1036,10 @@
         </div>
         <div class="pt-1">
           <label class="flex items-start gap-2.5 cursor-pointer text-xs text-gray-300 leading-relaxed">
-            <input id="regKvkkConsent" type="checkbox" required checked class="mt-0.5 rounded border-white/20 bg-[#212936] text-[#5e9c88] focus:ring-0" />
+            <input id="regKvkkConsent" type="checkbox" required class="mt-0.5 rounded border-white/20 bg-[#212936] text-[#5e9c88] focus:ring-0" />
             <span>
-              <button type="button" onclick="openLegalModal('kvkk')" class="text-[#88c0a8] hover:underline font-semibold">6698 Sayılı KVKK Aydınlatma Metni</button>'ni okudum ve
-              <button type="button" onclick="openLegalModal('terms')" class="text-[#88c0a8] hover:underline font-semibold">Kullanım Koşulları</button>'nı kabul ediyorum.
+              <button type="button" onclick="openLegalModal('kvkk')" class="text-[#88c0a8] hover:underline font-semibold">KVKK Aydınlatma Metni</button> ve
+              <button type="button" onclick="openLegalModal('terms')" class="text-[#88c0a8] hover:underline font-semibold">Kullanım Koşullarını</button> okudum, onaylıyorum. <span class="text-amber-300 font-bold">(Zorunlu Açık Rıza)</span>
             </span>
           </label>
         </div>
@@ -1042,11 +1122,61 @@
           <select id="profileFavGameSelect" class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10"></select>
         </div>
         <div class="flex justify-between items-center pt-1">
-          <button type="button" onclick="logoutUser()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-red-500/15 text-red-300 hover:bg-red-500/25 border border-red-500/25">
+          <button type="button" onclick="logoutUser()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white/10 text-gray-200 hover:bg-white/15 border border-white/15">
             Çıkış Yap
           </button>
           <button type="submit" class="accent-btn px-4 py-2 rounded-xl text-xs">
             Profili Güncelle
+          </button>
+        </div>
+        <!-- KVKK Article 11 Right to Erasure (Permanent Account & Data Deletion) -->
+        <div class="pt-3 mt-2 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <span class="text-[11px] text-gray-400">6698 Sayılı KVKK Madde 11 kapsamında veri silme hakkı:</span>
+          <button
+            type="button"
+            onclick="deleteMyAccountPermanently()"
+            class="px-3.5 py-2 rounded-xl text-xs font-bold bg-red-500/15 text-red-300 hover:bg-red-500/30 border border-red-500/35 transition"
+          >
+            🗑️ Hesabımı ve Tüm Verilerimi Kalıcı Olarak Sil
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4B: 5651 CONTENT REPORT MODAL (🚨 İçeriği Bildir) -->
+  <div id="reportContentModal" class="hidden fixed inset-0 z-[66] bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#1d2430] border border-red-500/35 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <span>🚨 İçeriği Bildir (5651 Uyarı & Kaldır)</span>
+          </h3>
+          <p id="reportModalTargetPreview" class="text-[11px] text-gray-400 mt-0.5 truncate">İçerik İnceleme Bildirimi</p>
+        </div>
+        <button type="button" onclick="closeReportModal()" class="text-gray-400 hover:text-white p-1">✕</button>
+      </div>
+      <form onsubmit="submitContentReport(event)" class="space-y-3.5">
+        <input id="reportTargetType" type="hidden" value="thread" />
+        <input id="reportTargetId" type="hidden" value="0" />
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Bildirim Nedeni</label>
+          <select id="reportReasonSelect" required class="w-full bg-[#212936] text-xs text-white rounded-xl px-3 py-2.5 border border-white/10">
+            <option value="Küfür / Hakaret / Nefret Söylemi">Küfür / Hakaret / Nefret Söylemi</option>
+            <option value="Crack / Warez / Korsan Paylaşım">Crack / Warez / Korsan Paylaşım</option>
+            <option value="Hile / Zararlı Link / Kısaltılmış Link">Hile / Zararlı Link / Kısaltılmış Link</option>
+            <option value="Kişisel Veri İfşası (KVKK İhlali)">Kişisel Veri İfşası (KVKK İhlali)</option>
+            <option value="Spam veya Yanıltıcı Teknik Komut">Spam veya Yanıltıcı Teknik Komut</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Ek Açıklama (Opsiyonel)</label>
+          <textarea id="reportDetailsInput" rows="2" placeholder="İnceleme ekibimiz için ek bilgi..." class="w-full bg-[#212936] text-xs text-white rounded-xl p-3 border border-white/10"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-1">
+          <button type="button" onclick="closeReportModal()" class="px-3.5 py-2 rounded-xl text-xs bg-white/5 text-gray-300">İptal</button>
+          <button type="submit" id="reportSubmitBtn" class="px-4 py-2 rounded-xl text-xs font-bold bg-red-500/25 hover:bg-red-500/40 text-red-200 border border-red-400/40 transition">
+            🚨 Bildirimi Gönder
           </button>
         </div>
       </form>
@@ -1225,8 +1355,8 @@
     <span id="toastMessage">İşlem tamamlandı</span>
   </div>
 
-  <script src="static/seed_data.js"></script>
-  <script src="static/cloud_engine.js"></script>
-  <script src="static/app.js"></script>
+  <script src="./static/seed_data.js"></script>
+  <script src="./static/cloud_engine.js"></script>
+  <script src="./static/app.js"></script>
 </body>
 </html>

@@ -901,6 +901,8 @@ GAME_COVER_URLS = {
     "apex": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
     "apex-legends": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
     "warzone": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
+    "cod-warzone": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
+    "call-of-duty-warzone-bo6": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
     "fortnite": "https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortnite_F_lettermark_logo.png",
     "victoria-3": "https://cdn.cloudflare.steamstatic.com/steam/apps/529340/header.jpg",
     "victoria3": "https://cdn.cloudflare.steamstatic.com/steam/apps/529340/header.jpg",
@@ -919,7 +921,7 @@ GAME_COVER_URLS = {
     "black-myth-wukong": "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/header.jpg",
     "palworld": "https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg",
     "dota-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg",
-    "escape-from-tarkov": "/api/games/cover/escape-from-tarkov",
+    "escape-from-tarkov": "https://cdn.cloudflare.steamstatic.com/steam/apps/221100/header.jpg",
     "europa-universalis-iv": "https://cdn.cloudflare.steamstatic.com/steam/apps/236850/header.jpg",
     "europa-universalis-4": "https://cdn.cloudflare.steamstatic.com/steam/apps/236850/header.jpg",
     "cities-skylines-ii": "https://cdn.cloudflare.steamstatic.com/steam/apps/949230/header.jpg",
@@ -943,7 +945,7 @@ def get_game_image_url(slug_or_name: str) -> str:
     s = slugify(slug_or_name)
     if s in GAME_COVER_URLS:
         return GAME_COVER_URLS[s]
-    return f"/api/games/cover/{s}"
+    return f"./api/games/cover/{s}"
 
 
 def get_random_world_suggestions(existing_slugs: list, count: int = 6) -> list:

@@ -12,15 +12,133 @@
   };
 
   const STORAGE_KEYS = {
-    games: 'hc_cloud_games_v4',
-    issues: 'hc_cloud_issues_v4',
-    threads: 'hc_cloud_threads_v4',
-    users: 'hc_cloud_users_v4',
-    sessions: 'hc_cloud_sessions_v4',
-    verifications: 'hc_cloud_verifications_v4',
-    votes: 'hc_cloud_votes_v4',
-    aiCache: 'hc_cloud_aicache_v4'
+    games: 'hc_cloud_games_v5',
+    issues: 'hc_cloud_issues_v5',
+    threads: 'hc_cloud_threads_v5',
+    users: 'hc_cloud_users_v5',
+    sessions: 'hc_cloud_sessions_v5',
+    verifications: 'hc_cloud_verifications_v5',
+    votes: 'hc_cloud_votes_v5',
+    hwVotes: 'hc_cloud_hw_votes_v5',
+    aiCache: 'hc_cloud_aicache_v5',
+    logs5651: 'hc_cloud_5651_logs_v5',
+    reports: 'hc_cloud_reports_v5',
+    guestTrials: 'hc_cloud_guest_trials_v5'
   };
+
+  const RATE_BUCKETS = {};
+
+  const PROHIBITED_PROFANITY = [
+    'amk', 'aq', 'sikik', 'sikeyim', 'siktir', 'orospu', 'piç', 'pezevenk',
+    'yavşak', 'götveren', 'kahpe', 'ibne', 'ananı', 'bacını', 'oç'
+  ];
+
+  const PROHIBITED_WAREZ = [
+    'crack indir', 'torrent indir', 'fitgirl repack', 'dodi repack', 'skidrow',
+    'codex crack', 'kmspico', 'keygen indir', 'aimbot indir', 'wallhack indir',
+    'hile indir', 'bedava hile', 'warez', 'fulloyun indir', 'serial key indir'
+  ];
+
+  const PROHIBITED_SHORT_LINKS = [
+    'bit.ly/', 'tinyurl.com/', 't.co/', 'goo.gl/', 'bc.vc/', 'ay.link/',
+    'tr.link/', 'ouo.io/', 'adf.ly/', 'cut.ly/', 'is.gd/', 'shorte.st/'
+  ];
+
+  const DANGEROUS_CMD_REGEXES = [
+    /\bformat\s+[a-zA-Z]:/gi,
+    /\bdel\s+\/[fFsSqQ]/gi,
+    /\brd\s+\/[sSqQ]/gi,
+    /\brmdir\s+\/[sSqQ]/gi,
+    /\brm\s+-rf\b/gi,
+    /\bcipher\s+\/w/gi,
+    /\bdiskpart\b/gi,
+    /\bbcdedit\s+\/delete\s+\{current\}/gi,
+    /\breg\s+delete\s+hklm\\(sam|system|security)/gi,
+    /\btakeown\s+\/f\s+c:\\windows/gi,
+    /\bicacls\s+c:\\windows\s+\/remove/gi,
+    /\bpowershell\s+-[eE][nN][cC]/gi,
+    /\binvoke-expression\b/gi,
+    /\biex\s*\(/gi
+  ];
+
+  function sanitizeUserText(raw) {
+    if (!raw) return '';
+    let s = String(raw).trim();
+    s = s.replace(/<\s*(script|iframe|object|embed|style|applet|meta|link)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, '');
+    s = s.replace(/<\s*\/?\s*(script|iframe|object|embed|style|applet|meta|link)[^>]*>/gi, '');
+    s = s.replace(/\bon[a-z]+\s*=\s*(['"].*?['"]|[^\s>]+)/gi, '');
+    s = s.replace(/javascript\s*:/gi, '');
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function sanitizeAiCommands(md) {
+    if (!md) return '';
+    let cleaned = String(md);
+    for (const rx of DANGEROUS_CMD_REGEXES) {
+      cleaned = cleaned.replace(rx, '[GÜVENLİK KALKANI: Zararlı sistem komutu HemenÇöz Güvenli Komut Filtresi tarafından engellendi]');
+    }
+    cleaned = cleaned.replace(/<\s*\/?\s*(script|iframe|object|embed)[^>]*>/gi, '');
+    return cleaned;
+  }
+
+  function validateContentFilter(text) {
+    if (!text) return null;
+    const lower = String(text).toLowerCase();
+    const words = lower.match(/[a-zçğıöşü0-9]+/g) || [];
+    for (const bad of PROHIBITED_PROFANITY) {
+      if (words.includes(bad)) {
+        return '🛡️ 5651 İçerik Filtresi: Gönderinizde topluluk kurallarına aykırı argo/hakaret ifadeleri tespit edildi. Lütfen teknik ve saygılı bir dil kullanın.';
+      }
+    }
+    for (const w of PROHIBITED_WAREZ) {
+      if (lower.includes(w)) {
+        return '🛡️ 5651 & Telif Filtresi: Forumda korsan oyun (crack/warez/torrent) ve hile yazılımı paylaşımı kesinlikle yasaktır.';
+      }
+    }
+    for (const lnk of PROHIBITED_SHORT_LINKS) {
+      if (lower.includes(lnk)) {
+        return '🛡️ Güvenlik Filtresi: Zararlı yazılım riskine karşı kısaltılmış link (bit.ly, tr.link vb.) paylaşımı engellenmiştir.';
+      }
+    }
+    return null;
+  }
+
+  function checkRateLimitBucket(bucketKey, maxCalls, windowMs, actionLabel) {
+    const now = Date.now();
+    let list = RATE_BUCKETS[bucketKey] || [];
+    list = list.filter(t => now - t < windowMs);
+    if (list.length >= maxCalls) {
+      const waitSec = Math.max(5, Math.ceil((windowMs - (now - list[0])) / 1000));
+      return `⏳ Rate Limit Koruması: Dakikada en fazla ${maxCalls} ${actionLabel} yapabilirsiniz. Lütfen ${waitSec} saniye bekleyin.`;
+    }
+    list.push(now);
+    RATE_BUCKETS[bucketKey] = list;
+    return null;
+  }
+
+  function log5651Audit(actionType, targetId, userId, clientId, summary) {
+    try {
+      const logs = loadStore(STORAGE_KEYS.logs5651, []);
+      logs.unshift({
+        id: logs.length + 1,
+        action_type: actionType,
+        target_id: Number(targetId || 0),
+        user_id: Number(userId || 0),
+        client_id: String(clientId || 'anon').slice(0, 64),
+        ip_address: 'client-edge-ip',
+        user_agent: (navigator.userAgent || 'Browser').slice(0, 220),
+        content_summary: String(summary || '').slice(0, 180),
+        utc_timestamp: new Date().toISOString()
+      });
+      if (logs.length > 250) logs.length = 250;
+      saveStore(STORAGE_KEYS.logs5651, logs);
+    } catch (e) {}
+  }
 
   function loadStore(key, fallback) {
     try {
@@ -68,8 +186,12 @@
 
   function getGameImageUrl(slugOrName, accentColor) {
     const s = slugify(slugOrName);
-    if (SEED.cover_urls && SEED.cover_urls[s] && !SEED.cover_urls[s].startsWith('/api/')) {
+    if (SEED.cover_urls && SEED.cover_urls[s] && SEED.cover_urls[s].startsWith('http')) {
       return SEED.cover_urls[s];
+    }
+    const foundGame = (SEED.games || []).find(g => g.slug === s);
+    if (foundGame && foundGame.image_url && foundGame.image_url.startsWith('http')) {
+      return foundGame.image_url;
     }
     return window.makeGameCoverDataUri(s, accentColor);
   }
@@ -399,6 +521,7 @@
       ].join('\n');
     }
 
+    md = sanitizeAiCommands(md);
     cache[cacheKey] = { markdown: md, confidence: matched ? matched.success_rate : 95 };
     saveStore(STORAGE_KEYS.aiCache, cache);
 
@@ -418,14 +541,28 @@
     });
   }
 
+  const DEFAULT_HW_TAGS = [
+    'Win 11 / RTX 4060',
+    'Win 11 / RTX 3060',
+    'Win 10 / RX 6700 XT',
+    'Win 11 / Ryzen 5 5600',
+    'Win 11 / RTX 4070 Super'
+  ];
+
   async function handleCloudApi(urlStr, options = {}) {
-    const url = new URL(urlStr, window.location.origin);
-    const path = url.pathname;
+    const url = new URL(urlStr, window.location.href);
+    // Normalize subdirectory path (e.g. /gamefix-hub/api/games -> /api/games)
+    const path = url.pathname.replace(/^.*\/api\//, '/api/');
     const method = (options.method || 'GET').toUpperCase();
     const headers = options.headers || {};
+    const clientId = (headers['X-Client-Id'] || headers['x-client-id'] || 'anon').slice(0, 64);
     let body = {};
     if (options.body) {
       try { body = JSON.parse(options.body); } catch (e) {}
+    }
+
+    if (body && ((body.website_hp && String(body.website_hp).trim()) || (body.website_url && String(body.website_url).trim()))) {
+      return jsonResponse({ detail: 'Güvenlik duvarı: Otomatik bot aktivitesi tespit edildi ve engellendi.' }, 400);
     }
 
     if (path === '/api/status') {
@@ -474,7 +611,9 @@
     if (path === '/api/games/create' && method === 'POST') {
       const user = getAuthUser(headers);
       if (!user) return jsonResponse({ detail: 'Yeni oyun sayfası eklemek için lütfen giriş yapın.' }, 401);
-      const game = ensureOrCreateGame(body.game_query);
+      const filterErr = validateContentFilter(body.game_query);
+      if (filterErr) return jsonResponse({ detail: filterErr }, 400);
+      const game = ensureOrCreateGame(sanitizeUserText(body.game_query));
       if (!game) return jsonResponse({ detail: 'Lütfen geçerli bir oyun adı girin.' }, 400);
       return jsonResponse({ game });
     }
@@ -485,6 +624,7 @@
       const search = (url.searchParams.get('search') || '').trim().toLowerCase();
       const voterKey = getVoterKey(headers);
       const votes = loadStore(STORAGE_KEYS.votes, {});
+      const hwVotes = loadStore(STORAGE_KEYS.hwVotes, {});
       let issues = loadStore(STORAGE_KEYS.issues, SEED.issues);
 
       if (gameSlug && gameSlug !== 'all') issues = issues.filter(i => i.game_slug === gameSlug);
@@ -506,6 +646,7 @@
         const dynSr = Math.round((upCnt / totalCnt) * 100);
         const rawVote = votes[`${voterKey}:issue:${i.id}`];
         const userVote = rawVote === 'down' ? 'down' : (rawVote ? 'up' : null);
+        const issueHwList = hwVotes[String(i.id)] || [DEFAULT_HW_TAGS[i.id % DEFAULT_HW_TAGS.length]];
         return {
           ...i,
           helpful_votes: upCnt,
@@ -514,7 +655,8 @@
           success_rate: dynSr,
           game_image_url: getGameImageUrl(i.game_slug, i.accent_color),
           user_voted: userVote === 'up',
-          user_vote: userVote
+          user_vote: userVote,
+          verified_hw_tags: issueHwList
         };
       }));
     }
@@ -523,8 +665,10 @@
     if (issueVoteMatch && method === 'POST') {
       const id = Number(issueVoteMatch[1]);
       const voteType = (body && body.vote_type === 'down') ? 'down' : 'up';
+      const hwTag = sanitizeUserText((body && body.hardware_tag) || '').slice(0, 42);
       const voterKey = getVoterKey(headers);
       const votes = loadStore(STORAGE_KEYS.votes, {});
+      const hwVotes = loadStore(STORAGE_KEYS.hwVotes, {});
       const issues = loadStore(STORAGE_KEYS.issues, SEED.issues);
       const item = issues.find(i => i.id === id);
       if (!item) return jsonResponse({ detail: 'Sorun bulunamadı' }, 404);
@@ -551,6 +695,11 @@
           votes[vKey] = 'up';
           item.helpful_votes = (item.helpful_votes || 0) + 1;
           nextVote = 'up';
+          if (hwTag) {
+            const list = hwVotes[String(id)] || [DEFAULT_HW_TAGS[id % DEFAULT_HW_TAGS.length]];
+            if (!list.includes(hwTag)) list.unshift(hwTag);
+            hwVotes[String(id)] = list.slice(0, 4);
+          }
         }
       } else {
         if (prevVote === 'down') {
@@ -571,6 +720,7 @@
       item.success_rate = Math.round(((item.helpful_votes || 0) / item.total_votes) * 100);
 
       saveStore(STORAGE_KEYS.votes, votes);
+      saveStore(STORAGE_KEYS.hwVotes, hwVotes);
       saveStore(STORAGE_KEYS.issues, issues);
       return jsonResponse({
         helpful_votes: item.helpful_votes,
@@ -578,14 +728,21 @@
         total_votes: item.total_votes,
         success_rate: item.success_rate,
         user_voted: nextVote === 'up',
-        user_vote: nextVote
+        user_vote: nextVote,
+        user_hardware_tag: nextVote === 'up' ? hwTag : '',
+        verified_hw_tags: hwVotes[String(id)] || [DEFAULT_HW_TAGS[id % DEFAULT_HW_TAGS.length]]
       });
     }
 
     if (path === '/api/auth/send-code' && method === 'POST') {
-      const username = String(body.username || '').trim();
+      if (body.kvkk_consent === false) {
+        return jsonResponse({ detail: 'Kayıt olabilmek için 6698 sayılı KVKK Aydınlatma Metni ve Kullanım Koşullarını onaylamanız zorunludur.' }, 400);
+      }
+      const username = sanitizeUserText(body.username || '');
       const email = String(body.email || '').trim().toLowerCase();
       const password = String(body.password || '');
+      const filterErr = validateContentFilter(username);
+      if (filterErr) return jsonResponse({ detail: filterErr }, 400);
       if (username.length < 2) return jsonResponse({ detail: 'Kullanıcı adı en az 2 karakter olmalıdır.' }, 400);
       if (!email.includes('@')) return jsonResponse({ detail: 'Lütfen geçerli bir e-posta adresi girin.' }, 400);
       if (password.length < 4) return jsonResponse({ detail: 'Şifre en az 4 karakter olmalıdır.' }, 400);
@@ -609,7 +766,7 @@
         username,
         email,
         password,
-        system_specs: String(body.system_specs || '').trim(),
+        system_specs: sanitizeUserText(body.system_specs || ''),
         favorite_game: body.favorite_game || 'valorant',
         code,
         expires_at: Date.now() + 900000
@@ -653,6 +810,7 @@
       saveStore(STORAGE_KEYS.users, users);
       saveStore(STORAGE_KEYS.verifications, verifications);
       saveStore(STORAGE_KEYS.sessions, sessions);
+      log5651Audit('user_register_kvkk', newUser.id, newUser.id, clientId, `Yeni üye kaydı: ${newUser.username}`);
       return jsonResponse({ token, user: newUser });
     }
 
@@ -686,12 +844,33 @@
       const users = loadStore(STORAGE_KEYS.users, []);
       const idx = users.findIndex(u => u.id === user.id);
       if (idx !== -1) {
-        users[idx].system_specs = String(body.system_specs || '').trim();
-        users[idx].favorite_game = String(body.favorite_game || 'valorant').trim();
+        users[idx].system_specs = sanitizeUserText(body.system_specs || '');
+        users[idx].favorite_game = sanitizeUserText(body.favorite_game || 'valorant');
         saveStore(STORAGE_KEYS.users, users);
         return jsonResponse({ user: users[idx] });
       }
       return jsonResponse({ user });
+    }
+
+    if (path === '/api/auth/account' && method === 'DELETE') {
+      const user = getAuthUser(headers);
+      if (!user) return jsonResponse({ detail: 'Hesap silme işlemi için oturum açmalısınız.' }, 401);
+      let users = loadStore(STORAGE_KEYS.users, []);
+      let sessions = loadStore(STORAGE_KEYS.sessions, {});
+      let threads = loadStore(STORAGE_KEYS.threads, SEED.threads);
+      users = users.filter(u => u.id !== user.id);
+      Object.keys(sessions).forEach(tk => {
+        if (sessions[tk] === user.id) delete sessions[tk];
+      });
+      threads = threads.filter(t => t.author_name !== user.username);
+      saveStore(STORAGE_KEYS.users, users);
+      saveStore(STORAGE_KEYS.sessions, sessions);
+      saveStore(STORAGE_KEYS.threads, threads);
+      log5651Audit('account_deleted_kvkk_m11', user.id, user.id, clientId, `KVKK Madde 11 kapsamında kullanıcı hesabı kalıcı olarak silindi.`);
+      return jsonResponse({
+        deleted: true,
+        message: '6698 sayılı KVKK Madde 11 kapsamında hesabınız ve tüm kişisel verileriniz sistemden kalıcı olarak silindi.'
+      });
     }
 
     if (path === '/api/auth/logout' && method === 'POST') {
@@ -700,12 +879,33 @@
 
     if (path === '/api/ai/analyze' && method === 'POST') {
       const user = getAuthUser(headers);
-      if (!user) return jsonResponse({ detail: 'Yapay zeka ile çözümleme yapmak için lütfen giriş yapın.' }, 401);
-      const game = ensureOrCreateGame(body.game_slug);
+      const voterKey = getVoterKey(headers);
+      const rlErr = checkRateLimitBucket(`ai:${voterKey}`, 3, 60000, 'AI arıza sorgusu');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
+      const filterErr = validateContentFilter(`${body.game_slug || ''} ${body.error_code || ''} ${body.problem_description || ''}`);
+      if (filterErr) return jsonResponse({ detail: filterErr }, 400);
+
+      let guestTrialUsed = false;
+      if (!user) {
+        const trials = loadStore(STORAGE_KEYS.guestTrials, {});
+        if (trials[clientId]) {
+          return jsonResponse({
+            detail: '🎁 1 adet ücretsiz Misafir AI Analiz hakkınızı kullandınız! Sınırsız AI arıza tespiti yapmak ve çözümleri kaydetmek için lütfen ücretsiz hesabınızı oluşturun.'
+          }, 401);
+        }
+        trials[clientId] = { used_at: new Date().toISOString() };
+        saveStore(STORAGE_KEYS.guestTrials, trials);
+        guestTrialUsed = true;
+      }
+
+      const game = ensureOrCreateGame(sanitizeUserText(body.game_slug));
       if (!game) return jsonResponse({ detail: 'Lütfen geçerli bir oyun adı girin.' }, 400);
-      const specs = String(body.system_specs || user.system_specs || '').trim();
-      const res = await synthesizeAiSolution(game, body.error_code || '', specs, body.problem_description || '');
+      const specs = sanitizeUserText(body.system_specs || (user && user.system_specs) || '');
+      const res = await synthesizeAiSolution(game, sanitizeUserText(body.error_code || ''), specs, sanitizeUserText(body.problem_description || ''));
       res.resolved_game = game;
+      res.guest_trial_used = guestTrialUsed;
+      log5651Audit('ai_diagnostic_query', game.id || 0, user ? user.id : 0, clientId, `${game.name} | ${body.error_code || 'Genel'}`);
       return jsonResponse(res);
     }
 
@@ -733,9 +933,20 @@
     if (path === '/api/threads' && method === 'POST') {
       const user = getAuthUser(headers);
       if (!user) return jsonResponse({ detail: 'Foruma soru sormak için lütfen giriş yapın.' }, 401);
-      const game = ensureOrCreateGame(body.game_slug);
-      const specs = String(body.system_specs || user.system_specs || '').trim();
-      const aiRes = await synthesizeAiSolution(game, body.error_code || '', specs, `${body.title}\n${body.content}`);
+      const voterKey = getVoterKey(headers);
+      const rlErr = checkRateLimitBucket(`thread:${voterKey}`, 2, 60000, 'forum konusu açma işlemi');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
+      const filterErr = validateContentFilter(`${body.title || ''} ${body.error_code || ''} ${body.content || ''}`);
+      if (filterErr) return jsonResponse({ detail: filterErr }, 400);
+
+      const cleanTitle = sanitizeUserText(body.title);
+      const cleanErrCode = sanitizeUserText(body.error_code || '');
+      const cleanContent = sanitizeUserText(body.content);
+      const specs = sanitizeUserText(body.system_specs || user.system_specs || '');
+
+      const game = ensureOrCreateGame(sanitizeUserText(body.game_slug));
+      const aiRes = await synthesizeAiSolution(game, cleanErrCode, specs, `${cleanTitle}\n${cleanContent}`);
       const threads = loadStore(STORAGE_KEYS.threads, SEED.threads);
       const newThread = {
         id: threads.reduce((m, x) => Math.max(m, x.id || 0), 0) + 1,
@@ -746,10 +957,10 @@
         game_image_url: game.image_url,
         author_name: user.username,
         author_avatar: user.avatar_initials,
-        title: body.title,
-        error_code: body.error_code || '',
+        title: cleanTitle,
+        error_code: cleanErrCode,
         system_specs: specs,
-        content: body.content,
+        content: cleanContent,
         status: 'AI Çözümledi',
         upvotes: 1,
         views: 1,
@@ -763,7 +974,7 @@
             author_name: 'HemenÇöz AI (Otomatik Forum Çözümleyici)',
             is_ai: 1,
             ai_mode: aiRes.mode,
-            content: aiRes.markdown,
+            content: sanitizeAiCommands(aiRes.markdown),
             helpful_count: 1,
             created_at: 'Az önce'
           }
@@ -771,6 +982,7 @@
       };
       threads.unshift(newThread);
       saveStore(STORAGE_KEYS.threads, threads);
+      log5651Audit('thread_create', newThread.id, user.id, clientId, `[${game.slug}] ${cleanTitle}`);
       return jsonResponse(newThread);
     }
 
@@ -778,22 +990,32 @@
     if (replyMatch && method === 'POST') {
       const user = getAuthUser(headers);
       if (!user) return jsonResponse({ detail: 'Yanıt yazmak için lütfen giriş yapın.' }, 401);
+      const voterKey = getVoterKey(headers);
+      const rlErr = checkRateLimitBucket(`reply:${voterKey}`, 3, 60000, 'forum yanıtı gönderme işlemi');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
+      const filterErr = validateContentFilter(body.content || '');
+      if (filterErr) return jsonResponse({ detail: filterErr }, 400);
+
+      const cleanContent = sanitizeUserText(body.content || '');
       const tid = Number(replyMatch[1]);
       const threads = loadStore(STORAGE_KEYS.threads, SEED.threads);
       const thread = threads.find(t => t.id === tid);
       if (!thread) return jsonResponse({ detail: 'Konu bulunamadı' }, 404);
       thread.replies = thread.replies || [];
+      const newRepId = Date.now();
       thread.replies.push({
-        id: Date.now(),
+        id: newRepId,
         thread_id: tid,
         author_name: user.username,
         is_ai: 0,
         ai_mode: null,
-        content: body.content,
+        content: cleanContent,
         helpful_count: 1,
         created_at: 'Az önce'
       });
       saveStore(STORAGE_KEYS.threads, threads);
+      log5651Audit('reply_create', newRepId, user.id, clientId, `Thread #${tid}: ${cleanContent}`);
       return jsonResponse({ replies: thread.replies });
     }
 
@@ -820,6 +1042,28 @@
       return jsonResponse({ upvotes: thread.upvotes, user_voted: userVoted });
     }
 
+    if (path === '/api/reports' && method === 'POST') {
+      const user = getAuthUser(headers);
+      const reports = loadStore(STORAGE_KEYS.reports, []);
+      const reportObj = {
+        id: reports.length + 1,
+        target_type: sanitizeUserText(body.target_type || 'thread'),
+        target_id: Number(body.target_id || 0),
+        reason: sanitizeUserText(body.reason || 'Uygunsuz İçerik'),
+        details: sanitizeUserText(body.details || ''),
+        reporter: user ? user.username : clientId,
+        created_at: new Date().toISOString()
+      };
+      reports.unshift(reportObj);
+      saveStore(STORAGE_KEYS.reports, reports);
+      log5651Audit('content_report_5651', reportObj.target_id, user ? user.id : 0, clientId, `Bildirim #${reportObj.id}: ${reportObj.reason}`);
+      return jsonResponse({
+        reported: true,
+        report_id: reportObj.id,
+        message: '🚨 Bildiriminiz 5651 sayılı Kanun (Uyar-Kaldır) kapsamında kayıt altına alındı ve moderasyon kuyruğuna iletildi.'
+      });
+    }
+
     return jsonResponse({ detail: 'Not found' }, 404);
   }
 
@@ -828,7 +1072,7 @@
 
   window.fetch = async function (input, init) {
     const urlStr = typeof input === 'string' ? input : (input && input.url) || '';
-    if (urlStr.startsWith('/api/') || urlStr.includes('/api/')) {
+    if (urlStr.startsWith('/api/') || urlStr.startsWith('./api/') || urlStr.startsWith('api/') || urlStr.includes('/api/')) {
       if (isStaticCloudHost) {
         return handleCloudApi(urlStr, init);
       }
