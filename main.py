@@ -19,7 +19,7 @@ from database import init_db, get_db_connection, hash_password, verify_password
 from game_catalog import resolve_game_input, get_random_world_suggestions, get_game_image_url
 
 app = FastAPI(
-    title="HemenÇöz (GameFix Hub) API",
+    title="OyunÇöz API",
     description="Popüler Oyunların Forum Sorunları ve Yapay Zeka Destekli Çözüm Platformu",
     version="4.0.0"
 )
@@ -87,7 +87,7 @@ def sanitize_ai_commands(markdown_text: str) -> str:
     for pat in DANGEROUS_COMMAND_PATTERNS:
         cleaned = re.sub(
             pat,
-            "[GÜVENLİK KALKANI: Zararlı sistem komutu HemenÇöz Güvenli Komut Filtresi tarafından engellendi]",
+            "[GÜVENLİK KALKANI: Zararlı sistem komutu OyunÇöz Güvenli Komut Filtresi tarafından engellendi]",
             cleaned,
             flags=re.IGNORECASE
         )
@@ -329,12 +329,12 @@ def try_send_smtp_email(to_email: str, username: str, code: str) -> bool:
     try:
         body = (
             f"Merhaba {username},\n\n"
-            f"GameFix AI Hub hesabınızı doğrulamak için 6 haneli onay kodunuz:\n\n"
+            f"OyunÇöz hesabınızı doğrulamak için 6 haneli onay kodunuz:\n\n"
             f"    {code}\n\n"
             f"Bu kod 10 dakika boyunca geçerlidir.\n"
         )
         msg = MIMEText(body, "plain", "utf-8")
-        msg["Subject"] = f"GameFix AI Hub E-Posta Doğrulama Kodunuz: {code}"
+        msg["Subject"] = f"OyunÇöz E-Posta Doğrulama Kodunuz: {code}"
         msg["From"] = smtp_user
         msg["To"] = to_email
 
@@ -490,7 +490,7 @@ def generate_ai_solution(
         try:
             client = genai.Client(api_key=effective_key)
             system_instruction = (
-                "Sen 'GameFix AI' adında, Reddit, Technopat Sosyal, Steam Topluluğu ve resmi oyun forumlarındaki "
+                "Sen 'OyunÇöz AI' adında, Reddit, Technopat Sosyal, Steam Topluluğu ve resmi oyun forumlarındaki "
                 "binlerce teknik çözüm konusunu analiz eden uzman bir Oyun Arıza Tespit ve Çözüm Yapay Zekasısın. "
                 "Yanıtlarını Türkçe, öz, teknik olarak doğru ve Markdown formatında ver. "
                 "Yanıtında şu bölümler yer alsın:\n"
@@ -1467,7 +1467,7 @@ def create_thread(
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO replies (thread_id, author_name, is_ai, ai_mode, content, helpful_count, created_at)
-        VALUES (?, 'HemenÇöz AI (Otomatik Forum Çözümleyici)', 1, ?, ?, 1, 'Az önce')
+        VALUES (?, 'OyunÇöz AI (Otomatik Forum Çözümleyici)', 1, ?, ?, 1, 'Az önce')
     """, (thread_id, ai_res["mode"], sanitize_ai_commands(ai_res["markdown"])))
     conn.commit()
 

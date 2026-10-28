@@ -29,7 +29,7 @@
 
   <!-- Right Typography -->
   <text x="410" y="235" fill="#88c0a8" font-family="Inter, Segoe UI, sans-serif" font-size="22" font-weight="700" letter-spacing="3">OYUN SORUNLARI &amp; PERFORMANS ÇÖZÜM MERKEZİ</text>
-  <text x="410" y="315" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="72" font-weight="800">HemenÇöz</text>
+  <text x="410" y="315" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="72" font-weight="800">OyunÇöz</text>
   <text x="410" y="375" fill="#cbd5e1" font-family="Inter, Segoe UI, sans-serif" font-size="26" font-weight="500">Valorant • CS2 • LoL • GTA V • RDR 2 • Bannerlord • 30+ Oyun</text>
   <text x="410" y="425" fill="#94a3b8" font-family="Inter, Segoe UI, sans-serif" font-size="22" font-weight="400">Reddit, Steam, Riot &amp; Technopat Forum Derlemeleri + Akıllı Arıza Çözümleyici</text>
 

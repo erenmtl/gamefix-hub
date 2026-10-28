@@ -1,4 +1,4 @@
-// GameFix AI Hub (HemenÇöz) Frontend Controller (v4.0 - Security Hardened, KVKK/5651 Compliant, Guest Trial, Crash Log Analyzer & Troubleshooting Wizard)
+// OyunÇöz Frontend Controller (v4.0 - Security Hardened, KVKK/5651 Compliant, Guest Trial, Crash Log Analyzer & Troubleshooting Wizard)
 
 function getOrCreateClientId() {
   let cid = localStorage.getItem('gamefix_client_id');
@@ -298,7 +298,7 @@ function buildSafetyBannerHtml(combinedText) {
   const risks = analyzeTechnicalRisk(combinedText);
   if (risks.length === 0) return '';
 
-  const restoreCmdRaw = 'Checkpoint-Computer -Description "HemenCoz_Yedek"';
+  const restoreCmdRaw = 'Checkpoint-Computer -Description "OyunCoz_Yedek"';
   const restoreCmdB64 = encodeBase64Utf8(restoreCmdRaw);
   const rstruiB64 = encodeBase64Utf8('rstrui.exe');
 
@@ -325,7 +325,7 @@ function buildSafetyBannerHtml(combinedText) {
         Bu çözüm rehberi <strong>${risks[0].hint}</strong> İşlemlere başlamadan önce tek tıkla <strong>Sistem Geri Yükleme Noktası</strong> oluşturmanız önerilir:
       </p>
       <div class="bg-[#141923]/90 border border-amber-400/30 rounded-lg px-3 py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <code class="text-xs font-mono text-amber-200">Checkpoint-Computer -Description "HemenCoz_Yedek"</code>
+        <code class="text-xs font-mono text-amber-200">Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
         <div class="flex flex-wrap items-center gap-2 shrink-0">
           <button
             type="button"
@@ -443,7 +443,7 @@ function dismissHardwareConfirmBox() {
 
 function isFunctionalCookieAllowed() {
   try {
-    const raw = localStorage.getItem('hemencoz_cookie_consent');
+    const raw = localStorage.getItem('oyuncoz_cookie_consent');
     if (!raw) return true;
     const parsed = JSON.parse(raw);
     return parsed.functional !== false;
@@ -464,7 +464,7 @@ async function confirmAndApplyDetectedHardware() {
 
   if (isFunctionalCookieAllowed()) {
     try {
-      localStorage.setItem('hemencoz_detected_specs', finalSpecs);
+      localStorage.setItem('oyuncoz_detected_specs', finalSpecs);
     } catch (e) {}
   }
 
@@ -499,7 +499,7 @@ async function autoFillSingleSpecsInput(inputId) {
   });
   if (isFunctionalCookieAllowed()) {
     try {
-      localStorage.setItem('hemencoz_detected_specs', hw.summary);
+      localStorage.setItem('oyuncoz_detected_specs', hw.summary);
     } catch (e) {}
   }
   evaluateHardwareCompatibility();
@@ -509,7 +509,7 @@ async function autoFillSingleSpecsInput(inputId) {
 function loadSavedHardwareSpecs() {
   if (!isFunctionalCookieAllowed()) return;
   try {
-    const saved = localStorage.getItem('hemencoz_detected_specs');
+    const saved = localStorage.getItem('oyuncoz_detected_specs');
     if (saved) {
       ['aiLabSpecs', 'modalThreadSpecs', 'regSpecs', 'profileSpecsInput'].forEach(id => {
         const el = document.getElementById(id);
@@ -528,7 +528,7 @@ function getCurrentUserSpecsString() {
   const aiInp = document.getElementById('aiLabSpecs');
   if (aiInp && aiInp.value.trim()) return aiInp.value.trim();
   try {
-    return localStorage.getItem('hemencoz_detected_specs') || '';
+    return localStorage.getItem('oyuncoz_detected_specs') || '';
   } catch (e) {
     return '';
   }
@@ -886,7 +886,7 @@ async function checkCurrentSession() {
 
 function hasGuestUsedFreeTrial() {
   try {
-    return localStorage.getItem('hemencoz_guest_ai_trial_used') === '1';
+    return localStorage.getItem('oyuncoz_guest_ai_trial_used') === '1';
   } catch (e) {
     return false;
   }
@@ -894,7 +894,7 @@ function hasGuestUsedFreeTrial() {
 
 function markGuestFreeTrialUsed() {
   try {
-    localStorage.setItem('hemencoz_guest_ai_trial_used', '1');
+    localStorage.setItem('oyuncoz_guest_ai_trial_used', '1');
   } catch (e) {}
 }
 
@@ -1214,7 +1214,7 @@ async function saveUserProfile(e) {
     document.getElementById('aiLabSpecs').value = data.user.system_specs || '';
     if (isFunctionalCookieAllowed()) {
       try {
-        localStorage.setItem('hemencoz_detected_specs', data.user.system_specs || '');
+        localStorage.setItem('oyuncoz_detected_specs', data.user.system_specs || '');
       } catch (e) {}
     }
     evaluateHardwareCompatibility();
@@ -1256,8 +1256,8 @@ async function deleteMyAccountPermanently() {
     STATE.currentUser = null;
     try {
       localStorage.removeItem('gamefix_auth_token');
-      localStorage.removeItem('hemencoz_detected_specs');
-      localStorage.removeItem(`hemencoz_votes_${STATE.clientId}`);
+      localStorage.removeItem('oyuncoz_detected_specs');
+      localStorage.removeItem(`oyuncoz_votes_${STATE.clientId}`);
     } catch (e) {}
 
     updateAuthUI();
@@ -1387,7 +1387,7 @@ function updateHeroBanner() {
       coverWrapper.classList.remove('hidden');
       coverImg.onerror = null;
       coverImg.src = './static/logo.svg';
-      coverImg.alt = 'HemenÇöz Tüm Oyunlar';
+      coverImg.alt = 'OyunÇöz Tüm Oyunlar';
       coverImg.className = 'w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-contain bg-[#151c27] p-2 border border-[#88c0a8]/35 shadow-xl transition-all duration-300';
     }
     catBadge.textContent = 'Tüm Oyunlar Portalı';
@@ -1472,12 +1472,12 @@ function updateDynamicSEO() {
 
     if (STATE.selectedGame === 'all') {
       document.title = STATE.searchQuery
-        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | HemenÇöz`
-        : 'HemenÇöz | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Akıllı Arıza Çözüm Merkezi';
+        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | OyunÇöz`
+        : 'OyunÇöz | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Akıllı Arıza Çözüm Merkezi';
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          'HemenÇöz ile Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, RDR 2, Bannerlord ve 30+ popüler oyunun hata çözümlerine saniyeler içinde ulaşın.'
+          'OyunÇöz ile Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, RDR 2, Bannerlord ve 30+ popüler oyunun hata çözümlerine saniyeler içinde ulaşın.'
         );
       }
       if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
@@ -1491,11 +1491,11 @@ function updateDynamicSEO() {
       const game = STATE.games.find(g => g.slug === STATE.selectedGame);
       if (game) {
         const tagSummary = (game.common_tags || []).slice(0, 4).join(', ');
-        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & Arıza Rehberi | HemenÇöz`;
+        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & Arıza Rehberi | OyunÇöz`;
         if (metaDesc) {
           metaDesc.setAttribute(
             'content',
-            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve HemenÇöz adım adım teknik rehberi.`
+            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve OyunÇöz adım adım teknik rehberi.`
           );
         }
         const gameUrl = `${baseUrl}?game=${encodeURIComponent(game.slug)}`;
@@ -1615,7 +1615,7 @@ function renderHomeShowcase() {
 
 function initCookieConsent() {
   try {
-    const saved = localStorage.getItem('hemencoz_cookie_consent');
+    const saved = localStorage.getItem('oyuncoz_cookie_consent');
     const banner = document.getElementById('cookieConsentBanner');
     if (!saved && banner) {
       banner.classList.remove('hidden');
@@ -1637,7 +1637,7 @@ function acceptCookies(mode = 'all') {
     updated_at: new Date().toISOString()
   };
   try {
-    localStorage.setItem('hemencoz_cookie_consent', JSON.stringify(prefs));
+    localStorage.setItem('oyuncoz_cookie_consent', JSON.stringify(prefs));
   } catch (e) {}
   const banner = document.getElementById('cookieConsentBanner');
   if (banner) banner.classList.add('hidden');
@@ -1655,7 +1655,7 @@ function saveCustomCookiePrefs() {
     updated_at: new Date().toISOString()
   };
   try {
-    localStorage.setItem('hemencoz_cookie_consent', JSON.stringify(prefs));
+    localStorage.setItem('oyuncoz_cookie_consent', JSON.stringify(prefs));
   } catch (e) {}
   const banner = document.getElementById('cookieConsentBanner');
   if (banner) banner.classList.add('hidden');
@@ -2062,7 +2062,7 @@ function handleCategoryChange(cat) {
 
 function getLocalVoteMap() {
   try {
-    const raw = localStorage.getItem(`hemencoz_votes_${STATE.clientId}`);
+    const raw = localStorage.getItem(`oyuncoz_votes_${STATE.clientId}`);
     return raw ? JSON.parse(raw) : {};
   } catch (e) {
     return {};
@@ -2077,7 +2077,7 @@ function setLocalVoteChoice(targetKey, choice) {
     } else {
       map[targetKey] = choice;
     }
-    localStorage.setItem(`hemencoz_votes_${STATE.clientId}`, JSON.stringify(map));
+    localStorage.setItem(`oyuncoz_votes_${STATE.clientId}`, JSON.stringify(map));
   } catch (e) {}
 }
 
@@ -2901,7 +2901,7 @@ function renderThreads() {
     container.innerHTML = `
       <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-8 text-center space-y-3">
         <div class="text-base font-bold text-white">Bu oyun ekranında henüz soru sorulmamış</div>
-        <p class="text-xs text-gray-400">İlk soruyu siz sorun, GameFix AI saniyeler içinde çözüm yanıtını oluştursun!</p>
+        <p class="text-xs text-gray-400">İlk soruyu siz sorun, OyunÇöz AI saniyeler içinde çözüm yanıtını oluştursun!</p>
         <button onclick="openAskModal()" class="accent-btn px-4 py-2 rounded-xl text-xs">+ İlk Soruyu Sor</button>
       </div>
     `;
@@ -3208,7 +3208,7 @@ async function submitNewThread(e) {
       if (data.resolved_game && data.resolved_game.was_created) {
         showToast(`✨ "${data.resolved_game.name}" sayfası otomatik oluşturuldu ve sorunuz AI tarafından yanıtlandı!`);
       } else {
-        showToast('Sorunuz yayınlandı ve GameFix AI tarafından yanıtlandı!');
+        showToast('Sorunuz yayınlandı ve OyunÇöz AI tarafından yanıtlandı!');
       }
     } else {
       const errData = await res.json();

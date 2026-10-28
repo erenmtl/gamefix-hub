@@ -241,7 +241,7 @@ def seed_initial_data(cursor):
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         "Admin",
-        "admin@gamefix.ai",
+        "admin@oyuncoz.com",
         hash_password("admin123"),
         "AD",
         "Windows 11 Pro | Ryzen 7 7800X3D | RTX 4070 Super | 32GB DDR5",
@@ -1558,13 +1558,13 @@ def seed_initial_data(cursor):
             "error_code": "VAN 9003",
             "system_specs": "Windows 11 Pro 24H2 | Ryzen 5 5600X | RTX 4060 | ASUS TUF B550-PLUS",
             "content": "Arkadaşlar BIOS'a girdim OS Type kısmını Windows UEFI Mode yaptım ama oyuna girince 2. rauntta VAN 9003 verip atıyor. msinfo32'ye baktığımda Güvenli Önyükleme Durumu hala Kapalı görünüyor. Nasıl aktif ederim?",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 42,
             "views": 610,
             "created_at": "15 dakika önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Merhaba **EmreK_VLR**! ASUS B550 serisi anakartlarda sadece `OS Type: Windows UEFI Mode` seçmek, eğer daha önce Key Management anahtarları silindiyse Secure Boot'u `Active` durumuna geçirmez.\n\n### Adım Adım Kesin Çözüm (ASUS BIOS):\n1. Bilgisayarı yeniden başlatıp `DEL` veya `F2` ile BIOS'a girin ve `F7` tuşuyla **Advanced Mode**'a geçin.\n2. **Boot** -> **CSM (Compatibility Support Module)** menüsüne girip `Launch CSM` ayarının **Disabled** olduğundan emin olun.\n3. **Boot** -> **Secure Boot** menüsüne dönün. `OS Type` değerini **Windows UEFI Mode** yapın.\n4. Hemen altındaki **Key Management** sekmesine girin ve **Install Default Secure Boot Keys** (veya *Restore Factory Keys*) seçeneğine tıklayıp onaylayın.\n5. `Secure Boot State` satırının **User / Active** olarak değiştiğini göreceksiniz. `F10` ile kaydedip çıkın.",
@@ -1589,13 +1589,13 @@ def seed_initial_data(cursor):
             "error_code": "CS2-STUTTER",
             "system_specs": "Windows 11 | i5-13400F | RX 6700 XT | 16GB DDR4 3200MHz",
             "content": "Özellikle Ancient ve Anubis haritalarında suya girince veya molotof/sis atıldığında oyun inanılmaz takılıyor. AMD Adrenalin sürücüm güncel, başlatma seçeneklerinde -high -threads 8 yazılı.",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 29,
             "views": 420,
             "created_at": "1 saat önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Sistem özelliklerinize (**i5-13400F hibrit P/E çekirdek mimarisi + RX 6700 XT**) göre sorunun iki temel kaynağı tespit edildi:\n\n1. **`-high` ve `-threads 8` Başlatma Kodları:** i5-13400F işlemcinizde Performans (P) ve Verimlilik (E) çekirdekleri bulunur. `-threads 8` komutu Source 2 motorunun iş parçacıklarını yanlışlıkla E-Core çekirdeklerine sıkıştırarak su/parçacık fiziğinde ağır darboğaz yaratır. **Başlatma seçeneklerindeki tüm kodları silin.**\n2. **AMD DXNAVI Gölgelendirici Önbelleği:** AMD Software: Adrenalin Edition -> **Oyun** -> **Ekran Kartları** -> En alttaki **Gelişmiş** bölümünden **Gölgelendirici Önbelleğini Sıfırla (Reset Shader Cache)** işlemini uygulayın ve CS2 içinde **Parçacık Detayı: Düşük** yapın.",
@@ -1612,13 +1612,13 @@ def seed_initial_data(cursor):
             "error_code": "FIVEM-TEXTURE-LOSS",
             "system_specs": "Windows 10 | Ryzen 5 3600 | GTX 1660 Super 6GB | 16GB RAM",
             "content": "Sunucuda 150+ kişi varken şehir merkezine girdiğimde binalar kağıt gibi oluyor ve yollar yok oluyor. Tüm ayarlarım en düşükte olmasına rağmen düzelmedi.",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 35,
             "views": 530,
             "created_at": "3 saat önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "FiveM'de tüm ayarları en düşüğe çekmek paradoksal olarak **Extended Texture Budget** değerini sıfırladığı için doku kaybına (Texture Loss) neden olur!\n\n### GTX 1660 Super (6GB VRAM) İçin Optimum FiveM Ayarları:\n1. **Ayarlar -> Grafikler** sekmesinde en altta yer alan **Extended Texture Budget** çubuğunu **%55 - %65** seviyesine (VRAM barı ~4200 MB civarına gelene kadar) yükseltin.\n2. **Texture Quality (Doku Kalitesi):** `Normal` veya `High` yapın, diğer gölge ve yansıma ayarlarını `Normal` bırakın.\n3. Görev Yöneticisi -> Ayrıntılar sekmesinden `FiveM_bxxxx_GTAProcess.exe` işlemine sağ tıklayıp **Öncelik Ayarla -> Yüksek** seçin.",
@@ -1635,13 +1635,13 @@ def seed_initial_data(cursor):
             "error_code": "RGL-GPU-MAP-CRASH",
             "system_specs": "Windows 11 | Ryzen 7 5800X3D | RTX 3070 | 32GB RAM",
             "content": "Meydan savaşlarında hiçbir sorun yok ama büyük şehir kuşatmalarında merdivenler kurulurken d3d_device_context_map at rglGPU_device::lock_texture hatasıyla masaüstüne atıyor.",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 51,
             "views": 740,
             "created_at": "4 saat önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Merhaba **Alparslan_MB**! Bu hata TaleWorlds motorunda kuşatma kuleleri/merdiven dokuları kilitlenirken bozuk gölgelendirici önbelleği (`C:\\ProgramData\\Mount and Blade II Bannerlord\\Shaders`) yüzünden tetiklenir.\n\n1. `Win + R` tuşlarına basıp `C:\\ProgramData\\Mount and Blade II Bannerlord` klasörünü açın ve içindeki **Shaders** klasörünü tamamen silin.\n2. Oyun içi Ses Ayarları'ndan **Ses Kanalları (Sound Channels)** değerini `Yüksek (512)` yerine `Orta (256)` yapın (kuşatma ses taşması da GPU senkronunu bozar).\n3. Grafik ayarlarından **Arazi Kalitesi (Terrain Quality)** ayarını Yüksek seviyesinde sabitleyin.",
@@ -1658,13 +1658,13 @@ def seed_initial_data(cursor):
             "error_code": "ERR_GFX_STATE",
             "system_specs": "Windows 11 | Ryzen 5 7500F | RTX 4060 Ti | 32GB DDR5",
             "content": "Oyunu Vulkan'da oynuyorum, son NVIDIA sürücü güncellemesinden sonra kasabaya atla girerken ERR_GFX_STATE verip çöküyor.",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 64,
             "views": 890,
             "created_at": "6 saat önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "Ekran kartı sürücüsü güncellendiğinde RDR 2'nin eski Vulkan boru hattı (`sga_vulkan_final_init`) dosyaları geçersiz kalır ve `ERR_GFX_STATE` çökmesine yol açar.\n\n### 1 Dakikada Kesin Çözüm:\n1. `Belgeler\\Rockstar Games\\Red Dead Redemption 2\\Settings` klasörünü açın.\n2. **`sga_`** ile başlayan 3 önbellek dosyasını silin (`system.xml` dosyasını silmeyin).\n3. Steam başlatma seçeneklerine `-ignorepipelinecache` parametresini ekleyin.",
@@ -1681,13 +1681,13 @@ def seed_initial_data(cursor):
             "error_code": "UE5-SHADER-OOM",
             "system_specs": "Windows 11 | i7-14700K | RTX 4070 Super 12GB | 32GB DDR5",
             "content": "Ekran kartımda 12GB VRAM var ama daha oyunun menüsüne bile gelemeden gölgelendirici derlemesinde Out of Video Memory hatası alıyorum.",
-            "status": "HemenÇöz AI Çözümledi",
+            "status": "OyunÇöz AI Çözümledi",
             "upvotes": 48,
             "views": 690,
             "created_at": "8 saat önce",
             "replies": [
                 {
-                    "author_name": "HemenÇöz AI (Teknik Analiz Motoru)",
+                    "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
                     "content": "**i7-14700K** işlemcinizde Unreal Engine 5 gölgelendirici derlemesi (Oodle decompression) sırasında oluşan yüksek AVX yükü, sahte `Out of Video Memory` hatası fırlatmaktadır (sorun RTX 4070 Super'de değildir!).\n\n### Çözüm:\n1. Denetim Masası -> **Güç Seçenekleri** menüsünden güç planını geçici olarak **Güç Tasarrufu (Power Saver)** moduna alın.\n2. Oyunu açıp %100 Shader Compilation işleminin tamamlanmasını bekleyin (yaklaşık 2 dakika sürer).\n3. Ana menü açıldıktan sonra güç planınızı tekrar **Dengeli / Yüksek Performans** moduna alabilirsiniz. Ayrıca anakartınızın en güncel `0x12B` mikro kodlu BIOS güncellemesini yapmanız kalıcı olarak bu hatayı önler.",

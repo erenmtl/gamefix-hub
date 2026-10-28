@@ -1,4 +1,4 @@
-// GameFix AI Hub — Hybrid Cloud & Static Serverless Engine (GitHub Pages & Cloudflare Pages Ready)
+// OyunÇöz — Hybrid Cloud & Static Serverless Engine (GitHub Pages & Cloudflare Pages Ready)
 // Automatically powers all /api/* endpoints when hosted on Cloudflare Pages or GitHub Pages.
 
 (function () {
@@ -12,18 +12,18 @@
   };
 
   const STORAGE_KEYS = {
-    games: 'hc_cloud_games_v5',
-    issues: 'hc_cloud_issues_v5',
-    threads: 'hc_cloud_threads_v5',
-    users: 'hc_cloud_users_v5',
-    sessions: 'hc_cloud_sessions_v5',
-    verifications: 'hc_cloud_verifications_v5',
-    votes: 'hc_cloud_votes_v5',
-    hwVotes: 'hc_cloud_hw_votes_v5',
-    aiCache: 'hc_cloud_aicache_v5',
-    logs5651: 'hc_cloud_5651_logs_v5',
-    reports: 'hc_cloud_reports_v5',
-    guestTrials: 'hc_cloud_guest_trials_v5'
+    games: 'oc_cloud_games_v6',
+    issues: 'oc_cloud_issues_v6',
+    threads: 'oc_cloud_threads_v6',
+    users: 'oc_cloud_users_v6',
+    sessions: 'oc_cloud_sessions_v6',
+    verifications: 'oc_cloud_verifications_v6',
+    votes: 'oc_cloud_votes_v6',
+    hwVotes: 'oc_cloud_hw_votes_v6',
+    aiCache: 'oc_cloud_aicache_v6',
+    logs5651: 'oc_cloud_5651_logs_v6',
+    reports: 'oc_cloud_reports_v6',
+    guestTrials: 'oc_cloud_guest_trials_v6'
   };
 
   const RATE_BUCKETS = {};
@@ -80,7 +80,7 @@
     if (!md) return '';
     let cleaned = String(md);
     for (const rx of DANGEROUS_CMD_REGEXES) {
-      cleaned = cleaned.replace(rx, '[GÜVENLİK KALKANI: Zararlı sistem komutu HemenÇöz Güvenli Komut Filtresi tarafından engellendi]');
+      cleaned = cleaned.replace(rx, '[GÜVENLİK KALKANI: Zararlı sistem komutu OyunÇöz Güvenli Komut Filtresi tarafından engellendi]');
     }
     cleaned = cleaned.replace(/<\s*\/?\s*(script|iframe|object|embed)[^>]*>/gi, '');
     return cleaned;
@@ -170,12 +170,12 @@
     );
     const rawTitle = (found && (found.short_name || found.name)) || String(slugOrName || 'Oyun').replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     const cleanTitle = rawTitle.slice(0, 20).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const sub = ((found && `${found.category} • ${found.engine}`) || subtitleText || 'HemenÇöz Arıza &amp; Performans Merkezi')
+    const sub = ((found && `${found.category} • ${found.engine}`) || subtitleText || 'OyunÇöz Arıza &amp; Performans Merkezi')
       .slice(0, 34)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-    const initials = rawTitle.split(/[\s:&-]+/).filter(Boolean).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'HC';
+    const initials = rawTitle.split(/[\s:&-]+/).filter(Boolean).slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || 'OC';
     const color = accentColor || (found && found.accent_color) || '#5e9c88';
     const fontSize = rawTitle.length > 14 ? 19 : 23;
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="200" viewBox="0 0 360 200">
@@ -195,7 +195,7 @@
       <circle cx="320" cy="165" r="55" fill="#ffffff" fill-opacity="0.04"/>
       <path d="M0 152 L360 112 L360 200 L0 200 Z" fill="#0b0f17" fill-opacity="0.45"/>
       <rect x="22" y="20" width="118" height="22" rx="6" fill="#0f141d" fill-opacity="0.65" stroke="#ffffff" stroke-opacity="0.15"/>
-      <text x="32" y="35" fill="#a3d9c6" font-family="Inter, Segoe UI, sans-serif" font-size="10" font-weight="800" letter-spacing="0.8">HEMENÇÖZ PORTAL</text>
+      <text x="32" y="35" fill="#a3d9c6" font-family="Inter, Segoe UI, sans-serif" font-size="10" font-weight="800" letter-spacing="0.8">OYUNÇÖZ PORTAL</text>
       <text x="275" y="88" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="52" font-weight="900" opacity="0.14">${initials}</text>
       <text x="22" y="136" fill="#ffffff" font-family="Inter, Segoe UI, sans-serif" font-size="${fontSize}" font-weight="900">${cleanTitle}</text>
       <rect x="22" y="147" width="88" height="3" rx="1.5" fill="url(#accentBar)"/>
@@ -991,7 +991,7 @@
           {
             id: Date.now(),
             thread_id: 1,
-            author_name: 'HemenÇöz AI (Otomatik Forum Çözümleyici)',
+            author_name: 'OyunÇöz AI (Otomatik Forum Çözümleyici)',
             is_ai: 1,
             ai_mode: aiRes.mode,
             content: sanitizeAiCommands(aiRes.markdown),

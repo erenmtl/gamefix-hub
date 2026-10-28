@@ -1,6 +1,6 @@
 {
-  "name": "HemenÇöz - Oyun Sorunları, Hata Kodları & Performans Çözüm Merkezi",
-  "short_name": "HemenÇöz",
+  "name": "OyunÇöz - Oyun Sorunları, Hata Kodları & Performans Çözüm Merkezi",
+  "short_name": "OyunÇöz",
   "description": "Valorant, CS2, LoL, GTA V, Minecraft, RDR 2, Bannerlord ve 30+ popüler oyunun hata kodlarını, FPS düşüşlerini ve çökmelerini forum rehberleri ve yapay zeka ile çözen platform.",
   "start_url": "./",
   "display": "standalone",

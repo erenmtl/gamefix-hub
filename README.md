@@ -1,4 +1,4 @@
-# GameFix AI Hub — Popüler Oyun Sorunları & Yapay Zeka Çözüm Platformu
+# OyunÇöz — Popüler Oyun Sorunları & Yapay Zeka Çözüm Platformu
 
 En popüler PC oyunlarının (Valorant, Counter-Strike 2, League of Legends, GTA V / FiveM, Minecraft, EA Sports FC 25, Cyberpunk 2077, PUBG, Elden Ring, Apex Legends, Call of Duty: Warzone, Fortnite, Victoria 3, Hearts of Iron IV, Mount & Blade II: Bannerlord, Red Dead Redemption 2 vb.) forumlarda en sık karşılaşılan teknik sorunlarını derleyen ve **Gemini 3.8 Flash** yapay zeka motoruyla çözümleyen platform.
 
