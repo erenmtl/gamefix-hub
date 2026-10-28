@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GTA V & FiveM ERR_GFX_D3D_INIT, Harita Yüklenmeme (Texture Loss) ve Crash Çözümü | OyunÇöz</title>
+  <meta name="description" content="GTA 5 ERR_GFX_D3D_INIT çökmesi, FiveM harita ve yolların yüklenmemesi (Texture Loss / boşluğa düşme), Early Exit Trap ve CitizenFX önbellek temizleme rehberi." />
+  <meta name="keywords" content="gta 5 err_gfx_d3d_init çözümü, fivem harita yüklenmeme sorunu, fivem texture loss çözümü, fivem yollar kayboluyor, fivem early exit trap, fivem cache temizleme, gta 5 oyundan atma sorunu, oyunçöz fivem" />
+  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://oyuncoz.com/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" />
+  <link rel="icon" type="image/svg+xml" href="./static/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="OyunÇöz" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://oyuncoz.com/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" />
+  <meta property="og:title" content="GTA V & FiveM ERR_GFX_D3D_INIT, Harita Yüklenmeme (Texture Loss) ve Crash Çözümü | OyunÇöz" />
+  <meta property="og:description" content="GTA 5 ERR_GFX_D3D_INIT çökmesi, FiveM harita ve yolların yüklenmemesi (Texture Loss / boşluğa düşme), Early Exit Trap ve CitizenFX önbellek temizleme rehberi." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "OyunÇöz Ana Sayfa",
+          "item": "https://oyuncoz.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "GTA V ve FiveM ERR_GFX_D3D_INIT, Doku Kaybı (Texture Loss) ve Early Exit Trap Çözümü",
+          "item": "https://oyuncoz.com/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html"
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "GTA V ve FiveM ERR_GFX_D3D_INIT, Doku Kaybı (Texture Loss) ve Early Exit Trap Çözümü",
+      "description": "GTA 5 ERR_GFX_D3D_INIT çökmesi, FiveM harita ve yolların yüklenmemesi (Texture Loss / boşluğa düşme), Early Exit Trap ve CitizenFX önbellek temizleme rehberi.",
+      "totalTime": "PT4M",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "FiveM Harita Yüklenmeme (Texture Loss) İçin Extended Texture Budget Ayarı",
+          "text": "FiveM'de tüm grafik ayarlarını en düşüğe çekmek paradoksal olarak VRAM doku bütçesini sıfırlar ve yolları yok eder! Ayarlar > Grafikler (Graphics) sekmesinde en altta yer alan 'Extended Texture Budget' çubuğunu ekran kartı belleğinize göre %50 ile %65 arasına yükseltin."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "ERR_GFX_D3D_INIT Hatası İçin DirectX 11 ve settings.xml Onarımı",
+          "text": "Belgeler > Rockstar Games > GTA V klasöründeki settings.xml dosyasını Not Defteri ile açın. <DX_Version value=\"2\" /> satırının 2 olduğundan emin olun. Ayrıca Belgeler\\Rockstar Games\\GTA V klasöründeki d3d11.dll veya dxgi.dll gibi bozuk ReShade/ENB kalıntılarını silin."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "FiveM CitizenFX Önbellek (Cache) Temizliği",
+          "text": "Win + R tuşlarına basıp %localappdata%\\FiveM\\FiveM.app\\data klasörünü açın. 'game-storage' klasörü HARİÇ içerideki 'cache', 'server-cache' ve 'server-cache-priv' klasörlerini silin. Bu işlem bozuk sunucu scriptlerini temizler."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "8 GB ve 16 GB RAM Sistemler İçin Sanal Bellek (Pagefile) Yapılandırması",
+          "text": "Kalabalık FiveM sunucuları 14 GB'ın üzerinde bellek tüketir. Gelişmiş Sistem Ayarları > Performans > Gelişmiş > Sanal Bellek bölümünden SSD diskinizde Başlangıç: 16384 MB, En Yüksek: 24576 MB sanal bellek tanımlayın."
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "FiveM'de ayarları düşürdüğüm halde neden yollar ve binalar kayboluyor?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Extended Texture Budget çubuğu en solda (sıfırda) kaldığında FiveM özel sunucu varlıklarını (modlu araçlar ve MLO binalar) VRAM'e yükleyemez. Bu çubuğu yarıya (%50-%65) getirmek doku kaybını anında çözer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "GTA V ERR_GFX_D3D_INIT hatası neden olur?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ekran kartı hız aşırtması (overclock), bozuk gölgelendirici önbelleği veya uyumsuz grafik modları DirectX 11 cihazının sıfırlanmasına yol açar. GPU hız aşırtmasını varsayılana çekmek ve settings.xml'de DX_Version değerini 2 yapmak sorunu giderir."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./static/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
+  <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <a href="./" class="flex items-center gap-3">
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <div>
+          <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
+          <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="./?game=gtav-fivem" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+          🤖 AI Arıza Çözümleyiciyi Aç
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1">
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex items-center gap-2">
+      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
+      <span>›</span>
+      <a href="./?game=gtav-fivem" class="hover:text-[#88c0a8]">Oyun Çözüm Ekranı</a>
+      <span>›</span>
+      <span class="text-gray-200 font-semibold">GTA V & FIVEM • RAGE ENGINE REHBERİ</span>
+    </nav>
+
+    <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">
+        <span>⚡ GTA V & FIVEM • RAGE ENGINE REHBERİ</span>
+        <span>•</span>
+        <span>%96 Doğrulanmış Çözüm Oranı</span>
+      </div>
+      <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">GTA V ve FiveM ERR_GFX_D3D_INIT, Doku Kaybı (Texture Loss) ve Early Exit Trap Çözümü</h1>
+      <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">GTA V ve FiveM roleplay sunucularında karşılaşılan 'ERR_GFX_D3D_INIT' hatası DirectX 11 görüntü sürücüsünün yanıt vermeyi kesmesinden, şehir içinde yolların ve binaların kaybolması (Texture Loss) ise FiveM'in özel araç/kıyafet dokularında VRAM bütçesini aşmasından kaynaklanır.</p>
+      <div class="pt-2 flex flex-wrap gap-3">
+        <a href="./?game=gtav-fivem" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+          🧭 İnteraktif Sihirbaz Modunda &amp; AI ile Çöz →
+        </a>
+        <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
+          📄 Crash Log (.log / .txt) Dosyası Analiz Et
+        </a>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-lg font-extrabold text-white">🛠️ Adım Adım Kesin Çözüm Rehberi</h2>
+      
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
+            <h2 class="text-sm sm:text-base font-bold text-white">FiveM Harita Yüklenmeme (Texture Loss) İçin Extended Texture Budget Ayarı</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">FiveM'de tüm grafik ayarlarını en düşüğe çekmek paradoksal olarak VRAM doku bütçesini sıfırlar ve yolları yok eder! Ayarlar > Grafikler (Graphics) sekmesinde en altta yer alan 'Extended Texture Budget' çubuğunu ekran kartı belleğinize göre %50 ile %65 arasına yükseltin.</p>
+        </div>
+        
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
+            <h2 class="text-sm sm:text-base font-bold text-white">ERR_GFX_D3D_INIT Hatası İçin DirectX 11 ve settings.xml Onarımı</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Belgeler > Rockstar Games > GTA V klasöründeki settings.xml dosyasını Not Defteri ile açın. <DX_Version value="2" /> satırının 2 olduğundan emin olun. Ayrıca Belgeler\Rockstar Games\GTA V klasöründeki d3d11.dll veya dxgi.dll gibi bozuk ReShade/ENB kalıntılarını silin.</p>
+        </div>
+        
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
+            <h2 class="text-sm sm:text-base font-bold text-white">FiveM CitizenFX Önbellek (Cache) Temizliği</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Win + R tuşlarına basıp %localappdata%\FiveM\FiveM.app\data klasörünü açın. 'game-storage' klasörü HARİÇ içerideki 'cache', 'server-cache' ve 'server-cache-priv' klasörlerini silin. Bu işlem bozuk sunucu scriptlerini temizler.</p>
+        </div>
+        
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 4</span>
+            <h2 class="text-sm sm:text-base font-bold text-white">8 GB ve 16 GB RAM Sistemler İçin Sanal Bellek (Pagefile) Yapılandırması</h2>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Kalabalık FiveM sunucuları 14 GB'ın üzerinde bellek tüketir. Gelişmiş Sistem Ayarları > Performans > Gelişmiş > Sanal Bellek bölümünden SSD diskinizde Başlangıç: 16384 MB, En Yüksek: 24576 MB sanal bellek tanımlayın.</p>
+        </div>
+        
+    </section>
+
+    <section class="bg-[#1b2230] border border-amber-400/35 rounded-2xl p-5 space-y-3">
+      <div class="flex items-center justify-between gap-2">
+        <h2 class="text-sm sm:text-base font-extrabold text-amber-200">💻 Hızlı Onarım ve Doğrulama Komutları (CMD / PowerShell)</h2>
+        <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-semibold">Yönetici Olarak Çalıştırın</span>
+      </div>
+      <p class="text-xs text-gray-300">İşlemlere başlamadan önce Sistem Geri Yükleme Noktası oluşturmak için: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code></p>
+      <div class="space-y-2">
+        
+        <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+          <code class="text-xs font-mono text-[#a3d9c6] overflow-x-auto">powershell -Command "Remove-Item -Path '$env:LOCALAPPDATA\FiveM\FiveM.app\data\cache\*' -Recurse -Force -ErrorAction SilentlyContinue"</code>
+          <button onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);this.textContent='✓ Kopyalandı';" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+        </div>
+        
+
+        <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+          <code class="text-xs font-mono text-[#a3d9c6] overflow-x-auto">sfc /scannow</code>
+          <button onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);this.textContent='✓ Kopyalandı';" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="space-y-3">
+      <h2 class="text-lg font-extrabold text-white">❓ Sıkça Sorulan Sorular (SSS)</h2>
+      
+        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
+          <h3 class="text-sm font-bold text-white">❓ FiveM'de ayarları düşürdüğüm halde neden yollar ve binalar kayboluyor?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Extended Texture Budget çubuğu en solda (sıfırda) kaldığında FiveM özel sunucu varlıklarını (modlu araçlar ve MLO binalar) VRAM'e yükleyemez. Bu çubuğu yarıya (%50-%65) getirmek doku kaybını anında çözer.</p>
+        </div>
+        
+
+        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
+          <h3 class="text-sm font-bold text-white">❓ GTA V ERR_GFX_D3D_INIT hatası neden olur?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Ekran kartı hız aşırtması (overclock), bozuk gölgelendirici önbelleği veya uyumsuz grafik modları DirectX 11 cihazının sıfırlanmasına yol açar. GPU hız aşırtmasını varsayılana çekmek ve settings.xml'de DX_Version değerini 2 yapmak sorunu giderir.</p>
+        </div>
+        
+    </section>
+
+    <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+      <h2 class="text-sm font-bold text-white">🔥 Diğer Popüler Oyun Hata Çözüm Rehberleri</h2>
+      <div class="flex flex-wrap gap-2">
+        <a href="./valorant-van-9003-van-1067-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">Valorant VAN 9003</a>
+<a href="./cs2-vac-oturum-dogrulama-fps-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">Counter-Strike 2 (CS2) VAC Oturum Doğrulama</a>
+<a href="./lol-vanguard-van-128-van-185-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">LoL Vanguard VAN 128</a>
+<a href="./gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">GTA V ve FiveM ERR_GFX_D3D_INIT</a>
+<a href="./minecraft-exit-code-1-glfw-65542-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">Minecraft Çıkış Kodu: 1 (Exit Code 1)</a>
+<a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">RDR 2 ERR_GFX_STATE</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10 bg-[#11161f] py-6 text-center text-xs text-gray-400">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>© 2026 <strong>OyunÇöz (oyuncoz.com)</strong> — Oyun Hata Çözümleri ve Akıllı Arıza Çözüm Platformu.</div>
+      <div class="flex gap-4">
+        <a href="./" class="hover:text-white">Ana Sayfa</a>
+        <a href="./sitemap.xml" class="hover:text-white">Site Haritası</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

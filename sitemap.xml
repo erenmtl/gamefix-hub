@@ -7,6 +7,43 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  <!-- Dedicated Static SEO Landing Pages -->
+  <url>
+    <loc>https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/lol-vanguard-van-128-van-185-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/minecraft-exit-code-1-glfw-65542-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/rdr2-bannerlord-fc25-wukong-crash-cozumu.html</loc>
+    <lastmod>2026-10-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
 
   <!-- Dedicated Game Troubleshooting Screens (All 30 Active Games) -->
   <url>
