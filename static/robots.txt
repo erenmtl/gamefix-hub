@@ -14,4 +14,4 @@ Allow: /
 User-agent: Yandex
 Allow: /
 
-Sitemap: https://erenmtl.github.io/gamefix-hub/sitemap.xml
+Sitemap: https://oyuncoz.com/sitemap.xml

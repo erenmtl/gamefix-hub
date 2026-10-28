@@ -1465,7 +1465,7 @@ async function applyUrlSeoParams() {
 
 function updateDynamicSEO() {
   try {
-    const baseUrl = 'https://erenmtl.github.io/gamefix-hub/';
+    const baseUrl = 'https://oyuncoz.com/';
     const metaDesc = document.querySelector('meta[name="description"]');
     const canonicalEl = document.getElementById('canonicalLink');
     const schemaEl = document.getElementById('dynamicSeoSchema');
