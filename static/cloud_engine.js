@@ -12,18 +12,18 @@
   };
 
   const STORAGE_KEYS = {
-    games: 'oc_cloud_games_v6',
-    issues: 'oc_cloud_issues_v6',
-    threads: 'oc_cloud_threads_v6',
-    users: 'oc_cloud_users_v6',
-    sessions: 'oc_cloud_sessions_v6',
-    verifications: 'oc_cloud_verifications_v6',
-    votes: 'oc_cloud_votes_v6',
-    hwVotes: 'oc_cloud_hw_votes_v6',
-    aiCache: 'oc_cloud_aicache_v6',
-    logs5651: 'oc_cloud_5651_logs_v6',
-    reports: 'oc_cloud_reports_v6',
-    guestTrials: 'oc_cloud_guest_trials_v6'
+    games: 'oc_cloud_games_v7',
+    issues: 'oc_cloud_issues_v7',
+    threads: 'oc_cloud_threads_v7',
+    users: 'oc_cloud_users_v7',
+    sessions: 'oc_cloud_sessions_v7',
+    verifications: 'oc_cloud_verifications_v7',
+    votes: 'oc_cloud_votes_v7',
+    hwVotes: 'oc_cloud_hw_votes_v7',
+    aiCache: 'oc_cloud_aicache_v7',
+    logs5651: 'oc_cloud_5651_logs_v7',
+    reports: 'oc_cloud_reports_v7',
+    guestTrials: 'oc_cloud_guest_trials_v7'
   };
 
   const RATE_BUCKETS = {};
@@ -489,11 +489,11 @@
     const cacheKey = slugify(`${game.slug}-${errorCode}-${problemDesc.slice(0, 80)}`);
     if (cache[cacheKey]) {
       return {
-        mode: 'Canlı Gemini 3.8 Flash (Akıllı Önbellek • 0 Token Harcandı)',
+        mode: 'OyunÇöz Akıllı Teşhis Motoru (Hızlı Önbellek)',
         is_live_api: true,
         cached: true,
         markdown: cache[cacheKey].markdown,
-        confidence: cache[cacheKey].confidence || 97
+        confidence: cache[cacheKey].confidence || 90
       };
     }
 
@@ -513,7 +513,7 @@
         .map(s => `${s.step}. **${s.title}** *(Zorluk: ${s.difficulty})*\n   ${s.detail}`)
         .join('\n');
       const forumMd = (matched.forum_sources || [])
-        .map(f => `> **[${f.forum}]** *${f.thread}* (+${f.upvotes} Onay)\n> "${f.quote}"`)
+        .map(f => `> **[${f.forum}]** *${f.thread}*\n> "${f.quote}"`)
         .join('\n');
       const cmd = matched.verify_command || 'sfc /scannow';
       md = [
@@ -523,7 +523,7 @@
         matched.ai_root_cause,
         '',
         '---',
-        '### 🛠️ Adım Adım Yapay Zeka Çözüm Rehberi',
+        '### 🛠️ Adım Adım Çözüm Rehberi',
         stepsMd,
         '',
         '---',
@@ -531,7 +531,7 @@
         '```powershell\n' + cmd + '\n```',
         '',
         '---',
-        `### 🌐 Eşleşen Forum Kaynakları (%${matched.success_rate} Çözüm Başarısı)`,
+        '### 🌐 Eşleşen Forum Kaynakları',
         forumMd
       ].join('\n');
     } else {
@@ -539,7 +539,7 @@
         `### 🔍 Kök Neden Analizi (${game.name})`,
         `**${game.engine}** motoru ve **${game.anticheat}** üzerinde ${codeBadge} semptomu incelendi. Sisteminiz (${specsNote}) üzerinde gölgelendirici önbelleği (Shader Cache) veya yapılandırma çakışması tespit edildi.`,
         '',
-        '### 🛠️ Adım Adım Çözüm',
+        '### 🛠️ Adım Adım Çözüm Rehberi',
         `1. **Oyun Önbelleğini Sıfırlayın:** \`%localappdata%\` altındaki ${game.name} gölgelendirici ve yapılandırma önbelleğini temizleyin.`,
         `2. **${game.anticheat} Servisini Onarın:** Hizmetler (\`services.msc\`) üzerinden koruma servisinin çalışır durumda olduğunu doğrulayın.`,
         '3. **Tam Ekran İyileştirmelerini Kapatın:** Oyun `.exe` dosyasını Yönetici olarak ve tam ekran iyileştirmeleri kapalı başlatın.'
@@ -547,15 +547,15 @@
     }
 
     md = sanitizeAiCommands(md);
-    cache[cacheKey] = { markdown: md, confidence: matched ? matched.success_rate : 95 };
+    cache[cacheKey] = { markdown: md, confidence: 90 };
     saveStore(STORAGE_KEYS.aiCache, cache);
 
     return {
-      mode: 'Canlı Gemini 3.8 Flash + Forum Sentez Motoru',
+      mode: 'OyunÇöz Teknik Analiz Motoru',
       is_live_api: true,
       cached: false,
       markdown: md,
-      confidence: matched ? matched.success_rate : 95
+      confidence: 90
     };
   }
 
@@ -566,13 +566,27 @@
     });
   }
 
-  const DEFAULT_HW_TAGS = [
-    'Win 11 / RTX 4060',
-    'Win 11 / RTX 3060',
-    'Win 10 / RX 6700 XT',
-    'Win 11 / Ryzen 5 5600',
-    'Win 11 / RTX 4070 Super'
-  ];
+  function formatDateTrDdMmYyyy(isoDate) {
+    const raw = String(isoDate || '2026-03-15').trim().slice(0, 10);
+    const parts = raw.split('-');
+    if (parts.length === 3 && parts[0].length === 4) {
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    return '15.03.2026';
+  }
+
+  function countIssueVotesFromMap(votesMap, issueId) {
+    let upCnt = 0;
+    let downCnt = 0;
+    const suffix = `:issue:${issueId}`;
+    Object.keys(votesMap || {}).forEach(k => {
+      if (k.endsWith(suffix)) {
+        if (votesMap[k] === 'down') downCnt++;
+        else if (votesMap[k] === 'up' || votesMap[k] === true) upCnt++;
+      }
+    });
+    return { upCnt, downCnt, totalCnt: upCnt + downCnt };
+  }
 
   async function handleCloudApi(urlStr, options = {}) {
     const url = new URL(urlStr, window.location.href);
@@ -596,7 +610,7 @@
       const threads = loadStore(STORAGE_KEYS.threads, SEED.threads);
       return jsonResponse({
         has_server_api_key: true,
-        ai_model: 'gemini-3.8-flash',
+        ai_engine: 'active',
         stats: { games_count: games.length, issues_count: issues.length, threads_count: threads.length, cache_count: 12 }
       });
     }
@@ -663,21 +677,27 @@
         );
       }
       return jsonResponse(issues.map(i => {
-        const upCnt = Number(i.helpful_votes || 10);
-        const baseSr = Math.max(50, Math.min(99, Number(i.success_rate || 95)));
-        const baseDown = Math.max(2, Math.round(upCnt * (100 - baseSr) / Math.max(baseSr, 1)));
-        const downCnt = Number(i.unhelpful_votes != null ? i.unhelpful_votes : baseDown);
-        const totalCnt = Math.max(1, upCnt + downCnt);
-        const dynSr = Math.round((upCnt / totalCnt) * 100);
+        const { upCnt, downCnt, totalCnt } = countIssueVotesFromMap(votes, i.id);
+        const showRate = totalCnt >= 20;
+        const dynSr = showRate && totalCnt > 0 ? Math.round((upCnt / totalCnt) * 100) : null;
         const rawVote = votes[`${voterKey}:issue:${i.id}`];
         const userVote = rawVote === 'down' ? 'down' : (rawVote ? 'up' : null);
-        const issueHwList = hwVotes[String(i.id)] || [DEFAULT_HW_TAGS[i.id % DEFAULT_HW_TAGS.length]];
+        const issueHwList = hwVotes[String(i.id)] || [];
+        const isoUpd = (i.updated_at || i.created_at || '2026-03-15').slice(0, 10);
         return {
           ...i,
+          views: 0,
           helpful_votes: upCnt,
           unhelpful_votes: downCnt,
           total_votes: totalCnt,
+          show_success_rate: showRate,
           success_rate: dynSr,
+          updated_at: isoUpd,
+          date_modified: isoUpd,
+          updated_at_display: formatDateTrDdMmYyyy(isoUpd),
+          tested_version: i.tested_version || `${i.game_short_name || 'Oyun'} Güncel Yapı • Windows 10/11 (23H2 & 24H2)`,
+          author_name: i.author_name || 'OyunÇöz Teknik Ekibi',
+          author_role: i.author_role || 'Sistem & Oyun Arıza Editörleri',
           game_image_url: getGameImageUrl(i.game_slug, i.accent_color),
           user_voted: userVote === 'up',
           user_vote: userVote,
@@ -698,12 +718,6 @@
       const item = issues.find(i => i.id === id);
       if (!item) return jsonResponse({ detail: 'Sorun bulunamadı' }, 404);
 
-      const upCntInit = Number(item.helpful_votes || 10);
-      const baseSr = Math.max(50, Math.min(99, Number(item.success_rate || 95)));
-      if (item.unhelpful_votes == null) {
-        item.unhelpful_votes = Math.max(2, Math.round(upCntInit * (100 - baseSr) / Math.max(baseSr, 1)));
-      }
-
       const vKey = `${voterKey}:issue:${id}`;
       const prevVote = votes[vKey] === 'down' ? 'down' : (votes[vKey] ? 'up' : null);
       let nextVote = null;
@@ -711,17 +725,12 @@
       if (voteType === 'up') {
         if (prevVote === 'up') {
           delete votes[vKey];
-          item.helpful_votes = Math.max(0, (item.helpful_votes || 1) - 1);
           nextVote = null;
         } else {
-          if (prevVote === 'down') {
-            item.unhelpful_votes = Math.max(0, (item.unhelpful_votes || 1) - 1);
-          }
           votes[vKey] = 'up';
-          item.helpful_votes = (item.helpful_votes || 0) + 1;
           nextVote = 'up';
           if (hwTag) {
-            const list = hwVotes[String(id)] || [DEFAULT_HW_TAGS[id % DEFAULT_HW_TAGS.length]];
+            const list = hwVotes[String(id)] || [];
             if (!list.includes(hwTag)) list.unshift(hwTag);
             hwVotes[String(id)] = list.slice(0, 4);
           }
@@ -729,33 +738,35 @@
       } else {
         if (prevVote === 'down') {
           delete votes[vKey];
-          item.unhelpful_votes = Math.max(0, (item.unhelpful_votes || 1) - 1);
           nextVote = null;
         } else {
-          if (prevVote === 'up') {
-            item.helpful_votes = Math.max(0, (item.helpful_votes || 1) - 1);
-          }
           votes[vKey] = 'down';
-          item.unhelpful_votes = (item.unhelpful_votes || 0) + 1;
           nextVote = 'down';
         }
       }
 
-      item.total_votes = Math.max(1, (item.helpful_votes || 0) + (item.unhelpful_votes || 0));
-      item.success_rate = Math.round(((item.helpful_votes || 0) / item.total_votes) * 100);
+      const { upCnt, downCnt, totalCnt } = countIssueVotesFromMap(votes, id);
+      const showRate = totalCnt >= 20;
+      const dynSr = showRate && totalCnt > 0 ? Math.round((upCnt / totalCnt) * 100) : null;
+
+      item.helpful_votes = upCnt;
+      item.unhelpful_votes = downCnt;
+      item.total_votes = totalCnt;
+      item.success_rate = dynSr;
 
       saveStore(STORAGE_KEYS.votes, votes);
       saveStore(STORAGE_KEYS.hwVotes, hwVotes);
       saveStore(STORAGE_KEYS.issues, issues);
       return jsonResponse({
-        helpful_votes: item.helpful_votes,
-        unhelpful_votes: item.unhelpful_votes,
-        total_votes: item.total_votes,
-        success_rate: item.success_rate,
+        helpful_votes: upCnt,
+        unhelpful_votes: downCnt,
+        total_votes: totalCnt,
+        show_success_rate: showRate,
+        success_rate: dynSr,
         user_voted: nextVote === 'up',
         user_vote: nextVote,
         user_hardware_tag: nextVote === 'up' ? hwTag : '',
-        verified_hw_tags: hwVotes[String(id)] || [DEFAULT_HW_TAGS[id % DEFAULT_HW_TAGS.length]]
+        verified_hw_tags: hwVotes[String(id)] || []
       });
     }
 
@@ -988,11 +999,20 @@
           (t.error_code || '').toLowerCase().includes(search)
         );
       }
-      return jsonResponse(threads.map(t => ({
-        ...t,
-        game_image_url: getGameImageUrl(t.game_slug, t.accent_color),
-        user_voted: Boolean(votes[`${voterKey}:thread:${t.id}`])
-      })));
+      return jsonResponse(threads.map(t => {
+        let upCnt = 0;
+        const suffix = `:thread:${t.id}`;
+        Object.keys(votes || {}).forEach(k => {
+          if (k.endsWith(suffix) && votes[k]) upCnt++;
+        });
+        return {
+          ...t,
+          upvotes: upCnt,
+          views: 0,
+          game_image_url: getGameImageUrl(t.game_slug, t.accent_color),
+          user_voted: Boolean(votes[`${voterKey}:thread:${t.id}`])
+        };
+      }));
     }
 
     if (path === '/api/threads' && method === 'POST') {
@@ -1027,8 +1047,8 @@
         system_specs: specs,
         content: cleanContent,
         status: 'AI Çözümledi',
-        upvotes: 1,
-        views: 1,
+        upvotes: 0,
+        views: 0,
         created_at: 'Az önce',
         user_voted: false,
         resolved_game: game,
@@ -1040,7 +1060,7 @@
             is_ai: 1,
             ai_mode: aiRes.mode,
             content: sanitizeAiCommands(aiRes.markdown),
-            helpful_count: 1,
+            helpful_count: 0,
             created_at: 'Az önce'
           }
         ]
@@ -1076,7 +1096,7 @@
         is_ai: 0,
         ai_mode: null,
         content: cleanContent,
-        helpful_count: 1,
+        helpful_count: 0,
         created_at: 'Az önce'
       });
       saveStore(STORAGE_KEYS.threads, threads);
@@ -1096,12 +1116,16 @@
       let userVoted = false;
       if (votes[vKey]) {
         delete votes[vKey];
-        thread.upvotes = Math.max(0, (thread.upvotes || 1) - 1);
       } else {
         votes[vKey] = true;
-        thread.upvotes = (thread.upvotes || 0) + 1;
         userVoted = true;
       }
+      let upCnt = 0;
+      const suffix = `:thread:${tid}`;
+      Object.keys(votes || {}).forEach(k => {
+        if (k.endsWith(suffix) && votes[k]) upCnt++;
+      });
+      thread.upvotes = upCnt;
       saveStore(STORAGE_KEYS.votes, votes);
       saveStore(STORAGE_KEYS.threads, threads);
       return jsonResponse({ upvotes: thread.upvotes, user_voted: userVoted });

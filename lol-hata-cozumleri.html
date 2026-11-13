@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>League of Legends Hata Çözümleri (Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım kesin çözümleri." />
+  <meta name="description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
   <meta name="keywords" content="league of legends hata çözümleri, lol oyundan atma sorunu, league of legends açılmıyor çözümü, league of legends crash çözümü, league of legends fps artırma, oyunçöz, oyuncoz, lol client siyah ekran çözümü, lol reconnect loop çözümü, lol van 185 çözümü, lol directx 9/11 çözümü, lol fps sabitlenme çözümü, lol vanguard hatası çözümü, lol-reconnect-loop, van 185 / van -81, dx11-alttab-lock" />
   <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -17,7 +17,7 @@
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/lol-hata-cozumleri.html" />
   <meta property="og:title" content="League of Legends Hata Çözümleri (Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım kesin çözümleri." />
+  <meta property="og:description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
   <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
   <script type="application/ld+json">
 {
@@ -48,7 +48,7 @@
           "name": "League of Legends: Şampiyon Seçimi Sonrası Oyun Ekranı Gelmiyor ve 'Yeniden Bağlan (Reconnect)' Döngüsü (LOL-RECONNECT-LOOP) nasıl çözülür?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Riot İstemcisi (`LeagueClientUx.exe`) ile oyun motoru (`League of Legends.exe`) arasındaki yerel el sıkışma; (1) `League of Legends.exe` dosyasında Uyumluluk Modu'nun açık kalması (Vanguard uyumluluk modunu engeller), (2) RivaTuner / Discord / Overwolf DLL enjeksiyonu veya (3) bozuk `game.cfg` dosyası nedeniyle kesilmektedir. Çözüm adımları: 1. Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!): `C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse KESİNLİKLE kaldırın. 2. Config ve Logs Klasörünü Sıfırlayın: `C:\\Riot Games\\League of Legends` içindeki `Config` ve `Logs` klasörlerini silin. İstemci ayarlarından Oyun -> 'Eski DX9 Modunu Tercih Et' kapalı olduğundan ve 'Pencereli / Çerçevesiz' modda denediğinizden emin olun. 3. Üçüncü Parti DLL Enjeksiyonlarını (RivaTuner / Discord Overlay) Kapatın: MSI Afterburner / RivaTuner Statistics Server çalışıyorsa `League of Legends.exe` için 'Application Detection Level: None' yapın."
+            "text": "Riot İstemcisi (`LeagueClientUx.exe`) ile oyun motoru (`League of Legends.exe`) arasındaki yerel el sıkışma; (1) `League of Legends.exe` dosyasında Uyumluluk Modu'nun açık kalması (Vanguard uyumluluk modunu engeller), (2) RivaTuner / Discord / Overwolf DLL enjeksiyonu veya (3) bozuk `game.cfg` dosyası nedeniyle kesilmektedir. Çözüm adımları: 1. Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!): `C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse mutlaka kaldırın. 2. Config ve Logs Klasörünü Sıfırlayın: `C:\\Riot Games\\League of Legends` içindeki `Config` ve `Logs` klasörlerini silin. İstemci ayarlarından Oyun -> 'Eski DX9 Modunu Tercih Et' kapalı olduğundan ve 'Pencereli / Çerçevesiz' modda denediğinizden emin olun. 3. Üçüncü Parti DLL Enjeksiyonlarını (RivaTuner / Discord Overlay) Kapatın: MSI Afterburner / RivaTuner Statistics Server çalışıyorsa `League of Legends.exe` için 'Application Detection Level: None' yapın."
           }
         },
         {
@@ -79,7 +79,7 @@
           "@type": "HowToStep",
           "position": 1,
           "name": "Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!)",
-          "text": "`C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse KESİNLİKLE kaldırın."
+          "text": "`C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse mutlaka kaldırın."
         },
         {
           "@type": "HowToStep",
@@ -159,11 +159,35 @@
           📄 Crash Log (.log / .txt) Dosyası Yükle
         </a>
       </div>
+    
+      <!-- Stage 2.3: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
+      <div class="stage2-author-box p-4 rounded-xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
+            OÇ
+          </div>
+          <div>
+            <div class="text-white font-bold">
+              Yazar: <a href="./hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
+            </div>
+            <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Контроlü</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            📅 Son güncelleme: <time datetime="2026-03-15" class="font-semibold text-white">15.03.2026</time>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel İstemci Sürümü</strong>
+          </span>
+        </div>
+      </div>
+
     </section>
 
     <section class="space-y-5">
       <div class="flex items-center justify-between">
-        <h2 class="text-lg font-extrabold text-white">🛠️ League of Legends En Sık Karşılaşılan Hatalar ve Kesin Çözümleri (3 Rehber)</h2>
+        <h2 class="text-lg font-extrabold text-white">🛠️ League of Legends En Sık Karşılaşılan Hatalar ve Çözüm Rehberleri (3 Rehber)</h2>
       </div>
       
         <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
@@ -172,7 +196,7 @@
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">LOL-RECONNECT-LOOP</span>
               <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Çökme &amp; Başlatma</span>
             </div>
-            <span class="text-xs font-bold text-[#88c0a8]">✓ %96 Başarı Oranı • 1290 Doğrulama</span>
+            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
 
           <div class="space-y-2">
@@ -186,7 +210,7 @@
           </div>
 
           <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Kesin Çözüm Adımları</h3>
+            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
             <div class="grid grid-cols-1 gap-2.5">
               
             <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
@@ -194,7 +218,7 @@
                 <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
                 <h4 class="text-xs sm:text-sm font-bold text-white">Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!)</h4>
               </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">`C:\Riot Games\League of Legends\Game\League of Legends.exe` dosyasına sağ tıklayın -&gt; Özellikler -&gt; Uyumluluk sekmesine gelin. &#x27;Bu programı uyumluluk modunda çalıştır&#x27; işaretliyse KESİNLİKLE kaldırın.</p>
+              <p class="text-xs text-gray-300 leading-relaxed pl-8">`C:\Riot Games\League of Legends\Game\League of Legends.exe` dosyasına sağ tıklayın -&gt; Özellikler -&gt; Uyumluluk sekmesine gelin. &#x27;Bu programı uyumluluk modunda çalıştır&#x27; işaretliyse mutlaka kaldırın.</p>
             </div>
             
 
@@ -235,18 +259,18 @@
             <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
               <div class="flex items-center justify-between text-[11px] text-gray-400">
                 <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Fix for &#x27;Reconnect&#x27; loop after Champ Select (Overlays + Compatibility Mode + DNS) • ▲ 1340 Oy</span>
+                <span>Fix for &#x27;Reconnect&#x27; loop after Champ Select (Overlays + Compatibility Mode + DNS)</span>
               </div>
-              <p class="text-gray-300 italic">"League of Legends.exe üzerinde Windows Uyumluluk Modu (Windows 7/8) açıksa Vanguard güncellemesinden sonra oyun hiç başlamıyor. Uyumluluk tikini kaldırınca anında düzeldi!"</p>
+              <p class="text-gray-300 italic">"League of Legends.exe üzerinde Windows Uyumluluk Modu (Windows 7/8) açıksa Vanguard güncellemesinden sonra oyun hiç başlamıyor. Uyumluluk tikini kaldırınca düzeldi!"</p>
             </div>
             
 
             <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
               <div class="flex items-center justify-between text-[11px] text-gray-400">
                 <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>LoL Şampiyon Seçiminden Sonra Oyuna Girmiyor (Yeniden Bağlan Hatası) • ▲ 520 Oy</span>
+                <span>LoL Şampiyon Seçiminden Sonra Oyuna Girmiyor (Yeniden Bağlan Hatası)</span>
               </div>
-              <p class="text-gray-300 italic">"Discord Overlay, MSI Afterburner/RivaTuner ve Nvidia GeForce Experience oyun içi yer paylaşımlarını kapatıp Hextech Onarım mantığıyla Config klasörünü silmek kesin çözüm."</p>
+              <p class="text-gray-300 italic">"Discord Overlay, MSI Afterburner/RivaTuner ve Nvidia GeForce Experience oyun içi yer paylaşımlarını kapatıp Hextech Onarım mantığıyla Config klasörünü silmek çözüm rehberi."</p>
             </div>
             
             </div>
@@ -259,7 +283,7 @@
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAN 185 / VAN -81</span>
               <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Anti-Cheat &amp; Güvenlik</span>
             </div>
-            <span class="text-xs font-bold text-[#88c0a8]">✓ %93 Başarı Oranı • 815 Doğrulama</span>
+            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
 
           <div class="space-y-2">
@@ -273,7 +297,7 @@
           </div>
 
           <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Kesin Çözüm Adımları</h3>
+            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
             <div class="grid grid-cols-1 gap-2.5">
               
             <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
@@ -313,7 +337,7 @@
             <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
               <div class="flex items-center justify-between text-[11px] text-gray-400">
                 <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>How I permanently fixed VAN 185 and VAN -81 errors in League • ▲ 780 Oy</span>
+                <span>How I permanently fixed VAN 185 and VAN -81 errors in League</span>
               </div>
               <p class="text-gray-300 italic">"vgc servisinin Hata Kurtarma (Recovery) sekmesinden 1., 2. ve sonraki hatalarda &#x27;Hizmeti Yeniden Başlat&#x27; seçtiğimden beri VAN 185 tamamen bitti."</p>
             </div>
@@ -328,7 +352,7 @@
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">DX11-ALTTAB-LOCK</span>
               <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Performans &amp; FPS</span>
             </div>
-            <span class="text-xs font-bold text-[#88c0a8]">✓ %97 Başarı Oranı • 510 Doğrulama</span>
+            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
 
           <div class="space-y-2">
@@ -342,7 +366,7 @@
           </div>
 
           <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Kesin Çözüm Adımları</h3>
+            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
             <div class="grid grid-cols-1 gap-2.5">
               
             <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
@@ -373,7 +397,7 @@
             <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
               <div class="flex items-center justify-between text-[11px] text-gray-400">
                 <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Windows 11 Alt+Tab Sonrası LoL FPS Düşüşü ve Donma Çözümü • ▲ 395 Oy</span>
+                <span>Windows 11 Alt+Tab Sonrası LoL FPS Düşüşü ve Donma Çözümü</span>
               </div>
               <p class="text-gray-300 italic">"Windows 11 Ayarlar -&gt; Sistem -&gt; Ekran -&gt; Grafikler -&gt; Pencereli oyunlar için iyileştirmeler ayarını açıp oyunu &#x27;Çerçevesiz (Borderless)&#x27; moda almak Alt+Tab süresini 0 saniyeye indirdi."</p>
             </div>
@@ -383,6 +407,28 @@
         </article>
         
     </section>
+
+    <section class="space-y-2">
+        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
+          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
+            <span>⚠️ Komut Güvenlik Notu:</span>
+            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">regedit / Kayıt Defteri Değişikliği</code>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+              <span class="text-gray-200">Windows Kayıt Defteri (Registry) anahtarlarında donanım, GPU zaman aşımı (TdrDelay) veya uygulama uyumluluk değerlerini düzenler.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+              <span class="text-gray-200">Hatalı kayıt defteri anahtarı silinmesi veya değiştirilmesi sistem kararsızlığına neden olabilir.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+              <span class="text-gray-200">İşlem öncesi Kayıt Defteri'nde ilgili anahtara sağ tıklayıp 'Ver (Export)' ile <code>.reg</code> yedeği alın veya oluşturduğunuz Sistem Geri Yükleme Noktasına dönün.</span>
+            </div>
+          </div>
+        </div></section>
 
     <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-4">
       <h2 class="text-sm sm:text-base font-bold text-white">⚡ Özel Hata Kodu Çözüm Rehberleri</h2>
@@ -428,6 +474,114 @@
 <a href="./diablo-iv-hata-cozumleri.html" class="px-2.5 py-1.5 rounded-lg bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-medium transition">Diablo IV Hata Çözümleri</a>
       </div>
     </section>
+  
+    <!-- Stage 2.3: Bu çözüm işe yaradı mı? Evet / Hayır (Veritabanı Oylama & 20+ Oyda Gerçek Oran) -->
+    <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 space-y-3 shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h2 class="text-sm sm:text-base font-extrabold text-white">Bu çözüm işe yaradı mı?</h2>
+          <p class="text-xs text-gray-400">Geri bildiriminiz veritabanına kaydedilir (istemci başına tek oy). Yeterli oy (20+) biriktiğinde gerçek işe yarama oranı gösterilir.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            id="staticVoteUpBtn"
+            onclick="submitStaticPageVote(9, 'up')"
+            class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition"
+          >
+            <span>👍 Evet</span>
+            <span id="staticVoteUpCount" class="hidden"></span>
+          </button>
+          <button
+            type="button"
+            id="staticVoteDownBtn"
+            onclick="submitStaticPageVote(9, 'down')"
+            class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition"
+          >
+            <span>👎 Hayır</span>
+            <span id="staticVoteDownCount" class="hidden"></span>
+          </button>
+          <span id="staticVoteRateBadge" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30"></span>
+        </div>
+      </div>
+      <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
+    </section>
+    <script>
+      (function() {
+        function getClientId() {
+          try {
+            var k = 'oyuncoz_client_id';
+            var v = localStorage.getItem(k);
+            if (!v) {
+              v = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+              localStorage.setItem(k, v);
+            }
+            return v;
+          } catch (e) {
+            return 'cid_anon';
+          }
+        }
+        function updateVoteUI(data) {
+          if (!data) return;
+          var upCnt = Number(data.helpful_votes || 0);
+          var downCnt = Number(data.unhelpful_votes || 0);
+          var total = Number(data.total_votes || (upCnt + downCnt));
+          var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
+          var upEl = document.getElementById('staticVoteUpCount');
+          var downEl = document.getElementById('staticVoteDownCount');
+          var rateEl = document.getElementById('staticVoteRateBadge');
+          var upBtn = document.getElementById('staticVoteUpBtn');
+          var downBtn = document.getElementById('staticVoteDownBtn');
+          if (upEl) {
+            upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
+            upEl.classList.toggle('hidden', upCnt === 0);
+          }
+          if (downEl) {
+            downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
+            downEl.classList.toggle('hidden', downCnt === 0);
+          }
+          if (rateEl) {
+            rateEl.textContent = showRate ? ('✓ İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
+            rateEl.classList.toggle('hidden', !showRate);
+          }
+          if (upBtn) {
+            upBtn.className = data.user_vote === 'up'
+              ? 'px-4 py-2 rounded-xl border border-[#88c0a8] bg-[#5e9c88]/30 text-xs font-extrabold text-white flex items-center gap-1.5 transition'
+              : 'px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition';
+          }
+          if (downBtn) {
+            downBtn.className = data.user_vote === 'down'
+              ? 'px-4 py-2 rounded-xl border border-red-400/60 bg-red-500/25 text-xs font-extrabold text-red-100 flex items-center gap-1.5 transition'
+              : 'px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition';
+          }
+        }
+        window.submitStaticPageVote = function(issueId, voteType) {
+          fetch('./api/issues/' + issueId + '/vote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Client-Id': getClientId() },
+            body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
+          }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+            if (!d) return;
+            updateVoteUI(d);
+            var msg = document.getElementById('staticVoteFeedbackMsg');
+            if (msg) {
+              msg.classList.remove('hidden');
+              msg.textContent = d.user_vote === 'up'
+                ? '👍 Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
+                : (d.user_vote === 'down' ? '👎 Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
+            }
+          }).catch(function() {});
+        };
+        fetch('./api/issues', { headers: { 'X-Client-Id': getClientId() } })
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(function(list) {
+            if (!Array.isArray(list)) return;
+            var found = list.find(function(x) { return Number(x.id) === 9; });
+            if (found) updateVoteUI(found);
+          }).catch(function() {});
+      })();
+    </script>
+
   </main>
 
   <footer class="border-t border-white/10 bg-[#11161f] py-6 text-center text-xs text-gray-400">

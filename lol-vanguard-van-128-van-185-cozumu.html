@@ -128,7 +128,7 @@
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">
         <span>⚡ LEAGUE OF LEGENDS • VANGUARD REHBERİ</span>
         <span>•</span>
-        <span>%96 Doğrulanmış Çözüm Oranı</span>
+        <span>Adım Adım Teknik Çözüm Rehberi</span>
       </div>
       <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">LoL Vanguard VAN 128, VAN 185, Siyah Ekran ve Yeniden Bağlan (Reconnect) Çözümü</h1>
       <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">League of Legends'a Riot Vanguard entegrasyonu geldikten sonra en sık karşılaşılan VAN 128, VAN 185 ve şampiyon seçimi sonrası 'Yeniden Bağlan (Reconnect)' döngüsü; 3. parti antivirüs sürücü çakışmaları, bozuk vgk.sys çekirdek servisi veya DNS/IPv6 oturum kopmalarından kaynaklanır.</p>
@@ -140,10 +140,34 @@
           📄 Crash Log (.log / .txt) Dosyası Analiz Et
         </a>
       </div>
+    
+      <!-- Stage 2.3: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
+      <div class="stage2-author-box p-4 rounded-xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
+            OÇ
+          </div>
+          <div>
+            <div class="text-white font-bold">
+              Yazar: <a href="./hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
+            </div>
+            <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Контроlü</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            📅 Son güncelleme: <time datetime="2026-03-15" class="font-semibold text-white">15.03.2026</time>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel İstemci Sürümü</strong>
+          </span>
+        </div>
+      </div>
+
     </section>
 
     <section class="space-y-4">
-      <h2 class="text-lg font-extrabold text-white">🛠️ Adım Adım Kesin Çözüm Rehberi</h2>
+      <h2 class="text-lg font-extrabold text-white">🛠️ Adım Adım Çözüm Rehberi</h2>
       
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
@@ -210,6 +234,49 @@
       </div>
     </section>
 
+    <section class="space-y-2">
+        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
+          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
+            <span>⚠️ Komut Güvenlik Notu:</span>
+            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">sc delete (Windows Hizmet Silme Komutu)</code>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+              <span class="text-gray-200">Belirtilen Windows arka plan hizmet kaydını (örn. bozuk vgc / vgk anti-cheat servisini) hizmet tablosundan kaldırır.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+              <span class="text-gray-200">Yanlış hizmet adı yazılması sistem veya oyun istemcisi servislerinin yeniden kurulana kadar çalışmamasına yol açabilir.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+              <span class="text-gray-200">Riot İstemcisi veya ilgili oyun başlatıcısını 'Yönetici Olarak' çalıştırıp 'Onar / Güncelle' seçeneğine tıklayarak hizmeti temiz şekilde yeniden kurun.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
+          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
+            <span>⚠️ Komut Güvenlik Notu:</span>
+            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">netsh int ip reset / winsock reset (Ağ Yığını Sıfırlama)</code>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+              <span class="text-gray-200">Windows TCP/IP ağ yığınını ve Winsock katalog ayarlarını fabrika varsayılanlarına sıfırlar.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+              <span class="text-gray-200">Ağ bağdaştırıcınızda elle (statik) girilmiş IP/DNS yapılandırması veya özel VPN sanal adaptör ayarları varsa sıfırlanabilir.</span>
+            </div>
+            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+              <span class="text-gray-200">Yeniden başlatma sonrasında özel DNS veya statik IP kullanıyorsanız Ağ Bağdaştırıcısı Özellikleri (IPv4) üzerinden tekrar tanımlayın.</span>
+            </div>
+          </div>
+        </div></section>
+
     <section class="space-y-3">
       <h2 class="text-lg font-extrabold text-white">❓ Sıkça Sorulan Sorular (SSS)</h2>
       
@@ -237,6 +304,114 @@
 <a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#263040] text-gray-200 hover:text-white border border-white/10 text-xs font-semibold transition">RDR 2 ERR_GFX_STATE</a>
       </div>
     </section>
+  
+    <!-- Stage 2.3: Bu çözüm işe yaradı mı? Evet / Hayır (Veritabanı Oylama & 20+ Oyda Gerçek Oran) -->
+    <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 space-y-3 shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h2 class="text-sm sm:text-base font-extrabold text-white">Bu çözüm işe yaradı mı?</h2>
+          <p class="text-xs text-gray-400">Geri bildiriminiz veritabanına kaydedilir (istemci başına tek oy). Yeterli oy (20+) biriktiğinde gerçek işe yarama oranı gösterilir.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            id="staticVoteUpBtn"
+            onclick="submitStaticPageVote(9, 'up')"
+            class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition"
+          >
+            <span>👍 Evet</span>
+            <span id="staticVoteUpCount" class="hidden"></span>
+          </button>
+          <button
+            type="button"
+            id="staticVoteDownBtn"
+            onclick="submitStaticPageVote(9, 'down')"
+            class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition"
+          >
+            <span>👎 Hayır</span>
+            <span id="staticVoteDownCount" class="hidden"></span>
+          </button>
+          <span id="staticVoteRateBadge" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30"></span>
+        </div>
+      </div>
+      <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
+    </section>
+    <script>
+      (function() {
+        function getClientId() {
+          try {
+            var k = 'oyuncoz_client_id';
+            var v = localStorage.getItem(k);
+            if (!v) {
+              v = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+              localStorage.setItem(k, v);
+            }
+            return v;
+          } catch (e) {
+            return 'cid_anon';
+          }
+        }
+        function updateVoteUI(data) {
+          if (!data) return;
+          var upCnt = Number(data.helpful_votes || 0);
+          var downCnt = Number(data.unhelpful_votes || 0);
+          var total = Number(data.total_votes || (upCnt + downCnt));
+          var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
+          var upEl = document.getElementById('staticVoteUpCount');
+          var downEl = document.getElementById('staticVoteDownCount');
+          var rateEl = document.getElementById('staticVoteRateBadge');
+          var upBtn = document.getElementById('staticVoteUpBtn');
+          var downBtn = document.getElementById('staticVoteDownBtn');
+          if (upEl) {
+            upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
+            upEl.classList.toggle('hidden', upCnt === 0);
+          }
+          if (downEl) {
+            downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
+            downEl.classList.toggle('hidden', downCnt === 0);
+          }
+          if (rateEl) {
+            rateEl.textContent = showRate ? ('✓ İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
+            rateEl.classList.toggle('hidden', !showRate);
+          }
+          if (upBtn) {
+            upBtn.className = data.user_vote === 'up'
+              ? 'px-4 py-2 rounded-xl border border-[#88c0a8] bg-[#5e9c88]/30 text-xs font-extrabold text-white flex items-center gap-1.5 transition'
+              : 'px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition';
+          }
+          if (downBtn) {
+            downBtn.className = data.user_vote === 'down'
+              ? 'px-4 py-2 rounded-xl border border-red-400/60 bg-red-500/25 text-xs font-extrabold text-red-100 flex items-center gap-1.5 transition'
+              : 'px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition';
+          }
+        }
+        window.submitStaticPageVote = function(issueId, voteType) {
+          fetch('./api/issues/' + issueId + '/vote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Client-Id': getClientId() },
+            body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
+          }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+            if (!d) return;
+            updateVoteUI(d);
+            var msg = document.getElementById('staticVoteFeedbackMsg');
+            if (msg) {
+              msg.classList.remove('hidden');
+              msg.textContent = d.user_vote === 'up'
+                ? '👍 Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
+                : (d.user_vote === 'down' ? '👎 Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
+            }
+          }).catch(function() {});
+        };
+        fetch('./api/issues', { headers: { 'X-Client-Id': getClientId() } })
+          .then(function(r) { return r.ok ? r.json() : []; })
+          .then(function(list) {
+            if (!Array.isArray(list)) return;
+            var found = list.find(function(x) { return Number(x.id) === 9; });
+            if (found) updateVoteUI(found);
+          }).catch(function() {});
+      })();
+    </script>
+
   </main>
 
   <footer class="border-t border-white/10 bg-[#11161f] py-6 text-center text-xs text-gray-400">

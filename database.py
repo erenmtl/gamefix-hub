@@ -187,13 +187,28 @@ def init_db():
         ai_root_cause TEXT NOT NULL,
         ai_solution_steps TEXT NOT NULL,
         verify_command TEXT,
-        success_rate INTEGER DEFAULT 94,
-        views INTEGER DEFAULT 1200,
-        helpful_votes INTEGER DEFAULT 180,
+        success_rate INTEGER DEFAULT 0,
+        views INTEGER DEFAULT 0,
+        helpful_votes INTEGER DEFAULT 0,
         created_at TEXT NOT NULL,
+        updated_at TEXT DEFAULT '2026-03-15',
+        tested_version TEXT DEFAULT 'Windows 10 / 11 (23H2 & 24H2) • Güncel İstemci Sürümü',
+        author_name TEXT DEFAULT 'OyunÇöz Teknik Ekibi',
+        author_role TEXT DEFAULT 'Sistem & Oyun Arıza Editörleri',
         FOREIGN KEY (game_slug) REFERENCES games (slug)
     )
     """)
+
+    for issue_alter_sql in (
+        "ALTER TABLE issues ADD COLUMN updated_at TEXT DEFAULT '2026-03-15'",
+        "ALTER TABLE issues ADD COLUMN tested_version TEXT DEFAULT 'Windows 10 / 11 (23H2 & 24H2) • Güncel İstemci Sürümü'",
+        "ALTER TABLE issues ADD COLUMN author_name TEXT DEFAULT 'OyunÇöz Teknik Ekibi'",
+        "ALTER TABLE issues ADD COLUMN author_role TEXT DEFAULT 'Sistem & Oyun Arıza Editörleri'",
+    ):
+        try:
+            cursor.execute(issue_alter_sql)
+        except Exception:
+            pass
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS threads (
@@ -206,8 +221,8 @@ def init_db():
         system_specs TEXT,
         content TEXT NOT NULL,
         status TEXT DEFAULT 'AI Çözümledi',
-        upvotes INTEGER DEFAULT 12,
-        views INTEGER DEFAULT 145,
+        upvotes INTEGER DEFAULT 0,
+        views INTEGER DEFAULT 0,
         created_at TEXT NOT NULL,
         FOREIGN KEY (game_slug) REFERENCES games (slug)
     )
@@ -221,7 +236,7 @@ def init_db():
         is_ai INTEGER DEFAULT 0,
         ai_mode TEXT,
         content TEXT NOT NULL,
-        helpful_count INTEGER DEFAULT 5,
+        helpful_count INTEGER DEFAULT 0,
         created_at TEXT NOT NULL,
         FOREIGN KEY (thread_id) REFERENCES threads (id) ON DELETE CASCADE
     )
@@ -246,6 +261,36 @@ def init_db():
     cursor.execute("SELECT COUNT(*) as cnt FROM games")
     if cursor.fetchone()["cnt"] == 0:
         seed_initial_data(cursor)
+
+    # Stage 2 Migration: Ensure all issues have author, updated_at, and tested_version populated,
+    # and sync helpful_votes strictly with real rows in user_votes (no fake unverified statistics).
+    cursor.execute("""
+        UPDATE issues
+        SET updated_at = COALESCE(NULLIF(updated_at, ''), '2026-03-15'),
+            author_name = COALESCE(NULLIF(author_name, ''), 'OyunÇöz Teknik Ekibi'),
+            author_role = COALESCE(NULLIF(author_role, ''), 'Sistem & Oyun Arıza Editörleri'),
+            tested_version = CASE
+                WHEN tested_version IS NULL OR tested_version = '' THEN
+                    CASE game_slug
+                        WHEN 'valorant' THEN 'Valorant 9.x / Riot Vanguard • Windows 11 23H2 & 24H2'
+                        WHEN 'cs2' THEN 'Counter-Strike 2 (Source 2 Güncel Yapı) • Windows 10/11'
+                        WHEN 'lol' THEN 'League of Legends 14.x / Riot Vanguard • Windows 10/11'
+                        WHEN 'gtav-fivem' THEN 'GTA V (Build 3095+) & FiveM CitizenFX • Windows 10/11'
+                        WHEN 'minecraft' THEN 'Minecraft Java Edition 1.20.5+ / 1.21 (Java 21) • Windows 10/11'
+                        WHEN 'red-dead-redemption-2' THEN 'RDR 2 (RAGE Vulkan / DX12) • Windows 10/11'
+                        WHEN 'mount-and-blade-2-bannerlord' THEN 'Bannerlord v1.2.x • Windows 10/11'
+                        WHEN 'fc25' THEN 'EA Sports FC 25 + EA AntiCheat • Windows 10/11'
+                        WHEN 'black-myth-wukong' THEN 'Black Myth: Wukong (UE5) • Windows 11 23H2/24H2'
+                        ELSE 'Windows 10 / 11 (23H2 & 24H2) • Güncel İstemci Sürümü'
+                    END
+                ELSE tested_version
+            END,
+            helpful_votes = (
+                SELECT COUNT(*) FROM user_votes uv
+                WHERE uv.target_type = 'issue' AND uv.target_id = issues.id
+            ),
+            views = 0
+    """)
 
     conn.commit()
     conn.close()
@@ -458,17 +503,17 @@ def seed_initial_data(cursor):
                 {
                     "forum": "Reddit r/ValorantTechSupport",
                     "thread": "[SOLVED] VAN 9003 on Windows 11 even when Secure Boot says Enabled in BIOS",
-                    "quote": "BIOS'ta Secure Boot 'Enabled' görünse bile 'Not Active' olabiliyor. CSM kapatıp Secure Boot Mode'u Custom -> Standard yapınca Factory Keys yüklendi ve sorun anında çözüldü.",
-                    "upvotes": 1420
+                    "quote": "BIOS'ta Secure Boot 'Enabled' görünse bile 'Not Active' olabiliyor. CSM kapatıp Secure Boot Mode'u Custom -> Standard yapınca Factory Keys yüklendi ve sorun çözüldü.",
+                    "upvotes": 0
                 },
                 {
                     "forum": "Technopat Sosyal",
                     "thread": "Çözüldü: Valorant VAN 9003 ve VAN 1067 Hatası (ASUS / MSI / Gigabyte Anakartlar)",
                     "quote": "Gigabyte anakartlarda CSM Support kapattıktan sonra Secure Boot altından 'Restore Factory Keys' yapmadan Windows msinfo32 içinde Güvenli Önyükleme Açık olarak görünmüyor.",
-                    "upvotes": 685
+                    "upvotes": 0
                 }
             ]),
-            "ai_root_cause": "Riot Vanguard çekirdek sürücüsü (vgk.sys), Windows 11'de önyükleme zincirinin bütünlüğünü doğrulamak için donanımsal TPM 2.0 ve aktif UEFI Secure Boot (Güvenli Önyükleme) şartı koşar. Forum verilerine göre kullanıcıların %78'inde BIOS'ta Secure Boot 'Enabled' görünmesine rağmen Platform Key (PK) yüklenmediği için durum 'Not Active' kalmaktadır veya `vgc` servisi Windows Hizmetleri'nde durmaktadır.",
+            "ai_root_cause": "Riot Vanguard çekirdek sürücüsü (vgk.sys), Windows 11'de önyükleme zincirinin bütünlüğünü doğrulamak için donanımsal TPM 2.0 ve aktif UEFI Secure Boot (Güvenli Önyükleme) şartı koşar. Forum verilerine göre birçok kullanıcıda BIOS'ta Secure Boot 'Enabled' görünmesine rağmen Platform Key (PK) yüklenmediği için durum 'Not Active' kalmaktadır veya `vgc` servisi Windows Hizmetleri'nde durmaktadır.",
             "ai_solution_steps": json.dumps([
                 {
                     "step": 1,
@@ -507,13 +552,13 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/ValorantCompetitive",
                     "thread": "PSA: 8000Hz / 4000Hz Mouse Polling Rate + HAGS + Discord Overlay causes massive micro-stutter",
                     "quote": "Mouse raporlama hızını (Polling Rate) 4000Hz'den 1000Hz'e çekip Valorant içinden 'Saf Girdi Süresi (Raw Input Buffer)' açtığımda tüm takılmalar bitti.",
-                    "upvotes": 940
+                    "upvotes": 0
                 },
                 {
                     "forum": "DonanımHaber Forum",
                     "thread": "Valorant AMD/NVIDIA Shader Cache ve MPO Kaynaklı Drop Çözümü",
                     "quote": "Windows 11 24H2/25H2 güncellemesi sonrası Tam Ekran İyileştirmelerini devre dışı bırakmak ve GPU Shader Cache temizlemek %1 Low FPS'i ikiye katladı.",
-                    "upvotes": 412
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Unreal Engine 4 tabanlı Valorant'ta anlık takılmaların 3 ana nedeni vardır: (1) 2000Hz+ yüksek polling rate'e sahip farelerde 'Saf Girdi Süresi (Raw Input Buffer)' kapalı olduğunda Windows mesaj kuyruğunun CPU'yu tıkaması, (2) Bozulmuş DirectX / GPU Gölgelendirici Önbelleği (Shader Cache), (3) Windows HAGS (Donanım Hızlandırmalı GPU Zamanlaması) ve Discord Donanım İvmesi çakışması.",
@@ -555,7 +600,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/ValorantTechSupport",
                     "thread": "Fixed 0 ping Packet Loss spikes by setting Valorant Network Buffering & disabling IPv6",
                     "quote": "Ağ bağdaştırıcısından IPv6'yı kapatıp DNS olarak Cloudflare (1.1.1.1) verdiğimde ve oyun içi Ağ Arabelleğini 'Orta' yaptığımda giden paket kaybı %0'a indi.",
-                    "upvotes": 530
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Riot Direct yönlendirmelerinde UDP paketlerinin (özellikle Wi-Fi dolaşım agresifliği, modem QoS/Bufferbloat şişmesi veya hatalı MTU boyutu nedeniyle) parçalanması sonucu oluşur. Ayrıca Realtek/Intel Killer ağ kartlarındaki 'Önceliklendirme Motoru' UDP paketlerini yanlış kuyruğa sokabilmektedir.",
@@ -589,9 +634,9 @@ def seed_initial_data(cursor):
             "forum_sources": json.dumps([
                 {
                     "forum": "Technopat Sosyal",
-                    "thread": "Valorant VAL 43 ve VAL 5 Kesin Çözüm",
+                    "thread": "Valorant VAL 43 ve VAL 5 Çözüm Rehberi",
                     "quote": "RiotLocalMachine.ini ve %localappdata%\\VALORANT\\Saved\\Config klasörünü silip vgc servisini yeniden başlatınca hemen girdi.",
-                    "upvotes": 320
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Riot İstemcisi kimlik doğrulama jetonunun (Auth Token) bozulması veya arka planda asılı kalan `RiotClientServices.exe` sürecinin yeni oturum el sıkışmasını engellemesinden kaynaklanır.",
@@ -621,15 +666,15 @@ def seed_initial_data(cursor):
             "forum_sources": json.dumps([
                 {
                     "forum": "Reddit r/GlobalOffensive",
-                    "thread": "100% Working Fix for 'VAC was unable to verify your game session' in CS2",
-                    "quote": "Dosya doğrulamak tek başına yetmiyor! Steam'i Yönetici olarak çalıştırıp Steam Service onarımı (`steamservice.exe /repair`) yapmak ve profil fotoğrafı/ismini bir kez değiştirmek anında çözüyor.",
-                    "upvotes": 2150
+                    "thread": "Working Fix for 'VAC was unable to verify your game session' in CS2",
+                    "quote": "Dosya doğrulamak tek başına yetmiyor! Steam'i Yönetici olarak çalıştırıp Steam Service onarımı (`steamservice.exe /repair`) yapmak ve profil fotoğrafı/ismini bir kez değiştirmek çözüyor.",
+                    "upvotes": 0
                 },
                 {
                     "forum": "Steam Community Guides",
                     "thread": "CS2 VAC Verify Fix Without Reinstalling Windows",
                     "quote": "DEP (Veri Yürütme Engellemesi) kapalıysa veya üçüncü parti başlatıcılar (CCleaner, Razer Synapse makro servisi) USN Journal'ı kilitliyorsa VAC imza doğrulaması başarısız oluyor.",
-                    "upvotes": 890
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "CS2'de VAC modülü, `steamservice.exe` üzerinden oyun belleği imzasını ve NTFS USN Journal kayıtlarını denetler. Steam servisi yetki kaybederse, oyun kısayoldan (Steam dışı) başlatılırsa veya bozuk `.vpk` önbelleği oluşursa doğrulama reddedilir.",
@@ -671,7 +716,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/GlobalOffensive",
                     "thread": "CS2 Frame Pacing & 1% Low FPS Guide (Stop using outdated CS:GO launch options!)",
                     "quote": "Eski CS:GO başlatma seçeneklerini (`-high -threads`) silin! CS2'de `-high` veya yanlış thread komutu E-Core / P-Core zamanlamasını bozuyor. NVIDIA Reflex 'Etkin' (Takviye değil) olmalı.",
-                    "upvotes": 1780
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Source 2 motoru çoklu iş parçacığı zamanlamasını kendi yönetir. Eski CS:GO başlatma kodları (`-threads`, `-high`, `-processheap`) Source 2'nin iş parçacığı havuzunu bozar. Ayrıca DirectX 11 gölgelendirici önbelleği (`directx_installer` / `shaders`) şiştiğinde her yeni efektte anlık derleme (shader compilation stutter) yaşanır.",
@@ -691,7 +736,7 @@ def seed_initial_data(cursor):
                 {
                     "step": 3,
                     "title": "Paket Kaybı / Jitter Kaynaklı Stutter İçin Ağ Arabelleği",
-                    "detail": "Son güncellemelerle gelen 'Paket Kaybını / Jitter'ı Düzgünleştir (Buffering to smooth over packet loss)' ayarını '1 Paket' olarak seçin; bu ayar sub-tick takılmalarını %80 azaltır.",
+                    "detail": "Son güncellemelerle gelen 'Paket Kaybını / Jitter'ı Düzgünleştir (Buffering to smooth over packet loss)' ayarını '1 Paket' olarak seçin; bu ayar sub-tick takılmalarını önemli ölçüde azaltır.",
                     "difficulty": "Kolay"
                 }
             ]),
@@ -713,7 +758,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/GlobalOffensive",
                     "thread": "Why your mic isn't working in CS2: voice_threshold and Windows Default Communications Device",
                     "quote": "CS2'de varsayılan mikrofon algılama eşiği çok yüksek çalışabiliyor. Konsola `voice_threshold 0` yazmak ve 'Kolaylaştırılmış Bas-Konuş (Streamlined Push to Talk)' açmak sorunu tamamen çözdü.",
-                    "upvotes": 1120
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "CS2 ses alt sistemi, mikrofon gürültü kapısı (noise gate) eşiğini (`voice_threshold`) bazı ses kartlarında çok yüksek algılar ve bas-konuş tuşuna basıldığında ses aygıtını o anda uyandırmaya çalışırken ilk 1-2 saniyeyi yutar.",
@@ -749,7 +794,7 @@ def seed_initial_data(cursor):
                     "forum": "Technopat Sosyal",
                     "thread": "Çözüldü: CS2 pak01.vpk Hatası Sürekli Tekrarlıyor (XMP / EXPO Bellek Kararsızlığı)",
                     "quote": "Sürekli pak01.vpk bozuluyorsa %90 RAM XMP/EXPO profilindeki anlık bit hatasından kaynaklanıyor. RAM frekansını bir kademe düşürünce bir daha hiç VPK hatası almadım.",
-                    "upvotes": 460
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Source 2 motoru sıkıştırılmış `.vpk` arşivlerini RAM üzerinde anlık açar ve CRC kontrolü yapar. Hatalı `.vpk` bloğu veya agresif DDR4/DDR5 XMP/EXPO bellek zamanlaması CRC doğrulamasını bozar.",
@@ -786,14 +831,14 @@ def seed_initial_data(cursor):
                 {
                     "forum": "Reddit r/leagueoflegends",
                     "thread": "Fix for 'Reconnect' loop after Champ Select (Overlays + Compatibility Mode + DNS)",
-                    "quote": "League of Legends.exe üzerinde Windows Uyumluluk Modu (Windows 7/8) açıksa Vanguard güncellemesinden sonra oyun hiç başlamıyor. Uyumluluk tikini kaldırınca anında düzeldi!",
-                    "upvotes": 1340
+                    "quote": "League of Legends.exe üzerinde Windows Uyumluluk Modu (Windows 7/8) açıksa Vanguard güncellemesinden sonra oyun hiç başlamıyor. Uyumluluk tikini kaldırınca düzeldi!",
+                    "upvotes": 0
                 },
                 {
                     "forum": "Technopat Sosyal",
                     "thread": "LoL Şampiyon Seçiminden Sonra Oyuna Girmiyor (Yeniden Bağlan Hatası)",
-                    "quote": "Discord Overlay, MSI Afterburner/RivaTuner ve Nvidia GeForce Experience oyun içi yer paylaşımlarını kapatıp Hextech Onarım mantığıyla Config klasörünü silmek kesin çözüm.",
-                    "upvotes": 520
+                    "quote": "Discord Overlay, MSI Afterburner/RivaTuner ve Nvidia GeForce Experience oyun içi yer paylaşımlarını kapatıp Hextech Onarım mantığıyla Config klasörünü silmek çözüm rehberi.",
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Riot İstemcisi (`LeagueClientUx.exe`) ile oyun motoru (`League of Legends.exe`) arasındaki yerel el sıkışma; (1) `League of Legends.exe` dosyasında Uyumluluk Modu'nun açık kalması (Vanguard uyumluluk modunu engeller), (2) RivaTuner / Discord / Overwolf DLL enjeksiyonu veya (3) bozuk `game.cfg` dosyası nedeniyle kesilmektedir.",
@@ -801,7 +846,7 @@ def seed_initial_data(cursor):
                 {
                     "step": 1,
                     "title": "Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!)",
-                    "detail": "`C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse KESİNLİKLE kaldırın.",
+                    "detail": "`C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse mutlaka kaldırın.",
                     "difficulty": "Kolay"
                 },
                 {
@@ -835,7 +880,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/LeagueOfLegends",
                     "thread": "How I permanently fixed VAN 185 and VAN -81 errors in League",
                     "quote": "vgc servisinin Hata Kurtarma (Recovery) sekmesinden 1., 2. ve sonraki hatalarda 'Hizmeti Yeniden Başlat' seçtiğimden beri VAN 185 tamamen bitti.",
-                    "upvotes": 780
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Arka planda çalışan `vgc.exe` kullanıcı modu servisinin Riot kalp atışı (heartbeat) sunucusuyla olan oturumu zaman aşımına uğradığında veya servis anlık çöktüğünde Windows servisi otomatik yeniden başlatmazsa VAN 185 tetiklenir.",
@@ -871,7 +916,7 @@ def seed_initial_data(cursor):
                     "forum": "Technopat Sosyal",
                     "thread": "Windows 11 Alt+Tab Sonrası LoL FPS Düşüşü ve Donma Çözümü",
                     "quote": "Windows 11 Ayarlar -> Sistem -> Ekran -> Grafikler -> Pencereli oyunlar için iyileştirmeler ayarını açıp oyunu 'Çerçevesiz (Borderless)' moda almak Alt+Tab süresini 0 saniyeye indirdi.",
-                    "upvotes": 395
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Windows Masaüstü Pencere Yöneticisi (DWM) ile Tam Ekran (Exclusive Fullscreen) DirectX 11 takas zinciri (SwapChain) arasında ekran yenileme hızı ve G-Sync/FreeSync durumu senkronize olamadığında oluşur.",
@@ -903,7 +948,7 @@ def seed_initial_data(cursor):
                     "forum": "Cfx.re / FiveM Community Forum",
                     "thread": "[GUIDE] Fixing Texture Loss / City Not Loading on High-Pop RP Servers",
                     "quote": "Extended Texture Budget (Genişletilmiş Doku Bütçesi) çubuğunu %0'da bırakmak FiveM'de özel araç/kıyafet paketleri yüzünden VRAM akışını kilitliyor. %50-%75 arasına çekince tüm harita anında yüklendi!",
-                    "upvotes": 1650
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "FiveM sunucularındaki yüksek boyutlu özel MLO binalar ve eklenti araçlar (add-on cars), GTA V'in varsayılan akış belleği (Streaming Memory) limitini aşar. 'Extended Texture Budget' ayarı düşük olduğunda RAGE motoru yeni yol dokularını VRAM'e yükleyemez.",
@@ -939,7 +984,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/FiveM",
                     "thread": "Solved ERR_GFX_D3D_INIT and DirectX crashes once and for all",
                     "quote": "Belgelerim\\Rockstar Games\\GTA V\\settings.xml içindeki DX_Version değerini kontrol edin ve grafik modlarını (QuantV / NVE) eski sürümse güncelleyin.",
-                    "upvotes": 740
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "DirectX 11 cihazının ekran kartı sürücüsü zaman aşımı (TDR), bozuk `settings.xml` yapılandırması veya eski sürüm ENB/ReShade/NVE grafik eklentileri (`d3d11.dll`, `dxgi.dll`) yüzünden sıfırlanmasıdır.",
@@ -968,8 +1013,8 @@ def seed_initial_data(cursor):
                 {
                     "forum": "Rockstar Support / Reddit r/GrandTheftAutoV_PC",
                     "thread": "Code 134 / Offline Mode Fix (Guvenli Internet & Social Club Cache)",
-                    "quote": "Belgelerim içindeki Rockstar Games\\Social Club ve Launcher klasörlerini silip modem veya DNS önbelleğini sıfırlayınca Code 134 anında düzeldi.",
-                    "upvotes": 510
+                    "quote": "Belgelerim içindeki Rockstar Games\\Social Club ve Launcher klasörlerini silip modem veya DNS önbelleğini sıfırlayınca Code 134 düzeldi.",
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Rockstar Games Servisleri'nin yerel kimlik önbelleğinin bozulması veya İSS (Güvenli İnternet / CGNAT IP bloğu) kaynaklı TLS el sıkışma reddi.",
@@ -1001,7 +1046,7 @@ def seed_initial_data(cursor):
                     "forum": "EA Answers HQ / Reddit r/EASportsFC",
                     "thread": "[PC] Fixed EA AntiCheat Launch Failure & Splash Screen Crash in FC 25",
                     "quote": "Oyun klasöründeki EAAntiCheat.Installer.exe dosyasını Yönetici olarak açıp önce 'Uninstall All', sonra 'Install' yapmak ve FC25.exe dijital imzasını yüklemek sorunu tamamen çözdü.",
-                    "upvotes": 1190
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "EA AntiCheat çekirdek sürücüsü (`EAAntiCheat.sys`), güncelleme sırasında eski sertifika önbelleğiyle çakıştığında veya `RivaTuner / Overwolf` gibi katman yazılımları `FC25.exe` belleğine erken kanca attığında başlatmayı iptal eder.",
@@ -1037,7 +1082,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/EASportsFC",
                     "thread": "PC Stutter & Cutscene FPS Drop Fix: fcsetup.ini & Cloth/Hair Physics",
                     "quote": "Oyun içi Dinamik Çözünürlük (Dynamic Resolution) kapatıp Telli Saç (Strand Based Hair) ayarını Kapalı yapmak ve Ara Sahne Kalitesini 'Tam Kare Hızı (Full Frame Rate)' seçmek korner takılmalarını %100 bitirdi.",
-                    "upvotes": 980
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Frostbite motorunda 'Telli Saç (Strand Based Hair)' ve 'Yarım Kare Hızı Ara Sahne' açık olduğunda korner/yakın çekim kameralarda GPU tessellation yükü aniden 4 katına çıkar ve V-Sync zamanlayıcısı kilitlenir.",
@@ -1069,7 +1114,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/MinecraftHelp",
                     "thread": "[Java] Solved Exit Code 1 & GLFW Error 65542 on laptops and modded 1.20 / 1.21",
                     "quote": "Minecraft 1.20.5 ve 1.21 sürümleri Java 21 gerektiriyor! Eski Java 17 yolu seçiliyse veya mods klasöründe eski sürüm OptiFine/Fabric API kalmışsa anında Exit Code 1 veriyor.",
-                    "upvotes": 1540
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Exit Code 1 hatasının iki temel nedeni vardır: (1) `.minecraft\\mods` klasöründe seçilen oyun sürümüyle uyumsuz bir mod/OptiFine `.jar` dosyası bulunması, (2) `javaw.exe` sürecinin harici ekran kartı (NVIDIA/AMD) yerine bozuk dahili GPU OpenGL sürücüsüyle (`opengl32.dll`) başlatılması.",
@@ -1105,7 +1150,7 @@ def seed_initial_data(cursor):
                     "forum": "Technopat Sosyal / Reddit r/feedthebeast",
                     "thread": "Minecraft RAM Verme Hatası: Çok Fazla RAM Vermek Neden Drop Yapar? (Aikar's Flags)",
                     "quote": "Minecraft'a 12GB-16GB RAM vermek Java Garbage Collector'un tek seferde devasa bellek temizliği yaparken oyunu dondurmasına yol açar. 4GB-6GB arası verip G1GC argümanları kullanmak tüm donmaları bitirdi.",
-                    "upvotes": 870
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "JVM (Java Sanal Makinesi) gereğinden fazla RAM (`-Xmx16G` gibi) ayrıldığında çöp toplama (Garbage Collection) döngüsünü geciktirir ve tek seferde büyük bellek bloğunu temizlerken 'Stop-the-World' duraksaması yaşatır.",
@@ -1137,7 +1182,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/CODWarzone",
                     "thread": "How I stopped DirectX 0x887A0005 & 0x00001338 crashes in Warzone / BO6",
                     "quote": "VRAM Scale Target (VRAM Ölçek Hedefi) varsayılan olarak 90 geliyor ve CoD belleği taşırıp sürücüyü çökertiyor. Bu değeri 70'e çekip İsteğe Bağlı Doku Akışını (On-Demand Texture Streaming) Minimal yapınca çökmeler tamamen bitti.",
-                    "upvotes": 1680
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "IW 9.0 motoru, VRAM Scale Target %85-%90 olduğunda Windows DWM için ayrılan paylaşımlı GPU belleğine taşar ve DirectX 12 `DXGI_ERROR_DEVICE_REMOVED (0x887A0005)` hatasını tetikler.",
@@ -1167,7 +1212,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/CODWarzone",
                     "thread": "PSA: 'Packet Burst' in Warzone is often CPU Thread Bottleneck + On-Demand Texture Streaming!",
                     "quote": "Belgelerim\\Call of Duty\\players klasöründeki ayar dosyasında RendererWorkerCount değerini işlemcinizin fiziksel çekirdek sayısına (veya 1 eksiğine) eşitlemek Packet Burst takılmalarını mucizevi şekilde çözüyor.",
-                    "upvotes": 1290
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Warzone'daki 'Packet Burst' uyarısı yalnızca internetten değil, işlemcinin sunucudan gelen sıkıştırılmış dünya durum paketlerini ve anlık indirilen dokuları (`On-Demand Texture Streaming`) zamanında işleyememesinden kaynaklanır.",
@@ -1198,8 +1243,8 @@ def seed_initial_data(cursor):
                 {
                     "forum": "Reddit r/playrust",
                     "thread": "Crashing on Asset Warmup with 16GB RAM? Fix your Windows Pagefile (Virtual Memory)!",
-                    "quote": "Rust sunucuya girerken anlık 22GB+ sanal bellek (commit charge) talep ediyor. 16GB RAM'iniz varsa ve Windows Sanal Belleği (Pagefile) kapalı veya küçükse Asset Warmup'ta %100 çöker.",
-                    "upvotes": 1450
+                    "quote": "Rust sunucuya girerken anlık 22GB+ sanal bellek (commit charge) talep ediyor. 16GB RAM'iniz varsa ve Windows Sanal Belleği (Pagefile) kapalı veya küçükse Asset Warmup'ta çökebilir.",
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Unity tabanlı Rust, büyük haritalı sunucularda tüm prefab varlıklarını yüklerken 16GB fiziksel RAM'i aşar. SSD üzerinde yeterli Sanal Bellek (`pagefile.sys`) yoksa Windows bellek tahsisini reddeder (`OutOfMemoryException`).",
@@ -1229,7 +1274,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/playrust",
                     "thread": "Reminder: Always set gc.buffer 2048 or 4096 in F1 console!",
                     "quote": "Rust varsayılan olarak `gc.buffer 256` ile açılıyor ve bellek tamponu her dakikada bir dolup oyunu donduruyor. `gc.buffer 2048` yapınca takılmalar bitti.",
-                    "upvotes": 1120
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Unity motorunun varsayılan 256MB çöp toplama tamponu (`gc.buffer`) Rust'ın yoğun varlık akışında çok sık dolar.",
@@ -1261,7 +1306,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/apexlegends",
                     "thread": "Solved 0x887A0006 DXGI_ERROR_DEVICE_HUNG on NVIDIA & AMD cards",
                     "quote": "Spot Shadow Detail (Spot Gölge Detayı) ayarını Kapalı yapmak ve DirectX 12 başlatma seçeneğiyle çalıştırmak DXGI çökmesini tamamen ortadan kaldırdı.",
-                    "upvotes": 950
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Modifiye Source motorunda dinamik spot gölge hesaplamaları yüksek GPU Boost saat hızlarında TDR (Timeout Detection and Recovery) süresini aşarak sürücüyü askıda bırakır.",
@@ -1291,7 +1336,7 @@ def seed_initial_data(cursor):
                     "forum": "EA Forums / Reddit r/apexuniversity",
                     "thread": "Fix for 100% CPU usage spike at the start of every match in Apex",
                     "quote": "NVIDIA/AMD Shader Cache klasörünü temizledikten sonra lobide 2 dakika bekleyip tüm harita shaderlarının arka planda derlenmesini sağlamak %100 CPU sorununu çözüyor.",
-                    "upvotes": 680
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Harita gölgelendiricileri (Vulkan/DX11 Shaders) maç başında tüm CPU çekirdeklerinde eşzamanlı derlendiğinde ağ iş parçacığı zaman aşımına uğrayarak `code:net` verir.",
@@ -1323,10 +1368,10 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/cyberpunkgame",
                     "thread": "Ultimate Fix for 'Cyberpunk 2077 has flatlined' after patch / mod updates",
                     "quote": "Oyunu silip yükleseniz bile klasörde kalan eski `r6/cache/modded`, `red4ext` ve `bin/x64/version.dll` dosyaları silinmiyor! Bunları temizleyip UserSettings.json silince hemen açıldı.",
-                    "upvotes": 1890
+                    "upvotes": 0
                 }
             ]),
-            "ai_root_cause": "REDengine 4 çökme günlüklerine (`stacktrace.txt`) göre 'Flatlined' hatalarının %85'i; oyun güncellendikten sonra kalan uyumsuz Cyber Engine Tweaks (`version.dll`), RED4ext/ArchiveXL kancaları veya bozuk `UserSettings.json` kaynaklıdır.",
+            "ai_root_cause": "REDengine 4 çökme günlüklerine (`stacktrace.txt`) göre 'Flatlined' hatalarının büyük çoğunluğu; oyun güncellendikten sonra kalan uyumsuz Cyber Engine Tweaks (`version.dll`), RED4ext/ArchiveXL kancaları veya bozuk `UserSettings.json` kaynaklıdır.",
             "ai_solution_steps": json.dumps([
                 {
                     "step": 1,
@@ -1359,7 +1404,7 @@ def seed_initial_data(cursor):
                     "forum": "Steam Community / Reddit r/cyberpunkgame",
                     "thread": "Fix for Audio Crackling (Sample Rate 48000Hz) & Map Opening VRAM Leak",
                     "quote": "Windows Ses Ayarları'ndan örnekleme hızını 192000Hz/96000Hz yerine 24 bit 48000 Hz (DVD Kalitesi) yapınca ses cızırtısı tamamen kesildi.",
-                    "upvotes": 670
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "REDengine 4 ses mikseri 96kHz/192kHz örnekleme hızlarında tampon taşması yaşar. Harita açılışındaki FPS düşüşü ise 8GB/12GB VRAM'li kartlarda Işın İzleme doku havuzunun dolmasından kaynaklanır.",
@@ -1391,7 +1436,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/Eldenring",
                     "thread": "Solved 'Inappropriate Activity Detected' after DLC / Patch update",
                     "quote": "Game\\EasyAntiCheat\\easyanticheat_eos_setup.exe dosyasını yönetici olarak çalıştırıp onarmak ve Steam DLC/oyun dosyalarını doğrulamak sorunu hemen çözdü.",
-                    "upvotes": 1150
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Easy Anti-Cheat (EOS) servisinin güncelleme sonrası imza kataloglarının (`Certificates` klasörü) eşleşmemesi veya Windows Çekirdek Yalıtımı ile eski EAC sürücüsünün çakışmasıdır.",
@@ -1421,7 +1466,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/Eldenring",
                     "thread": "The secret culprit behind Elden Ring's 1-second double freezes: Device Association Service & Xbox Game Pass virtual disks",
                     "quote": "Aygıt Yöneticisi'nde Xbox uygulaması tarafından oluşturulan 'Xvdd SCSI Miniport' sanal disk sürücüsü sürekli yenilendiği için Elden Ring her yenilemede 2 kez donuyor!",
-                    "upvotes": 2400
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "FromSoftware motoru DirectInput üzerinden bağlı donanım listesi (`WM_DEVICECHANGE`) her değiştiğinde tüm kontrolcüleri yeniden tarar. Windows'taki sanal diskler (`Xvdd`) veya temassızlık yapan USB aygıtları bu taramayı tetikleyerek çift donmaya yol açar.",
@@ -1453,7 +1498,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/PUBATTLEGROUNDS",
                     "thread": "Instant shortcut & permanent DNS/MTU fix for stuck on Lobby Screen after match",
                     "quote": "Lobi takıldığında Backspace -> Shift+Backspace yapmak lobiyi anında yeniliyor! Kalıcı çözüm için CoherentUI_Host.exe'ye güvenlik duvarı izni vermek ve Cloudflare DNS kullanmak gerekiyor.",
-                    "upvotes": 920
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "PUBG lobisi HTML5 tabanlı bir web arayüzüdür (`CoherentUI_Host.exe`). Maç sonunda lobi sunucusuna yapılan WebSocket bağlantısı MTU parçalanması veya DNS gecikmesi yüzünden zaman aşımına uğradığında arayüz yüklenemez.",
@@ -1483,7 +1528,7 @@ def seed_initial_data(cursor):
                     "forum": "Reddit r/CompetitivePUBG",
                     "thread": "Why Pro Players use DirectX 11 Enhanced instead of DX12 or regular DX11",
                     "quote": "Normal DX11 tek çekirdeğe yükleniyor, DX12 ise stutter yapıyor. 'DirectX 11 Enhanced' seçmek render yükünü çoklu çekirdeklere dağıtarak %1 Low FPS'i ciddi oranda artırıyor.",
-                    "upvotes": 810
+                    "upvotes": 0
                 }
             ]),
             "ai_root_cause": "Standart DX11 modunda çizim çağrıları (Draw Calls) tek bir ana render iş parçacığında toplanır ve kalabalık şehirlerde CPU darboğazı yaratır.",
@@ -1576,7 +1621,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 11 Pro 24H2 | Ryzen 5 5600X | RTX 4060 | ASUS TUF B550-PLUS",
             "content": "Arkadaşlar BIOS'a girdim OS Type kısmını Windows UEFI Mode yaptım ama oyuna girince 2. rauntta VAN 9003 verip atıyor. msinfo32'ye baktığımda Güvenli Önyükleme Durumu hala Kapalı görünüyor. Nasıl aktif ederim?",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 42,
+            "upvotes": 0,
             "views": 610,
             "created_at": "15 dakika önce",
             "replies": [
@@ -1584,7 +1629,7 @@ def seed_initial_data(cursor):
                     "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
-                    "content": "Merhaba **EmreK_VLR**! ASUS B550 serisi anakartlarda sadece `OS Type: Windows UEFI Mode` seçmek, eğer daha önce Key Management anahtarları silindiyse Secure Boot'u `Active` durumuna geçirmez.\n\n### Adım Adım Kesin Çözüm (ASUS BIOS):\n1. Bilgisayarı yeniden başlatıp `DEL` veya `F2` ile BIOS'a girin ve `F7` tuşuyla **Advanced Mode**'a geçin.\n2. **Boot** -> **CSM (Compatibility Support Module)** menüsüne girip `Launch CSM` ayarının **Disabled** olduğundan emin olun.\n3. **Boot** -> **Secure Boot** menüsüne dönün. `OS Type` değerini **Windows UEFI Mode** yapın.\n4. Hemen altındaki **Key Management** sekmesine girin ve **Install Default Secure Boot Keys** (veya *Restore Factory Keys*) seçeneğine tıklayıp onaylayın.\n5. `Secure Boot State` satırının **User / Active** olarak değiştiğini göreceksiniz. `F10` ile kaydedip çıkın.",
+                    "content": "Merhaba **EmreK_VLR**! ASUS B550 serisi anakartlarda sadece `OS Type: Windows UEFI Mode` seçmek, eğer daha önce Key Management anahtarları silindiyse Secure Boot'u `Active` durumuna geçirmez.\n\n### Adım Adım Çözüm Rehberi (ASUS BIOS):\n1. Bilgisayarı yeniden başlatıp `DEL` veya `F2` ile BIOS'a girin ve `F7` tuşuyla **Advanced Mode**'a geçin.\n2. **Boot** -> **CSM (Compatibility Support Module)** menüsüne girip `Launch CSM` ayarının **Disabled** olduğundan emin olun.\n3. **Boot** -> **Secure Boot** menüsüne dönün. `OS Type` değerini **Windows UEFI Mode** yapın.\n4. Hemen altındaki **Key Management** sekmesine girin ve **Install Default Secure Boot Keys** (veya *Restore Factory Keys*) seçeneğine tıklayıp onaylayın.\n5. `Secure Boot State` satırının **User / Active** olarak değiştiğini göreceksiniz. `F10` ile kaydedip çıkın.",
                     "helpful_count": 38,
                     "created_at": "14 dakika önce"
                 },
@@ -1607,7 +1652,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 11 | i5-13400F | RX 6700 XT | 16GB DDR4 3200MHz",
             "content": "Özellikle Ancient ve Anubis haritalarında suya girince veya molotof/sis atıldığında oyun inanılmaz takılıyor. AMD Adrenalin sürücüm güncel, başlatma seçeneklerinde -high -threads 8 yazılı.",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 29,
+            "upvotes": 0,
             "views": 420,
             "created_at": "1 saat önce",
             "replies": [
@@ -1630,7 +1675,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 10 | Ryzen 5 3600 | GTX 1660 Super 6GB | 16GB RAM",
             "content": "Sunucuda 150+ kişi varken şehir merkezine girdiğimde binalar kağıt gibi oluyor ve yollar yok oluyor. Tüm ayarlarım en düşükte olmasına rağmen düzelmedi.",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 35,
+            "upvotes": 0,
             "views": 530,
             "created_at": "3 saat önce",
             "replies": [
@@ -1653,7 +1698,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 11 | Ryzen 7 5800X3D | RTX 3070 | 32GB RAM",
             "content": "Meydan savaşlarında hiçbir sorun yok ama büyük şehir kuşatmalarında merdivenler kurulurken d3d_device_context_map at rglGPU_device::lock_texture hatasıyla masaüstüne atıyor.",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 51,
+            "upvotes": 0,
             "views": 740,
             "created_at": "4 saat önce",
             "replies": [
@@ -1676,7 +1721,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 11 | Ryzen 5 7500F | RTX 4060 Ti | 32GB DDR5",
             "content": "Oyunu Vulkan'da oynuyorum, son NVIDIA sürücü güncellemesinden sonra kasabaya atla girerken ERR_GFX_STATE verip çöküyor.",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 64,
+            "upvotes": 0,
             "views": 890,
             "created_at": "6 saat önce",
             "replies": [
@@ -1684,7 +1729,7 @@ def seed_initial_data(cursor):
                     "author_name": "OyunÇöz AI (Teknik Analiz Motoru)",
                     "is_ai": 1,
                     "ai_mode": "Forum + AI Sentezi",
-                    "content": "Ekran kartı sürücüsü güncellendiğinde RDR 2'nin eski Vulkan boru hattı (`sga_vulkan_final_init`) dosyaları geçersiz kalır ve `ERR_GFX_STATE` çökmesine yol açar.\n\n### 1 Dakikada Kesin Çözüm:\n1. `Belgeler\\Rockstar Games\\Red Dead Redemption 2\\Settings` klasörünü açın.\n2. **`sga_`** ile başlayan 3 önbellek dosyasını silin (`system.xml` dosyasını silmeyin).\n3. Steam başlatma seçeneklerine `-ignorepipelinecache` parametresini ekleyin.",
+                    "content": "Ekran kartı sürücüsü güncellendiğinde RDR 2'nin eski Vulkan boru hattı (`sga_vulkan_final_init`) dosyaları geçersiz kalır ve `ERR_GFX_STATE` çökmesine yol açar.\n\n### Adım Adım Çözüm Rehberi:\n1. `Belgeler\\Rockstar Games\\Red Dead Redemption 2\\Settings` klasörünü açın.\n2. **`sga_`** ile başlayan 3 önbellek dosyasını silin (`system.xml` dosyasını silmeyin).\n3. Steam başlatma seçeneklerine `-ignorepipelinecache` parametresini ekleyin.",
                     "helpful_count": 59,
                     "created_at": "6 saat önce"
                 }
@@ -1699,7 +1744,7 @@ def seed_initial_data(cursor):
             "system_specs": "Windows 11 | i7-14700K | RTX 4070 Super 12GB | 32GB DDR5",
             "content": "Ekran kartımda 12GB VRAM var ama daha oyunun menüsüne bile gelemeden gölgelendirici derlemesinde Out of Video Memory hatası alıyorum.",
             "status": "OyunÇöz AI Çözümledi",
-            "upvotes": 48,
+            "upvotes": 0,
             "views": 690,
             "created_at": "8 saat önce",
             "replies": [

@@ -304,6 +304,60 @@ function analyzeTechnicalRisk(combinedText) {
   return risks;
 }
 
+function buildRiskyCommandNotesHtml(rawText) {
+  const txt = String(rawText || '');
+  const notes = [];
+
+  if (/\bbcdedit\b/i.test(txt)) {
+    notes.push({
+      cmd: 'bcdedit',
+      what: 'Windows Önyükleme Yapılandırma Verilerini (BCD) değiştirerek çekirdek doğrulama veya önyükleme parametrelerini günceller.',
+      risk: 'Yanlış parametre kullanımı Windows açılış davranışını veya sürücü imza doğrulamasını etkileyebilir.',
+      undo: 'Yönetici CMD ekranında varsayılan önyükleme bütünlüğüne dönmek için: bcdedit /deletevalue nointegritychecks ve bcdedit /set testsigning off komutlarını çalıştırıp sistemi yeniden başlatın.'
+    });
+  }
+  if (/\bsc\s+delete\b/i.test(txt)) {
+    notes.push({
+      cmd: 'sc delete (vgc / vgk)',
+      what: 'Belirtilen Windows arka plan hizmetini (örn. Riot Vanguard vgc/vgk) kayıt defterinden ve hizmet listesinden kaldırır.',
+      risk: 'Hizmet silindikten sonra ilgili oyun veya anti-cheat istemcisi onarım yapılana kadar başlatılamaz.',
+      undo: 'Riot İstemcisi (veya ilgili oyun başlatıcısı) üzerinden "Onar / Güncelle" seçeneğini çalıştırarak hizmeti temiz şekilde yeniden kurun ve bilgisayarı yeniden başlatın.'
+    });
+  }
+  if (/\b(regedit|kayıt\s*defteri|hkey_|dword|tdrdelay)\b/i.test(txt)) {
+    notes.push({
+      cmd: 'regedit (Kayıt Defteri)',
+      what: 'Windows Kayıt Defteri (Registry) altındaki sistem veya ekran kartı zaman aşımı (TdrDelay vb.) anahtarlarını düzenler.',
+      risk: 'Hatalı anahtar silinmesi veya yanlış DWORD değeri girilmesi sistem kararlılığını bozabilir.',
+      undo: 'Değişiklik öncesi Regedit üzerinden "Dosya > Ver (.reg)" ile aldığınız yedeğe çift tıklayarak veya oluşturduğunuz DWORD değerini silip bilgisayarı yeniden başlatarak geri alabilirsiniz.'
+    });
+  }
+  if (/\bnetsh\s+int\s+ip\s+reset\b/i.test(txt)) {
+    notes.push({
+      cmd: 'netsh int ip reset',
+      what: 'Windows TCP/IP ağ yığınını (IPv4/IPv6 soket ve yönlendirme tablolarını) fabrika varsayılanlarına sıfırlar.',
+      risk: 'Ağ bağdaştırıcınızda elle (statik) girilmiş IP veya özel DNS adresleri varsa otomatik (DHCP) moda döner.',
+      undo: 'Denetim Masası > Ağ ve Paylaşım Merkezi > Bağdaştırıcı Ayarları üzerinden özel DNS/statik IP ayarlarınızı yeniden girebilir veya Sistem Geri Yükleme Noktasına dönebilirsiniz.'
+    });
+  }
+
+  if (notes.length === 0) return '';
+
+  return notes.map(n => `
+    <div class="rounded-xl p-3.5 bg-[#1b1922] border border-amber-400/40 text-xs space-y-1.5 shadow-sm">
+      <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
+        <span>⚠️ Kritik Komut Bilgilendirmesi:</span>
+        <code class="px-1.5 py-0.5 rounded bg-black/40 text-amber-100 font-mono">${escapeHTML(n.cmd)}</code>
+      </div>
+      <div class="grid grid-cols-1 gap-1 text-gray-200 leading-relaxed">
+        <div><strong class="text-[#a3d9c6]">Ne yapar?:</strong> ${escapeHTML(n.what)}</div>
+        <div><strong class="text-amber-300">Risk:</strong> ${escapeHTML(n.risk)}</div>
+        <div><strong class="text-sky-300">Geri alma:</strong> ${escapeHTML(n.undo)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
 function buildSafetyBannerHtml(combinedText) {
   const risks = analyzeTechnicalRisk(combinedText);
   if (risks.length === 0) return '';
@@ -1260,10 +1314,8 @@ async function fetchStatus() {
     const data = await res.json();
     STATE.hasServerApiKey = data.has_server_api_key;
     const label = document.getElementById('aiStatusLabel');
-    if (STATE.hasServerApiKey) {
-      label.textContent = 'Canlı Gemini 3.8 Flash (API Key Aktif)';
-    } else {
-      label.textContent = 'Akıllı Forum + AI Motoru Aktif';
+    if (label) {
+      label.textContent = 'OyunÇöz Teknik Analiz Motoru Aktif';
     }
   } catch (err) {
     console.error('Status error:', err);
@@ -1297,7 +1349,7 @@ function renderSidebarGames() {
           <div class="text-[11px] text-gray-400">Genel Forum & AI Akışı</div>
         </div>
       </div>
-      <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-semibold">${totalIssues}</span>
+      ${totalIssues > 0 ? `<span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-semibold">${totalIssues}</span>` : ''}
     </button>
   `;
 
@@ -1305,6 +1357,9 @@ function renderSidebarGames() {
     const isActive = STATE.selectedGame === g.slug;
     const imgSrc = resolveSafeCoverUrl(g.image_url, g.short_name || g.name || g.slug, g.accent_color, g.category);
     const safeTitle = (g.short_name || g.slug || '').replace(/'/g, "\\'");
+    const countBadge = g.issue_count > 0
+      ? `<span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-semibold shrink-0">${g.issue_count}</span>`
+      : '';
     html += `
       <button onclick="selectGame('${g.slug}')" class="game-nav-item ${isActive ? 'active' : ''}">
         <div class="flex items-center gap-3 min-w-0">
@@ -1319,7 +1374,7 @@ function renderSidebarGames() {
             <div class="text-[11px] text-gray-400 truncate">${escapeHTML(g.category)}</div>
           </div>
         </div>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-200 font-semibold shrink-0">${g.issue_count}</span>
+        ${countBadge}
       </button>
     `;
   }
@@ -1456,11 +1511,11 @@ function updateDynamicSEO() {
     if (STATE.selectedGame === 'all') {
       document.title = STATE.searchQuery
         ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | OyunÇöz`
-        : 'OyunÇöz | Oyun Hata Çözümleri, VAN 9003, CS2 VAC, FPS Artırma & Akıllı Arıza Çözüm Merkezi';
+        : 'OyunÇöz | Oyun Hata Kodları ve FPS Çözümleri';
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          'OyunÇöz ile Valorant VAN 9003 & VAN 1067, CS2 VAC oturum doğrulama ve Packet Burst, LoL Vanguard VAN 128, GTA V, Minecraft Exit Code 1, RDR 2, Bannerlord ve 30+ popüler oyunun hata çözümlerine saniyeler içinde ulaşın.'
+          'Valorant VAN 9003, CS2 VAC, LoL VAN 128, GTA V, Minecraft Exit Code 1 ve popüler PC oyunları için adım adım teknik hata kodu ve FPS çözüm rehberi.'
         );
       }
       if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
@@ -1478,7 +1533,7 @@ function updateDynamicSEO() {
         if (metaDesc) {
           metaDesc.setAttribute(
             'content',
-            `${game.name} (${game.engine}) için en güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve OyunÇöz adım adım teknik rehberi.`
+            `${game.name} (${game.engine}) için güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve OyunÇöz adım adım teknik rehberi.`
           );
         }
         const gameUrl = `${baseUrl}?game=${encodeURIComponent(game.slug)}`;
@@ -1487,23 +1542,6 @@ function updateDynamicSEO() {
           window.history.replaceState({}, '', `${window.location.pathname}?game=${encodeURIComponent(game.slug)}`);
         }
       }
-    }
-
-    // Populate dynamic FAQPage Schema from current visible issues for Rich Search Snippets
-    if (schemaEl && Array.isArray(STATE.issues) && STATE.issues.length > 0) {
-      const faqEntities = STATE.issues.slice(0, 8).map(iss => ({
-        '@type': 'Question',
-        name: `${iss.game_name || ''} ${iss.title} (${iss.error_code || 'Çözüm'})`.trim(),
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: (iss.ai_root_cause || iss.symptom_summary || '').replace(/[#*`>_~]/g, '').substring(0, 600)
-        }
-      }));
-      schemaEl.textContent = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: faqEntities
-      });
     }
   } catch (e) {
     console.warn('Dynamic SEO update warning:', e);
@@ -1514,12 +1552,14 @@ function renderHomeShowcase() {
   try {
     const totalGamesEl = document.getElementById('hudTotalGamesStat');
     const totalIssuesEl = document.getElementById('hudTotalIssuesStat');
+    const allIssuesBtnEl = document.getElementById('allIssuesLinkBtn');
     const gamesGrid = document.getElementById('homeGamesShowcaseGrid');
     const trendingGrid = document.getElementById('homeTrendingIssuesGrid');
 
-    const totalIssuesCount = STATE.games.reduce((acc, g) => acc + (g.issue_count || 0), 0) || STATE.issues.length || 50;
-    if (totalGamesEl) totalGamesEl.textContent = `${STATE.games.length || 30}+ Oyun`;
-    if (totalIssuesEl) totalIssuesEl.textContent = `${totalIssuesCount}+ Rehber`;
+    const totalIssuesCount = STATE.games.reduce((acc, g) => acc + (g.issue_count || 0), 0) || STATE.issues.length;
+    if (totalGamesEl && STATE.games.length > 0) totalGamesEl.textContent = `${STATE.games.length} Oyun`;
+    if (totalIssuesEl && totalIssuesCount > 0) totalIssuesEl.textContent = `${totalIssuesCount} Rehber`;
+    if (allIssuesBtnEl && totalIssuesCount > 0) allIssuesBtnEl.textContent = `Tüm ${totalIssuesCount} Çözüm Rehberini Listele →`;
 
     if (gamesGrid && STATE.games.length > 0) {
       const featuredGames = STATE.selectedGame === 'all'
@@ -1532,6 +1572,9 @@ function renderHomeShowcase() {
       gamesGrid.innerHTML = featuredGames.map(g => {
         const imgSrc = resolveSafeCoverUrl(g.image_url, g.short_name || g.name || g.slug, g.accent_color, g.category);
         const safeTitle = (g.short_name || g.slug || '').replace(/'/g, "\\'");
+        const solBadge = g.issue_count > 0
+          ? `<span class="absolute top-1.5 right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/75 text-[#a3d9c6] border border-white/10">${g.issue_count} Rehber</span>`
+          : '';
         return `
           <div
             onclick="selectGame('${g.slug}'); switchTab('issues');"
@@ -1545,9 +1588,7 @@ function renderHomeShowcase() {
                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
               />
               <div class="absolute inset-0 bg-gradient-to-t from-[#161c28] via-transparent to-transparent"></div>
-              <span class="absolute top-1.5 right-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/75 text-[#a3d9c6] border border-white/10">
-                ${g.issue_count || 2} Çözüm
-              </span>
+              ${solBadge}
             </div>
             <div class="p-2.5">
               <div class="text-xs font-bold text-white truncate group-hover:text-[#88c0a8] transition">${escapeHTML(g.short_name)}</div>
@@ -1563,6 +1604,12 @@ function renderHomeShowcase() {
       trendingGrid.innerHTML = topIssues.map(iss => {
         const imgSrc = resolveSafeCoverUrl(iss.game_image_url, iss.game_short_name || iss.game_slug, iss.accent_color, iss.category);
         const safeTitle = (iss.game_short_name || iss.game_slug || '').replace(/'/g, "\\'");
+        const rateStatus = (iss.show_success_rate && iss.total_votes >= 20 && iss.success_rate != null)
+          ? `<span class="text-[#88c0a8] font-semibold">✓ İşe yarama oranı: %${iss.success_rate} (${iss.total_votes} Oy)</span>`
+          : `<span class="text-gray-400">📅 Güncelleme: ${escapeHTML(iss.updated_at_display || '15.03.2026')}</span>`;
+        const voteLabel = iss.helpful_votes > 0
+          ? `👍 ${iss.helpful_votes} Evet • Rehberi Gör →`
+          : `Adım Adım Rehberi Gör →`;
         return `
           <div
             onclick="quickSearchTag('${(iss.error_code || iss.title).replace(/'/g, '')}')"
@@ -1579,13 +1626,13 @@ function renderHomeShowcase() {
                 <span class="text-xs font-bold text-gray-200 truncate">${escapeHTML(iss.game_short_name)}</span>
               </div>
               <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">
-                ${iss.error_code}
+                ${escapeHTML(iss.error_code)}
               </span>
             </div>
-            <div class="text-xs font-bold text-white line-clamp-2 leading-snug">${iss.title}</div>
+            <div class="text-xs font-bold text-white line-clamp-2 leading-snug">${escapeHTML(iss.title)}</div>
             <div class="flex items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5">
-              <span class="text-[#88c0a8] font-semibold">✓ %${iss.success_rate} Başarı</span>
-              <span>👍 ${iss.helpful_votes} Faydalı • Çözümü Gör →</span>
+              ${rateStatus}
+              <span>${voteLabel}</span>
             </div>
           </div>
         `;
@@ -1867,6 +1914,10 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
         <div class="space-y-1">
           ${matchedGames.map(g => {
             const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+            const gCount = Number(g.issue_count || 0);
+            const gBadge = gCount > 0
+              ? `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">${gCount} Çözüm</span>`
+              : '';
             return `
               <button
                 type="button"
@@ -1880,7 +1931,7 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
                     <div class="text-[10px] text-gray-400 truncate">${g.category} • ${g.engine}</div>
                   </div>
                 </div>
-                <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">${g.issue_count || 2} Çözüm</span>
+                ${gBadge}
               </button>
             `;
           }).join('')}
@@ -1894,7 +1945,11 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
       <div class="p-3 space-y-1.5">
         <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">🛠️ Eşleşen Hata Kodları &amp; Çözüm Rehberleri (${matchedIssues.length})</div>
         <div class="space-y-1">
-          ${matchedIssues.map(iss => `
+          ${matchedIssues.map(iss => {
+            const pillText = (iss.show_success_rate && Number(iss.total_votes || 0) >= 20 && iss.success_rate != null)
+              ? `%${iss.success_rate} İşe Yarama`
+              : 'Adım Adım Rehber';
+            return `
             <button
               type="button"
               onclick="selectAutocompleteIssue(${iss.id}, '${iss.game_slug}')"
@@ -1909,10 +1964,11 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
                 <div class="text-[11px] text-gray-400 truncate">${iss.symptom_summary}</div>
               </div>
               <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] shrink-0 mt-1">
-                %${iss.success_rate} Başarı
+                ${pillText}
               </span>
             </button>
-          `).join('')}
+          `;
+          }).join('')}
         </div>
       </div>
     `;
@@ -2072,7 +2128,11 @@ async function fetchIssues() {
 
   const res = await fetch(`/api/issues?${params.toString()}`, { headers: getAuthHeaders() });
   STATE.issues = await res.json();
-  document.getElementById('issuesCountBadge').textContent = STATE.issues.length;
+  const badgeEl = document.getElementById('issuesCountBadge');
+  if (badgeEl) {
+    badgeEl.textContent = STATE.issues.length > 0 ? String(STATE.issues.length) : '';
+    badgeEl.classList.toggle('hidden', STATE.issues.length === 0);
+  }
   renderIssues();
 }
 
@@ -2099,33 +2159,39 @@ function renderIssues() {
   container.innerHTML = STATE.issues.map(issue => {
     const severityColors = {
       'Kritik': 'bg-[#a8555d]/20 text-[#deb0b5] border-[#a8555d]/35',
-      'Yüksek': 'bg-[#b38852]/20 text-[#e0c59e] border-[#b38852]/35',
+      'Yüksek': 'bg-[#b38852]/20 text-[#e0c59e] border-[#b3885d]/35',
       'Orta': 'bg-[#5586ad]/20 text-[#acc8e0] border-[#5586ad]/35'
     };
     const sevClass = severityColors[issue.severity] || severityColors['Yüksek'];
 
-    const forumsHtml = (issue.forum_sources || []).map(f => `
+    const forumsHtml = (issue.forum_sources || []).map(f => {
+      const fUpvotes = Number(f.upvotes || 0);
+      const upvoteBadge = fUpvotes > 0
+        ? `<span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 font-semibold">▲ ${fUpvotes} Onay</span>`
+        : '';
+      return `
       <div class="forum-quote-box p-3.5 space-y-1.5">
         <div class="flex flex-wrap items-center justify-between gap-2">
           <span class="text-xs font-bold text-[#a3b8d4] flex items-center gap-1.5">
             <span>📌 ${escapeHTML(f.forum)}</span>
             <span class="text-gray-400 font-normal">• ${escapeHTML(f.thread)}</span>
           </span>
-          <span class="text-[11px] px-2 py-0.5 rounded bg-white/5 text-gray-300 font-semibold">▲ ${Number(f.upvotes || 0)} Onay</span>
+          ${upvoteBadge}
         </div>
         <p class="text-xs text-gray-300 italic">"${escapeHTML(f.quote)}"</p>
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     const rawSteps = issue.ai_solution_steps || [];
     const wizState = STATE.wizardByIssue[issue.id] || { active: false, stepIndex: 0, solved: false };
     const totalSteps = Math.max(1, rawSteps.length);
     const curIdx = Math.min(Math.max(0, wizState.stepIndex || 0), totalSteps - 1);
     const curStepObj = rawSteps[curIdx] || { step: 1, title: 'Adım 1', difficulty: 'Kolay', detail: '' };
-    const curStepRiskHtml = buildSafetyBannerHtml(`${curStepObj.title} ${curStepObj.detail}`);
+    const curStepRiskHtml = buildSafetyBannerHtml(`${curStepObj.title} ${curStepObj.detail}`) + buildRiskyCommandNotesHtml(`${curStepObj.title} ${curStepObj.detail}`);
 
     const stepsHtml = rawSteps.map(s => {
-      const stepSafetyHtml = buildSafetyBannerHtml(`${s.title} ${s.detail}`);
+      const stepSafetyHtml = buildSafetyBannerHtml(`${s.title} ${s.detail}`) + buildRiskyCommandNotesHtml(`${s.title} ${s.detail}`);
       return `
         <div class="flex items-start gap-3.5 bg-[#181e29] p-3.5 rounded-xl border border-white/5">
           <div class="w-7 h-7 rounded-lg accent-btn flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
@@ -2162,7 +2228,7 @@ function renderIssues() {
         ${wizState.solved ? `
           <div class="p-4 rounded-xl bg-emerald-500/15 border border-emerald-400/40 text-center space-y-2">
             <div class="text-base font-extrabold text-emerald-200">🎉 Harika! Sorununuzun Çözüldüğüne Sevindik!</div>
-            <p class="text-xs text-gray-200">Bu adımın işe yaradığı donanım etiketinizle (<strong>${escapeHTML(extractShortHardwareTag())}</strong>) doğrulandı.</p>
+            <p class="text-xs text-gray-200">Bu adımın işe yaradığı geri bildiriminizle kaydedildi.</p>
             <button type="button" onclick="toggleIssueWizard(${issue.id})" class="px-4 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white font-semibold">
               Tüm Adımları Görünümüne Dön
             </button>
@@ -2210,19 +2276,23 @@ function renderIssues() {
     ` : '';
 
     const verifyCmdB64 = issue.verify_command ? encodeBase64Utf8(issue.verify_command) : '';
+    const verifyCmdNotesHtml = issue.verify_command ? buildRiskyCommandNotesHtml(issue.verify_command) : '';
     const verifyCmdBlock = issue.verify_command ? `
-      <div class="bg-[#151a23] border border-white/10 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div class="space-y-0.5 overflow-x-auto">
-          <div class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">PowerShell / CMD Hızlı Kontrol Komutu:</div>
-          <code class="text-xs text-[#8fbcbb] font-mono">${escapeHTML(issue.verify_command)}</code>
+      <div class="space-y-2">
+        <div class="bg-[#151a23] border border-white/10 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="space-y-0.5 overflow-x-auto">
+            <div class="text-[11px] text-gray-400 font-semibold uppercase tracking-wider">PowerShell / CMD Hızlı Kontrol Komutu:</div>
+            <code class="text-xs text-[#8fbcbb] font-mono">${escapeHTML(issue.verify_command)}</code>
+          </div>
+          <button
+            type="button"
+            onclick="copyCodeFromBtn(this, '${verifyCmdB64}')"
+            class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white font-medium shrink-0 transition"
+          >
+            📋 Komutu Kopyala
+          </button>
         </div>
-        <button
-          type="button"
-          onclick="copyCodeFromBtn(this, '${verifyCmdB64}')"
-          class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 text-xs text-white font-medium shrink-0 transition"
-        >
-          📋 Komutu Kopyala
-        </button>
+        ${verifyCmdNotesHtml}
       </div>
     ` : '';
 
@@ -2230,12 +2300,12 @@ function renderIssues() {
     const combinedRiskText = `${issue.title} ${issue.error_code} ${issue.ai_root_cause} ${issue.verify_command || ''} ${(issue.ai_solution_steps || []).map(x => x.title + ' ' + x.detail).join(' ')}`;
     const safetyBannerHtml = buildSafetyBannerHtml(combinedRiskText);
 
-    // Compute voting stats
-    const upVotes = Number(issue.helpful_votes || 10);
-    const baseSr = Number(issue.success_rate || 95);
-    const downVotes = Number(issue.unhelpful_votes != null ? issue.unhelpful_votes : Math.max(2, Math.round(upVotes * (100 - baseSr) / Math.max(baseSr, 1))));
+    // Stage 2: Honest voting stats from database (0 by default; rate shown only when total_votes >= 20)
+    const upVotes = Number(issue.helpful_votes || 0);
+    const downVotes = Number(issue.unhelpful_votes || 0);
     const totalVotes = Number(issue.total_votes || (upVotes + downVotes));
-    const currentSr = Math.round((upVotes / Math.max(1, totalVotes)) * 100);
+    const showRate = Boolean(issue.show_success_rate && totalVotes >= 20 && issue.success_rate != null);
+    const currentSr = showRate ? Number(issue.success_rate) : null;
 
     const activeVote = issue.user_vote || localVotes[`issue_${issue.id}`] || (issue.user_voted ? 'up' : null);
     const upBtnClass = activeVote === 'up'
@@ -2245,15 +2315,11 @@ function renderIssues() {
       ? 'bg-red-500/25 border-red-400/50 text-red-200 font-bold'
       : 'bg-white/5 hover:bg-red-500/15 text-gray-300 border-white/10';
 
-    const userHwShort = extractShortHardwareTag();
-    const hwTagsList = Array.isArray(issue.verified_hw_tags) && issue.verified_hw_tags.length > 0
-      ? issue.verified_hw_tags
-      : [userHwShort, 'Win 11 / RTX 3060', 'Win 10 / RX 6600'];
-    const hwBadgesHtml = hwTagsList.slice(0, 3).map(tag => `
-      <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-lg bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-        👍 Bu çözüm işe yaradı (${escapeHTML(tag)})
-      </span>
-    `).join('');
+    const authorName = issue.author_name || 'OyunÇöz Teknik Ekibi';
+    const authorRole = issue.author_role || 'Sistem & Oyun Arıza Editörleri';
+    const updatedDisplay = issue.updated_at_display || '15.03.2026';
+    const dateModifiedIso = issue.date_modified || issue.updated_at || '2026-03-15';
+    const testedVer = issue.tested_version || 'Windows 10 / 11 (23H2 & 24H2) • Güncel İstemci Sürümü';
 
     return `
       <article id="issueCard-${issue.id}" class="issue-card p-6 space-y-5 transition-all duration-300">
@@ -2279,8 +2345,8 @@ function renderIssues() {
             </span>
           </div>
           <div class="flex items-center gap-2">
-            <span id="issueSuccessBadge-${issue.id}" class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-              ✓ %${currentSr} Başarı (${totalVotes} Oy)
+            <span id="issueSuccessBadge-${issue.id}" class="${showRate ? '' : 'hidden '}text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
+              ${showRate ? `✓ İşe yarama oranı: %${currentSr} (${totalVotes} Oy)` : ''}
             </span>
           </div>
         </div>
@@ -2288,6 +2354,29 @@ function renderIssues() {
         <div class="space-y-1.5">
           <h3 class="text-lg sm:text-xl font-extrabold text-white">${escapeHTML(issue.title)}</h3>
           <p class="text-sm text-gray-300">${escapeHTML(issue.symptom_summary)}</p>
+        </div>
+
+        <!-- Stage 2.3: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
+        <div class="p-3.5 rounded-xl bg-[#161c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-[#5e9c88]/20 border border-[#88c0a8]/35 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
+              OÇ
+            </div>
+            <div>
+              <div class="text-white font-bold">
+                Yazar: <a href="./hakkimizda.html" class="text-[#88c0a8] hover:underline">${escapeHTML(authorName)}</a>
+              </div>
+              <div class="text-[11px] text-gray-400">${escapeHTML(authorRole)}</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+              📅 Son güncelleme: <time datetime="${escapeHTML(dateModifiedIso)}" class="font-semibold text-white">${escapeHTML(updatedDisplay)}</time>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+              🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">${escapeHTML(testedVer)}</strong>
+            </span>
+          </div>
         </div>
 
         ${safetyBannerHtml}
@@ -2311,7 +2400,7 @@ function renderIssues() {
         <div class="space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="text-xs font-bold uppercase tracking-wider text-gray-300">
-              🛠️ Adım Adım Kesin Çözüm Rehberi
+              🛠️ Adım Adım Çözüm Rehberi
             </div>
             <button
               type="button"
@@ -2326,22 +2415,19 @@ function renderIssues() {
 
         ${verifyCmdBlock}
 
-        <!-- Solution Verification & Hardware-Tagged Upvote/Downvote Component -->
+        <!-- Stage 2.3: Bu çözüm işe yaradı mı? Evet / Hayır (Tek Oy, 20+ Oyda Gerçek Oran) -->
         <div class="pt-4 border-t border-white/10 space-y-3">
-          <div class="flex flex-wrap items-center gap-2" id="issueHwTags-${issue.id}">
-            ${hwBadgesHtml}
-          </div>
           <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div class="flex flex-wrap items-center gap-2.5">
-              <span class="text-xs font-bold text-gray-200">Bu çözüm çalıştı mı?</span>
+              <span class="text-xs font-bold text-gray-200">Bu çözüm işe yaradı mı?</span>
               <button
                 type="button"
                 id="issueUpBtn-${issue.id}"
                 onclick="voteIssue(${issue.id}, 'up')"
                 class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upBtnClass}"
               >
-                <span>👍 Bu çözüm işe yaradı (${escapeHTML(userHwShort)})</span>
-                <span id="issueUpCount-${issue.id}" class="font-bold">(${upVotes})</span>
+                <span>👍 Evet</span>
+                <span id="issueUpCount-${issue.id}" class="font-bold ${upVotes > 0 ? '' : 'hidden'}">${upVotes > 0 ? `(${upVotes})` : ''}</span>
               </button>
               <button
                 type="button"
@@ -2350,12 +2436,11 @@ function renderIssues() {
                 class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downBtnClass}"
               >
                 <span>👎 Hayır</span>
-                <span id="issueDownCount-${issue.id}" class="font-bold">(${downVotes})</span>
+                <span id="issueDownCount-${issue.id}" class="font-bold ${downVotes > 0 ? '' : 'hidden'}">${downVotes > 0 ? `(${downVotes})` : ''}</span>
               </button>
-              <span id="issueRateInline-${issue.id}" class="text-xs font-semibold text-[#88c0a8]">
-                • %${currentSr} Başarı (${totalVotes} Oy)
+              <span id="issueRateInline-${issue.id}" class="${showRate ? '' : 'hidden '}text-xs font-semibold text-[#88c0a8]">
+                ${showRate ? `• İşe yarama oranı: %${currentSr} (${totalVotes} Oy)` : ''}
               </span>
-              <span class="text-xs text-gray-400 hidden sm:inline">• 👁️ ${issue.views.toLocaleString('tr-TR')} görüntülenme</span>
             </div>
 
             <button
@@ -2448,22 +2533,28 @@ async function voteIssue(issueId, voteType = 'up') {
     const downBtnEl = document.getElementById(`issueDownBtn-${issueId}`);
     const badgeEl = document.getElementById(`issueSuccessBadge-${issueId}`);
     const inlineEl = document.getElementById(`issueRateInline-${issueId}`);
-    const hwTagsContainer = document.getElementById(`issueHwTags-${issueId}`);
 
-    const totalVotes = data.total_votes || ((data.helpful_votes || 0) + (data.unhelpful_votes || 0));
-    const sr = data.success_rate || 95;
+    const upCnt = Number(data.helpful_votes || 0);
+    const downCnt = Number(data.unhelpful_votes || 0);
+    const totalVotes = Number(data.total_votes || (upCnt + downCnt));
+    const showRate = Boolean(data.show_success_rate && totalVotes >= 20 && data.success_rate != null);
+    const sr = showRate ? Number(data.success_rate) : null;
 
-    if (upCountEl) upCountEl.textContent = `(${data.helpful_votes})`;
-    if (downCountEl) downCountEl.textContent = `(${data.unhelpful_votes || 0})`;
-    if (badgeEl) badgeEl.textContent = `✓ %${sr} Başarı (${totalVotes} Oy)`;
-    if (inlineEl) inlineEl.textContent = `• %${sr} Başarı (${totalVotes} Oy)`;
-
-    if (Array.isArray(data.verified_hw_tags) && hwTagsContainer) {
-      hwTagsContainer.innerHTML = data.verified_hw_tags.slice(0, 3).map(tag => `
-        <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-lg bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-          👍 Bu çözüm işe yaradı (${escapeHTML(tag)})
-        </span>
-      `).join('');
+    if (upCountEl) {
+      upCountEl.textContent = upCnt > 0 ? `(${upCnt})` : '';
+      upCountEl.classList.toggle('hidden', upCnt === 0);
+    }
+    if (downCountEl) {
+      downCountEl.textContent = downCnt > 0 ? `(${downCnt})` : '';
+      downCountEl.classList.toggle('hidden', downCnt === 0);
+    }
+    if (badgeEl) {
+      badgeEl.textContent = showRate ? `✓ İşe yarama oranı: %${sr} (${totalVotes} Oy)` : '';
+      badgeEl.classList.toggle('hidden', !showRate);
+    }
+    if (inlineEl) {
+      inlineEl.textContent = showRate ? `• İşe yarama oranı: %${sr} (${totalVotes} Oy)` : '';
+      inlineEl.classList.toggle('hidden', !showRate);
     }
 
     if (upBtnEl) {
@@ -2480,36 +2571,31 @@ async function voteIssue(issueId, voteType = 'up') {
     // Update issue in STATE.issues too
     const found = STATE.issues.find(i => i.id === issueId);
     if (found) {
-      found.helpful_votes = data.helpful_votes;
-      found.unhelpful_votes = data.unhelpful_votes;
+      found.helpful_votes = upCnt;
+      found.unhelpful_votes = downCnt;
       found.total_votes = totalVotes;
+      found.show_success_rate = showRate;
       found.success_rate = sr;
       found.user_vote = data.user_vote;
-      if (Array.isArray(data.verified_hw_tags)) {
-        found.verified_hw_tags = data.verified_hw_tags;
-      }
     }
 
     if (data.user_vote === 'up') {
-      showToast(`👍 Bu çözüm işe yaradı (${userHwTag}) olarak doğrulandı!`);
+      showToast('👍 Geri bildiriminiz (Evet) kaydedildi!');
     } else if (data.user_vote === 'down') {
-      showToast('👎 Geri bildiriminiz kaydedildi. Alternatif çözüm için AI Çözümleyiciyi kullanabilirsiniz.');
+      showToast('👎 Geri bildiriminiz (Hayır) kaydedildi. Alternatif çözüm için AI Çözümleyiciyi kullanabilirsiniz.');
     } else {
       showToast('Oyunuz geri alındı.');
     }
   }
 }
 
-function renderAiReportVoteBar(reportKey, initialConfidence = 96, isGuestTrial = false) {
+function renderAiReportVoteBar(reportKey, initialConfidence = null, isGuestTrial = false) {
   const bar = document.getElementById('aiResultVoteBar');
   if (!bar) return;
   const localVotes = getLocalVoteMap();
   const currentChoice = localVotes[`ai_${reportKey}`] || null;
-  const baseUp = 48 + (currentChoice === 'up' ? 1 : 0);
-  const baseDown = 2 + (currentChoice === 'down' ? 1 : 0);
-  const total = baseUp + baseDown;
-  const sr = Math.round((baseUp / total) * 100);
-  const userHwTag = extractShortHardwareTag();
+  const upCnt = currentChoice === 'up' ? 1 : 0;
+  const downCnt = currentChoice === 'down' ? 1 : 0;
 
   const upClass = currentChoice === 'up'
     ? 'vote-btn-active font-bold'
@@ -2537,25 +2623,22 @@ function renderAiReportVoteBar(reportKey, initialConfidence = 96, isGuestTrial =
     <div class="space-y-2">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex flex-wrap items-center gap-2.5">
-          <span class="text-xs font-bold text-white">Bu AI çözümü çalıştı mı?</span>
+          <span class="text-xs font-bold text-white">Bu çözüm işe yaradı mı?</span>
           <button
             type="button"
             onclick="voteAiReport('${escapeHTML(reportKey)}', 'up')"
             class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${upClass}"
           >
-            <span>👍 Bu çözüm işe yaradı (${escapeHTML(userHwTag)}) (${baseUp})</span>
+            <span>👍 Evet${upCnt > 0 ? ` (${upCnt})` : ''}</span>
           </button>
           <button
             type="button"
             onclick="voteAiReport('${escapeHTML(reportKey)}', 'down')"
             class="px-3.5 py-1.5 rounded-xl border text-xs flex items-center gap-1.5 transition ${downClass}"
           >
-            <span>👎 Hayır (${baseDown})</span>
+            <span>👎 Hayır${downCnt > 0 ? ` (${downCnt})` : ''}</span>
           </button>
         </div>
-        <span class="text-xs font-bold px-3 py-1 rounded-full bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30">
-          ✓ %${sr} Başarı (${total} Oy)
-        </span>
       </div>
       ${guestSavePromptHtml}
     </div>
@@ -2840,9 +2923,11 @@ async function submitAiDiagnostic(e) {
     const contentEl = document.getElementById('aiLabResultContent');
 
     modeBadge.textContent = data.mode;
-    confEl.textContent = `✓ %${data.confidence || 96} Çözüm Başarısı`;
+    if (confEl) {
+      confEl.textContent = 'Adım Adım Teknik Çözüm Rehberi';
+    }
 
-    const safetyHtml = buildSafetyBannerHtml(`${payload.error_code} ${payload.problem_description} ${data.markdown}`);
+    const safetyHtml = buildSafetyBannerHtml(`${payload.error_code} ${payload.problem_description} ${data.markdown}`) + buildRiskyCommandNotesHtml(`${payload.error_code} ${payload.problem_description} ${data.markdown}`);
     if (safetyEl) {
       if (safetyHtml) {
         safetyEl.innerHTML = safetyHtml;
@@ -2855,7 +2940,7 @@ async function submitAiDiagnostic(e) {
 
     contentEl.innerHTML = formatSimpleMarkdown(data.markdown);
     const reportKey = encodeBase64Utf8(`${payload.game_slug}:${payload.error_code}`).slice(0, 16) || 'default';
-    renderAiReportVoteBar(reportKey, data.confidence || 96, Boolean(data.guest_trial_used || !STATE.currentUser));
+    renderAiReportVoteBar(reportKey, null, Boolean(data.guest_trial_used || !STATE.currentUser));
 
     card.classList.remove('hidden');
     card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2874,7 +2959,11 @@ async function fetchThreads() {
 
   const res = await fetch(`./api/threads?${params.toString()}`, { headers: getAuthHeaders() });
   STATE.threads = await res.json();
-  document.getElementById('threadsCountBadge').textContent = STATE.threads.length;
+  const badgeEl = document.getElementById('threadsCountBadge');
+  if (badgeEl) {
+    badgeEl.textContent = STATE.threads.length > 0 ? String(STATE.threads.length) : '';
+    badgeEl.classList.toggle('hidden', STATE.threads.length === 0);
+  }
   renderThreads();
 }
 
@@ -2884,7 +2973,7 @@ function renderThreads() {
     container.innerHTML = `
       <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-8 text-center space-y-3">
         <div class="text-base font-bold text-white">Bu oyun ekranında henüz soru sorulmamış</div>
-        <p class="text-xs text-gray-400">İlk soruyu siz sorun, OyunÇöz AI saniyeler içinde çözüm yanıtını oluştursun!</p>
+        <p class="text-xs text-gray-400">İlk soruyu siz sorun, OyunÇöz AI adım adım çözüm yanıtını oluştursun!</p>
         <button onclick="openAskModal()" class="accent-btn px-4 py-2 rounded-xl text-xs">+ İlk Soruyu Sor</button>
       </div>
     `;
@@ -2894,7 +2983,7 @@ function renderThreads() {
   container.innerHTML = STATE.threads.map(t => {
     const repliesHtml = (t.replies || []).map(rep => {
       if (rep.is_ai) {
-        const repSafetyHtml = buildSafetyBannerHtml(`${t.error_code || ''} ${t.title || ''} ${rep.content || ''}`);
+        const repSafetyHtml = buildSafetyBannerHtml(`${t.error_code || ''} ${t.title || ''} ${rep.content || ''}`) + buildRiskyCommandNotesHtml(`${t.error_code || ''} ${t.title || ''} ${rep.content || ''}`);
         return `
           <div class="ai-root-box p-4 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#5e9c88]/20 pb-2">
@@ -2938,6 +3027,7 @@ function renderThreads() {
     const voteBtnClass = t.user_voted ? 'vote-btn-active' : 'bg-white/5 hover:bg-white/10 text-gray-200';
     const voteBtnLabel = t.user_voted ? '✓ Faydalı Konu (Oylandı)' : '▲ Faydalı Konu';
     const safeThreadTitlePreview = escapeHTML((t.title || '').slice(0, 50)).replace(/'/g, "\\'");
+    const tUpvotes = Number(t.upvotes || 0);
 
     return `
       <article class="issue-card p-6 space-y-4">
@@ -2990,7 +3080,7 @@ function renderThreads() {
                 class="px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-white/10 transition ${voteBtnClass}"
               >
                 <span id="threadVoteText-${t.id}">${voteBtnLabel}</span>
-                <span id="threadVote-${t.id}">(${Number(t.upvotes || 0)})</span>
+                <span id="threadVote-${t.id}" class="${tUpvotes > 0 ? '' : 'hidden'}">${tUpvotes > 0 ? `(${tUpvotes})` : ''}</span>
               </button>
               <button
                 type="button"
@@ -3061,8 +3151,12 @@ async function upvoteThread(threadId) {
     const countEl = document.getElementById(`threadVote-${threadId}`);
     const textEl = document.getElementById(`threadVoteText-${threadId}`);
     const btnEl = document.getElementById(`threadVoteBtn-${threadId}`);
+    const upCnt = Number(data.upvotes || 0);
 
-    if (countEl) countEl.textContent = `(${data.upvotes})`;
+    if (countEl) {
+      countEl.textContent = upCnt > 0 ? `(${upCnt})` : '';
+      countEl.classList.toggle('hidden', upCnt === 0);
+    }
     if (data.user_voted) {
       if (textEl) textEl.textContent = '✓ Faydalı Konu (Oylandı)';
       if (btnEl) btnEl.classList.add('vote-btn-active');

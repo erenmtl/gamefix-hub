@@ -465,7 +465,7 @@ WORLD_GAMES_CATALOG = [
                     {
                         "forum": "Sortitoutsi & Technopat Sosyal",
                         "thread": "FM 24 Crash Dump ve Tema/Logo Önbellek Sıfırlama Rehberi",
-                        "quote": "%localappdata%\\Sports Interactive\\Football Manager 2024 içindeki Caches ve Preferences klasörlerini silmek Crash Dump hatasını anında çözüyor.",
+                        "quote": "%localappdata%\\Sports Interactive\\Football Manager 2024 içindeki Caches ve Preferences klasörlerini silmek Crash Dump hatasını çözüyor.",
                         "upvotes": 610
                     }
                 ],
