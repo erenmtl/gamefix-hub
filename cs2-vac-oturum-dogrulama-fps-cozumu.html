@@ -3,112 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CS2 VAC Oturumunuzu Doğrulayamadı, Packet Burst ve FPS Düşmesi Çözümü | OyunÇöz</title>
-  <meta name="description" content="CS2 'VAC oturumunuzu doğrulayamadı' (VAC was unable to verify your game session) hatası, sub-tick paket kaybı (jitter), su/molotof FPS çökmesi ve mikro takılma (stutter) çözüm rehberi adımları." />
-  <meta name="keywords" content="cs2 vac oturumunuzu doğrulayamadı, cs2 vac hatası çözümü, vac was unable to verify your game session cs2, cs2 packet burst çözümü, cs2 fps artırma, cs2 takılma sorunu stutter, cs2 pak01.vpk hatası, oyunçöz cs2" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>CS2 VAC Doğrulama, Packet Burst ve FPS Çözümü | OyunÇöz</title>
+  <meta name="description" content="Counter-Strike 2 oyununda oluşan VAC oturumunuzu doğrulayamadı uyarısı, Packet Burst ağ takılması ve FPS düşüşü sorunlarını adım adım teknik rehberle çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html" />
+  <link rel="alternate" hreflang="tr-TR" href="https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html" />
   <link rel="icon" type="image/svg+xml" href="./static/favicon.svg" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html" />
-  <meta property="og:title" content="CS2 VAC Oturumunuzu Doğrulayamadı, Packet Burst ve FPS Düşmesi Çözümü | OyunÇöz" />
-  <meta property="og:description" content="CS2 'VAC oturumunuzu doğrulayamadı' (VAC was unable to verify your game session) hatası, sub-tick paket kaybı (jitter), su/molotof FPS çökmesi ve mikro takılma (stutter) çözüm rehberi adımları." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="CS2 VAC Doğrulama, Packet Burst ve FPS Çözümü | OyunÇöz" />
+  <meta property="og:description" content="Counter-Strike 2 oyununda oluşan VAC oturumunuzu doğrulayamadı uyarısı, Packet Burst ağ takılması ve FPS düşüşü sorunlarını adım adım teknik rehberle çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/cs2-vac-oturum-dogrulama-fps-cozumu.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CS2 VAC Doğrulama, Packet Burst ve FPS Çözümü | OyunÇöz" />
+  <meta name="twitter:description" content="Counter-Strike 2 oyununda oluşan VAC oturumunuzu doğrulayamadı uyarısı, Packet Burst ağ takılması ve FPS düşüşü sorunlarını adım adım teknik rehberle çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/cs2-vac-oturum-dogrulama-fps-cozumu.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Counter-Strike 2 (CS2) VAC Oturum Doğrulama, Packet Burst ve FPS Artırma Rehberi",
+          "name": "Counter-Strike 2",
+          "item": "https://oyuncoz.com/cs2-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VAC & Packet Burst",
           "item": "https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html"
         }
       ]
     },
     {
-      "@type": "HowTo",
-      "name": "Counter-Strike 2 (CS2) VAC Oturum Doğrulama, Packet Burst ve FPS Artırma Rehberi",
-      "description": "CS2 'VAC oturumunuzu doğrulayamadı' (VAC was unable to verify your game session) hatası, sub-tick paket kaybı (jitter), su/molotof FPS çökmesi ve mikro takılma (stutter) çözüm rehberi adımları.",
-      "totalTime": "PT4M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Steam'i Yönetici Olarak Çalıştırın ve Dosya Bütünlüğünü Doğrulayın",
-          "text": "Steam'i sağ alt sistem tepsisinden tamamen kapatın. Masaüstündeki Steam kısayoluna sağ tıklayıp 'Yönetici olarak çalıştır' deyin. Kütüphane > Counter-Strike 2 > Özellikler > Yüklü Dosyalar menüsünden 'Oyun dosyalarının bütünlüğünü doğrula' işlemini tamamlayın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "Windows BCD Bütünlük ve Veri Yürütme (DEP) Onarımı",
-          "text": "Komut İstemi'ni (CMD) Yönetici olarak açın. bcdedit /deletevalue nointegritychecks ve bcdedit /deletevalue loadoptions komutlarını çalıştırıp bilgisayarınızı yeniden başlatın. Bu işlem VAC modülünün Windows çekirdek imzasını doğrulamasını sağlar."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "Eski Başlatma Seçeneklerini (-high / -threads) Silin",
-          "text": "CS:GO döneminden kalan -high, -threads veya -processheap başlatma kodları Source 2 motorunda hibrit (Intel P/E-Core ve AMD Ryzen) işlemcilerde ağır takılmalara (stutter) yol açar. CS2 başlatma seçeneklerindeki tüm eski parametreleri temizleyin."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 4,
-          "name": "DirectX Shader Cache (Gölgelendirici Önbelleği) ve Ağ Tamponu Ayarı",
-          "text": "Windows Disk Temizleme (cleanmgr) aracını açıp 'DirectX Gölgelendirici Önbelleği' kutucuğunu işaretleyerek temizleyin. CS2 Oyun Ayarları > Ağ bölümünden 'Paket Kaybını/Seğirmeyi Yumuşat (Buffering to smooth over packet loss)' ayarını '1 Paket' olarak seçin."
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html#article",
+      "headline": "Counter-Strike 2 (CS2) VAC Oturum Doğrulama, Packet Burst ve FPS Artırma Rehberi",
+      "description": "Counter-Strike 2 oyununda oluşan VAC oturumunuzu doğrulayamadı uyarısı, Packet Burst ağ takılması ve FPS düşüşü sorunlarını adım adım teknik rehberle çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/cs2-vac-oturum-dogrulama-fps-cozumu.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "CS2 VAC oturumunuzu doğrulayamadı hatası ban sebebi midir?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hayır, bu bir VAC yasaklaması (ban) değildir. Steam servisinin oyun dosyalarınızın bellekteki imzasını doğrulayamadığını gösterir. Steam'i yönetici olarak başlatmak ve oyun dosyalarını doğrulamak sorunu güvenle çözer."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "CS2'de suya girince veya molotof atılınca FPS neden düşüyor?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "AMD ve NVIDIA kartlarda eski sürücüden kalan bozuk DXNAVI / DX11 shader önbelleği su ve parçacık efektlerinde anlık derleme gecikmesi yaratır. Ekran kartı panelinden Shader Cache sıfırlamak ve CS2'de Parçacık Detayı ayarını Düşük yapmak FPS çökmesini engeller."
-          }
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=cs2" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 AI Arıza Çözümleyiciyi Aç
         </a>
       </div>
@@ -116,14 +122,15 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1">
-    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <a href="./?game=cs2" class="hover:text-[#88c0a8]">Oyun Çözüm Ekranı</a>
-      <span>›</span>
-      <span class="text-gray-200 font-semibold">COUNTER-STRIKE 2 • SOURCE 2 REHBERİ</span>
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./cs2-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Counter-Strike 2</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VAC & Packet Burst</span>
     </nav>
 
+    <article class="space-y-7">
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">
         <span>⚡ COUNTER-STRIKE 2 • SOURCE 2 REHBERİ</span>
@@ -133,7 +140,7 @@
       <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">Counter-Strike 2 (CS2) VAC Oturum Doğrulama, Packet Burst ve FPS Artırma Rehberi</h1>
       <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Counter-Strike 2 (Source 2) motorunda karşılaşılan 'VAC oturumunuzu doğrulayamadı' hatası, Steam istemci yetkileri veya Windows önyükleme bütünlük bayraklarından kaynaklanır. Maç içi ani FPS düşüşleri (%1 Low FPS) ve Packet Burst ise bozuk DirectX gölgelendirici önbelleği ve eski başlatma seçeneklerinden tetiklenir.</p>
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=cs2" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz Modunda &amp; AI ile Çöz →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
@@ -172,7 +179,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">Steam'i Yönetici Olarak Çalıştırın ve Dosya Bütünlüğünü Doğrulayın</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">Steam'i Yönetici Olarak Çalıştırın ve Dosya Bütünlüğünü Doğrulayın</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Steam'i sağ alt sistem tepsisinden tamamen kapatın. Masaüstündeki Steam kısayoluna sağ tıklayıp 'Yönetici olarak çalıştır' deyin. Kütüphane > Counter-Strike 2 > Özellikler > Yüklü Dosyalar menüsünden 'Oyun dosyalarının bütünlüğünü doğrula' işlemini tamamlayın.</p>
         </div>
@@ -181,7 +188,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">Windows BCD Bütünlük ve Veri Yürütme (DEP) Onarımı</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">Windows BCD Bütünlük ve Veri Yürütme (DEP) Onarımı</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Komut İstemi'ni (CMD) Yönetici olarak açın. bcdedit /deletevalue nointegritychecks ve bcdedit /deletevalue loadoptions komutlarını çalıştırıp bilgisayarınızı yeniden başlatın. Bu işlem VAC modülünün Windows çekirdek imzasını doğrulamasını sağlar.</p>
         </div>
@@ -190,7 +197,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">Eski Başlatma Seçeneklerini (-high / -threads) Silin</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">Eski Başlatma Seçeneklerini (-high / -threads) Silin</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">CS:GO döneminden kalan -high, -threads veya -processheap başlatma kodları Source 2 motorunda hibrit (Intel P/E-Core ve AMD Ryzen) işlemcilerde ağır takılmalara (stutter) yol açar. CS2 başlatma seçeneklerindeki tüm eski parametreleri temizleyin.</p>
         </div>
@@ -199,7 +206,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 4</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">DirectX Shader Cache (Gölgelendirici Önbelleği) ve Ağ Tamponu Ayarı</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">DirectX Shader Cache (Gölgelendirici Önbelleği) ve Ağ Tamponu Ayarı</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Windows Disk Temizleme (cleanmgr) aracını açıp 'DirectX Gölgelendirici Önbelleği' kutucuğunu işaretleyerek temizleyin. CS2 Oyun Ayarları > Ağ bölümünden 'Paket Kaybını/Seğirmeyi Yumuşat (Buffering to smooth over packet loss)' ayarını '1 Paket' olarak seçin.</p>
         </div>
@@ -391,6 +398,7 @@
       })();
     </script>
 
+      </article>
   </main>
 
   <footer class="border-t border-white/10 bg-[#11161f] py-6 text-center text-xs text-gray-400">

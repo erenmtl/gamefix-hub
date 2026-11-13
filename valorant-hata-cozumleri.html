@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VALORANT Hata Çözümleri (VAN 9003, VAN 1067, TPM 2.0, Secure Boot, Packet Loss, VAL 62) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="VALORANT (Unreal Engine 4) için VAN 9003, VAN 1067, TPM 2.0, Secure Boot, Packet Loss, VAL 62 hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="valorant hata çözümleri, valorant oyundan atma sorunu, valorant açılmıyor çözümü, valorant crash çözümü, valorant fps artırma, oyunçöz, oyuncoz, valorant van 9003 çözümü, valorant van 1067 çözümü, valorant tpm 2.0 çözümü, valorant secure boot çözümü, valorant packet loss çözümü, valorant val 62 çözümü, valorant micro-stutter çözümü, van 9003 / van 1067, perf-stutter, net-pktloss / val 62, val 5 / val 43" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Valorant Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Windows 10 ve 11 bilgisayarlarda Valorant oynarken oluşan VAN 9003, VAN 1067, VAL 62, paket kaybı ve anlık FPS düşmesi sorunlarını adım adım giderin PC." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/valorant-hata-cozumleri.html" />
@@ -16,111 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/valorant-hata-cozumleri.html" />
-  <meta property="og:title" content="VALORANT Hata Çözümleri (VAN 9003, VAN 1067, TPM 2.0, Secure Boot, Packet Loss, VAL 62) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="VALORANT (Unreal Engine 4) için VAN 9003, VAN 1067, TPM 2.0, Secure Boot, Packet Loss, VAL 62 hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Valorant Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Windows 10 ve 11 bilgisayarlarda Valorant oynarken oluşan VAN 9003, VAN 1067, VAL 62, paket kaybı ve anlık FPS düşmesi sorunlarını adım adım giderin PC." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/valorant-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Valorant Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="Windows 10 ve 11 bilgisayarlarda Valorant oynarken oluşan VAN 9003, VAN 1067, VAL 62, paket kaybı ve anlık FPS düşmesi sorunlarını adım adım giderin PC." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/valorant-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/valorant-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "VALORANT Hata Çözümleri",
+          "name": "Valorant",
+          "item": "https://oyuncoz.com/valorant-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VAN 9003, 1067, VAL 62",
           "item": "https://oyuncoz.com/valorant-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "VALORANT: VAN 9003 & VAN 1067: Windows 11 TPM 2.0 ve Secure Boot Uyumluluk Hatası (VAN 9003 / VAN 1067) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Riot Vanguard çekirdek sürücüsü (vgk.sys), Windows 11'de önyükleme zincirinin bütünlüğünü doğrulamak için donanımsal TPM 2.0 ve aktif UEFI Secure Boot (Güvenli Önyükleme) şartı koşar. Forum verilerine göre birçok kullanıcıda BIOS'ta Secure Boot 'Enabled' görünmesine rağmen Platform Key (PK) yüklenmediği için durum 'Not Active' kalmaktadır veya `vgc` servisi Windows Hizmetleri'nde durmaktadır. Çözüm adımları: 1. Sistem Durumunu msinfo32 ile Doğrulayın: Win + R tuşlarına basıp `msinfo32` yazın. 'BIOS Modu: UEFI' ve 'Güvenli Önyükleme Durumu: Açık' olmalıdır. Eğer 'Kapalı' veya 'Desteklenmiyor' yazıyorsa 2. adıma geçin. 2. BIOS Üzerinden CSM Kapatma ve Secure Boot Key Yükleme: Bilgisayarı yeniden başlatıp BIOS'a (DEL/F2) girin. Boot sekmesinden CSM (Compatibility Support Module) ayarını 'Disabled' yapın. Ardından Secure Boot menüsüne girip 'Secure Boot Mode' ayarını 'Custom' yapıp 'Restore Factory Keys / Install Default Secure Boot Keys' seçeneğine tıklayın ve tekrar 'Standard' moduna alıp F10 ile kaydedin. 3. TPM 2.0 (fTPM / PTT) ve VGC Servisini Aktifleştirin: AMD işlemcilerde 'AMD CPU fTPM', Intel işlemcilerde 'Intel PTT' ayarını Enabled yapın. Windows açıldığında `services.msc` içerisinden 'vgc' servisinin Başlangıç Türünü 'Otomatik' olarak ayarlayın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "VALORANT: Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi (PERF-STUTTER) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Unreal Engine 4 tabanlı Valorant'ta anlık takılmaların 3 ana nedeni vardır: (1) 2000Hz+ yüksek polling rate'e sahip farelerde 'Saf Girdi Süresi (Raw Input Buffer)' kapalı olduğunda Windows mesaj kuyruğunun CPU'yu tıkaması, (2) Bozulmuş DirectX / GPU Gölgelendirici Önbelleği (Shader Cache), (3) Windows HAGS (Donanım Hızlandırmalı GPU Zamanlaması) ve Discord Donanım İvmesi çakışması. Çözüm adımları: 1. Oyun İçi 'Saf Girdi Süresi (Raw Input Buffer)' Ayarını Açın: Valorant -> Ayarlar -> Genel -> Fare altındaki 'Saf Girdi Süresi' seçeneğini 'Açık' yapın. 4000Hz/8000Hz fare kullanıyorsanız bu ayar zorunludur; devam ederse fare yazılımından 1000Hz veya 2000Hz'e düşürün. 2. DirectX ve GPU Gölgelendirici Önbelleğini (Shader Cache) Sıfırlayın: Windows Disk Temizleme (cleanmgr) aracını çalıştırıp 'DirectX Gölgelendirici Önbelleği'ni temizleyin. NVIDIA Denetim Masası -> 3D Ayarları -> 'Gölgelendirici Önbellek Boyutu'nu '10 GB' olarak sabitleyin. 3. Tam Ekran İyileştirmeleri ve Core Isolation (Bellek Bütünlüğü) Ayarı: `VALORANT-Win64-Shipping.exe` dosyasına sağ tıklayıp Özellikler -> Uyumluluk -> 'Tam ekran iyileştirmelerini devre dışı bırak' kutucuğunu işaretleyin."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "VALORANT: Ping Düşük Olmasına Rağmen %10-%30 Paket Kaybı (Packet Loss) ve Işınlanma (NET-PKTLOSS / VAL 62) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Riot Direct yönlendirmelerinde UDP paketlerinin (özellikle Wi-Fi dolaşım agresifliği, modem QoS/Bufferbloat şişmesi veya hatalı MTU boyutu nedeniyle) parçalanması sonucu oluşur. Ayrıca Realtek/Intel Killer ağ kartlarındaki 'Önceliklendirme Motoru' UDP paketlerini yanlış kuyruğa sokabilmektedir. Çözüm adımları: 1. Oyun İçi Ağ Arabelleğini (Network Buffering) Ayarlayın: Valorant Ayarlar -> Genel -> Ağ Arabelleği seçeneğini 'Asgari' yerine 'Orta' yapın. Bu ayar mikro paket gecikmelerini telafi eder. 2. TCP/IP Yığınını Sıfırlayın ve IPv6'yı Devre Dışı Bırakın: Yönetici CMD/PowerShell açarak `netsh int ip reset` ve `netsh winsock reset` komutlarını çalıştırın. Ağ Bağdaştırıcısı Özellikleri'nden 'İnternet Protokolü Sürüm 6 (TCP/IPv6)' işaretini kaldırın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "VALORANT: VAL 5 / VAL 43: İstemci Başlatılamadı veya Oturum Başka Yerde Açık Hatası (VAL 5 / VAL 43) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Riot İstemcisi kimlik doğrulama jetonunun (Auth Token) bozulması veya arka planda asılı kalan `RiotClientServices.exe` sürecinin yeni oturum el sıkışmasını engellemesinden kaynaklanır. Çözüm adımları: 1. Asılı Kalan Riot Süreçlerini ve Önbelleği Temizleyin: Görev Yöneticisi'nden tüm Riot ve Valorant süreçlerini kapatın. `Win + R` tuşlarına basıp `%localappdata%\\Riot Games\\Riot Client\\Data` klasörünün içini temizleyin ve istemciyi Yönetici olarak başlatın."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/valorant-hata-cozumleri.html#article",
+      "headline": "VALORANT Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Windows 10 ve 11 bilgisayarlarda Valorant oynarken oluşan VAN 9003, VAN 1067, VAL 62, paket kaybı ve anlık FPS düşmesi sorunlarını adım adım giderin PC.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/valorant-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/valorant-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "VALORANT - VAN 9003 & VAN 1067: Windows 11 TPM 2.0 ve Secure Boot Uyumluluk Hatası Çözümü",
-      "description": "Oyun açıldıktan 1-2 dakika sonra 'This build of Vanguard is out of compliance with current system settings (VAN 9003)' veya 'VAN 1067' uyarısı vererek istemciyi kapatıyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Sistem Durumunu msinfo32 ile Doğrulayın",
-          "text": "Win + R tuşlarına basıp `msinfo32` yazın. 'BIOS Modu: UEFI' ve 'Güvenli Önyükleme Durumu: Açık' olmalıdır. Eğer 'Kapalı' veya 'Desteklenmiyor' yazıyorsa 2. adıma geçin."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "BIOS Üzerinden CSM Kapatma ve Secure Boot Key Yükleme",
-          "text": "Bilgisayarı yeniden başlatıp BIOS'a (DEL/F2) girin. Boot sekmesinden CSM (Compatibility Support Module) ayarını 'Disabled' yapın. Ardından Secure Boot menüsüne girip 'Secure Boot Mode' ayarını 'Custom' yapıp 'Restore Factory Keys / Install Default Secure Boot Keys' seçeneğine tıklayın ve tekrar 'Standard' moduna alıp F10 ile kaydedin."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "TPM 2.0 (fTPM / PTT) ve VGC Servisini Aktifleştirin",
-          "text": "AMD işlemcilerde 'AMD CPU fTPM', Intel işlemcilerde 'Intel PTT' ayarını Enabled yapın. Windows açıldığında `services.msc` içerisinden 'vgc' servisinin Başlangıç Türünü 'Otomatik' olarak ayarlayın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=valorant" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 Valorant AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -129,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Taktiksel FPS</span>
-      <span>›</span>
-      <span class="text-white font-semibold">VALORANT Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./valorant-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Valorant</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VAN 9003, 1067, VAL 62</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -161,7 +155,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=valorant" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

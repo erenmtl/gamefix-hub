@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Witcher 3: Wild Hunt (Next-Gen) Hata Çözümleri (DX12 Crash Fix, Novigrad Stutter, HairWorks Off, REDlauncher Skip, DLSS Frame Gen Crash) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="The Witcher 3: Wild Hunt (Next-Gen) (REDengine 3 (DX12 / DX11)) için DX12 Crash Fix, Novigrad Stutter, HairWorks Off, REDlauncher Skip, DLSS Frame Gen Crash hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="the witcher 3: wild hunt (next-gen) hata çözümleri, the witcher 3 oyundan atma sorunu, the witcher 3: wild hunt (next-gen) açılmıyor çözümü, the witcher 3: wild hunt (next-gen) crash çözümü, the witcher 3: wild hunt (next-gen) fps artırma, oyunçöz, oyuncoz, the witcher 3 dx12 crash fix çözümü, the witcher 3 novigrad stutter çözümü, the witcher 3 hairworks off çözümü, the witcher 3 redlauncher skip çözümü, the witcher 3 dlss frame gen crash çözümü, tw3-dx12-rt-crash" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>The Witcher 3 Next-Gen DX12 Çökme ve FPS Çözümü | OyunÇöz</title>
+  <meta name="description" content="The Witcher 3 Next-Gen (v4.04) güncellemesi sonrasında DirectX 12 modunda oluşan Ray Tracing çökmesi, Script Compilation hatası ve FPS takılmalarını çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/the-witcher-3-hata-cozumleri.html" />
@@ -16,75 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/the-witcher-3-hata-cozumleri.html" />
-  <meta property="og:title" content="The Witcher 3: Wild Hunt (Next-Gen) Hata Çözümleri (DX12 Crash Fix, Novigrad Stutter, HairWorks Off, REDlauncher Skip, DLSS Frame Gen Crash) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="The Witcher 3: Wild Hunt (Next-Gen) (REDengine 3 (DX12 / DX11)) için DX12 Crash Fix, Novigrad Stutter, HairWorks Off, REDlauncher Skip, DLSS Frame Gen Crash hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="The Witcher 3 Next-Gen DX12 Çökme ve FPS Çözümü | OyunÇöz" />
+  <meta property="og:description" content="The Witcher 3 Next-Gen (v4.04) güncellemesi sonrasında DirectX 12 modunda oluşan Ray Tracing çökmesi, Script Compilation hatası ve FPS takılmalarını çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/the-witcher-3-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Witcher 3 Next-Gen DX12 Çökme ve FPS Çözümü | OyunÇöz" />
+  <meta name="twitter:description" content="The Witcher 3 Next-Gen (v4.04) güncellemesi sonrasında DirectX 12 modunda oluşan Ray Tracing çökmesi, Script Compilation hatası ve FPS takılmalarını çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/the-witcher-3-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/the-witcher-3-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "The Witcher 3: Wild Hunt (Next-Gen) Hata Çözümleri",
+          "name": "The Witcher 3: Wild Hunt",
+          "item": "https://oyuncoz.com/the-witcher-3-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Next-Gen DX12 Crash",
           "item": "https://oyuncoz.com/the-witcher-3-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "The Witcher 3: Wild Hunt (Next-Gen): Next-Gen Güncellemesi Sonrası DirectX 12 Modunda Çökme ve Novigrad Takılması (TW3-DX12-RT-CRASH) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Next-Gen sürümündeki DX12 çeviri katmanı (`d3d11on12`) yoğun şehir içi çizim çağrılarında yüksek CPU ek yükü ve VRAM parçalanması oluşturur. Çözüm adımları: 1. REDlauncher Üzerinden DirectX 11 Moduna Geçin veya HairWorks Kapatın: Ray Tracing kullanmıyorsanız oyunu başlatırken **DX11** seçin. DX12 kullanacaksanız NVIDIA HairWorks ayarını Kapalı konuma getirin."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/the-witcher-3-hata-cozumleri.html#article",
+      "headline": "The Witcher 3: Wild Hunt (Next-Gen) Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "The Witcher 3 Next-Gen (v4.04) güncellemesi sonrasında DirectX 12 modunda oluşan Ray Tracing çökmesi, Script Compilation hatası ve FPS takılmalarını çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/the-witcher-3-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/the-witcher-3-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "The Witcher 3: Wild Hunt (Next-Gen) - Next-Gen Güncellemesi Sonrası DirectX 12 Modunda Çökme ve Novigrad Takılması Çözümü",
-      "description": "DX12 ile başlatıldığında Ray Tracing veya DLSS Frame Generation açıkken oyun hızlı seyahat (Fast Travel) sonrası çöküyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "REDlauncher Üzerinden DirectX 11 Moduna Geçin veya HairWorks Kapatın",
-          "text": "Ray Tracing kullanmıyorsanız oyunu başlatırken **DX11** seçin. DX12 kullanacaksanız NVIDIA HairWorks ayarını Kapalı konuma getirin."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=the-witcher-3" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 The Witcher 3 AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -93,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Açık Dünya RPG</span>
-      <span>›</span>
-      <span class="text-white font-semibold">The Witcher 3: Wild Hunt (Next-Gen) Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./the-witcher-3-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">The Witcher 3: Wild Hunt</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">Next-Gen DX12 Crash</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -123,7 +153,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=the-witcher-3" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

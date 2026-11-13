@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>League of Legends Hata Çözümleri (Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="league of legends hata çözümleri, lol oyundan atma sorunu, league of legends açılmıyor çözümü, league of legends crash çözümü, league of legends fps artırma, oyunçöz, oyuncoz, lol client siyah ekran çözümü, lol reconnect loop çözümü, lol van 185 çözümü, lol directx 9/11 çözümü, lol fps sabitlenme çözümü, lol vanguard hatası çözümü, lol-reconnect-loop, van 185 / van -81, dx11-alttab-lock" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>League of Legends Hata Kodları ve Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="League of Legends (LoL) istemcisinde yaşanan Vanguard VAN 128, VAN 185, yeniden bağlan döngüsü ve FPS takılması sorunlarını adım adım rehberle onarın." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/lol-hata-cozumleri.html" />
@@ -16,103 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/lol-hata-cozumleri.html" />
-  <meta property="og:title" content="League of Legends Hata Çözümleri (Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="League of Legends (Riot Proprietary Engine) için Client Siyah Ekran, Reconnect Loop, VAN 185, DirectX 9/11, FPS Sabitlenme, Vanguard Hatası hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="League of Legends Hata Kodları ve Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="League of Legends (LoL) istemcisinde yaşanan Vanguard VAN 128, VAN 185, yeniden bağlan döngüsü ve FPS takılması sorunlarını adım adım rehberle onarın." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/lol-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="League of Legends Hata Kodları ve Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="League of Legends (LoL) istemcisinde yaşanan Vanguard VAN 128, VAN 185, yeniden bağlan döngüsü ve FPS takılması sorunlarını adım adım rehberle onarın." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/lol-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/lol-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "League of Legends Hata Çözümleri",
+          "name": "League of Legends",
+          "item": "https://oyuncoz.com/lol-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VAN 128, VAN 185, Reconnect",
           "item": "https://oyuncoz.com/lol-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "League of Legends: Şampiyon Seçimi Sonrası Oyun Ekranı Gelmiyor ve 'Yeniden Bağlan (Reconnect)' Döngüsü (LOL-RECONNECT-LOOP) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Riot İstemcisi (`LeagueClientUx.exe`) ile oyun motoru (`League of Legends.exe`) arasındaki yerel el sıkışma; (1) `League of Legends.exe` dosyasında Uyumluluk Modu'nun açık kalması (Vanguard uyumluluk modunu engeller), (2) RivaTuner / Discord / Overwolf DLL enjeksiyonu veya (3) bozuk `game.cfg` dosyası nedeniyle kesilmektedir. Çözüm adımları: 1. Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!): `C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse mutlaka kaldırın. 2. Config ve Logs Klasörünü Sıfırlayın: `C:\\Riot Games\\League of Legends` içindeki `Config` ve `Logs` klasörlerini silin. İstemci ayarlarından Oyun -> 'Eski DX9 Modunu Tercih Et' kapalı olduğundan ve 'Pencereli / Çerçevesiz' modda denediğinizden emin olun. 3. Üçüncü Parti DLL Enjeksiyonlarını (RivaTuner / Discord Overlay) Kapatın: MSI Afterburner / RivaTuner Statistics Server çalışıyorsa `League of Legends.exe` için 'Application Detection Level: None' yapın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "League of Legends: VAN 185 & VAN -81: Vanguard Bağlantı Koptu ve Oyun Ortasında İstemci Kapanması (VAN 185 / VAN -81) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Arka planda çalışan `vgc.exe` kullanıcı modu servisinin Riot kalp atışı (heartbeat) sunucusuyla olan oturumu zaman aşımına uğradığında veya servis anlık çöktüğünde Windows servisi otomatik yeniden başlatmazsa VAN 185 tetiklenir. Çözüm adımları: 1. VGC Hizmeti İçin Otomatik Kurtarma Ayarlayın: `Win + R` -> `services.msc` açın -> `vgc` hizmetine çift tıklayın. 'Kurtarma (Recovery)' sekmesine geçip Birinci, İkinci ve Sonraki Hatalar kısmını 'Hizmeti Yeniden Başlat' ve süreyi '0 dakika' olarak kaydedin. 2. Vanguard'ı Temiz Kaldırıp Yeniden Kurun: Sistem tepsisinden Vanguard'a sağ tıklayıp `More -> Uninstall Vanguard` seçin. Ardından Riot İstemcisini açarak temiz kurulum yapmasını sağlayın ve bilgisayarı yeniden başlatın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "League of Legends: Alt+Tab Sonrası Ekranın Donması veya FPS'in 60'a Sabitlenmesi (DX11-ALTTAB-LOCK) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Windows Masaüstü Pencere Yöneticisi (DWM) ile Tam Ekran (Exclusive Fullscreen) DirectX 11 takas zinciri (SwapChain) arasında ekran yenileme hızı ve G-Sync/FreeSync durumu senkronize olamadığında oluşur. Çözüm adımları: 1. Oyun İçi Görüntü Modunu 'Çerçevesiz (Borderless)' Yapın: LoL Görüntü Ayarları'ndan Tam Ekran yerine 'Çerçevesiz' seçin ve Dikey Senkronizasyon (V-Sync) tikini kaldırın."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/lol-hata-cozumleri.html#article",
+      "headline": "League of Legends Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "League of Legends (LoL) istemcisinde yaşanan Vanguard VAN 128, VAN 185, yeniden bağlan döngüsü ve FPS takılması sorunlarını adım adım rehberle onarın.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/lol-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/lol-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "League of Legends - Şampiyon Seçimi Sonrası Oyun Ekranı Gelmiyor ve 'Yeniden Bağlan (Reconnect)' Döngüsü Çözümü",
-      "description": "Şampiyon seçimi bittikten sonra oyun penceresi (`League of Legends.exe`) açılmıyor, istemcide sürekli 'Yeniden Bağlan' butonu çıkıyor ve tıklayınca hiçbir şey olmuyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Uyumluluk Modu İşaretini Kaldırın (En Yaygın Sebep!)",
-          "text": "`C:\\Riot Games\\League of Legends\\Game\\League of Legends.exe` dosyasına sağ tıklayın -> Özellikler -> Uyumluluk sekmesine gelin. 'Bu programı uyumluluk modunda çalıştır' işaretliyse mutlaka kaldırın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "Config ve Logs Klasörünü Sıfırlayın",
-          "text": "`C:\\Riot Games\\League of Legends` içindeki `Config` ve `Logs` klasörlerini silin. İstemci ayarlarından Oyun -> 'Eski DX9 Modunu Tercih Et' kapalı olduğundan ve 'Pencereli / Çerçevesiz' modda denediğinizden emin olun."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "Üçüncü Parti DLL Enjeksiyonlarını (RivaTuner / Discord Overlay) Kapatın",
-          "text": "MSI Afterburner / RivaTuner Statistics Server çalışıyorsa `League of Legends.exe` için 'Application Detection Level: None' yapın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=lol" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 LoL AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -121,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">MOBA</span>
-      <span>›</span>
-      <span class="text-white font-semibold">League of Legends Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./lol-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">League of Legends</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VAN 128, VAN 185, Reconnect</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -152,7 +154,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=lol" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

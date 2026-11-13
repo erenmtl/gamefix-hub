@@ -1,15 +1,37 @@
 User-agent: *
 Allow: /
-Disallow: /api/auth/
+Allow: /api/og-image.png
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /profil/
+Disallow: /oturum/
 
 User-agent: Googlebot
 Allow: /
+Allow: /api/og-image.png
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /profil/
+Disallow: /oturum/
 
 User-agent: Bingbot
 Allow: /
+Allow: /api/og-image.png
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /profil/
+Disallow: /oturum/
 
 User-agent: Yandex
 Allow: /
+Allow: /api/og-image.png
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /profil/
+Disallow: /oturum/
 
 Sitemap: https://oyuncoz.com/sitemap.xml
-Sitemap: https://oyuncoz.com/sitemap2.xml

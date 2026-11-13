@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Call of Duty: Warzone &amp; BO6 Hata Çözümleri (DirectX 0x887A0005, Packet Burst, RendererWorkerCount, VRAM Scale Target, Dev Error) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="Call of Duty: Warzone &amp; BO6 (IW 9.0 Engine) için DirectX 0x887A0005, Packet Burst, RendererWorkerCount, VRAM Scale Target, Dev Error hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="call of duty: warzone &amp; bo6 hata çözümleri, cod warzone oyundan atma sorunu, call of duty: warzone &amp; bo6 açılmıyor çözümü, call of duty: warzone &amp; bo6 crash çözümü, call of duty: warzone &amp; bo6 fps artırma, oyunçöz, oyuncoz, cod warzone directx 0x887a0005 çözümü, cod warzone packet burst çözümü, cod warzone rendererworkercount çözümü, cod warzone vram scale target çözümü, cod warzone dev error çözümü, dx-0x887a0005 / 0x1338, cod-packet-burst" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>CoD Warzone Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Call of Duty Warzone ve Black Ops 6 oyunlarında oluşan DirectX 0x887A0005 çökmesi, Ricochet anti-cheat ve Packet Burst sorunlarını adım adım giderin PC." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/cod-warzone-hata-cozumleri.html" />
@@ -16,83 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/cod-warzone-hata-cozumleri.html" />
-  <meta property="og:title" content="Call of Duty: Warzone &amp; BO6 Hata Çözümleri (DirectX 0x887A0005, Packet Burst, RendererWorkerCount, VRAM Scale Target, Dev Error) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Call of Duty: Warzone &amp; BO6 (IW 9.0 Engine) için DirectX 0x887A0005, Packet Burst, RendererWorkerCount, VRAM Scale Target, Dev Error hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="CoD Warzone Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Call of Duty Warzone ve Black Ops 6 oyunlarında oluşan DirectX 0x887A0005 çökmesi, Ricochet anti-cheat ve Packet Burst sorunlarını adım adım giderin PC." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/cod-warzone-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CoD Warzone Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="Call of Duty Warzone ve Black Ops 6 oyunlarında oluşan DirectX 0x887A0005 çökmesi, Ricochet anti-cheat ve Packet Burst sorunlarını adım adım giderin PC." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/cod-warzone-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/cod-warzone-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Call of Duty: Warzone & BO6 Hata Çözümleri",
+          "name": "Call of Duty: Warzone",
+          "item": "https://oyuncoz.com/cod-warzone-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "DirectX Error 0x887A0005",
           "item": "https://oyuncoz.com/cod-warzone-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Call of Duty: Warzone & BO6: DirectX Encountered an Unrecoverable Error (0x887A0005 / Dev Error 0x00001338) (DX-0x887A0005 / 0x1338) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "IW 9.0 motoru, VRAM Scale Target %85-%90 olduğunda Windows DWM için ayrılan paylaşımlı GPU belleğine taşar ve DirectX 12 `DXGI_ERROR_DEVICE_REMOVED (0x887A0005)` hatasını tetikler. Çözüm adımları: 1. VRAM Scale Target Değerini 70'e Düşürün ve Shader Yeniden Başlatın: Grafikler -> Kalite -> 'VRAM Scale Target' ayarını `70` olarak ayarlayın. Aynı menüden 'Restart Shaders Pre-Loading' (Gölgelendirici Ön Yüklemesini Yeniden Başlat) seçeneğine tıklayıp %100 olmasını bekleyin."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Call of Duty: Warzone & BO6: Sürekli 'Packet Burst' (Turuncu 3 Kare İkonu) ve Çatışmada Takılma (COD-PACKET-BURST) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Warzone'daki 'Packet Burst' uyarısı yalnızca internetten değil, işlemcinin sunucudan gelen sıkıştırılmış dünya durum paketlerini ve anlık indirilen dokuları (`On-Demand Texture Streaming`) zamanında işleyememesinden kaynaklanır. Çözüm adımları: 1. RendererWorkerCount Değerini Fiziksel Çekirdek Sayınıza Ayarlayın: `Belgeler\\Call of Duty\\players` içindeki `.cst` / `.ini` yapılandırma dosyasını Not Defteri ile açın. `RendererWorkerCount` satırını bulup işlemcinizin fiziksel çekirdek sayısına (Örn: 6 çekirdekli Ryzen 5 5600 için `6`, 8 çekirdekli işlemci için `7` veya `8`) ayarlayıp kaydedin."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/cod-warzone-hata-cozumleri.html#article",
+      "headline": "Call of Duty: Warzone &amp; BO6 Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Call of Duty Warzone ve Black Ops 6 oyunlarında oluşan DirectX 0x887A0005 çökmesi, Ricochet anti-cheat ve Packet Burst sorunlarını adım adım giderin PC.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/cod-warzone-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/cod-warzone-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "Call of Duty: Warzone & BO6 - DirectX Encountered an Unrecoverable Error (0x887A0005 / Dev Error 0x00001338) Çözümü",
-      "description": "Maçın ortasında veya uçaktan atlarken 'DirectX encountered an unrecoverable error' uyarısı verip masaüstüne atıyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "VRAM Scale Target Değerini 70'e Düşürün ve Shader Yeniden Başlatın",
-          "text": "Grafikler -> Kalite -> 'VRAM Scale Target' ayarını `70` olarak ayarlayın. Aynı menüden 'Restart Shaders Pre-Loading' (Gölgelendirici Ön Yüklemesini Yeniden Başlat) seçeneğine tıklayıp %100 olmasını bekleyin."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=cod-warzone" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 CoD Warzone AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -101,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Battle Royale / FPS</span>
-      <span>›</span>
-      <span class="text-white font-semibold">Call of Duty: Warzone &amp; BO6 Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./cod-warzone-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Call of Duty: Warzone</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">DirectX Error 0x887A0005</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -131,7 +153,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=cod-warzone" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

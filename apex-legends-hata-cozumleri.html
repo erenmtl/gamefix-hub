@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apex Legends Hata Çözümleri (DXGI_ERROR_DEVICE_HUNG, code:net / code:leaf, 100% CPU Fix, DirectX 12 Beta) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="Apex Legends (Source (Modified)) için DXGI_ERROR_DEVICE_HUNG, code:net / code:leaf, 100% CPU Fix, DirectX 12 Beta hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="apex legends hata çözümleri, apex legends oyundan atma sorunu, apex legends açılmıyor çözümü, apex legends crash çözümü, apex legends fps artırma, oyunçöz, oyuncoz, apex legends dxgi_error_device_hung çözümü, apex legends code:net / code:leaf çözümü, apex legends 100% cpu fix çözümü, apex legends directx 12 beta çözümü, dxgi-0x887a0006, apex-100cpu-codenet" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Apex Legends Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Apex Legends PC sürümünde karşılaşılan DXGI_ERROR_DEVICE_HUNG ekran kartı çökmesi, Easy Anti-Cheat ve Code:Net bağlantı hatalarını adım adım giderin PC." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/apex-legends-hata-cozumleri.html" />
@@ -16,83 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/apex-legends-hata-cozumleri.html" />
-  <meta property="og:title" content="Apex Legends Hata Çözümleri (DXGI_ERROR_DEVICE_HUNG, code:net / code:leaf, 100% CPU Fix, DirectX 12 Beta) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Apex Legends (Source (Modified)) için DXGI_ERROR_DEVICE_HUNG, code:net / code:leaf, 100% CPU Fix, DirectX 12 Beta hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Apex Legends Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Apex Legends PC sürümünde karşılaşılan DXGI_ERROR_DEVICE_HUNG ekran kartı çökmesi, Easy Anti-Cheat ve Code:Net bağlantı hatalarını adım adım giderin PC." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/apex-legends-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Apex Legends Hata Kodları ve FPS Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="Apex Legends PC sürümünde karşılaşılan DXGI_ERROR_DEVICE_HUNG ekran kartı çökmesi, Easy Anti-Cheat ve Code:Net bağlantı hatalarını adım adım giderin PC." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/apex-legends-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/apex-legends-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Apex Legends Hata Çözümleri",
+          "name": "Apex Legends",
+          "item": "https://oyuncoz.com/apex-legends-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Engine Error & Code:Net",
           "item": "https://oyuncoz.com/apex-legends-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Apex Legends: 0x887A0006 - DXGI_ERROR_DEVICE_HUNG Motor Çökme Hatası (DXGI-0x887A0006) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Modifiye Source motorunda dinamik spot gölge hesaplamaları yüksek GPU Boost saat hızlarında TDR (Timeout Detection and Recovery) süresini aşarak sürücüyü askıda bırakır. Çözüm adımları: 1. Spot Shadow Detail Kapatma ve Texture Streaming Budget Ayarı: Oyun içi Video Ayarları'ndan 'Spot Shadow Detail: Disabled' ve 'Dynamic Spot Shadows: Disabled' yapın. Steam başlatma seçeneklerinde bozuk `-high` komutu varsa kaldırın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Apex Legends: Maç Başında %100 CPU Kullanımı ve code:net / code:leaf Kopması (APEX-100CPU-CODENET) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Harita gölgelendiricileri (Vulkan/DX11 Shaders) maç başında tüm CPU çekirdeklerinde eşzamanlı derlendiğinde ağ iş parçacığı zaman aşımına uğrayarak `code:net` verir. Çözüm adımları: 1. videoconfig.txt ve Shader Cache Yenileme: `%userprofile%\\Saved Games\\Respawn\\Apex\\local\\videoconfig.txt` içinde `setting.cl_ragdoll_self_collision` değerini `0` yapın ve oyunu açtıktan sonra maça girmeden पहले Poligon (Firing Range) haritasına bir kez girin."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/apex-legends-hata-cozumleri.html#article",
+      "headline": "Apex Legends Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Apex Legends PC sürümünde karşılaşılan DXGI_ERROR_DEVICE_HUNG ekran kartı çökmesi, Easy Anti-Cheat ve Code:Net bağlantı hatalarını adım adım giderin PC.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/apex-legends-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/apex-legends-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "Apex Legends - 0x887A0006 - DXGI_ERROR_DEVICE_HUNG Motor Çökme Hatası Çözümü",
-      "description": "Maç esnasında ekran donuyor ve 'Engine Error - 0x887A0006 - DXGI_ERROR_DEVICE_HUNG' uyarısıyla oyun kapanıyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Spot Shadow Detail Kapatma ve Texture Streaming Budget Ayarı",
-          "text": "Oyun içi Video Ayarları'ndan 'Spot Shadow Detail: Disabled' ve 'Dynamic Spot Shadows: Disabled' yapın. Steam başlatma seçeneklerinde bozuk `-high` komutu varsa kaldırın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=apex-legends" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 Apex Legends AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -101,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Battle Royale / Hero Shooter</span>
-      <span>›</span>
-      <span class="text-white font-semibold">Apex Legends Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./apex-legends-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Apex Legends</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">Engine Error & Code:Net</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -130,7 +152,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=apex-legends" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

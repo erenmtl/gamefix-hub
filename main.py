@@ -1919,6 +1919,96 @@ STATIC_DIR = os.path.join(ROOT_DIR, "static")
 os.makedirs(STATIC_DIR, exist_ok=True)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+from fastapi.responses import RedirectResponse
+from og_generator import render_og_png_bytes
+
+
+@app.get("/api/og-image.png")
+def serve_dynamic_og_image(
+    title: str = Query("Oyun Hata Kodları ve FPS Çözümleri"),
+    game: str = Query("OyunÇöz"),
+    code: str = Query("ADIM ADIM REHBER"),
+    subtitle: str = Query("Windows 10 / 11 Oyun Hata Kodları ve Performans Çözüm Rehberi"),
+):
+    png_bytes = render_og_png_bytes(
+        title=sanitize_user_text(title)[:90],
+        game_name=sanitize_user_text(game)[:40],
+        error_code=sanitize_user_text(code)[:36],
+        subtitle=sanitize_user_text(subtitle)[:100],
+    )
+    return Response(
+        content=png_bytes,
+        media_type="image/png",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
+def regenerate_sitemap_xml() -> str:
+    """
+    Stage 3.4: Automatically builds sitemap.xml with only indexable pages,
+    real <lastmod> dates, and NO <changefreq> or <priority> tags.
+    """
+    entries = [("https://oyuncoz.com/", "2026-03-15")]
+    for fname in sorted(os.listdir(ROOT_DIR)):
+        if not fname.endswith(".html"):
+            continue
+        if fname == "index.html" or fname.startswith("google") or fname.startswith("bing"):
+            continue
+        fpath = os.path.join(ROOT_DIR, fname)
+        if not os.path.isfile(fpath):
+            continue
+        try:
+            with open(fpath, "r", encoding="utf-8") as f:
+                html_text = f.read()
+        except Exception:
+            continue
+        if 'content="noindex' in html_text.lower():
+            continue
+        m_date = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html_text)
+        if not m_date:
+            m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
+        lastmod = m_date.group(1) if m_date else "2026-03-15"
+        entries.append((f"https://oyuncoz.com/{fname}", lastmod))
+
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+    for loc, lastmod in entries:
+        lines.append("  <url>")
+        lines.append(f"    <loc>{loc}</loc>")
+        lines.append(f"    <lastmod>{lastmod}</lastmod>")
+        lines.append("  </url>")
+    lines.append("</urlset>")
+    xml_str = "\n".join(lines) + "\n"
+
+    for target_file in ["sitemap.xml", "sitemap2.xml"]:
+        try:
+            with open(os.path.join(ROOT_DIR, target_file), "w", encoding="utf-8") as f:
+                f.write(xml_str)
+        except Exception:
+            pass
+    return xml_str
+
+
+LEGACY_301_REDIRECTS = {
+    "index.html": "/",
+    "index.htm": "/",
+    "home": "/",
+    "anasayfa": "/",
+    "valorant.html": "/valorant-hata-cozumleri.html",
+    "cs2.html": "/cs2-hata-cozumleri.html",
+    "lol.html": "/lol-hata-cozumleri.html",
+    "minecraft.html": "/minecraft-hata-cozumleri.html",
+    "gtav-fivem.html": "/gtav-fivem-hata-cozumleri.html",
+    "valorant-van9003.html": "/valorant-van-9003-van-1067-cozumu.html",
+    "valorant-van-9003-cozumu.html": "/valorant-van-9003-van-1067-cozumu.html",
+    "cs2-vac-hatasi-cozumu.html": "/cs2-vac-oturum-dogrulama-fps-cozumu.html",
+    "lol-van-128-cozumu.html": "/lol-vanguard-van-128-van-185-cozumu.html",
+    "gta5-err-gfx-d3d-init-cozumu.html": "/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html",
+    "minecraft-exit-code-1-cozumu.html": "/minecraft-exit-code-1-glfw-65542-cozumu.html",
+}
+
 
 @app.get("/robots.txt")
 def serve_robots():
@@ -1927,7 +2017,13 @@ def serve_robots():
 
 @app.get("/sitemap.xml")
 def serve_sitemap():
-    return FileResponse(os.path.join(ROOT_DIR, "sitemap.xml"), media_type="application/xml")
+    xml_content = regenerate_sitemap_xml()
+    return Response(content=xml_content, media_type="application/xml")
+
+
+@app.get("/sitemap2.xml")
+def serve_sitemap2():
+    return RedirectResponse(url="/sitemap.xml", status_code=301)
 
 
 @app.get("/site.webmanifest")
@@ -1938,3 +2034,21 @@ def serve_manifest():
 @app.get("/")
 def serve_index():
     return FileResponse(os.path.join(ROOT_DIR, "index.html"))
+
+
+@app.get("/{page_path:path}")
+def serve_html_or_redirect(page_path: str):
+    clean_path = page_path.strip("/")
+    if clean_path in LEGACY_301_REDIRECTS:
+        return RedirectResponse(url=LEGACY_301_REDIRECTS[clean_path], status_code=301)
+
+    candidate = os.path.join(ROOT_DIR, clean_path)
+    if os.path.isfile(candidate) and clean_path.endswith(".html"):
+        return FileResponse(candidate, media_type="text/html")
+
+    if not clean_path.endswith(".html"):
+        html_candidate = os.path.join(ROOT_DIR, f"{clean_path}.html")
+        if os.path.isfile(html_candidate):
+            return FileResponse(html_candidate, media_type="text/html")
+
+    raise HTTPException(status_code=404, detail="Sayfa bulunamadı")

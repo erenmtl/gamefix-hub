@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Counter-Strike 2 Hata Çözümleri (VAC Verify, Shader Stutter, 1% Low FPS, Mikrofon Algılamama, Sub-tick Jitter, pak01.vpk) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="Counter-Strike 2 (Source 2) için VAC Verify, Shader Stutter, 1% Low FPS, Mikrofon Algılamama, Sub-tick Jitter, pak01.vpk hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="counter-strike 2 hata çözümleri, cs2 oyundan atma sorunu, counter-strike 2 açılmıyor çözümü, counter-strike 2 crash çözümü, counter-strike 2 fps artırma, oyunçöz, oyuncoz, cs2 vac verify çözümü, cs2 shader stutter çözümü, cs2 1% low fps çözümü, cs2 mikrofon algılamama çözümü, cs2 sub-tick jitter çözümü, cs2 pak01.vpk çözümü, vac-verify-err, cs2-frametime, audio-mic-threshold, vpk-corrupt-01" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Counter-Strike 2 Hata Kodları ve FPS Çözümleri | OyunÇöz</title>
+  <meta name="description" content="Counter-Strike 2 (Source 2) oyununda karşılaşılan VAC oturum doğrulama hatası, Packet Burst gecikmesi, çökme ve FPS düşüşü sorunlarını adım adım çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/cs2-hata-cozumleri.html" />
@@ -16,111 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/cs2-hata-cozumleri.html" />
-  <meta property="og:title" content="Counter-Strike 2 Hata Çözümleri (VAC Verify, Shader Stutter, 1% Low FPS, Mikrofon Algılamama, Sub-tick Jitter, pak01.vpk) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Counter-Strike 2 (Source 2) için VAC Verify, Shader Stutter, 1% Low FPS, Mikrofon Algılamama, Sub-tick Jitter, pak01.vpk hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Counter-Strike 2 Hata Kodları ve FPS Çözümleri | OyunÇöz" />
+  <meta property="og:description" content="Counter-Strike 2 (Source 2) oyununda karşılaşılan VAC oturum doğrulama hatası, Packet Burst gecikmesi, çökme ve FPS düşüşü sorunlarını adım adım çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/cs2-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Counter-Strike 2 Hata Kodları ve FPS Çözümleri | OyunÇöz" />
+  <meta name="twitter:description" content="Counter-Strike 2 (Source 2) oyununda karşılaşılan VAC oturum doğrulama hatası, Packet Burst gecikmesi, çökme ve FPS düşüşü sorunlarını adım adım çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/cs2-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/cs2-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Counter-Strike 2 Hata Çözümleri",
+          "name": "Counter-Strike 2",
+          "item": "https://oyuncoz.com/cs2-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VAC, Packet Burst, FPS",
           "item": "https://oyuncoz.com/cs2-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Counter-Strike 2: VAC Oyun Oturumunuzu Doğrulayamadı (VAC Was Unable to Verify Your Game Session) (VAC-VERIFY-ERR) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CS2'de VAC modülü, `steamservice.exe` üzerinden oyun belleği imzasını ve NTFS USN Journal kayıtlarını denetler. Steam servisi yetki kaybederse, oyun kısayoldan (Steam dışı) başlatılırsa veya bozuk `.vpk` önbelleği oluşursa doğrulama reddedilir. Çözüm adımları: 1. Steam Service Onarımı ve Yönetici Modu: Steam'i tamamen kapatın. Yönetici CMD açıp `\"C:\\Program Files (x86)\\Common Files\\Steam\\SteamService.exe\" /repair` komutunu çalıştırın. 2. Oyun Dosyalarını Doğrulayın ve İndirme Önbelleğini Temizleyin: Steam -> Ayarlar -> İndirmeler -> 'İndirme Önbelleğini Temizle' butonuna tıklayın. Ardından CS2 Özellikler -> Yüklü Dosyalar -> 'Oyun dosyalarının bütünlüğünü doğrula' işlemini başlatın. 3. BCDEDIT / DEP Kontrolü: Yönetici CMD'de `bcdedit /deletevalue nointegritychecks` ve `bcdedit /deletevalue loadoptions` komutlarını çalıştırıp bilgisayarı yeniden başlatın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Counter-Strike 2: Source 2 Frame-Time Spikes, Yüksek %1 Low FPS Düşüşü ve Su/Sis Takılması (CS2-FRAMETIME) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Source 2 motoru çoklu iş parçacığı zamanlamasını kendi yönetir. Eski CS:GO başlatma kodları (`-threads`, `-high`, `-processheap`) Source 2'nin iş parçacığı havuzunu bozar. Ayrıca DirectX 11 gölgelendirici önbelleği (`directx_installer` / `shaders`) şiştiğinde her yeni efektte anlık derleme (shader compilation stutter) yaşanır. Çözüm adımları: 1. Eski CS:GO Başlatma Seçeneklerini Temizleyin: Steam -> CS2 Başlatma Seçenekleri'ndeki `-threads`, `-high`, `-novid`, `-forcepreload` gibi tüm eski kodları silin. Sadece `-noreflex` (gerekirse) veya tamamen boş bırakın. 2. CS2 DirectX Shader Cache Temizliği ve Optimum Görüntü Ayarları: Oyun içi Gelişmiş Görüntü ayarlarında: 'Düşük Gecikme Oranı (NVIDIA Reflex): Etkin', 'Parçacık Detayı: Düşük', 'Keskinliği Yumuşatma: 2x MSAA veya CMAA2' ve 'Dinamik Gölgeler: Tümü' olarak ayarlayın. 3. Paket Kaybı / Jitter Kaynaklı Stutter İçin Ağ Arabelleği: Son güncellemelerle gelen 'Paket Kaybını / Jitter'ı Düzgünleştir (Buffering to smooth over packet loss)' ayarını '1 Paket' olarak seçin; bu ayar sub-tick takılmalarını önemli ölçüde azaltır."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Counter-Strike 2: CS2 Mikrofon Algılamama ve Sesin Karşı Tarafa Kesik/Hiç Gitmemesi (AUDIO-MIC-THRESHOLD) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "CS2 ses alt sistemi, mikrofon gürültü kapısı (noise gate) eşiğini (`voice_threshold`) bazı ses kartlarında çok yüksek algılar ve bas-konuş tuşuna basıldığında ses aygıtını o anda uyandırmaya çalışırken ilk 1-2 saniyeyi yutar. Çözüm adımları: 1. Kolaylaştırılmış Bas-Konuş (Streamlined Push-to-Talk) Açın: CS2 Ayarlar -> Ses -> 'Kolaylaştırılmış Bas-Konuş' ayarını 'Evet' yapın. Bu ayar mikrofonu arka planda hazır tutarak bas-konuş gecikmesini ve ses kesilmesini önler. 2. Steam Ses Ayarları ve Windows İletişim Aygıtı Eşitlemesi: Shift+Tab ile Steam Arayüzünü açıp Ayarlar -> Ses bölümünden Mikrofonunuzu 'Varsayılan' yerine doğrudan kendi adıyla seçin ve 'Ses Eşiği (Voice Transmission Threshold)' ayarını Kapalı yapın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Counter-Strike 2: pak01.vpk Bozuk Dosya Hatası ve Maç Ortasında Masaüstüne Atma (VPK-CORRUPT-01) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Source 2 motoru sıkıştırılmış `.vpk` arşivlerini RAM üzerinde anlık açar ve CRC kontrolü yapar. Hatalı `.vpk` bloğu veya agresif DDR4/DDR5 XMP/EXPO bellek zamanlaması CRC doğrulamasını bozar. Çözüm adımları: 1. Hatalı VPK Dosyasını Silip Doğrulama Yapın: `steamapps\\common\\Counter-Strike Global Offensive\\game\\csgo` klasöründeki hata veren `pak01_xxx.vpk` dosyasını silin ve Steam üzerinden dosya bütünlüğünü doğrulayın. 2. Tekrarlıyorsa RAM XMP/EXPO Kararlılığını Test Edin: Dosya doğrulamadan birkaç gün sonra tekrar aynı hatayı alıyorsanız Windows Bellek Tanılama (`mdsched.exe`) çalıştırın ve BIOS'tan RAM hızını 200MHz düşürerek test edin."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/cs2-hata-cozumleri.html#article",
+      "headline": "Counter-Strike 2 Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Counter-Strike 2 (Source 2) oyununda karşılaşılan VAC oturum doğrulama hatası, Packet Burst gecikmesi, çökme ve FPS düşüşü sorunlarını adım adım çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/cs2-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/cs2-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "Counter-Strike 2 - VAC Oyun Oturumunuzu Doğrulayamadı (VAC Was Unable to Verify Your Game Session) Çözümü",
-      "description": "Seçkin (Premier) veya Rekabetçi maça girerken 'VAC oyun oturumunuzu doğrulayamadı' hatası verip eşleştirmeyi iptal ediyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Steam Service Onarımı ve Yönetici Modu",
-          "text": "Steam'i tamamen kapatın. Yönetici CMD açıp `\"C:\\Program Files (x86)\\Common Files\\Steam\\SteamService.exe\" /repair` komutunu çalıştırın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "Oyun Dosyalarını Doğrulayın ve İndirme Önbelleğini Temizleyin",
-          "text": "Steam -> Ayarlar -> İndirmeler -> 'İndirme Önbelleğini Temizle' butonuna tıklayın. Ardından CS2 Özellikler -> Yüklü Dosyalar -> 'Oyun dosyalarının bütünlüğünü doğrula' işlemini başlatın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "BCDEDIT / DEP Kontrolü",
-          "text": "Yönetici CMD'de `bcdedit /deletevalue nointegritychecks` ve `bcdedit /deletevalue loadoptions` komutlarını çalıştırıp bilgisayarı yeniden başlatın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=cs2" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 CS2 AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -129,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Rekabetçi FPS</span>
-      <span>›</span>
-      <span class="text-white font-semibold">Counter-Strike 2 Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./cs2-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Counter-Strike 2</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VAC, Packet Burst, FPS</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -160,7 +154,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=cs2" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

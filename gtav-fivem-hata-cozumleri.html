@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GTA V &amp; FiveM Hata Çözümleri (ERR_GFX_D3D_INIT, Texture Loss, Early Exit Trap, Social Club Code 134, CitizenFX Crash) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="GTA V &amp; FiveM (RAGE Engine) için ERR_GFX_D3D_INIT, Texture Loss, Early Exit Trap, Social Club Code 134, CitizenFX Crash hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="gta v &amp; fivem hata çözümleri, gta v / fivem oyundan atma sorunu, gta v &amp; fivem açılmıyor çözümü, gta v &amp; fivem crash çözümü, gta v &amp; fivem fps artırma, oyunçöz, oyuncoz, gta v / fivem err_gfx_d3d_init çözümü, gta v / fivem texture loss çözümü, gta v / fivem early exit trap çözümü, gta v / fivem social club code 134 çözümü, gta v / fivem citizenfx crash çözümü, fivem-texture-loss, err_gfx_d3d_init, social-club-134" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>GTA V ve FiveM Hata Kodları ve FPS Çözümleri | OyunÇöz</title>
+  <meta name="description" content="GTA V ve FiveM roleplay sunucularında oluşan ERR_GFX_D3D_INIT çökmesi, harita yüklenmeme (Texture Loss) ve düşük FPS sorunlarını adım adım giderin rehberimizle." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/gtav-fivem-hata-cozumleri.html" />
@@ -16,97 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/gtav-fivem-hata-cozumleri.html" />
-  <meta property="og:title" content="GTA V &amp; FiveM Hata Çözümleri (ERR_GFX_D3D_INIT, Texture Loss, Early Exit Trap, Social Club Code 134, CitizenFX Crash) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="GTA V &amp; FiveM (RAGE Engine) için ERR_GFX_D3D_INIT, Texture Loss, Early Exit Trap, Social Club Code 134, CitizenFX Crash hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="GTA V ve FiveM Hata Kodları ve FPS Çözümleri | OyunÇöz" />
+  <meta property="og:description" content="GTA V ve FiveM roleplay sunucularında oluşan ERR_GFX_D3D_INIT çökmesi, harita yüklenmeme (Texture Loss) ve düşük FPS sorunlarını adım adım giderin rehberimizle." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/gtav-fivem-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GTA V ve FiveM Hata Kodları ve FPS Çözümleri | OyunÇöz" />
+  <meta name="twitter:description" content="GTA V ve FiveM roleplay sunucularında oluşan ERR_GFX_D3D_INIT çökmesi, harita yüklenmeme (Texture Loss) ve düşük FPS sorunlarını adım adım giderin rehberimizle." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/gtav-fivem-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/gtav-fivem-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "GTA V & FiveM Hata Çözümleri",
+          "name": "GTA V & FiveM",
+          "item": "https://oyuncoz.com/gtav-fivem-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ERR_GFX_D3D_INIT & Texture",
           "item": "https://oyuncoz.com/gtav-fivem-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "GTA V & FiveM: FiveM Harita / Doku Yüklenmeme (Texture Loss) ve Boşluğa Düşme Sorunu (FIVEM-TEXTURE-LOSS) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "FiveM sunucularındaki yüksek boyutlu özel MLO binalar ve eklenti araçlar (add-on cars), GTA V'in varsayılan akış belleği (Streaming Memory) limitini aşar. 'Extended Texture Budget' ayarı düşük olduğunda RAGE motoru yeni yol dokularını VRAM'e yükleyemez. Çözüm adımları: 1. Extended Texture Budget (Genişletilmiş Doku Bütçesi) Ayarını Artırın: Oyun içi Ayarlar -> Grafikler menüsünde 'Extended Texture Budget' çubuğunu ekran kartı VRAM'inize göre %50 ile %75 arasına getirin. 2. FiveM Cache Klasörünü Güvenli Şekilde Temizleyin: FiveM dosya konumunu açın -> `FiveM Application Data\\data` klasörüne girin. `game-storage` HARİÇ `cache`, `server-cache` ve `server-cache-priv` klasörlerini silin."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "GTA V & FiveM: ERR_GFX_D3D_INIT ve FiveM 'Early Exit Trap' Çökme Hatası (ERR_GFX_D3D_INIT) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "DirectX 11 cihazının ekran kartı sürücüsü zaman aşımı (TDR), bozuk `settings.xml` yapılandırması veya eski sürüm ENB/ReShade/NVE grafik eklentileri (`d3d11.dll`, `dxgi.dll`) yüzünden sıfırlanmasıdır. Çözüm adımları: 1. settings.xml Sıfırlama ve Grafik Eklentisi Kontrolü: `Belgeler\\Rockstar Games\\GTA V\\settings.xml` dosyasını silin. GTA V ana dizininde `d3d11.dll` veya `dxgi.dll` varsa geçici olarak kaldırın."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "GTA V & FiveM: Rockstar Games Launcher 'Code 134' / Social Club Çevrimdışı Mod Hatası (SOCIAL-CLUB-134) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Rockstar Games Servisleri'nin yerel kimlik önbelleğinin bozulması veya İSS (Güvenli İnternet / CGNAT IP bloğu) kaynaklı TLS el sıkışma reddi. Çözüm adımları: 1. Social Club Yerel Profilini Yenileyin: Rockstar Games Launcher'ı kapatın. `Belgeler\\Rockstar Games\\Social Club` ve `Launcher` klasörlerinin adını `_old` olarak değiştirip Launcher'ı Yönetici olarak çalıştırın."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/gtav-fivem-hata-cozumleri.html#article",
+      "headline": "GTA V &amp; FiveM Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "GTA V ve FiveM roleplay sunucularında oluşan ERR_GFX_D3D_INIT çökmesi, harita yüklenmeme (Texture Loss) ve düşük FPS sorunlarını adım adım giderin rehberimizle.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/gtav-fivem-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/gtav-fivem-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "GTA V & FiveM - FiveM Harita / Doku Yüklenmeme (Texture Loss) ve Boşluğa Düşme Sorunu Çözümü",
-      "description": "Roleplay sunucusunda hızlı araç sürerken yollar, binalar ve dokular kayboluyor, araç yerin altına düşüyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Extended Texture Budget (Genişletilmiş Doku Bütçesi) Ayarını Artırın",
-          "text": "Oyun içi Ayarlar -> Grafikler menüsünde 'Extended Texture Budget' çubuğunu ekran kartı VRAM'inize göre %50 ile %75 arasına getirin."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "FiveM Cache Klasörünü Güvenli Şekilde Temizleyin",
-          "text": "FiveM dosya konumunu açın -> `FiveM Application Data\\data` klasörüne girin. `game-storage` HARİÇ `cache`, `server-cache` ve `server-cache-priv` klasörlerini silin."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=gtav-fivem" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 GTA V / FiveM AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -115,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Açık Dünya / Roleplay</span>
-      <span>›</span>
-      <span class="text-white font-semibold">GTA V &amp; FiveM Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./gtav-fivem-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">GTA V & FiveM</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">ERR_GFX_D3D_INIT & Texture</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -145,7 +153,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=gtav-fivem" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

@@ -433,7 +433,7 @@ function cleanWebGLRendererName(rawRenderer) {
 }
 
 async function detectClientHardware() {
-  // 1. WebGL GPU Detection
+  // Stage 3.11: Runs ONLY when user explicitly clicks "Donanımımı Algıla" button
   let gpuName = 'Tespit Edilemedi (WebGL)';
   try {
     const canvas = document.createElement('canvas');
@@ -442,6 +442,8 @@ async function detectClientHardware() {
       const dbg = gl.getExtension('WEBGL_debug_renderer_info');
       const rawRenderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
       gpuName = cleanWebGLRendererName(rawRenderer);
+      const loseCtx = gl.getExtension('WEBGL_lose_context');
+      if (loseCtx) loseCtx.loseContext();
     }
   } catch (e) {}
 
@@ -642,13 +644,11 @@ function evaluateHardwareCompatibility() {
   const gameObj = STATE.games.find(g => g.slug === slug);
   const gameTitle = gameObj ? gameObj.name : 'Seçili Oyun';
 
-  // Parse RAM in GB
+  // Parse RAM in GB solely from user-saved/confirmed specs (never probe device hardware automatically on load)
   let ramGb = null;
   const ramMatch = specs.match(/\b(\d{1,3})\s*\+?\s*GB\s*(?:RAM|Bellek)?/i);
   if (ramMatch) {
     ramGb = parseInt(ramMatch[1], 10);
-  } else if (navigator.deviceMemory) {
-    ramGb = navigator.deviceMemory;
   }
 
   const heavyRamGames = [
@@ -790,7 +790,7 @@ function renderSuggestionChips() {
         onclick="pickSuggestedGame('${safeNameAttr}', '${(s.hint || '').replace(/'/g, "\\'")}', '${inputId}', '${hintId}', '${errorInputId || ''}')"
         class="text-xs px-2.5 py-1.5 rounded-xl bg-[#212936] hover:bg-[#2a3446] text-gray-200 border border-white/10 transition flex items-center gap-2"
       >
-        <img
+        <img loading="lazy" decoding="async"
           src="${safeSrc}"
           onerror="this.onerror=null;this.src=fallbackCover('${safeNameAttr}','#5e9c88')"
           alt="${escapeHTML(s.name)}"
@@ -1363,7 +1363,7 @@ function renderSidebarGames() {
     html += `
       <button onclick="selectGame('${g.slug}')" class="game-nav-item ${isActive ? 'active' : ''}">
         <div class="flex items-center gap-3 min-w-0">
-          <img
+          <img loading="lazy" decoding="async"
             src="${imgSrc}"
             onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${g.accent_color}')"
             alt="${escapeHTML(g.short_name)}"
@@ -1501,24 +1501,47 @@ async function applyUrlSeoParams() {
   }
 }
 
+function buildStrictSeoMetaDescription(rawSentence) {
+  let s = String(rawSentence || '').replace(/\s+/g, ' ').trim();
+  if (!s.endsWith('.')) s += '.';
+  if (s.length > 160) {
+    s = s.slice(0, 159).replace(/\s+\S*$/, '').replace(/[,;:\-]+$/, '') + '.';
+  }
+  while (s.length < 150) {
+    const pad = ' Adım adım güncel çözüm adımlarını inceleyin.';
+    if (s.length + pad.length <= 160) {
+      s = s.slice(0, -1) + ' için adım adım teknik çözüm rehberi.';
+    } else {
+      break;
+    }
+  }
+  return s;
+}
+
 function updateDynamicSEO() {
   try {
     const baseUrl = 'https://oyuncoz.com/';
     const metaDesc = document.querySelector('meta[name="description"]');
     const canonicalEl = document.getElementById('canonicalLink');
-    const schemaEl = document.getElementById('dynamicSeoSchema');
+
+    // Stage 3.6: Parameterized URLs (?game=, ?q=) always keep canonical pointing to the main homepage
+    if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
 
     if (STATE.selectedGame === 'all') {
-      document.title = STATE.searchQuery
-        ? `${STATE.searchQuery} Hatası Çözümü & Rehberi | OyunÇöz`
-        : 'OyunÇöz | Oyun Hata Kodları ve FPS Çözümleri';
+      if (STATE.searchQuery) {
+        const cleanQ = STATE.searchQuery.slice(0, 28).trim();
+        let t = `${cleanQ} Çözüm Rehberi | OyunÇöz`;
+        if (t.length > 60) t = `${cleanQ.slice(0, 20)} Çözümü | OyunÇöz`;
+        document.title = t;
+      } else {
+        document.title = 'OyunÇöz | Oyun Hata Kodları ve FPS Çözümleri';
+      }
       if (metaDesc) {
         metaDesc.setAttribute(
           'content',
-          'Valorant VAN 9003, CS2 VAC, LoL VAN 128, GTA V, Minecraft Exit Code 1 ve popüler PC oyunları için adım adım teknik hata kodu ve FPS çözüm rehberi.'
+          'OyunÇöz, Windows 10 ve 11 bilgisayarlarda karşılaşılan oyun hata kodları, çökme sorunları ve FPS düşüşleri için adım adım teknik çözüm rehberleri sunar.'
         );
       }
-      if (canonicalEl) canonicalEl.setAttribute('href', baseUrl);
       if (window.history && window.history.replaceState) {
         const nextUrl = STATE.searchQuery
           ? `${window.location.pathname}?q=${encodeURIComponent(STATE.searchQuery)}`
@@ -1528,16 +1551,20 @@ function updateDynamicSEO() {
     } else {
       const game = STATE.games.find(g => g.slug === STATE.selectedGame);
       if (game) {
-        const tagSummary = (game.common_tags || []).slice(0, 4).join(', ');
-        document.title = `${game.name} Hata Çözümleri (${tagSummary}) & Arıza Rehberi | OyunÇöz`;
-        if (metaDesc) {
-          metaDesc.setAttribute(
-            'content',
-            `${game.name} (${game.engine}) için güncel forum sorunları, ${tagSummary} hata kodları, FPS düşmesi, çökme çözümleri ve OyunÇöz adım adım teknik rehberi.`
-          );
+        const shortName = (game.short_name || game.name || 'Oyun').trim();
+        let t = `${shortName} Hata Kodları ve FPS Çözümleri | OyunÇöz`;
+        if (t.length > 60) {
+          t = `${shortName} Hata Çözüm Rehberi | OyunÇöz`;
         }
-        const gameUrl = `${baseUrl}?game=${encodeURIComponent(game.slug)}`;
-        if (canonicalEl) canonicalEl.setAttribute('href', gameUrl);
+        if (t.length > 60) {
+          t = `${shortName.slice(0, 28)} Çözümleri | OyunÇöz`;
+        }
+        document.title = t;
+        if (metaDesc) {
+          const tagSummary = (game.common_tags || []).slice(0, 2).join(' ve ') || 'çökme';
+          const descCandidate = `Windows 10 ve 11 sistemlerde ${game.name} oynarken oluşan ${tagSummary} hata kodları, çökme sorunları ve FPS düşüşleri için adım adım teknik çözüm rehberi sunar.`;
+          metaDesc.setAttribute('content', buildStrictSeoMetaDescription(descCandidate));
+        }
         if (window.history && window.history.replaceState) {
           window.history.replaceState({}, '', `${window.location.pathname}?game=${encodeURIComponent(game.slug)}`);
         }
@@ -1581,7 +1608,7 @@ function renderHomeShowcase() {
             class="showcase-card rounded-xl overflow-hidden cursor-pointer group flex flex-col justify-between"
           >
             <div class="relative h-20 w-full overflow-hidden bg-[#151b26]">
-              <img
+              <img loading="lazy" decoding="async"
                 src="${imgSrc}"
                 onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${g.accent_color}')"
                 alt="${escapeHTML(g.name)}"
@@ -1617,7 +1644,7 @@ function renderHomeShowcase() {
           >
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2 min-w-0">
-                <img
+                <img loading="lazy" decoding="async"
                   src="${imgSrc}"
                   onerror="this.onerror=null;this.src=fallbackCover('${safeTitle}','${iss.accent_color}')"
                   alt="${escapeHTML(iss.game_short_name)}"
@@ -1925,7 +1952,7 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
                 class="w-full text-left p-2 rounded-xl hover:bg-white/10 transition flex items-center justify-between gap-3"
               >
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <img src="${imgSrc}" onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')" alt="${g.short_name}" class="w-10 h-7 rounded object-cover border border-white/15 shrink-0" />
+                  <img loading="lazy" decoding="async" src="${imgSrc}" onerror="this.onerror=null;this.src=fallbackCover('${g.slug}','${g.accent_color}')" alt="${g.short_name}" class="w-10 h-7 rounded object-cover border border-white/15 shrink-0" />
                   <div class="min-w-0">
                     <div class="text-xs font-bold text-white truncate">${g.name}</div>
                     <div class="text-[10px] text-gray-400 truncate">${g.category} • ${g.engine}</div>
@@ -2326,7 +2353,7 @@ function renderIssues() {
         <div class="flex flex-wrap items-center justify-between gap-2">
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(issue.accent_color)}" onclick="selectGame('${escapeHTML(issue.game_slug)}')">
-              <img
+              <img loading="lazy" decoding="async"
                 src="${issue.game_image_url || fallbackCover(issue.game_slug, issue.accent_color)}"
                 onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(issue.game_slug)}','${escapeHTML(issue.accent_color)}')"
                 alt="${escapeHTML(issue.game_short_name)}"
@@ -3047,7 +3074,7 @@ function renderThreads() {
 
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(t.accent_color)}" onclick="selectGame('${escapeHTML(t.game_slug)}')">
-              <img
+              <img loading="lazy" decoding="async"
                 src="${t.game_image_url || fallbackCover(t.game_slug, t.accent_color)}"
                 onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(t.game_slug)}','${escapeHTML(t.accent_color)}')"
                 alt="${escapeHTML(t.game_short_name)}"

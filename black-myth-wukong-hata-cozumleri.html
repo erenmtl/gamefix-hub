@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Black Myth: Wukong Hata Çözümleri (Out of Video Memory, Shader Compilation Crash, UE5 Traversal Stutter, -dx11 Launch) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="Black Myth: Wukong (Unreal Engine 5) için Out of Video Memory, Shader Compilation Crash, UE5 Traversal Stutter, -dx11 Launch hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="black myth: wukong hata çözümleri, black myth: wukong oyundan atma sorunu, black myth: wukong açılmıyor çözümü, black myth: wukong crash çözümü, black myth: wukong fps artırma, oyunçöz, oyuncoz, black myth: wukong out of video memory çözümü, black myth: wukong shader compilation crash çözümü, black myth: wukong ue5 traversal stutter çözümü, black myth: wukong -dx11 launch çözümü, ue5-shader-oom" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Black Myth: Wukong Out of Video Memory Çözümü | OyunÇöz</title>
+  <meta name="description" content="Black Myth: Wukong (Unreal Engine 5) gölgelendirici derleme ekranında oluşan Out of Video Memory çökmesi ve traversal stutter sorunlarını adım adım çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html" />
@@ -16,75 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html" />
-  <meta property="og:title" content="Black Myth: Wukong Hata Çözümleri (Out of Video Memory, Shader Compilation Crash, UE5 Traversal Stutter, -dx11 Launch) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Black Myth: Wukong (Unreal Engine 5) için Out of Video Memory, Shader Compilation Crash, UE5 Traversal Stutter, -dx11 Launch hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Black Myth: Wukong Out of Video Memory Çözümü | OyunÇöz" />
+  <meta property="og:description" content="Black Myth: Wukong (Unreal Engine 5) gölgelendirici derleme ekranında oluşan Out of Video Memory çökmesi ve traversal stutter sorunlarını adım adım çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/black-myth-wukong-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Black Myth: Wukong Out of Video Memory Çözümü | OyunÇöz" />
+  <meta name="twitter:description" content="Black Myth: Wukong (Unreal Engine 5) gölgelendirici derleme ekranında oluşan Out of Video Memory çökmesi ve traversal stutter sorunlarını adım adım çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/black-myth-wukong-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Black Myth: Wukong Hata Çözümleri",
+          "name": "Black Myth: Wukong",
+          "item": "https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Out of Video Memory",
           "item": "https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Black Myth: Wukong: Başlangıçta 'Out of Video Memory Trying to Allocate a Rendering Resource' Hatası (UE5-SHADER-OOM) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Unreal Engine 5'in Oodle gölgelendirici sıkıştırma açıcısı tüm CPU çekirdeklerini %100 AVX yüküne soktuğunda kararsız çekirdek çarpanları sahte `Out of Video Memory` hatası fırlatır. Çözüm adımları: 1. Gölgelendirici Derlemesi Sırasında Güç Planını Geçici Olarak Düşürün veya Uyumluluk Modu Açın: İlk açılıştaki Shader Compilation ekranını geçmek için Windows Güç Planını geçici olarak 'Güç Tasarrufu' yapın (derleme bitince tekrar Yüksek Performans'a alın) veya Steam'den 'Compatibility Mode' ile başlatın."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html#article",
+      "headline": "Black Myth: Wukong Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Black Myth: Wukong (Unreal Engine 5) gölgelendirici derleme ekranında oluşan Out of Video Memory çökmesi ve traversal stutter sorunlarını adım adım çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/black-myth-wukong-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "Black Myth: Wukong - Başlangıçta 'Out of Video Memory Trying to Allocate a Rendering Resource' Hatası Çözümü",
-      "description": "Ekran kartında 12GB/16GB VRAM olmasına rağmen ilk açılışta 'Shader Compilation' sırasında 'Out of video memory' verip çöküyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Gölgelendirici Derlemesi Sırasında Güç Planını Geçici Olarak Düşürün veya Uyumluluk Modu Açın",
-          "text": "İlk açılıştaki Shader Compilation ekranını geçmek için Windows Güç Planını geçici olarak 'Güç Tasarrufu' yapın (derleme bitince tekrar Yüksek Performans'a alın) veya Steam'den 'Compatibility Mode' ile başlatın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=black-myth-wukong" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 Black Myth: Wukong AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -93,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Aksiyon RPG</span>
-      <span>›</span>
-      <span class="text-white font-semibold">Black Myth: Wukong Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./black-myth-wukong-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Black Myth: Wukong</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">Out of Video Memory</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -122,7 +152,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=black-myth-wukong" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diablo IV Hata Çözümleri (Fenris Crash, VRAM Leak Fix, Disable Cross-Network Play, DirectStorage Dll) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="Diablo IV (Proprietary PBR Engine) için Fenris Crash, VRAM Leak Fix, Disable Cross-Network Play, DirectStorage Dll hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="diablo iv hata çözümleri, diablo iv oyundan atma sorunu, diablo iv açılmıyor çözümü, diablo iv crash çözümü, diablo iv fps artırma, oyunçöz, oyuncoz, diablo iv fenris crash çözümü, diablo iv vram leak fix çözümü, diablo iv disable cross-network play çözümü, diablo iv directstorage dll çözümü, d4-fenris-vram" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Diablo IV Fenris Çökme, VRAM ve FPS Çözümleri | OyunÇöz</title>
+  <meta name="description" content="Diablo IV ve Vessel of Hatred PC sürümünde yaşanan Fenris.exe bellek sızıntısı çökmesi, Code 300202 bağlantı hatası ve şehir içi takılmaları adım adım çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/diablo-iv-hata-cozumleri.html" />
@@ -16,75 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/diablo-iv-hata-cozumleri.html" />
-  <meta property="og:title" content="Diablo IV Hata Çözümleri (Fenris Crash, VRAM Leak Fix, Disable Cross-Network Play, DirectStorage Dll) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Diablo IV (Proprietary PBR Engine) için Fenris Crash, VRAM Leak Fix, Disable Cross-Network Play, DirectStorage Dll hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Diablo IV Fenris Çökme, VRAM ve FPS Çözümleri | OyunÇöz" />
+  <meta property="og:description" content="Diablo IV ve Vessel of Hatred PC sürümünde yaşanan Fenris.exe bellek sızıntısı çökmesi, Code 300202 bağlantı hatası ve şehir içi takılmaları adım adım çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/diablo-iv-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Diablo IV Fenris Çökme, VRAM ve FPS Çözümleri | OyunÇöz" />
+  <meta name="twitter:description" content="Diablo IV ve Vessel of Hatred PC sürümünde yaşanan Fenris.exe bellek sızıntısı çökmesi, Code 300202 bağlantı hatası ve şehir içi takılmaları adım adım çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/diablo-iv-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/diablo-iv-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Diablo IV Hata Çözümleri",
+          "name": "Diablo IV",
+          "item": "https://oyuncoz.com/diablo-iv-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Fenris Crash & Code 300202",
           "item": "https://oyuncoz.com/diablo-iv-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "Diablo IV: Fenris Hatası (Bellek Sızıntısı / Out of Memory) ve Şehirde Aşırı Takılma (Rubberbanding) (D4-FENRIS-VRAM) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Diablo IV yakındaki her oyuncunun tüm kozmetik/sandık envanterini VRAM'e yükler; Çapraz Ağ açıkken farklı platform senkronizasyonu gecikme yaratır ve Yüksek çözünürlüklü dokular VRAM taşmasına yol açar. Çözüm adımları: 1. Çapraz Ağ Oyununu (Cross-Network Play) ve Tarayıcı İvmesini Kapatın: Karakter seçme ekranında Seçenekler -> **Connect (Bağlantı)** sekmesinden **Cross-Network Play** işaretini kaldırın. Battle.net -> Ayarlar -> Uygulama altından 'Tarayıcı donanım ivmesini kullan' seçeneğini kapatın."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/diablo-iv-hata-cozumleri.html#article",
+      "headline": "Diablo IV Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "Diablo IV ve Vessel of Hatred PC sürümünde yaşanan Fenris.exe bellek sızıntısı çökmesi, Code 300202 bağlantı hatası ve şehir içi takılmaları adım adım çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/diablo-iv-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/diablo-iv-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "Diablo IV - Fenris Hatası (Bellek Sızıntısı / Out of Memory) ve Şehirde Aşırı Takılma (Rubberbanding) Çözümü",
-      "description": "1 saat oynadıktan sonra ışınlanırken oyun donuyor ve 'Diablo IV has run out of memory' (Fenris) hatası veriyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Çapraz Ağ Oyununu (Cross-Network Play) ve Tarayıcı İvmesini Kapatın",
-          "text": "Karakter seçme ekranında Seçenekler -> **Connect (Bağlantı)** sekmesinden **Cross-Network Play** işaretini kaldırın. Battle.net -> Ayarlar -> Uygulama altından 'Tarayıcı donanım ivmesini kullan' seçeneğini kapatın."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=diablo-iv" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 Diablo IV AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -93,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Aksiyon RPG (ARPG)</span>
-      <span>›</span>
-      <span class="text-white font-semibold">Diablo IV Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./diablo-iv-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Diablo IV</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">Fenris Crash & Code 300202</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -122,7 +152,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=diablo-iv" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">

@@ -3,120 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valorant VAN 9003 ve VAN 1067 Hatası Çözüm Rehberi (Windows 11 Secure Boot & TPM 2.0) | OyunÇöz</title>
-  <meta name="description" content="Windows 11'de Valorant VAN 9003 (This build of Vanguard requires secure boot to be enabled) ve VAN 1067 hatası nasıl çözülür? ASUS, MSI, Gigabyte ve ASRock BIOS Secure Boot, TPM 2.0 ve VGC servis ayarları." />
-  <meta name="keywords" content="valorant van 9003 çözümü, valorant van 9003 windows 11, van 1067 hatası çözümü, this build of vanguard requires secure boot, valorant tpm 2.0 hatası, asus bios secure boot açma, msi bios van 9003, gigabyte secure boot valorant, oyunçöz valorant" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>Valorant VAN 9003 ve VAN 1067 Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Windows 11 bilgisayarlarda karşılaşılan Valorant VAN 9003 ve VAN 1067 hatalarını BIOS UEFI Secure Boot, TPM 2.0 ve VGC servis ayarlarıyla adım adım çözün." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html" />
+  <link rel="alternate" hreflang="tr-TR" href="https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html" />
   <link rel="icon" type="image/svg+xml" href="./static/favicon.svg" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html" />
-  <meta property="og:title" content="Valorant VAN 9003 ve VAN 1067 Hatası Çözüm Rehberi (Windows 11 Secure Boot & TPM 2.0) | OyunÇöz" />
-  <meta property="og:description" content="Windows 11'de Valorant VAN 9003 (This build of Vanguard requires secure boot to be enabled) ve VAN 1067 hatası nasıl çözülür? ASUS, MSI, Gigabyte ve ASRock BIOS Secure Boot, TPM 2.0 ve VGC servis ayarları." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="Valorant VAN 9003 ve VAN 1067 Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Windows 11 bilgisayarlarda karşılaşılan Valorant VAN 9003 ve VAN 1067 hatalarını BIOS UEFI Secure Boot, TPM 2.0 ve VGC servis ayarlarıyla adım adım çözün." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/valorant-van-9003-van-1067-cozumu.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Valorant VAN 9003 ve VAN 1067 Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="Windows 11 bilgisayarlarda karşılaşılan Valorant VAN 9003 ve VAN 1067 hatalarını BIOS UEFI Secure Boot, TPM 2.0 ve VGC servis ayarlarıyla adım adım çözün." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/valorant-van-9003-van-1067-cozumu.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "Valorant VAN 9003, VAN 1067, TPM 2.0 ve Secure Boot Çözüm Rehberi",
+          "name": "Valorant",
+          "item": "https://oyuncoz.com/valorant-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VAN 9003 & VAN 1067",
           "item": "https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html"
         }
       ]
     },
     {
-      "@type": "HowTo",
-      "name": "Valorant VAN 9003, VAN 1067, TPM 2.0 ve Secure Boot Çözüm Rehberi",
-      "description": "Windows 11'de Valorant VAN 9003 (This build of Vanguard requires secure boot to be enabled) ve VAN 1067 hatası nasıl çözülür? ASUS, MSI, Gigabyte ve ASRock BIOS Secure Boot, TPM 2.0 ve VGC servis ayarları.",
-      "totalTime": "PT4M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "Mevcut Güvenli Önyükleme ve BIOS Modunu Doğrulayın",
-          "text": "Klavyeden Win + R tuşlarına basıp msinfo32 yazarak Sistem Bilgisi penceresini açın. 'BIOS Modu' satırının UEFI olduğundan ve 'Güvenli Önyükleme Durumu (Secure Boot State)' satırının Açık/Kapalı durumunu kontrol edin. Ayrıca tpm.msc komutuyla TPM 2.0 hazırlık durumunu doğrulayın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 2,
-          "name": "BIOS Üzerinden CSM Kapatma ve UEFI Secure Boot Aktifleştirme",
-          "text": "Bilgisayarı yeniden başlatırken DEL veya F2 tuşuna basarak BIOS'a girin. Boot menüsünden CSM (Compatibility Support Module) ayarını Disabled yapın. Secure Boot menüsüne girip OS Type / Secure Boot Mode ayarını 'Windows UEFI Mode' veya 'Standard' yapın. Eğer msinfo32'de hala Kapalı görünüyorsa 'Key Management' altından 'Install Default Secure Boot Keys' (Fabrika Anahtarlarını Yükle) seçeneğini onaylayın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 3,
-          "name": "AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Açın",
-          "text": "AMD Ryzen işlemcili anakartlarda Advanced > AMD fTPM Configuration > AMD fTPM Switch ayarını Enabled yapın. Intel işlemcili anakartlarda Settings > Security > Trusted Computing > Intel Platform Trust Technology (PTT) ayarını Enabled konumuna getirin ve F10 ile kaydedip çıkın."
-        },
-        {
-          "@type": "HowToStep",
-          "position": 4,
-          "name": "Riot Vanguard (vgc) Hizmetini Otomatik Başlatın ve Onarın",
-          "text": "Windows açıldığında Hizmetler (services.msc) penceresinden 'vgc' hizmetini bulun, Başlangıç Türünü 'Otomatik' yapıp hizmeti başlatın. Komut İstemi'ni (CMD) Yönetici olarak açıp aşağıdaki doğrulama komutlarını çalıştırın."
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html#article",
+      "headline": "Valorant VAN 9003, VAN 1067, TPM 2.0 ve Secure Boot Çözüm Rehberi",
+      "description": "Windows 11 bilgisayarlarda karşılaşılan Valorant VAN 9003 ve VAN 1067 hatalarını BIOS UEFI Secure Boot, TPM 2.0 ve VGC servis ayarlarıyla adım adım çözün.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/valorant-van-9003-van-1067-cozumu.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "BIOS'ta Secure Boot Enabled görünmesine rağmen Valorant neden hala VAN 9003 veriyor?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "ASUS ve Gigabyte anakartlarda Secure Boot seçeneği Enabled olsa bile Platform Key (PK) anahtarları yüklenmemişse Secure Boot durumu 'Not Active' kalır. BIOS > Secure Boot > Key Management menüsünden 'Install Default Secure Boot Keys' (veya Restore Factory Keys) işlemini uyguladığınızda sorun çözülür."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Valorant VAN 1067 hatası neden kaynaklanır?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "VAN 1067 hatası TPM 2.0 servisinin yanıt vermemesi, vgc hizmetinin durması veya Discord/RivaTuner gibi 3. parti ekran katmanı (overlay) yazılımlarının Vanguard ile çakışmasından kaynaklanır. vgc hizmetini Otomatik yapıp bilgisayarı yeniden başlatmak sorunun giderilmesine yardımcı olur."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Valorant paket kaybı (Packet Loss) ve mikro takılma (stutter) nasıl giderilir?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Oyun içi Genel ayarlarından 'Ağ Arabelleği' değerini Asgari'den Orta'ya çekin, Faresiz Ham Giriş (RawInputBuffer) özelliğini Açık yapın ve CMD'de ipconfig /flushdns && netsh int ip reset komutlarını çalıştırın."
-          }
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=valorant" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 AI Arıza Çözümleyiciyi Aç
         </a>
       </div>
@@ -124,14 +122,15 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1">
-    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <a href="./?game=valorant" class="hover:text-[#88c0a8]">Oyun Çözüm Ekranı</a>
-      <span>›</span>
-      <span class="text-gray-200 font-semibold">VALORANT • RIOT VANGUARD REHBERİ</span>
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./valorant-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Valorant</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VAN 9003 & VAN 1067</span>
     </nav>
 
+    <article class="space-y-7">
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">
         <span>⚡ VALORANT • RIOT VANGUARD REHBERİ</span>
@@ -141,7 +140,7 @@
       <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">Valorant VAN 9003, VAN 1067, TPM 2.0 ve Secure Boot Çözüm Rehberi</h1>
       <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows 11 23H2 ve 24H2 güncellemeleri sonrasında Riot Vanguard çekirdek (kernel) sürücüsü, anakartınızda UEFI Secure Boot (Güvenli Önyükleme) ve TPM 2.0 (fTPM / PTT) modüllerinin yalnızca açık olmasını değil, donanımsal olarak 'Aktif (Active)' durumda çalışmasını zorunlu tutar. Aşağıdaki adım adım rehber ile VAN 9003, VAN 1067 ve VAL 62 hatalarını adım adım uygulayarak çözebilirsiniz.</p>
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=valorant" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz Modunda &amp; AI ile Çöz →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
@@ -180,7 +179,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">Mevcut Güvenli Önyükleme ve BIOS Modunu Doğrulayın</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">Mevcut Güvenli Önyükleme ve BIOS Modunu Doğrulayın</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Klavyeden Win + R tuşlarına basıp msinfo32 yazarak Sistem Bilgisi penceresini açın. 'BIOS Modu' satırının UEFI olduğundan ve 'Güvenli Önyükleme Durumu (Secure Boot State)' satırının Açık/Kapalı durumunu kontrol edin. Ayrıca tpm.msc komutuyla TPM 2.0 hazırlık durumunu doğrulayın.</p>
         </div>
@@ -189,7 +188,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">BIOS Üzerinden CSM Kapatma ve UEFI Secure Boot Aktifleştirme</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">BIOS Üzerinden CSM Kapatma ve UEFI Secure Boot Aktifleştirme</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Bilgisayarı yeniden başlatırken DEL veya F2 tuşuna basarak BIOS'a girin. Boot menüsünden CSM (Compatibility Support Module) ayarını Disabled yapın. Secure Boot menüsüne girip OS Type / Secure Boot Mode ayarını 'Windows UEFI Mode' veya 'Standard' yapın. Eğer msinfo32'de hala Kapalı görünüyorsa 'Key Management' altından 'Install Default Secure Boot Keys' (Fabrika Anahtarlarını Yükle) seçeneğini onaylayın.</p>
         </div>
@@ -198,7 +197,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Açın</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Açın</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">AMD Ryzen işlemcili anakartlarda Advanced > AMD fTPM Configuration > AMD fTPM Switch ayarını Enabled yapın. Intel işlemcili anakartlarda Settings > Security > Trusted Computing > Intel Platform Trust Technology (PTT) ayarını Enabled konumuna getirin ve F10 ile kaydedip çıkın.</p>
         </div>
@@ -207,7 +206,7 @@
         <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-2">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 4</span>
-            <h2 class="text-sm sm:text-base font-bold text-white">Riot Vanguard (vgc) Hizmetini Otomatik Başlatın ve Onarın</h2>
+            <h3 class="text-sm sm:text-base font-bold text-white">Riot Vanguard (vgc) Hizmetini Otomatik Başlatın ve Onarın</h3>
           </div>
           <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Windows açıldığında Hizmetler (services.msc) penceresinden 'vgc' hizmetini bulun, Başlangıç Türünü 'Otomatik' yapıp hizmeti başlatın. Komut İstemi'ni (CMD) Yönetici olarak açıp aşağıdaki doğrulama komutlarını çalıştırın.</p>
         </div>
@@ -399,6 +398,7 @@
       })();
     </script>
 
+      </article>
   </main>
 
   <footer class="border-t border-white/10 bg-[#11161f] py-6 text-center text-xs text-gray-400">

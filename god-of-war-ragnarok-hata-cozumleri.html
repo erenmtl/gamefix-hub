@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>God of War Ragnarök (PC) Hata Çözümleri (PS PC SDK Crash, VRAM Bypass, Audio 5.1 Dialog Fix, DLSS Stutter, Realm Travel Drop) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz</title>
-  <meta name="description" content="God of War Ragnarök (PC) (Proprietary DX12 Engine) için PS PC SDK Crash, VRAM Bypass, Audio 5.1 Dialog Fix, DLSS Stutter, Realm Travel Drop hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta name="keywords" content="god of war ragnarök (pc) hata çözümleri, gow ragnarök oyundan atma sorunu, god of war ragnarök (pc) açılmıyor çözümü, god of war ragnarök (pc) crash çözümü, god of war ragnarök (pc) fps artırma, oyunçöz, oyuncoz, gow ragnarök ps pc sdk crash çözümü, gow ragnarök vram bypass çözümü, gow ragnarök audio 5.1 dialog fix çözümü, gow ragnarök dlss stutter çözümü, gow ragnarök realm travel drop çözümü, gowr-pssdk-audio" />
-  <meta name="author" content="OyunÇöz Oyun & Teknik Çözüm Merkezi" />
+  <title>God of War Ragnarök PC Çökme ve FPS Çözümleri | OyunÇöz</title>
+  <meta name="description" content="God of War Ragnarök PC sürümünde karşılaşılan 6 GB ekran kartı uyumluluk hatası, PlayStation PC SDK başlatma sorunu ve VRAM sızıntısını adım adım giderin." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html" />
@@ -16,75 +15,106 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html" />
-  <meta property="og:title" content="God of War Ragnarök (PC) Hata Çözümleri (PS PC SDK Crash, VRAM Bypass, Audio 5.1 Dialog Fix, DLSS Stutter, Realm Travel Drop) - Çökme, FPS &amp; Açılmama Rehberi | OyunÇöz" />
-  <meta property="og:description" content="God of War Ragnarök (PC) (Proprietary DX12 Engine) için PS PC SDK Crash, VRAM Bypass, Audio 5.1 Dialog Fix, DLSS Stutter, Realm Travel Drop hata kodları, oyundan atma (crash), açılmama, siyah ekran ve FPS düşmesi sorunlarının adım adım çözüm rehberleri." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.svg" />
+  <meta property="og:title" content="God of War Ragnarök PC Çökme ve FPS Çözümleri | OyunÇöz" />
+  <meta property="og:description" content="God of War Ragnarök PC sürümünde karşılaşılan 6 GB ekran kartı uyumluluk hatası, PlayStation PC SDK başlatma sorunu ve VRAM sızıntısını adım adım giderin." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/god-of-war-ragnarok-hata-cozumleri.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="God of War Ragnarök PC Çökme ve FPS Çözümleri | OyunÇöz" />
+  <meta name="twitter:description" content="God of War Ragnarök PC sürümünde karşılaşılan 6 GB ekran kartı uyumluluk hatası, PlayStation PC SDK başlatma sorunu ve VRAM sızıntısını adım adım giderin." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/god-of-war-ragnarok-hata-cozumleri.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html#breadcrumb",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "OyunÇöz Ana Sayfa",
+          "name": "Ana Sayfa",
           "item": "https://oyuncoz.com/"
         },
         {
           "@type": "ListItem",
           "position": 2,
-          "name": "God of War Ragnarök (PC) Hata Çözümleri",
+          "name": "God of War Ragnarök",
+          "item": "https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "VRAM Leak & PSN SDK",
           "item": "https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html"
         }
       ]
     },
     {
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "God of War Ragnarök (PC): Oyun Açılışında Siyah Ekran (PlayStation PC SDK Runtime Hatası) ve Ses/Diyalog Gelmeme (GOWR-PSSDK-AUDIO) nasıl çözülür?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "PlayStation PC SDK arka plan servisi kurulmadığında kimlik doğrulama penceresi siyah ekranda asılı kalır; diyalog kaybı ise oyunun sanal 7.1 kulaklıkları gerçek merkez (Center) hoparlör sanmasından kaynaklanır. Çözüm adımları: 1. PsPcSdkRuntime Kurulumunu Onarın ve Ses Kanalını Stereo Yapın: Oyun dizinindeki `PsPcSdkRuntimeInstaller.msi` dosyasını çalıştırıp Onar deyin. Ses sorunu için Windows Ses Denetim Masası -> Kulaklığınız -> Yapılandır -> **Stereo** seçin."
-          }
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html#article",
+      "headline": "God of War Ragnarök (PC) Hata Çözümleri, Çökme (Crash), Açılmama ve FPS Artırma Rehberi",
+      "description": "God of War Ragnarök PC sürümünde karşılaşılan 6 GB ekran kartı uyumluluk hatası, PlayStation PC SDK başlatma sorunu ve VRAM sızıntısını adım adım giderin.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/god-of-war-ragnarok-hata-cozumleri.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
         }
-      ]
-    },
-    {
-      "@type": "HowTo",
-      "name": "God of War Ragnarök (PC) - Oyun Açılışında Siyah Ekran (PlayStation PC SDK Runtime Hatası) ve Ses/Diyalog Gelmeme Çözümü",
-      "description": "Oyun açılırken siyah ekranda kalıyor veya ara sahnelerde Kratos ve Atreus'un konuşma sesleri hiç duyulmuyor.",
-      "totalTime": "PT5M",
-      "step": [
-        {
-          "@type": "HowToStep",
-          "position": 1,
-          "name": "PsPcSdkRuntime Kurulumunu Onarın ve Ses Kanalını Stereo Yapın",
-          "text": "Oyun dizinindeki `PsPcSdkRuntimeInstaller.msi` dosyasını çalıştırıp Onar deyin. Ses sorunu için Windows Ses Denetim Masası -> Kulaklığınız -> Yapılandır -> **Stereo** seçin."
-        }
-      ]
+      }
     }
   ]
 }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="./" class="flex items-center gap-3">
-        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40"  loading="lazy" decoding="async" />
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hataları &amp; Akıllı Arıza Çözüm Merkezi</span>
         </div>
       </a>
       <div class="flex items-center gap-2">
-        <a href="./?game=god-of-war-ragnarok" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+        <a href="./#tabContent-ai-lab" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
           🤖 GoW Ragnarök AI Çözümleyiciyi Aç
         </a>
       </div>
@@ -93,11 +123,11 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 space-y-7 flex-1">
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
-      <a href="./" class="hover:text-[#88c0a8]">OyunÇöz Ana Sayfa</a>
-      <span>›</span>
-      <span class="text-gray-300">Aksiyon Macera</span>
-      <span>›</span>
-      <span class="text-white font-semibold">God of War Ragnarök (PC) Hata Çözümleri</span>
+      <a href="./" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="./god-of-war-ragnarok-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">God of War Ragnarök</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">VRAM Leak & PSN SDK</span>
     </nav>
 
     <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
@@ -123,7 +153,7 @@
       </div>
 
       <div class="pt-2 flex flex-wrap gap-3">
-        <a href="./?game=god-of-war-ragnarok" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
+        <a href="./#tabContent-ai-lab" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white shadow transition">
           🧭 İnteraktif Sihirbaz &amp; AI Teşhis Ekranında Aç →
         </a>
         <a href="./" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
