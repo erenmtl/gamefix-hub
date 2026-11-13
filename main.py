@@ -1914,6 +1914,70 @@ def upvote_thread(
     return {"upvotes": new_upvotes, "user_voted": voted_now}
 
 
+class ContactFormRequest(BaseModel):
+    full_name: str
+    email: str
+    subject: str
+    message: str
+    website_url: Optional[str] = ""
+
+
+@app.post("/api/contact")
+def submit_contact_message(
+    req: ContactFormRequest,
+    request: Request,
+    x_client_id: Optional[str] = Header(None)
+):
+    if req.website_url and req.website_url.strip():
+        return {"status": "ok", "message": "Mesajınız iletildi."}
+
+    ip_addr = get_client_ip(request)
+    client_key = (x_client_id or ip_addr).strip()[:64]
+    check_rate_limit(f"contact_ip:{ip_addr}", max_calls=5, window_sec=300, action_name="iletişim formu gönderimi")
+    check_rate_limit(f"contact_client:{client_key}", max_calls=5, window_sec=300, action_name="iletişim formu gönderimi")
+
+    full_name = sanitize_user_text(req.full_name)[:80]
+    email = req.email.strip().lower()[:120]
+    subject = sanitize_user_text(req.subject)[:140]
+    message = sanitize_user_text(req.message)[:2500]
+
+    if len(full_name) < 2:
+        raise HTTPException(status_code=400, detail="Lütfen geçerli bir ad veya rumuz girin.")
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Lütfen geçerli bir e-posta adresi girin.")
+    if len(subject) < 3 or len(message) < 10:
+        raise HTTPException(status_code=400, detail="Lütfen konu başlığını ve mesajınızı detaylıca yazın (en az 10 karakter).")
+
+    ua_str = (request.headers.get("User-Agent") or "unknown")[:250]
+    now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO contact_messages (full_name, email, subject, message, ip_address, user_agent, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (full_name, email, subject, message, ip_addr, ua_str, now_iso))
+    msg_id = cursor.lastrowid or 0
+    conn.commit()
+    conn.close()
+
+    log_5651_event(
+        action_type="contact_message_submitted",
+        target_id=int(msg_id),
+        user_id=0,
+        client_id=client_key,
+        ip_address=ip_addr,
+        user_agent=ua_str,
+        content_summary=f"Contact [{subject}] from {email}"
+    )
+
+    return {
+        "status": "ok",
+        "message_id": msg_id,
+        "message": "✓ Mesajınız OyunÇöz Teknik Ekibine başarıyla iletildi. En kısa sürede e-posta adresinize dönüş yapılacaktır."
+    }
+
+
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_DIR = os.path.join(ROOT_DIR, "static")
 os.makedirs(STATIC_DIR, exist_ok=True)
