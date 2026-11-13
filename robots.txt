@@ -1,10 +1,7 @@
 User-agent: *
 Allow: /
-Allow: /gamefix-hub/
 Disallow: /api/auth/
-Disallow: /gamefix-hub/api/auth/
 
-# Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -15,3 +12,4 @@ User-agent: Yandex
 Allow: /
 
 Sitemap: https://oyuncoz.com/sitemap.xml
+Sitemap: https://oyuncoz.com/sitemap2.xml

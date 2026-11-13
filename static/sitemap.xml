@@ -1,229 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Hub & OyunÇöz AI Troubleshooter -->
   <url>
     <loc>https://oyuncoz.com/</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  <!-- Dedicated Static SEO Landing Pages -->
   <url>
     <loc>https://oyuncoz.com/valorant-van-9003-van-1067-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://oyuncoz.com/cs2-vac-oturum-dogrulama-fps-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://oyuncoz.com/lol-vanguard-van-128-van-185-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://oyuncoz.com/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://oyuncoz.com/minecraft-exit-code-1-glfw-65542-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://oyuncoz.com/rdr2-bannerlord-fc25-wukong-crash-cozumu.html</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.95</priority>
-  </url>
-
-  <!-- Dedicated Game Troubleshooting Screens (All 30 Active Games) -->
-  <url>
-    <loc>https://oyuncoz.com/?game=valorant</loc>
-    <lastmod>2026-10-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=cs2</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=lol</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.95</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=gtav-fivem</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/valorant-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=fc25</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/cs2-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=minecraft</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/lol-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=cod-warzone</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/gtav-fivem-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=rust</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=apex-legends</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=cyberpunk-2077</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=elden-ring</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=pubg</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=victoria-3</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=hearts-of-iron-4</loc>
-    <lastmod>2026-10-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/?game=mount-and-blade-2-bannerlord</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/fc25-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=red-dead-redemption-2</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/minecraft-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=baldurs-gate-3</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/cod-warzone-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=euro-truck-simulator-2</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/rust-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=forza-horizon-5</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/apex-legends-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=helldivers-2</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/cyberpunk-2077-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=rainbow-six-siege</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/elden-ring-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=football-manager-2024</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/pubg-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=black-myth-wukong</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/victoria-3-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=palworld</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/hearts-of-iron-4-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=dota-2</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/mount-and-blade-2-bannerlord-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=escape-from-tarkov</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/red-dead-redemption-2-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=the-witcher-3</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/baldurs-gate-3-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=god-of-war-ragnarok</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/euro-truck-simulator-2-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=overwatch-2</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/forza-horizon-5-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://oyuncoz.com/?game=diablo-iv</loc>
-    <lastmod>2026-10-28</lastmod>
+    <loc>https://oyuncoz.com/helldivers-2-hata-cozumleri.html</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/rainbow-six-siege-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/football-manager-2024-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/black-myth-wukong-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/palworld-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/dota-2-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/escape-from-tarkov-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/the-witcher-3-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/god-of-war-ragnarok-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/overwatch-2-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/diablo-iv-hata-cozumleri.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
   </url>
 </urlset>
