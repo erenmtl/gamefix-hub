@@ -191,368 +191,104 @@
       <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-400/35 text-xs text-amber-100">
         🛡️ <strong>Sistem Güvenliği Uyarısı:</strong> Sistem veya kayıt defteri komutlarını uygulamadan önce geri yükleme noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
       </div>
-    <section class="space-y-5">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-extrabold text-white">🛠️ Counter-Strike 2 En Sık Karşılaşılan Hatalar ve Çözüm Rehberleri (4 Rehber)</h2>
-      </div>
-      
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAC-VERIFY-ERR</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Anti-Cheat &amp; Güvenlik</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">VAC Oyun Oturumunuzu Doğrulayamadı (VAC Was Unable to Verify Your Game Session)</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Seçkin (Premier) veya Rekabetçi maça girerken &#x27;VAC oyun oturumunuzu doğrulayamadı&#x27; hatası verip eşleştirmeyi iptal ediyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Source 2 &amp; VAC (Valve Anti-Cheat))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">CS2&#x27;de VAC modülü, `steamservice.exe` üzerinden oyun belleği imzasını ve NTFS USN Journal kayıtlarını denetler. Steam servisi yetki kaybederse, oyun kısayoldan (Steam dışı) başlatılırsa veya bozuk `.vpk` önbelleği oluşursa doğrulama reddedilir.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Steam Service Onarımı ve Yönetici Modu</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Steam&#x27;i tamamen kapatın. Yönetici CMD açıp `&quot;C:\Program Files (x86)\Common Files\Steam\SteamService.exe&quot; /repair` komutunu çalıştırın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Oyun Dosyalarını Doğrulayın ve İndirme Önbelleğini Temizleyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Steam -&gt; Ayarlar -&gt; İndirmeler -&gt; &#x27;İndirme Önbelleğini Temizle&#x27; butonuna tıklayın. Ardından CS2 Özellikler -&gt; Yüklü Dosyalar -&gt; &#x27;Oyun dosyalarının bütünlüğünü doğrula&#x27; işlemini başlatın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">3</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">BCDEDIT / DEP Kontrolü</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Yönetici CMD&#x27;de `bcdedit /deletevalue nointegritychecks` ve `bcdedit /deletevalue loadoptions` komutlarını çalıştırıp bilgisayarı yeniden başlatın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-Service -Name &#x27;Steam Client Service&#x27; | Select-Object Name, Status, StartType</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-Service -Name &#x27;Steam Client Service&#x27; | Select-Object Name, Status, StartType');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Working Fix for &#x27;VAC was unable to verify your game session&#x27; in CS2</span>
-              </div>
-              <p class="text-gray-300 italic">"Dosya doğrulamak tek başına yetmiyor! Steam&#x27;i Yönetici olarak çalıştırıp Steam Service onarımı (`steamservice.exe /repair`) yapmak ve profil fotoğrafı/ismini bir kez değiştirmek çözüyor."</p>
-            </div>
-            
-
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>CS2 VAC Verify Fix Without Reinstalling Windows</span>
-              </div>
-              <p class="text-gray-300 italic">"DEP (Veri Yürütme Engellemesi) kapalıysa veya üçüncü parti başlatıcılar (CCleaner, Razer Synapse makro servisi) USN Journal&#x27;ı kilitliyorsa VAC imza doğrulaması başarısız oluyor."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">CS2-FRAMETIME</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Performans &amp; FPS</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">Source 2 Frame-Time Spikes, Yüksek %1 Low FPS Düşüşü ve Su/Sis Takılması</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Ortalama FPS 250 iken çatışmada veya el bombası patladığında ms (frame time) 4ms&#x27;den 35ms&#x27;ye fırlıyor ve oyun 60Hz gibi hissettiriyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Source 2 &amp; VAC (Valve Anti-Cheat))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Source 2 motoru çoklu iş parçacığı zamanlamasını kendi yönetir. Eski CS:GO başlatma kodları (`-threads`, `-high`, `-processheap`) Source 2&#x27;nin iş parçacığı havuzunu bozar. Ayrıca DirectX 11 gölgelendirici önbelleği (`directx_installer` / `shaders`) şiştiğinde her yeni efektte anlık derleme (shader compilation stutter) yaşanır.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Eski CS:GO Başlatma Seçeneklerini Temizleyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Steam -&gt; CS2 Başlatma Seçenekleri&#x27;ndeki `-threads`, `-high`, `-novid`, `-forcepreload` gibi tüm eski kodları silin. Sadece `-noreflex` (gerekirse) veya tamamen boş bırakın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">CS2 DirectX Shader Cache Temizliği ve Optimum Görüntü Ayarları</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Oyun içi Gelişmiş Görüntü ayarlarında: &#x27;Düşük Gecikme Oranı (NVIDIA Reflex): Etkin&#x27;, &#x27;Parçacık Detayı: Düşük&#x27;, &#x27;Keskinliği Yumuşatma: 2x MSAA veya CMAA2&#x27; ve &#x27;Dinamik Gölgeler: Tümü&#x27; olarak ayarlayın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">3</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Paket Kaybı / Jitter Kaynaklı Stutter İçin Ağ Arabelleği</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Son güncellemelerle gelen &#x27;Paket Kaybını / Jitter&#x27;ı Düzgünleştir (Buffering to smooth over packet loss)&#x27; ayarını &#x27;1 Paket&#x27; olarak seçin; bu ayar sub-tick takılmalarını önemli ölçüde azaltır.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-ChildItem &quot;$env:LOCALAPPDATA\NVIDIA\DXCache&quot; -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-ChildItem &quot;$env:LOCALAPPDATA\NVIDIA\DXCache&quot; -ErrorAction SilentlyContinue | Measure-Object -Property Length -Sum');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>CS2 Frame Pacing &amp; 1% Low FPS Guide (Stop using outdated CS:GO launch options!)</span>
-              </div>
-              <p class="text-gray-300 italic">"Eski CS:GO başlatma seçeneklerini (`-high -threads`) silin! CS2&#x27;de `-high` veya yanlış thread komutu E-Core / P-Core zamanlamasını bozuyor. NVIDIA Reflex &#x27;Etkin&#x27; (Takviye değil) olmalı."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">AUDIO-MIC-THRESHOLD</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Ses &amp; Donanım</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">CS2 Mikrofon Algılamama ve Sesin Karşı Tarafa Kesik/Hiç Gitmemesi</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Discord ve Windows&#x27;ta mikrofon sorunsuz çalışırken CS2 içinde bas-konuş tuşuna basıldığında ses simgesi çıkıyor ama takım arkadaşları hiçbir şey duymuyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Source 2 &amp; VAC (Valve Anti-Cheat))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">CS2 ses alt sistemi, mikrofon gürültü kapısı (noise gate) eşiğini (`voice_threshold`) bazı ses kartlarında çok yüksek algılar ve bas-konuş tuşuna basıldığında ses aygıtını o anda uyandırmaya çalışırken ilk 1-2 saniyeyi yutar.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Kolaylaştırılmış Bas-Konuş (Streamlined Push-to-Talk) Açın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">CS2 Ayarlar -&gt; Ses -&gt; &#x27;Kolaylaştırılmış Bas-Konuş&#x27; ayarını &#x27;Evet&#x27; yapın. Bu ayar mikrofonu arka planda hazır tutarak bas-konuş gecikmesini ve ses kesilmesini önler.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Steam Ses Ayarları ve Windows İletişim Aygıtı Eşitlemesi</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Shift+Tab ile Steam Arayüzünü açıp Ayarlar -&gt; Ses bölümünden Mikrofonunuzu &#x27;Varsayılan&#x27; yerine doğrudan kendi adıyla seçin ve &#x27;Ses Eşiği (Voice Transmission Threshold)&#x27; ayarını Kapalı yapın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-CimInstance Win32_SoundDevice | Select-Object Name, Status</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-CimInstance Win32_SoundDevice | Select-Object Name, Status');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Why your mic isn&#x27;t working in CS2: voice_threshold and Windows Default Communications Device</span>
-              </div>
-              <p class="text-gray-300 italic">"CS2&#x27;de varsayılan mikrofon algılama eşiği çok yüksek çalışabiliyor. Konsola `voice_threshold 0` yazmak ve &#x27;Kolaylaştırılmış Bas-Konuş (Streamlined Push to Talk)&#x27; açmak sorunu tamamen çözdü."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VPK-CORRUPT-01</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Çökme &amp; Başlatma</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">pak01.vpk Bozuk Dosya Hatası ve Maç Ortasında Masaüstüne Atma</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Harita yüklenirken &#x27;Content file pak01.vpk doesn&#x27;t match the server&#x27;s file&#x27; hatası verip oyundan atıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Source 2 &amp; VAC (Valve Anti-Cheat))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Source 2 motoru sıkıştırılmış `.vpk` arşivlerini RAM üzerinde anlık açar ve CRC kontrolü yapar. Hatalı `.vpk` bloğu veya agresif DDR4/DDR5 XMP/EXPO bellek zamanlaması CRC doğrulamasını bozar.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Hatalı VPK Dosyasını Silip Doğrulama Yapın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">`steamapps\common\Counter-Strike Global Offensive\game\csgo` klasöründeki hata veren `pak01_xxx.vpk` dosyasını silin ve Steam üzerinden dosya bütünlüğünü doğrulayın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Tekrarlıyorsa RAM XMP/EXPO Kararlılığını Test Edin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Dosya doğrulamadan birkaç gün sonra tekrar aynı hatayı alıyorsanız Windows Bellek Tanılama (`mdsched.exe`) çalıştırın ve BIOS&#x27;tan RAM hızını 200MHz düşürerek test edin.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-CimInstance Win32_PhysicalMemory | Select-Object Manufacturer, ConfiguredClockSpeed, Capacity</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-CimInstance Win32_PhysicalMemory | Select-Object Manufacturer, ConfiguredClockSpeed, Capacity');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Çözüldü: CS2 pak01.vpk Hatası Sürekli Tekrarlıyor (XMP / EXPO Bellek Kararsızlığı)</span>
-              </div>
-              <p class="text-gray-300 italic">"Sürekli pak01.vpk bozuluyorsa %90 RAM XMP/EXPO profilindeki anlık bit hatasından kaynaklanıyor. RAM frekansını bir kademe düşürünce bir daha hiç VPK hatası almadım."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-    </section>
-
-    <section class="space-y-2">
-        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
-          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
-            <span>⚠️ Komut Güvenlik Notu:</span>
-            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">bcdedit (Windows Önyükleme Yapılandırması)</code>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
-              <span class="text-gray-200">Windows önyükleme (Boot Configuration Data) parametrelerini ve çekirdek bütünlük/test imzası bayraklarını günceller.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
-              <span class="text-gray-200">Yanlış parametre girilmesi Windows önyükleme davranışını veya sanallaştırma/anti-cheat servislerini etkileyebilir.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
-              <span class="text-gray-200">Test imzası/bütünlük varsayılanına dönmek için Yönetici CMD'de <code>bcdedit /set testsigning off</code> ve <code>bcdedit /set nointegritychecks off</code> çalıştırıp yeniden başlatın.</span>
-            </div>
-          </div>
+        <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-extrabold text-white">🗂️ Counter-Strike 2 Hata Kodları ve Özel Çözüm Sayfaları (4 Rehber)</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Aradığınız hata koduna tıklayarak o hataya özel adım adım çözüm rehberine, ekran görüntüsü alanlarına ve doğrulama komutlarına ulaşabilirsiniz.</p>
         </div>
+        <a href="/hata-kodlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm Oyunların Hata Kodları Dizini →</a>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
 
-        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
-          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
-            <span>⚠️ Komut Güvenlik Notu:</span>
-            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">regedit / Kayıt Defteri Değişikliği</code>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAC Oturum Doğrulama</span>
+              <span class="text-xs text-gray-400">Counter-Strike 2</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
-              <span class="text-gray-200">Windows Kayıt Defteri (Registry) anahtarlarında donanım, GPU zaman aşımı (TdrDelay) veya uygulama uyumluluk değerlerini düzenler.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
-              <span class="text-gray-200">Hatalı kayıt defteri anahtarı silinmesi veya değiştirilmesi sistem kararsızlığına neden olabilir.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
-              <span class="text-gray-200">İşlem öncesi Kayıt Defteri'nde ilgili anahtara sağ tıklayıp 'Ver (Export)' ile <code>.reg</code> yedeği alın veya oluşturduğunuz Sistem Geri Yükleme Noktasına dönün.</span>
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/cs2/vac-oturum-dogrulama" class="hover:text-[#88c0a8] transition">CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Counter-Strike 2 'VAC oyun oturumunuzu doğrulayamadı (VAC Was Unable to Verify Your Game Session)' uyarısı, Valve Anti-Cheat servisinin (SteamService.exe) oyun belleğindeki imzaları...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/cs2/vac-oturum-dogrulama" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
-        </div></section>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">Packet Burst & FPS</span>
+              <span class="text-xs text-gray-400">Counter-Strike 2</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/cs2/packet-burst" class="hover:text-[#88c0a8] transition">CS2 Packet Burst, Sub-Tick Takılması ve %1 Low FPS Düşüşü Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">CS2'de sağ üst köşede beliren 'Packet Burst / Jitter' uyarısı ve çatışma anındaki ani kare süresi (frame-time) sıçramaları, Source 2 motorunun büyük sub-tick ağ paketlerini veya...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/cs2/packet-burst" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">AUDIO-MIC-THRESHOLD</span>
+              <span class="text-xs text-gray-400">Counter-Strike 2</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/cs2/audio-mic-threshold" class="hover:text-[#88c0a8] transition">Counter-Strike 2 — CS2 Mikrofon Algılamama ve Sesin Karşı Tarafa Kesik/Hiç Gitmemesi (AUDIO-MIC-THRESHOLD) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Discord ve Windows'ta mikrofon sorunsuz çalışırken CS2 içinde bas-konuş tuşuna basıldığında ses simgesi çıkıyor ama takım arkadaşları hiçbir şey duymuyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/cs2/audio-mic-threshold" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VPK-CORRUPT-01</span>
+              <span class="text-xs text-gray-400">Counter-Strike 2</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/cs2/vpk-corrupt-01" class="hover:text-[#88c0a8] transition">Counter-Strike 2 — pak01.vpk Bozuk Dosya Hatası ve Maç Ortasında Masaüstüne Atma (VPK-CORRUPT-01) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Harita yüklenirken 'Content file pak01.vpk doesn't match the server's file' hatası verip oyundan atıyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/cs2/vpk-corrupt-01" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
 
     <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-4">
       <h2 class="text-sm sm:text-base font-bold text-white">⚡ Özel Hata Kodu Çözüm Rehberleri</h2>
       <div class="flex flex-wrap gap-2">
-        <a href="./valorant-van-9003-van-1067-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
-<a href="./cs2-vac-oturum-dogrulama-fps-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
-<a href="./lol-vanguard-van-128-van-185-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
-<a href="./gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
-<a href="./minecraft-exit-code-1-glfw-65542-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
-<a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
+        <a href="/valorant/van-9003" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
+<a href="/cs2/vac-oturum-dogrulama" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
+<a href="/lol/van-128" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
+<a href="/gtav-fivem/err-gfx-d3d-init" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
+<a href="/minecraft/exit-code-1" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
+<a href="/rdr2/err-gfx-state" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
       </div>
       <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 pt-2">🎮 Tüm Oyunların Hata Çözüm Sayfaları (30 Oyun)</h3>
       <div class="flex flex-wrap gap-1.5">

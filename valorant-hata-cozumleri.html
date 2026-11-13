@@ -192,368 +192,123 @@
       <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-400/35 text-xs text-amber-100">
         🛡️ <strong>Sistem Güvenliği Uyarısı:</strong> Sistem veya kayıt defteri komutlarını uygulamadan önce geri yükleme noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
       </div>
-    <section class="space-y-5">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-extrabold text-white">🛠️ VALORANT En Sık Karşılaşılan Hatalar ve Çözüm Rehberleri (4 Rehber)</h2>
-      </div>
-      
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAN 9003 / VAN 1067</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Anti-Cheat &amp; Güvenlik</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">VAN 9003 &amp; VAN 1067: Windows 11 TPM 2.0 ve Secure Boot Uyumluluk Hatası</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Oyun açıldıktan 1-2 dakika sonra &#x27;This build of Vanguard is out of compliance with current system settings (VAN 9003)&#x27; veya &#x27;VAN 1067&#x27; uyarısı vererek istemciyi kapatıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Unreal Engine 4 &amp; Riot Vanguard (Kernel-Level))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Riot Vanguard çekirdek sürücüsü (vgk.sys), Windows 11&#x27;de önyükleme zincirinin bütünlüğünü doğrulamak için donanımsal TPM 2.0 ve aktif UEFI Secure Boot (Güvenli Önyükleme) şartı koşar. Forum verilerine göre kullanıcıların %78&#x27;inde BIOS&#x27;ta Secure Boot &#x27;Enabled&#x27; görünmesine rağmen Platform Key (PK) yüklenmediği için durum &#x27;Not Active&#x27; kalmaktadır veya `vgc` servisi Windows Hizmetleri&#x27;nde durmaktadır.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Sistem Durumunu msinfo32 ile Doğrulayın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Win + R tuşlarına basıp `msinfo32` yazın. &#x27;BIOS Modu: UEFI&#x27; ve &#x27;Güvenli Önyükleme Durumu: Açık&#x27; olmalıdır. Eğer &#x27;Kapalı&#x27; veya &#x27;Desteklenmiyor&#x27; yazıyorsa 2. adıma geçin.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">BIOS Üzerinden CSM Kapatma ve Secure Boot Key Yükleme</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Bilgisayarı yeniden başlatıp BIOS&#x27;a (DEL/F2) girin. Boot sekmesinden CSM (Compatibility Support Module) ayarını &#x27;Disabled&#x27; yapın. Ardından Secure Boot menüsüne girip &#x27;Secure Boot Mode&#x27; ayarını &#x27;Custom&#x27; yapıp &#x27;Restore Factory Keys / Install Default Secure Boot Keys&#x27; seçeneğine tıklayın ve tekrar &#x27;Standard&#x27; moduna alıp F10 ile kaydedin.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">3</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">TPM 2.0 (fTPM / PTT) ve VGC Servisini Aktifleştirin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">AMD işlemcilerde &#x27;AMD CPU fTPM&#x27;, Intel işlemcilerde &#x27;Intel PTT&#x27; ayarını Enabled yapın. Windows açıldığında `services.msc` içerisinden &#x27;vgc&#x27; servisinin Başlangıç Türünü &#x27;Otomatik&#x27; olarak ayarlayın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Confirm-SecureBootUEFI; Get-Tpm | Select-Object TpmPresent, TpmReady</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Confirm-SecureBootUEFI; Get-Tpm | Select-Object TpmPresent, TpmReady');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>[SOLVED] VAN 9003 on Windows 11 even when Secure Boot says Enabled in BIOS</span>
-              </div>
-              <p class="text-gray-300 italic">"BIOS&#x27;ta Secure Boot &#x27;Enabled&#x27; görünse bile &#x27;Not Active&#x27; olabiliyor. CSM kapatıp Secure Boot Mode&#x27;u Custom -&gt; Standard yapınca Factory Keys yüklendi ve sorun çözüldü."</p>
-            </div>
-            
-
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Çözüldü: Valorant VAN 9003 ve VAN 1067 Hatası (ASUS / MSI / Gigabyte Anakartlar)</span>
-              </div>
-              <p class="text-gray-300 italic">"Gigabyte anakartlarda CSM Support kapattıktan sonra Secure Boot altından &#x27;Restore Factory Keys&#x27; yapmadan Windows msinfo32 içinde Güvenli Önyükleme Açık olarak görünmüyor."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">PERF-STUTTER</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Performans &amp; FPS</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">Yüksek FPS&#x27;e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> FPS 300+ olmasına rağmen çatışma anında (yetenek kullanıldığında veya peek atarken) ekran 0.2 saniyeliğine donuyor ve fare takılıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Unreal Engine 4 &amp; Riot Vanguard (Kernel-Level))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Unreal Engine 4 tabanlı Valorant&#x27;ta anlık takılmaların 3 ana nedeni vardır: (1) 2000Hz+ yüksek polling rate&#x27;e sahip farelerde &#x27;Saf Girdi Süresi (Raw Input Buffer)&#x27; kapalı olduğunda Windows mesaj kuyruğunun CPU&#x27;yu tıkaması, (2) Bozulmuş DirectX / GPU Gölgelendirici Önbelleği (Shader Cache), (3) Windows HAGS (Donanım Hızlandırmalı GPU Zamanlaması) ve Discord Donanım İvmesi çakışması.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Oyun İçi &#x27;Saf Girdi Süresi (Raw Input Buffer)&#x27; Ayarını Açın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Valorant -&gt; Ayarlar -&gt; Genel -&gt; Fare altındaki &#x27;Saf Girdi Süresi&#x27; seçeneğini &#x27;Açık&#x27; yapın. 4000Hz/8000Hz fare kullanıyorsanız bu ayar zorunludur; devam ederse fare yazılımından 1000Hz veya 2000Hz&#x27;e düşürün.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">DirectX ve GPU Gölgelendirici Önbelleğini (Shader Cache) Sıfırlayın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Windows Disk Temizleme (cleanmgr) aracını çalıştırıp &#x27;DirectX Gölgelendirici Önbelleği&#x27;ni temizleyin. NVIDIA Denetim Masası -&gt; 3D Ayarları -&gt; &#x27;Gölgelendirici Önbellek Boyutu&#x27;nu &#x27;10 GB&#x27; olarak sabitleyin.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">3</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Tam Ekran İyileştirmeleri ve Core Isolation (Bellek Bütünlüğü) Ayarı</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">`VALORANT-Win64-Shipping.exe` dosyasına sağ tıklayıp Özellikler -&gt; Uyumluluk -&gt; &#x27;Tam ekran iyileştirmelerini devre dışı bırak&#x27; kutucuğunu işaretleyin.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-Process VALORANT-Win64-Shipping -ErrorAction SilentlyContinue | Select-Object Name, PriorityClass, WorkingSet64</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-Process VALORANT-Win64-Shipping -ErrorAction SilentlyContinue | Select-Object Name, PriorityClass, WorkingSet64');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>PSA: 8000Hz / 4000Hz Mouse Polling Rate + HAGS + Discord Overlay causes massive micro-stutter</span>
-              </div>
-              <p class="text-gray-300 italic">"Mouse raporlama hızını (Polling Rate) 4000Hz&#x27;den 1000Hz&#x27;e çekip Valorant içinden &#x27;Saf Girdi Süresi (Raw Input Buffer)&#x27; açtığımda tüm takılmalar bitti."</p>
-            </div>
-            
-
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Valorant AMD/NVIDIA Shader Cache ve MPO Kaynaklı Drop Çözümü</span>
-              </div>
-              <p class="text-gray-300 italic">"Windows 11 24H2/25H2 güncellemesi sonrası Tam Ekran İyileştirmelerini devre dışı bırakmak ve GPU Shader Cache temizlemek %1 Low FPS&#x27;i ikiye katladı."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">NET-PKTLOSS / VAL 62</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Ağ &amp; Bağlantı</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">Ping Düşük Olmasına Rağmen %10-%30 Paket Kaybı (Packet Loss) ve Işınlanma</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> İstanbul sunucusunda ping 12-18ms görünmesine rağmen sağ üstte &#x27;Ağ Sorunu&#x27; ikonu çıkıyor, mermiler gitmiyor ve karakter geriye ışınlanıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Unreal Engine 4 &amp; Riot Vanguard (Kernel-Level))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Riot Direct yönlendirmelerinde UDP paketlerinin (özellikle Wi-Fi dolaşım agresifliği, modem QoS/Bufferbloat şişmesi veya hatalı MTU boyutu nedeniyle) parçalanması sonucu oluşur. Ayrıca Realtek/Intel Killer ağ kartlarındaki &#x27;Önceliklendirme Motoru&#x27; UDP paketlerini yanlış kuyruğa sokabilmektedir.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Oyun İçi Ağ Arabelleğini (Network Buffering) Ayarlayın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Valorant Ayarlar -&gt; Genel -&gt; Ağ Arabelleği seçeneğini &#x27;Asgari&#x27; yerine &#x27;Orta&#x27; yapın. Bu ayar mikro paket gecikmelerini telafi eder.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">TCP/IP Yığınını Sıfırlayın ve IPv6&#x27;yı Devre Dışı Bırakın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Yönetici CMD/PowerShell açarak `netsh int ip reset` ve `netsh winsock reset` komutlarını çalıştırın. Ağ Bağdaştırıcısı Özellikleri&#x27;nden &#x27;İnternet Protokolü Sürüm 6 (TCP/IPv6)&#x27; işaretini kaldırın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Test-NetConnection -ComputerName 162.249.79.1 -InformationLevel Detailed</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Test-NetConnection -ComputerName 162.249.79.1 -InformationLevel Detailed');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Fixed 0 ping Packet Loss spikes by setting Valorant Network Buffering &amp; disabling IPv6</span>
-              </div>
-              <p class="text-gray-300 italic">"Ağ bağdaştırıcısından IPv6&#x27;yı kapatıp DNS olarak Cloudflare (1.1.1.1) verdiğimde ve oyun içi Ağ Arabelleğini &#x27;Orta&#x27; yaptığımda giden paket kaybı %0&#x27;a indi."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAL 5 / VAL 43</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Çökme &amp; Başlatma</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">VAL 5 / VAL 43: İstemci Başlatılamadı veya Oturum Başka Yerde Açık Hatası</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Oyuna girerken yükleme ekranında takılı kalıp VAL 43 veriyor ya da maç ortasında VAL 5 ile oyundan atıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Unreal Engine 4 &amp; Riot Vanguard (Kernel-Level))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Riot İstemcisi kimlik doğrulama jetonunun (Auth Token) bozulması veya arka planda asılı kalan `RiotClientServices.exe` sürecinin yeni oturum el sıkışmasını engellemesinden kaynaklanır.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Asılı Kalan Riot Süreçlerini ve Önbelleği Temizleyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Görev Yöneticisi&#x27;nden tüm Riot ve Valorant süreçlerini kapatın. `Win + R` tuşlarına basıp `%localappdata%\Riot Games\Riot Client\Data` klasörünün içini temizleyin ve istemciyi Yönetici olarak başlatın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Stop-Process -Name &#x27;RiotClientServices&#x27;,&#x27;VALORANT-Win64-Shipping&#x27; -Force -ErrorAction SilentlyContinue</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Stop-Process -Name &#x27;RiotClientServices&#x27;,&#x27;VALORANT-Win64-Shipping&#x27; -Force -ErrorAction SilentlyContinue');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Valorant VAL 43 ve VAL 5 Çözüm Rehberi</span>
-              </div>
-              <p class="text-gray-300 italic">"RiotLocalMachine.ini ve %localappdata%\VALORANT\Saved\Config klasörünü silip vgc servisini yeniden başlatınca hemen girdi."</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-    </section>
-
-    <section class="space-y-2">
-        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
-          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
-            <span>⚠️ Komut Güvenlik Notu:</span>
-            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">regedit / Kayıt Defteri Değişikliği</code>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
-              <span class="text-gray-200">Windows Kayıt Defteri (Registry) anahtarlarında donanım, GPU zaman aşımı (TdrDelay) veya uygulama uyumluluk değerlerini düzenler.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
-              <span class="text-gray-200">Hatalı kayıt defteri anahtarı silinmesi veya değiştirilmesi sistem kararsızlığına neden olabilir.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
-              <span class="text-gray-200">İşlem öncesi Kayıt Defteri'nde ilgili anahtara sağ tıklayıp 'Ver (Export)' ile <code>.reg</code> yedeği alın veya oluşturduğunuz Sistem Geri Yükleme Noktasına dönün.</span>
-            </div>
-          </div>
+        <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-extrabold text-white">🗂️ VALORANT Hata Kodları ve Özel Çözüm Sayfaları (5 Rehber)</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Aradığınız hata koduna tıklayarak o hataya özel adım adım çözüm rehberine, ekran görüntüsü alanlarına ve doğrulama komutlarına ulaşabilirsiniz.</p>
         </div>
+        <a href="/hata-kodlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm Oyunların Hata Kodları Dizini →</a>
+      </div>
+      <div class="grid grid-cols-1 gap-4">
 
-        <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-1.5 mt-2">
-          <div class="font-extrabold text-amber-200 flex items-center gap-1.5">
-            <span>⚠️ Komut Güvenlik Notu:</span>
-            <code class="px-1.5 py-0.5 rounded bg-black/30 text-amber-100 font-mono">netsh int ip reset / winsock reset (Ağ Yığını Sıfırlama)</code>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAN 9003</span>
+              <span class="text-xs text-gray-400">VALORANT</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] leading-relaxed">
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
-              <span class="text-gray-200">Windows TCP/IP ağ yığınını ve Winsock katalog ayarlarını fabrika varsayılanlarına sıfırlar.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
-              <span class="text-gray-200">Ağ bağdaştırıcınızda elle (statik) girilmiş IP/DNS yapılandırması veya özel VPN sanal adaptör ayarları varsa sıfırlanabilir.</span>
-            </div>
-            <div class="p-2 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
-              <span class="text-gray-200">Yeniden başlatma sonrasında özel DNS veya statik IP kullanıyorsanız Ağ Bağdaştırıcısı Özellikleri (IPv4) üzerinden tekrar tanımlayın.</span>
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/valorant/van-9003" class="hover:text-[#88c0a8] transition">Valorant VAN 9003 Hatası Çözüm Rehberi (Windows 11 UEFI Secure Boot)</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Valorant VAN 9003 ('This build of Vanguard requires secure boot to be enabled in order to play'), Riot Vanguard çekirdek sürücüsünün (vgk.sys) Windows 11 önyükleme zincirinde UEFI...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/valorant/van-9003" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
-        </div></section>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAN 1067</span>
+              <span class="text-xs text-gray-400">VALORANT</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/valorant/van-1067" class="hover:text-[#88c0a8] transition">Valorant VAN 1067 Hatası Çözüm Rehberi (TPM 2.0 ve VGC Servis Onarımı)</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Valorant VAN 1067 hatası, Riot İstemcisi'nin arka planda çalışan Riot Vanguard kullanıcı modu hizmeti (vgc.exe) veya donanımsal TPM 2.0 güvenlik çipiyle olan şifreli oturum bağlantısının...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/valorant/van-1067" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAL 62</span>
+              <span class="text-xs text-gray-400">VALORANT</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/valorant/val-62" class="hover:text-[#88c0a8] transition">Valorant VAL 62 Hatası ve Paket Kaybı (Packet Loss) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Valorant VAL 62 hatası, istemcinin Riot Direct oyun sunucularıyla ilk el sıkışma (handshake) paketlerini tamamlayamadığını veya UDP veri akışında yüksek paket kaybı yaşandığını gösterir.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/valorant/val-62" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">PERF-STUTTER</span>
+              <span class="text-xs text-gray-400">VALORANT</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/valorant/perf-stutter" class="hover:text-[#88c0a8] transition">VALORANT — Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi (PERF-STUTTER) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">FPS 300+ olmasına rağmen çatışma anında (yetenek kullanıldığında veya peek atarken) ekran 0.2 saniyeliğine donuyor ve fare takılıyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/valorant/perf-stutter" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">VAL 5 / VAL 43</span>
+              <span class="text-xs text-gray-400">VALORANT</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/valorant/val-5-val-43" class="hover:text-[#88c0a8] transition">VALORANT — VAL 5 / VAL 43: İstemci Başlatılamadı veya Oturum Başka Yerde Açık Hatası (VAL 5 / VAL 43) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Oyuna girerken yükleme ekranında takılı kalıp VAL 43 veriyor ya da maç ortasında VAL 5 ile oyundan atıyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/valorant/val-5-val-43" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
 
     <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-4">
       <h2 class="text-sm sm:text-base font-bold text-white">⚡ Özel Hata Kodu Çözüm Rehberleri</h2>
       <div class="flex flex-wrap gap-2">
-        <a href="./valorant-van-9003-van-1067-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
-<a href="./cs2-vac-oturum-dogrulama-fps-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
-<a href="./lol-vanguard-van-128-van-185-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
-<a href="./gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
-<a href="./minecraft-exit-code-1-glfw-65542-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
-<a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
+        <a href="/valorant/van-9003" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
+<a href="/cs2/vac-oturum-dogrulama" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
+<a href="/lol/van-128" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
+<a href="/gtav-fivem/err-gfx-d3d-init" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
+<a href="/minecraft/exit-code-1" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
+<a href="/rdr2/err-gfx-state" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
       </div>
       <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 pt-2">🎮 Tüm Oyunların Hata Çözüm Sayfaları (30 Oyun)</h3>
       <div class="flex flex-wrap gap-1.5">

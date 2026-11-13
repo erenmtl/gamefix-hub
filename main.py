@@ -2007,16 +2007,45 @@ def serve_dynamic_og_image(
     )
 
 
+LEGACY_301_REDIRECTS = {
+    "index.html": "/",
+    "index.htm": "/",
+    "home": "/",
+    "anasayfa": "/",
+    "valorant.html": "/valorant-hata-cozumleri.html",
+    "cs2.html": "/cs2-hata-cozumleri.html",
+    "lol.html": "/lol-hata-cozumleri.html",
+    "minecraft.html": "/minecraft-hata-cozumleri.html",
+    "gtav-fivem.html": "/gtav-fivem-hata-cozumleri.html",
+    # Stage 5.1 & 5.2: Old combined .html error pages -> clean /<game>/<error-code> URLs (301)
+    "valorant-van-9003-van-1067-cozumu.html": "/valorant/van-9003",
+    "valorant-van9003.html": "/valorant/van-9003",
+    "valorant-van-9003-cozumu.html": "/valorant/van-9003",
+    "cs2-vac-oturum-dogrulama-fps-cozumu.html": "/cs2/vac-oturum-dogrulama",
+    "cs2-vac-hatasi-cozumu.html": "/cs2/vac-oturum-dogrulama",
+    "lol-vanguard-van-128-van-185-cozumu.html": "/lol/van-128",
+    "lol-van-128-cozumu.html": "/lol/van-128",
+    "gta5-fivem-err-gfx-d3d-init-texture-cozumu.html": "/gtav-fivem/err-gfx-d3d-init",
+    "gta5-err-gfx-d3d-init-cozumu.html": "/gtav-fivem/err-gfx-d3d-init",
+    "minecraft-exit-code-1-glfw-65542-cozumu.html": "/minecraft/exit-code-1",
+    "minecraft-exit-code-1-cozumu.html": "/minecraft/exit-code-1",
+    "rdr2-bannerlord-fc25-wukong-crash-cozumu.html": "/rdr2/err-gfx-state",
+}
+
+
 def regenerate_sitemap_xml() -> str:
     """
-    Stage 3.4: Automatically builds sitemap.xml with only indexable pages,
+    Stage 3.4 & Stage 5: Automatically builds sitemap.xml with only indexable pages,
     real <lastmod> dates, and NO <changefreq> or <priority> tags.
+    Includes root .html pages and clean /<game>/<error-code> pages.
     """
     entries = [("https://oyuncoz.com/", "2026-03-15")]
+
+    # 1. Root .html pages (excluding 301-redirected legacy files and verification files)
     for fname in sorted(os.listdir(ROOT_DIR)):
         if not fname.endswith(".html"):
             continue
-        if fname == "index.html" or fname.startswith("google") or fname.startswith("bing"):
+        if fname == "index.html" or fname in LEGACY_301_REDIRECTS or fname.startswith("google") or fname.startswith("bing"):
             continue
         fpath = os.path.join(ROOT_DIR, fname)
         if not os.path.isfile(fpath):
@@ -2032,7 +2061,33 @@ def regenerate_sitemap_xml() -> str:
         if not m_date:
             m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
         lastmod = m_date.group(1) if m_date else "2026-03-15"
-        entries.append((f"https://oyuncoz.com/{fname}", lastmod))
+        clean_loc = f"https://oyuncoz.com/{fname[:-5]}" if fname == "hata-kodlari.html" else f"https://oyuncoz.com/{fname}"
+        entries.append((clean_loc, lastmod))
+
+    # 2. Clean nested /<game>/<error-code> pages (<game>/<error>/index.html)
+    excluded_dirs = {"static", ".git", ".venv", "__pycache__", ".pytest_cache"}
+    for dname in sorted(os.listdir(ROOT_DIR)):
+        if dname in excluded_dirs or dname.startswith("."):
+            continue
+        dpath = os.path.join(ROOT_DIR, dname)
+        if not os.path.isdir(dpath):
+            continue
+        for subname in sorted(os.listdir(dpath)):
+            sub_index = os.path.join(dpath, subname, "index.html")
+            if not os.path.isfile(sub_index):
+                continue
+            try:
+                with open(sub_index, "r", encoding="utf-8") as f:
+                    html_text = f.read()
+            except Exception:
+                continue
+            if 'content="noindex' in html_text.lower():
+                continue
+            m_date = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html_text)
+            if not m_date:
+                m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
+            lastmod = m_date.group(1) if m_date else "2026-03-15"
+            entries.append((f"https://oyuncoz.com/{dname}/{subname}", lastmod))
 
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -2053,25 +2108,6 @@ def regenerate_sitemap_xml() -> str:
         except Exception:
             pass
     return xml_str
-
-
-LEGACY_301_REDIRECTS = {
-    "index.html": "/",
-    "index.htm": "/",
-    "home": "/",
-    "anasayfa": "/",
-    "valorant.html": "/valorant-hata-cozumleri.html",
-    "cs2.html": "/cs2-hata-cozumleri.html",
-    "lol.html": "/lol-hata-cozumleri.html",
-    "minecraft.html": "/minecraft-hata-cozumleri.html",
-    "gtav-fivem.html": "/gtav-fivem-hata-cozumleri.html",
-    "valorant-van9003.html": "/valorant-van-9003-van-1067-cozumu.html",
-    "valorant-van-9003-cozumu.html": "/valorant-van-9003-van-1067-cozumu.html",
-    "cs2-vac-hatasi-cozumu.html": "/cs2-vac-oturum-dogrulama-fps-cozumu.html",
-    "lol-van-128-cozumu.html": "/lol-vanguard-van-128-van-185-cozumu.html",
-    "gta5-err-gfx-d3d-init-cozumu.html": "/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html",
-    "minecraft-exit-code-1-cozumu.html": "/minecraft-exit-code-1-glfw-65542-cozumu.html",
-}
 
 
 @app.get("/robots.txt")
@@ -2109,6 +2145,11 @@ def serve_html_or_redirect(page_path: str):
     candidate = os.path.join(ROOT_DIR, clean_path)
     if os.path.isfile(candidate) and clean_path.endswith(".html"):
         return FileResponse(candidate, media_type="text/html")
+
+    # Serve clean nested URLs like /valorant/van-9003 from valorant/van-9003/index.html
+    nested_index = os.path.join(ROOT_DIR, clean_path, "index.html")
+    if os.path.isfile(nested_index):
+        return FileResponse(nested_index, media_type="text/html")
 
     if not clean_path.endswith(".html"):
         html_candidate = os.path.join(ROOT_DIR, f"{clean_path}.html")

@@ -186,211 +186,85 @@
 
     </section>
 
-    <section class="space-y-5">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-extrabold text-white">🛠️ GTA V &amp; FiveM En Sık Karşılaşılan Hatalar ve Çözüm Rehberleri (3 Rehber)</h2>
+        <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-extrabold text-white">🗂️ GTA V & FiveM Hata Kodları ve Özel Çözüm Sayfaları (3 Rehber)</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Aradığınız hata koduna tıklayarak o hataya özel adım adım çözüm rehberine, ekran görüntüsü alanlarına ve doğrulama komutlarına ulaşabilirsiniz.</p>
+        </div>
+        <a href="/hata-kodlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm Oyunların Hata Kodları Dizini →</a>
       </div>
-      
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">FIVEM-TEXTURE-LOSS</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Performans &amp; FPS</span>
-            </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
-          </div>
+      <div class="grid grid-cols-1 gap-4">
 
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">FiveM Harita / Doku Yüklenmeme (Texture Loss) ve Boşluğa Düşme Sorunu</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Roleplay sunucusunda hızlı araç sürerken yollar, binalar ve dokular kayboluyor, araç yerin altına düşüyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (RAGE Engine &amp; Cfx.re Adhesive / BattlEye)</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">FiveM sunucularındaki yüksek boyutlu özel MLO binalar ve eklenti araçlar (add-on cars), GTA V&#x27;in varsayılan akış belleği (Streaming Memory) limitini aşar. &#x27;Extended Texture Budget&#x27; ayarı düşük olduğunda RAGE motoru yeni yol dokularını VRAM&#x27;e yükleyemez.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Extended Texture Budget (Genişletilmiş Doku Bütçesi) Ayarını Artırın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Oyun içi Ayarlar -&gt; Grafikler menüsünde &#x27;Extended Texture Budget&#x27; çubuğunu ekran kartı VRAM&#x27;inize göre %50 ile %75 arasına getirin.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">FiveM Cache Klasörünü Güvenli Şekilde Temizleyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">FiveM dosya konumunu açın -&gt; `FiveM Application Data\data` klasörüne girin. `game-storage` HARİÇ `cache`, `server-cache` ve `server-cache-priv` klasörlerini silin.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Test-Path &quot;$env:LOCALAPPDATA\FiveM\FiveM.app\data\cache&quot;</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Test-Path &quot;$env:LOCALAPPDATA\FiveM\FiveM.app\data\cache&quot;');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>[GUIDE] Fixing Texture Loss / City Not Loading on High-Pop RP Servers</span>
-              </div>
-              <p class="text-gray-300 italic">"Extended Texture Budget (Genişletilmiş Doku Bütçesi) çubuğunu %0&#x27;da bırakmak FiveM&#x27;de özel araç/kıyafet paketleri yüzünden VRAM akışını kilitliyor. %50-%75 arasına çekince tüm harita anında yüklendi!"</p>
-            </div>
-            
-            </div>
-          </div>
-        </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">ERR_GFX_D3D_INIT</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Çökme &amp; Başlatma</span>
+              <span class="text-xs text-gray-400">GTA V & FiveM</span>
             </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">ERR_GFX_D3D_INIT ve FiveM &#x27;Early Exit Trap&#x27; Çökme Hatası</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Oyun yüklenirken veya 15-20 dakika oynadıktan sonra &#x27;ERR_GFX_D3D_INIT&#x27; ya da &#x27;FiveM has encountered an error (Early Exit Trap)&#x27; vererek kapanıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (RAGE Engine &amp; Cfx.re Adhesive / BattlEye)</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">DirectX 11 cihazının ekran kartı sürücüsü zaman aşımı (TDR), bozuk `settings.xml` yapılandırması veya eski sürüm ENB/ReShade/NVE grafik eklentileri (`d3d11.dll`, `dxgi.dll`) yüzünden sıfırlanmasıdır.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">settings.xml Sıfırlama ve Grafik Eklentisi Kontrolü</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">`Belgeler\Rockstar Games\GTA V\settings.xml` dosyasını silin. GTA V ana dizininde `d3d11.dll` veya `dxgi.dll` varsa geçici olarak kaldırın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Test-Path &quot;$env:USERPROFILE\Documents\Rockstar Games\GTA V\settings.xml&quot;</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Test-Path &quot;$env:USERPROFILE\Documents\Rockstar Games\GTA V\settings.xml&quot;');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Solved ERR_GFX_D3D_INIT and DirectX crashes once and for all</span>
-              </div>
-              <p class="text-gray-300 italic">"Belgelerim\Rockstar Games\GTA V\settings.xml içindeki DX_Version değerini kontrol edin ve grafik modlarını (QuantV / NVE) eski sürümse güncelleyin."</p>
-            </div>
-            
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/gtav-fivem/err-gfx-d3d-init" class="hover:text-[#88c0a8] transition">GTA V ve FiveM ERR_GFX_D3D_INIT Ekran Kartı Çökme Hatası Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">GTA V ve FiveM 'ERR_GFX_D3D_INIT' hatası, RAGE motorunun DirectX görüntü bağdaştırıcısını başlatamadığını veya oyun sırasında ekran kartı sürücüsünün zaman aşımına uğrayıp...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/gtav-fivem/err-gfx-d3d-init" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
         </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">FiveM Texture Loss</span>
+              <span class="text-xs text-gray-400">GTA V & FiveM</span>
+            </div>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+          </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/gtav-fivem/texture-loss" class="hover:text-[#88c0a8] transition">FiveM Harita Yüklenmeme (Texture Loss) ve Boşluğa Düşme Sorunu Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">FiveM sunucularında yüksek hızla araç sürerken yolların, binaların ve dokuların şeffaflaşıp kaybolması (Texture Loss), sunucudaki yüksek boyutlu özel araç/MLO modellerinin RAGE motorunun...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/gtav-fivem/texture-loss" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
+          </div>
+        </article>
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">SOCIAL-CLUB-134</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Ağ &amp; Bağlantı</span>
+              <span class="text-xs text-gray-400">GTA V & FiveM</span>
             </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">Rockstar Games Launcher &#x27;Code 134&#x27; / Social Club Çevrimdışı Mod Hatası</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> GTA V veya FiveM açılırken &#x27;Unable to launch game, please verify your game data (Code 134)&#x27; veya Social Club bağlantı hatası veriyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (RAGE Engine &amp; Cfx.re Adhesive / BattlEye)</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Rockstar Games Servisleri&#x27;nin yerel kimlik önbelleğinin bozulması veya İSS (Güvenli İnternet / CGNAT IP bloğu) kaynaklı TLS el sıkışma reddi.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Social Club Yerel Profilini Yenileyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Rockstar Games Launcher&#x27;ı kapatın. `Belgeler\Rockstar Games\Social Club` ve `Launcher` klasörlerinin adını `_old` olarak değiştirip Launcher&#x27;ı Yönetici olarak çalıştırın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">ipconfig /flushdns</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('ipconfig /flushdns');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>Code 134 / Offline Mode Fix (Guvenli Internet &amp; Social Club Cache)</span>
-              </div>
-              <p class="text-gray-300 italic">"Belgelerim içindeki Rockstar Games\Social Club ve Launcher klasörlerini silip modem veya DNS önbelleğini sıfırlayınca Code 134 düzeldi."</p>
-            </div>
-            
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/gtav-fivem/social-club-134" class="hover:text-[#88c0a8] transition">GTA V & FiveM — Rockstar Games Launcher 'Code 134' / Social Club Çevrimdışı Mod Hatası (SOCIAL-CLUB-134) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">GTA V veya FiveM açılırken 'Unable to launch game, please verify your game data (Code 134)' veya Social Club bağlantı hatası veriyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/gtav-fivem/social-club-134" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
         </article>
-        
+      </div>
     </section>
 
     <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-4">
       <h2 class="text-sm sm:text-base font-bold text-white">⚡ Özel Hata Kodu Çözüm Rehberleri</h2>
       <div class="flex flex-wrap gap-2">
-        <a href="./valorant-van-9003-van-1067-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
-<a href="./cs2-vac-oturum-dogrulama-fps-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
-<a href="./lol-vanguard-van-128-van-185-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
-<a href="./gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
-<a href="./minecraft-exit-code-1-glfw-65542-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
-<a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
+        <a href="/valorant/van-9003" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
+<a href="/cs2/vac-oturum-dogrulama" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
+<a href="/lol/van-128" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
+<a href="/gtav-fivem/err-gfx-d3d-init" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
+<a href="/minecraft/exit-code-1" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
+<a href="/rdr2/err-gfx-state" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
       </div>
       <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 pt-2">🎮 Tüm Oyunların Hata Çözüm Sayfaları (30 Oyun)</h3>
       <div class="flex flex-wrap gap-1.5">

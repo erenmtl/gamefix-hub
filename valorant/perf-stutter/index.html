@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valorant PERF-STUTTER Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Windows 10 ve 11 bilgisayarlarda VALORANT oynarken oluşan PERF-STUTTER hatası ve Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi giderin." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://oyuncoz.com/valorant/perf-stutter" />
+  <link rel="alternate" hreflang="tr-TR" href="https://oyuncoz.com/valorant/perf-stutter" />
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="OyunÇöz" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://oyuncoz.com/valorant/perf-stutter" />
+  <meta property="og:title" content="Valorant PERF-STUTTER Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Windows 10 ve 11 bilgisayarlarda VALORANT oynarken oluşan PERF-STUTTER hatası ve Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi giderin." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og/valorant-perf-stutter.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Valorant PERF-STUTTER Çözüm Rehberi | OyunÇöz" />
+  <meta name="twitter:description" content="Windows 10 ve 11 bilgisayarlarda VALORANT oynarken oluşan PERF-STUTTER hatası ve Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi giderin." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og/valorant-perf-stutter.png" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/valorant/perf-stutter#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Ana Sayfa",
+          "item": "https://oyuncoz.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "VALORANT",
+          "item": "https://oyuncoz.com/valorant-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "PERF-STUTTER",
+          "item": "https://oyuncoz.com/valorant/perf-stutter"
+        }
+      ]
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/valorant/perf-stutter#article",
+      "headline": "VALORANT — Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi (PERF-STUTTER) Çözüm Rehberi",
+      "description": "Windows 10 ve 11 bilgisayarlarda VALORANT oynarken oluşan PERF-STUTTER hatası ve Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi giderin.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-01",
+      "dateModified": "2026-03-15",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/valorant/perf-stutter"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://oyuncoz.com/static/og/valorant-perf-stutter.png",
+        "width": 1200,
+        "height": 630
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    }
+  ]
+}
+  </script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
+  <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3">
+        <img src="/static/logo.svg" alt="OyunÇöz Logo" loading="lazy" decoding="async" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <div>
+          <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
+          <span class="block text-[11px] text-gray-400">Oyun Hata Kodları ve FPS Çözümleri</span>
+        </div>
+      </a>
+      <nav aria-label="Üst Hızlı Menü" class="flex items-center gap-2.5 text-xs">
+        <a href="/hata-kodlari" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 font-semibold transition">🔎 Tüm Hata Kodları</a>
+        <a href="/valorant-hata-cozumleri.html" class="hidden sm:inline-block px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[#a3d9c6] border border-white/10 font-semibold transition">VALORANT Rehberleri</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1 w-full">
+    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
+      <a href="/" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="/valorant-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">VALORANT</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">PERF-STUTTER</span>
+    </nav>
+
+    <article class="space-y-7">
+      <!-- Hero & Yazar / Tarih / Sürüm -->
+      <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="px-3 py-1 rounded-full font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">VALORANT</span>
+          <span class="px-3 py-1 rounded-full font-mono font-bold bg-white/10 text-amber-200 border border-white/15">Hata Kodu: PERF-STUTTER</span>
+          <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 font-semibold">✓ Editör Kontrolünden Geçti</span>
+        </div>
+
+        <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">VALORANT — Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi (PERF-STUTTER) Çözüm Rehberi</h1>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows 10 ve 11 bilgisayarlarda VALORANT oynarken oluşan PERF-STUTTER hatası ve Yüksek FPS'e Rağmen Anlık Takılma (Micro-Stutter) ve Fare Gecikmesi giderin.</p>
+
+        <!-- Stage 2.3 & 5.4: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
+        <div class="stage2-author-box p-4 rounded-xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
+              OÇ
+            </div>
+            <div>
+              <div class="text-white font-bold">
+                Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
+              </div>
+              <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Kontrolü</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+              📅 Son güncelleme: <time datetime="2026-03-15" class="font-semibold text-white">15.03.2026</time>
+            </span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+              🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel İstemci</strong>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bölüm 1: Hata Kodunun Anlamı -->
+      <section id="hata-anlami" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-2.5">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">🔍 1. PERF-STUTTER Hata Kodunun Anlamı ve Belirtileri</h2>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">FPS 300+ olmasına rağmen çatışma anında (yetenek kullanıldığında veya peek atarken) ekran 0.2 saniyeliğine donuyor ve fare takılıyor.</p>
+      </section>
+
+      <!-- Bölüm 2: Nedenleri -->
+      <section id="hata-nedenleri" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">⚙️ 2. Hatanın Başlıca Nedenleri (Kök Neden Analizi)</h2>
+        <ul class="list-disc pl-5 text-xs sm:text-sm text-gray-300 space-y-2">
+          <li class="leading-relaxed">Unreal Engine 4 tabanlı Valorant'ta anlık takılmaların 3 ana nedeni vardır: (1) 2000Hz+ yüksek polling rate'e sahip farelerde 'Saf Girdi Süresi (Raw Input Buffer)' kapalı olduğunda Windows mesaj kuyruğunun CPU'yu tıkaması, (2) Bozulmuş DirectX / GPU Gölgelendirici Önbelleği (Shader Cache), (3) Windows HAGS (Donanım Hızlandırmalı GPU Zamanlaması) ve Discord Donanım İvmesi çakışması.</li>
+          <li class="leading-relaxed">Unreal Engine 4 gölgelendirici/yapılandırma önbelleğinin güncelleme sonrası bozulması.</li>
+          <li class="leading-relaxed">Arka plan katman (Overlay) yazılımları veya Riot Vanguard (Kernel-Level) izin çakışmaları.</li>
+        </ul>
+      </section>
+
+      <!-- Bölüm 3: Adım Adım Çözüm Adımları (Görsel Alanı ile) -->
+      <section id="cozum-adimlari" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">🛠️ 3. Adım Adım Çözüm Rehberi</h2>
+          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-200 border border-amber-400/30">
+            🛡️ İşlem öncesi Sistem Geri Yükleme Noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
+          </span>
+        </div>
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
+            <h3 class="text-sm sm:text-base font-bold text-white">Oyun İçi 'Saf Girdi Süresi (Raw Input Buffer)' Ayarını Açın</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Valorant -> Ayarlar -> Genel -> Fare altındaki 'Saf Girdi Süresi' seçeneğini 'Açık' yapın. 4000Hz/8000Hz fare kullanıyorsanız bu ayar zorunludur; devam ederse fare yazılımından 1000Hz veya 2000Hz'e düşürün.</p>
+          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
+          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
+            <img
+              src="/static/og/valorant-perf-stutter.png"
+              alt="VALORANT PERF-STUTTER - Adım 1: Oyun İçi 'Saf Girdi Süresi (Raw Input Buffer)' Ayarını Açın ekran görüntüsü"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="315"
+              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
+            />
+            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
+              <span>📸 <strong>Adım 1 Görsel Alanı:</strong> Oyun İçi 'Saf Girdi Süresi (Raw Input Buffer)' Ayarını Açın uygulama ekranı</span>
+              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-perf-stutter-adim-1.png</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
+            <h3 class="text-sm sm:text-base font-bold text-white">DirectX ve GPU Gölgelendirici Önbelleğini (Shader Cache) Sıfırlayın</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Windows Disk Temizleme (cleanmgr) aracını çalıştırıp 'DirectX Gölgelendirici Önbelleği'ni temizleyin. NVIDIA Denetim Masası -> 3D Ayarları -> 'Gölgelendirici Önbellek Boyutu'nu '10 GB' olarak sabitleyin.</p>
+          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
+          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
+            <img
+              src="/static/og/valorant-perf-stutter.png"
+              alt="VALORANT PERF-STUTTER - Adım 2: DirectX ve GPU Gölgelendirici Önbelleğini (Shader Cache) Sıfırlayın ekran görüntüsü"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="315"
+              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
+            />
+            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
+              <span>📸 <strong>Adım 2 Görsel Alanı:</strong> DirectX ve GPU Gölgelendirici Önbelleğini (Shader Cache) Sıfırlayın uygulama ekranı</span>
+              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-perf-stutter-adim-2.png</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
+            <h3 class="text-sm sm:text-base font-bold text-white">Tam Ekran İyileştirmeleri ve Core Isolation (Bellek Bütünlüğü) Ayarı</h3>
+          </div>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">`VALORANT-Win64-Shipping.exe` dosyasına sağ tıklayıp Özellikler -> Uyumluluk -> 'Tam ekran iyileştirmelerini devre dışı bırak' kutucuğunu işaretleyin.</p>
+          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
+          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
+            <img
+              src="/static/og/valorant-perf-stutter.png"
+              alt="VALORANT PERF-STUTTER - Adım 3: Tam Ekran İyileştirmeleri ve Core Isolation (Bellek Bütünlüğü) Ayarı ekran görüntüsü"
+              loading="lazy"
+              decoding="async"
+              width="600"
+              height="315"
+              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
+            />
+            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
+              <span>📸 <strong>Adım 3 Görsel Alanı:</strong> Tam Ekran İyileştirmeleri ve Core Isolation (Bellek Bütünlüğü) Ayarı uygulama ekranı</span>
+              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-perf-stutter-adim-3.png</span>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Hızlı Doğrulama Komutu & Risk Notları -->
+      <section class="bg-[#1b2230] border border-amber-400/35 rounded-2xl p-5 space-y-3">
+        <div class="flex items-center justify-between gap-2">
+          <h2 class="text-sm sm:text-base font-extrabold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</h2>
+          <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-semibold">Yönetici Olarak Çalıştırın</span>
+        </div>
+        <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+          <code class="text-xs font-mono text-[#a3d9c6] overflow-x-auto">Get-Process VALORANT-Win64-Shipping -ErrorAction SilentlyContinue | Select-Object Name, PriorityClass, WorkingSet64</code>
+          <button onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);this.textContent='✓ Kopyalandı';" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+        </div>
+
+        <div class="stage2-risky-cmd-note p-4 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-2">
+          <div class="font-extrabold text-amber-200 flex items-center gap-2">
+            <span>⚠️ Komut Güvenlik Notu:</span>
+            <code class="px-2 py-0.5 rounded bg-black/40 text-amber-100 font-mono">Sistem ve Servis Doğrulama Komutu</code>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
+            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+              <span class="text-gray-200">İlgili oyun servisinin, sistem dosyalarının veya grafik/ağ önbelleğinin mevcut durumunu salt-okunur veya standart Windows aracıyla doğrular.</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+              <span class="text-gray-200">Standart doğrulama komutları sistem ayarlarını bozmaz; ancak servis yeniden başlatma işlemleri açık oyun istemcisini kapatabilir.</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+              <span class="text-gray-200">Herhangi bir sistem değişikliği öncesinde oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilir veya istemciyi yeniden başlatabilirsiniz.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bölüm 4: İşe Yaramazsa Bölümü -->
+      <section id="ise-yaramazsa" class="bg-[#18202c] border border-sky-400/30 rounded-2xl p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-sky-200">🧭 4. Bu Çözümler İşe Yaramazsa Ne Yapmalısınız?</h2>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Yukarıdaki adımlar VALORANT (PERF-STUTTER) sorununu çözmediyse oyun istemcisi üzerinden dosya bütünlüğünü yeniden doğrulayın, ekran kartı sürücünüzü DDU ile temiz kurun veya ana sayfadaki Crash Log Analiz Aracına .log dosyanızı yükleyerek donanımınıza özel teşhis oluşturun.</p>
+        <div class="pt-1 flex flex-wrap gap-3">
+          <a href="/#tabContent-ai-lab" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
+            🤖 Crash Log (.log) Yükleyip AI ile Özel Teşhis Al →
+          </a>
+          <a href="/#tabContent-forum" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
+            💬 Oyuncu Forumunda Konu Aç
+          </a>
+        </div>
+      </section>
+
+      <!-- Bölüm 5: Resmi Kaynak Linki -->
+      <section id="resmi-kaynak" class="bg-[#18202c] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">🌐 5. Resmi Destek ve Dokümantasyon Kaynağı</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Yayıncı ve geliştirici ekibin güncel yama/destek dokümanını resmi kaynağından inceleyebilirsiniz.</p>
+        </div>
+        <a href="https://support-valorant.riotgames.com/hc/tr/articles/360045619633-VALORANT-Hata-Kodlar%C4%B1" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/15 text-[#a3d9c6] border border-white/15 shrink-0 transition">
+          🔗 Riot Games Valorant Resmi Destek Merkezi (Hata Kodları) ↗
+        </a>
+      </section>
+
+      <!-- Bölüm 6: Sıkça Sorulan Sorular (SSS) -->
+      <section id="sss" class="space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">❓ 6. Sıkça Sorulan Sorular (SSS)</h2>
+        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
+          <h3 class="text-xs sm:text-sm font-bold text-white">VALORANT PERF-STUTTER hatası donanımsal bir arızadan mı kaynaklanır?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Çoğu durumda donanımsal arıza değildir; işletim sistemi güvenlik politikaları, bozuk gölgelendirici önbelleği (Shader Cache) veya anti-cheat servis izinlerinden kaynaklanır ve yukarıdaki adımlarla yazılımsal olarak giderilebilir.</p>
+        </div>
+        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
+          <h3 class="text-xs sm:text-sm font-bold text-white">Çözüm adımlarını uygulamadan önce hangi yedeği almalıyım?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">PowerShell'i Yönetici olarak açıp <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code> komutuyla veya <code>rstrui.exe</code> arayüzüyle bir Sistem Geri Yükleme Noktası oluşturmanız önerilir.</p>
+        </div>
+      </section>
+
+      <!-- Bölüm 7: İlgili Hatalar (İç Linkler) -->
+      <section id="ilgili-hatalar" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">🔗 7. İlgili Hata Kodları ve Benzer Çözüm Rehberleri</h2>
+          <a href="/hata-kodlari" class="text-xs font-semibold text-[#88c0a8] hover:underline">Tüm Hata Kodları →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <a href="/valorant/van-9003" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAN 9003</span><span class="text-gray-200 font-semibold">Valorant VAN 9003 Secure Boot Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+          <a href="/valorant/van-1067" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAN 1067</span><span class="text-gray-200 font-semibold">Valorant VAN 1067 TPM 2.0 ve VGC Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+          <a href="/valorant/val-62" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAL 62</span><span class="text-gray-200 font-semibold">Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+          <a href="/valorant/val-5-val-43" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">VALORANT • VAL 5 / VAL 43</span><span class="text-gray-200 font-semibold">Valorant VAL 5 Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+          <a href="/cs2/vac-oturum-dogrulama" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • VAC Oturum Doğrulama</span><span class="text-gray-200 font-semibold">CS2 VAC Oturumunuzu Doğrulayamadı Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+          <a href="/cs2/packet-burst" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • Packet Burst & FPS</span><span class="text-gray-200 font-semibold">CS2 Packet Burst, Jitter ve FPS Düşmesi Çözümü</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+        </div>
+      </section>
+
+      <!-- Bölüm 8: Bu çözüm işe yaradı mı? Evet / Hayır -->
+      <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 space-y-3 shadow-lg">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h2 class="text-sm sm:text-base font-extrabold text-white">Bu çözüm işe yaradı mı?</h2>
+            <p class="text-xs text-gray-400">Geri bildiriminiz veritabanına kaydedilir (istemci başına tek oy). Yeterli oy (20+) biriktiğinde gerçek işe yarama oranı gösterilir.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              id="staticVoteUpBtn"
+              onclick="submitStaticPageVote(2, 'up')"
+              class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition"
+            >
+              <span>👍 Evet</span>
+              <span id="staticVoteUpCount" class="hidden"></span>
+            </button>
+            <button
+              type="button"
+              id="staticVoteDownBtn"
+              onclick="submitStaticPageVote(2, 'down')"
+              class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition"
+            >
+              <span>👎 Hayır</span>
+              <span id="staticVoteDownCount" class="hidden"></span>
+            </button>
+            <span id="staticVoteRateBadge" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30"></span>
+          </div>
+        </div>
+        <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
+      </section>
+      <script>
+        (function() {
+          function getClientId() {
+            try {
+              var k = 'oyuncoz_client_id';
+              var v = localStorage.getItem(k);
+              if (!v) {
+                v = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+                localStorage.setItem(k, v);
+              }
+              return v;
+            } catch (e) {
+              return 'cid_anon';
+            }
+          }
+          function updateVoteUI(data) {
+            if (!data) return;
+            var upCnt = Number(data.helpful_votes || 0);
+            var downCnt = Number(data.unhelpful_votes || 0);
+            var total = Number(data.total_votes || (upCnt + downCnt));
+            var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
+            var upEl = document.getElementById('staticVoteUpCount');
+            var downEl = document.getElementById('staticVoteDownCount');
+            var rateEl = document.getElementById('staticVoteRateBadge');
+            if (upEl) {
+              upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
+              upEl.classList.toggle('hidden', upCnt === 0);
+            }
+            if (downEl) {
+              downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
+              downEl.classList.toggle('hidden', downCnt === 0);
+            }
+            if (rateEl) {
+              rateEl.textContent = showRate ? ('✓ İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
+              rateEl.classList.toggle('hidden', !showRate);
+            }
+          }
+          window.submitStaticPageVote = function(issueId, voteType) {
+            fetch('/api/issues/' + issueId + '/vote', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-Client-Id': getClientId() },
+              body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
+            }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+              if (!d) return;
+              updateVoteUI(d);
+              var msg = document.getElementById('staticVoteFeedbackMsg');
+              if (msg) {
+                msg.classList.remove('hidden');
+                msg.textContent = d.user_vote === 'up'
+                  ? '👍 Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
+                  : (d.user_vote === 'down' ? '👎 Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
+              }
+            }).catch(function() {});
+          };
+          fetch('/api/issues', { headers: { 'X-Client-Id': getClientId() } })
+            .then(function(r) { return r.ok ? r.json() : []; })
+            .then(function(list) {
+              if (!Array.isArray(list)) return;
+              var found = list.find(function(x) { return Number(x.id) === 2; });
+              if (found) updateVoteUI(found);
+            }).catch(function() {});
+        })();
+      </script>
+    </article>
+  </main>
+
+  <footer class="border-t border-white/10 bg-[#11161f] py-6 text-xs text-gray-400 mt-10">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-3">
+      <div>© 2026 <strong>OyunÇöz (oyuncoz.com)</strong> — Oyun Hata Kodları ve FPS Çözüm Rehberi.</div>
+      <div class="flex flex-wrap items-center justify-center gap-2.5 text-[11px]">
+        <a href="/hata-kodlari" class="hover:text-[#a3d9c6] transition">Hata Kodları Dizini</a>
+        <span>•</span>
+        <a href="./hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
+        <span>•</span>
+        <a href="./iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
+        <span>•</span>
+        <a href="./kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK Aydınlatma Metni</a>
+        <span>•</span>
+        <a href="./gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez Politikası</a>
+        <span>•</span>
+        <a href="./kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
+        <span>•</span>
+        <a href="./telif-ve-sorumluluk-reddi.html" class="hover:text-[#a3d9c6] transition">Telif ve Sorumluluk Reddi</a>
+        <span>•</span>
+        <a href="/sitemap.xml" class="hover:text-gray-200 transition">Site Haritası</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

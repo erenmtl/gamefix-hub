@@ -185,151 +185,66 @@
 
     </section>
 
-    <section class="space-y-5">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-extrabold text-white">🛠️ EA Sports FC 25 En Sık Karşılaşılan Hatalar ve Çözüm Rehberleri (2 Rehber)</h2>
+        <section class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 class="text-lg font-extrabold text-white">🗂️ EA Sports FC 25 Hata Kodları ve Özel Çözüm Sayfaları (2 Rehber)</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Aradığınız hata koduna tıklayarak o hataya özel adım adım çözüm rehberine, ekran görüntüsü alanlarına ve doğrulama komutlarına ulaşabilirsiniz.</p>
+        </div>
+        <a href="/hata-kodlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm Oyunların Hata Kodları Dizini →</a>
       </div>
-      
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">EAAC-ERR-115</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Anti-Cheat &amp; Güvenlik</span>
+      <div class="grid grid-cols-1 gap-4">
+
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">EA AntiCheat Hatası</span>
+              <span class="text-xs text-gray-400">EA Sports FC 25</span>
             </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">EA AntiCheat Başlatılamadı (Hata Kodu 115 / Secure Boot &amp; Servis Hatası)</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> EA App veya Steam üzerinden FC 25 başlatılırken küçük EA AntiCheat penceresi doluyor ancak &#x27;EA AntiCheat Service Encountered an Error&#x27; diyerek oyun kapanıyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Frostbite Engine &amp; EA AntiCheat (Kernel))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">EA AntiCheat çekirdek sürücüsü (`EAAntiCheat.sys`), güncelleme sırasında eski sertifika önbelleğiyle çakıştığında veya `RivaTuner / Overwolf` gibi katman yazılımları `FC25.exe` belleğine erken kanca attığında başlatmayı iptal eder.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">EAAntiCheat.Installer.exe ile Temiz Yeniden Kurulum Yapın</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">`EA SPORTS FC 25\__Installer\EAAntiCheat` klasöründeki `EAAntiCheat.Installer.exe` aracını Yönetici olarak çalıştırın. Açılan listeden FC 25&#x27;i seçip önce &#x27;Kaldır (Uninstall)&#x27;, ardından &#x27;Yükle (Install)&#x27; butonuna basın.</p>
-            </div>
-            
-
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">EA App Önbelleğini (App Recovery) Temizleyin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">EA App sol üst menüden `Help -&gt; App Recovery -&gt; Clear Cache` seçeneğine tıklayarak bozuk oturum jetonlarını sıfırlayın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Get-Service -Name &#x27;EAAntiCheatService&#x27; -ErrorAction SilentlyContinue | Select-Object Name, Status, StartType</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Get-Service -Name &#x27;EAAntiCheatService&#x27; -ErrorAction SilentlyContinue | Select-Object Name, Status, StartType');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>[PC] Fixed EA AntiCheat Launch Failure &amp; Splash Screen Crash in FC 25</span>
-              </div>
-              <p class="text-gray-300 italic">"Oyun klasöründeki EAAntiCheat.Installer.exe dosyasını Yönetici olarak açıp önce &#x27;Uninstall All&#x27;, sonra &#x27;Install&#x27; yapmak ve FC25.exe dijital imzasını yüklemek sorunu tamamen çözdü."</p>
-            </div>
-            
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/fc25/ea-anticheat" class="hover:text-[#88c0a8] transition">EA Sports FC 25 EA AntiCheat Başlatılamadı (Hata 115 / 7) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">EA Sports FC 25 açılış ekranında (Splash Screen) kapanma veya 'EA AntiCheat Service Encountered an Error (115 / 7)' uyarısı, çekirdek düzeyindeki EAAntiCheat.GameService.exe hizmetinin...</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/fc25/ea-anticheat" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
         </article>
-        
-        <article class="bg-[#18202c] border border-white/15 rounded-2xl p-6 space-y-4 shadow-lg">
-          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
-            <div class="flex flex-wrap items-center gap-2">
+        <article class="bg-[#18202c] border border-white/15 hover:border-[#88c0a8]/45 rounded-2xl p-5 space-y-3 shadow-lg transition">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-2">
               <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/35 text-xs font-mono font-bold">FC25-CUTSCENE-FPS</span>
-              <span class="px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10 text-xs">Performans &amp; FPS</span>
+              <span class="text-xs text-gray-400">EA Sports FC 25</span>
             </div>
-            <span class="text-xs font-semibold text-gray-400">📅 Son güncelleme: 15.03.2026</span>
+            <span class="text-[11px] text-gray-400">📅 Son güncelleme: 15.03.2026</span>
           </div>
-
-          <div class="space-y-2">
-            <h2 class="text-base sm:text-xl font-extrabold text-white">Korner, Duran Top ve Ara Sahnelerde Şiddetli FPS Düşüşü ve Takılma</h2>
-            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed"><strong>Belirti (Semptom):</strong> Maç içi akıcıyken kornerlerde, gol sevinçlerinde ve devre arası geçişlerinde FPS bir anda 30&#x27;un altına düşüp oyun ağır çekime giriyor.</p>
-          </div>
-
-          <div class="bg-[#131a24] border border-[#5e9c88]/30 rounded-xl p-4 space-y-1.5">
-            <div class="text-xs font-bold text-[#a3d9c6]">🔍 Kök Neden Analizi (Frostbite Engine &amp; EA AntiCheat (Kernel))</div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Frostbite motorunda &#x27;Telli Saç (Strand Based Hair)&#x27; ve &#x27;Yarım Kare Hızı Ara Sahne&#x27; açık olduğunda korner/yakın çekim kameralarda GPU tessellation yükü aniden 4 katına çıkar ve V-Sync zamanlayıcısı kilitlenir.</p>
-          </div>
-
-          <div class="space-y-2.5">
-            <h3 class="text-sm font-extrabold text-white">🛠️ Adım Adım Çözüm Adımları</h3>
-            <div class="grid grid-cols-1 gap-2.5">
-              
-            <div class="bg-[#141923] border border-white/10 rounded-xl p-4 space-y-1">
-              <div class="flex items-center gap-2.5">
-                <span class="w-6 h-6 rounded-md bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                <h4 class="text-xs sm:text-sm font-bold text-white">Ara Sahne Performansı ve Telli Saç (Strand Hair) Ayarını Değiştirin</h4>
-              </div>
-              <p class="text-xs text-gray-300 leading-relaxed pl-8">Oyun Ayarları -&gt; Ekran Yapılandırması altında &#x27;Ara Sahne Kalitesi: Tam Kare Hızı (Full Frame Rate)&#x27;, &#x27;Telli Saç: Kapalı&#x27; ve &#x27;Dinamik Çözünürlük Ölçeği: Kapalı&#x27; olarak ayarlayın.</p>
-            </div>
-            
-            </div>
-          </div>
-
-          <div class="bg-[#11161f] border border-amber-400/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div class="text-[11px] font-bold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</div>
-              <code class="text-xs font-mono text-[#a3d9c6]">Test-Path &quot;$env:LOCALAPPDATA\EA SPORTS FC 25\fcsetup.ini&quot;</code>
-            </div>
-            <button onclick="navigator.clipboard.writeText('Test-Path &quot;$env:LOCALAPPDATA\EA SPORTS FC 25\fcsetup.ini&quot;');this.textContent='✓ Kopyalandı';" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/35 text-amber-100 border border-amber-400/30 text-xs font-bold shrink-0 transition">
-              📋 Komutu Kopyala
-            </button>
-          </div>
-
-          <div class="space-y-2 pt-1">
-            <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">📌 Reddit, Steam ve Technopat Topluluk Kaynakları</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-              
-            <div class="bg-[#141923]/70 border border-white/5 rounded-lg p-3 text-xs space-y-1">
-              <div class="flex items-center justify-between text-[11px] text-gray-400">
-                <span class="font-bold text-[#a3d9c6]">Forum</span>
-                <span>PC Stutter &amp; Cutscene FPS Drop Fix: fcsetup.ini &amp; Cloth/Hair Physics</span>
-              </div>
-              <p class="text-gray-300 italic">"Oyun içi Dinamik Çözünürlük (Dynamic Resolution) kapatıp Telli Saç (Strand Based Hair) ayarını Kapalı yapmak ve Ara Sahne Kalitesini &#x27;Tam Kare Hızı (Full Frame Rate)&#x27; seçmek korner takılmalarını %100 bitirdi."</p>
-            </div>
-            
-            </div>
+          <h3 class="text-base sm:text-lg font-extrabold text-white">
+            <a href="/fc25/fc25-cutscene-fps" class="hover:text-[#88c0a8] transition">EA Sports FC 25 — Korner, Duran Top ve Ara Sahnelerde Şiddetli FPS Düşüşü ve Takılma (FC25-CUTSCENE-FPS) Çözüm Rehberi</a>
+          </h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Maç içi akıcıyken kornerlerde, gol sevinçlerinde ve devre arası geçişlerinde FPS bir anda 30'un altına düşüp oyun ağır çekime giriyor.</p>
+          <div class="pt-1 flex items-center justify-between">
+            <span class="text-[11px] text-gray-400">🧪 Windows 10 / 11 • Adım Adım Rehber</span>
+            <a href="/fc25/fc25-cutscene-fps" class="px-3.5 py-1.5 rounded-xl bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#a3d9c6] border border-[#88c0a8]/35 text-xs font-bold transition">
+              Çözüm Rehberine Git →
+            </a>
           </div>
         </article>
-        
+      </div>
     </section>
 
     <section class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-4">
       <h2 class="text-sm sm:text-base font-bold text-white">⚡ Özel Hata Kodu Çözüm Rehberleri</h2>
       <div class="flex flex-wrap gap-2">
-        <a href="./valorant-van-9003-van-1067-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
-<a href="./cs2-vac-oturum-dogrulama-fps-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
-<a href="./lol-vanguard-van-128-van-185-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
-<a href="./gta5-fivem-err-gfx-d3d-init-texture-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
-<a href="./minecraft-exit-code-1-glfw-65542-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
-<a href="./rdr2-bannerlord-fc25-wukong-crash-cozumu.html" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
+        <a href="/valorant/van-9003" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Valorant VAN 9003 &amp; VAN 1067 Çözümü</a>
+<a href="/cs2/vac-oturum-dogrulama" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ CS2 VAC Doğrulama &amp; Packet Burst Çözümü</a>
+<a href="/lol/van-128" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ LoL Vanguard VAN 128 &amp; VAN 185 Çözümü</a>
+<a href="/gtav-fivem/err-gfx-d3d-init" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ GTA V &amp; FiveM ERR_GFX &amp; Doku Kaybı Çözümü</a>
+<a href="/minecraft/exit-code-1" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ Minecraft Exit Code 1 &amp; GLFW 65542 Çözümü</a>
+<a href="/rdr2/err-gfx-state" class="px-2.5 py-1.5 rounded-lg bg-[#5e9c88]/15 hover:bg-[#5e9c88]/30 text-[#a3d9c6] border border-[#5e9c88]/30 text-xs font-semibold transition">⚡ RDR2, Bannerlord, FC 25 &amp; Wukong Crash Çözümü</a>
       </div>
       <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 pt-2">🎮 Tüm Oyunların Hata Çözüm Sayfaları (30 Oyun)</h3>
       <div class="flex flex-wrap gap-1.5">

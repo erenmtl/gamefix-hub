@@ -1,11 +1,22 @@
-# OyunÇöz 301 Kalıcı Yönlendirme Kuralları (Aşama 3 Teknik SEO)
+# OyunÇöz 301 Kalıcı Yönlendirme Kuralları (Aşama 3 & Aşama 5 İçerik Mimarisi)
 /sitemap2.xml /sitemap.xml 301
 /index.htm / 301
 /home / 301
 /anasayfa / 301
-/valorant-van9003.html /valorant-van-9003-van-1067-cozumu.html 301
-/valorant-van-9003-cozumu.html /valorant-van-9003-van-1067-cozumu.html 301
-/cs2-vac-hatasi-cozumu.html /cs2-vac-oturum-dogrulama-fps-cozumu.html 301
-/lol-van-128-cozumu.html /lol-vanguard-van-128-van-185-cozumu.html 301
-/gta5-err-gfx-d3d-init-cozumu.html /gta5-fivem-err-gfx-d3d-init-texture-cozumu.html 301
-/minecraft-exit-code-1-cozumu.html /minecraft-exit-code-1-glfw-65542-cozumu.html 301
+/valorant.html /valorant-hata-cozumleri.html 301
+/cs2.html /cs2-hata-cozumleri.html 301
+/lol.html /lol-hata-cozumleri.html 301
+/minecraft.html /minecraft-hata-cozumleri.html 301
+/gtav-fivem.html /gtav-fivem-hata-cozumleri.html 301
+/valorant-van-9003-van-1067-cozumu.html /valorant/van-9003 301
+/valorant-van9003.html /valorant/van-9003 301
+/valorant-van-9003-cozumu.html /valorant/van-9003 301
+/cs2-vac-oturum-dogrulama-fps-cozumu.html /cs2/vac-oturum-dogrulama 301
+/cs2-vac-hatasi-cozumu.html /cs2/vac-oturum-dogrulama 301
+/lol-vanguard-van-128-van-185-cozumu.html /lol/van-128 301
+/lol-van-128-cozumu.html /lol/van-128 301
+/gta5-fivem-err-gfx-d3d-init-texture-cozumu.html /gtav-fivem/err-gfx-d3d-init 301
+/gta5-err-gfx-d3d-init-cozumu.html /gtav-fivem/err-gfx-d3d-init 301
+/minecraft-exit-code-1-glfw-65542-cozumu.html /minecraft/exit-code-1 301
+/minecraft-exit-code-1-cozumu.html /minecraft/exit-code-1 301
+/rdr2-bannerlord-fc25-wukong-crash-cozumu.html /rdr2/err-gfx-state 301
