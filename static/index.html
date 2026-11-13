@@ -1305,19 +1305,10 @@
 
       <!-- Register Step 2: Enter 6-Digit Email Verification Code -->
       <form id="registerFormStep2" onsubmit="verifyCodeAndCompleteRegister(event)" class="hidden space-y-4">
-        <div class="bg-[#181e29] border border-[#5e9c88]/40 rounded-xl p-3.5 space-y-2">
-          <div class="text-xs font-bold text-[#a3d9c6]">📩 E-Posta Onay Kodu Oluşturuldu</div>
+        <div class="bg-[#181e29] border border-[#5e9c88]/40 rounded-xl p-3.5 space-y-1.5">
+          <div class="text-xs font-bold text-[#a3d9c6]">📩 E-Posta Doğrulama Kodu Gönderildi</div>
           <p id="verifyEmailTargetText" class="text-xs text-gray-300"></p>
-          <!-- Local Inbox Preview when SMTP is not configured -->
-          <div id="localInboxPreviewBox" class="hidden mt-2 pt-2 border-t border-white/10 flex items-center justify-between gap-2">
-            <span class="text-[11px] text-gray-300">Gelen Kutusu Onay Kodunuz:</span>
-            <div class="flex items-center gap-2">
-              <span id="localInboxPreviewCode" class="font-mono font-extrabold text-sm px-2.5 py-0.5 rounded bg-[#5e9c88]/25 text-[#a3d9c6] tracking-widest"></span>
-              <button type="button" onclick="fillPreviewVerificationCode()" class="text-[11px] px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white font-semibold">
-                Kodu Doldur
-              </button>
-            </div>
-          </div>
+          <p class="text-[11px] text-gray-400">Kod 10 dakika geçerlidir, tek kullanımlıktır ve 5 hatalı denemede kilitlenir.</p>
         </div>
 
         <div>

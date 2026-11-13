@@ -35,6 +35,16 @@ function escapeHTML(raw) {
     .replace(/'/g, '&#39;');
 }
 
+function renderSafeForumUserText(raw) {
+  // Stage 1.4 & 1.5: Never render user forum text as raw HTML; escape first, then linkify safe http(s) URLs with rel="ugc nofollow noopener"
+  const escaped = escapeHTML(raw);
+  if (!escaped) return '';
+  return escaped.replace(
+    /\b(https?:\/\/[^\s<>"'`]+)/gi,
+    (match) => `<a href="${match}" target="_blank" rel="ugc nofollow noopener" class="text-[#88c0a8] hover:underline break-all">${match}</a>`
+  );
+}
+
 function sanitizeHTML(dirtyHtml) {
   if (!dirtyHtml) return '';
   if (window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
@@ -74,6 +84,11 @@ function sanitizeAiCommandsClient(mdText) {
   return cleaned;
 }
 
+// Purge any legacy localStorage auth token (Stage 1.2: Session moved to HttpOnly + Secure + SameSite=Lax cookie)
+try {
+  localStorage.removeItem('gamefix_auth_token');
+} catch (e) {}
+
 let STATE = {
   games: [],
   issues: [],
@@ -85,7 +100,6 @@ let STATE = {
   activeTab: 'ai-lab',
   hasServerApiKey: false,
   clientId: getOrCreateClientId(),
-  authToken: localStorage.getItem('gamefix_auth_token') || '',
   currentUser: null,
   pendingVerifyEmail: '',
   wizardByIssue: {},
@@ -95,14 +109,10 @@ let STATE = {
 let resolveTimer = null;
 
 function getAuthHeaders(extra = {}) {
-  const headers = {
+  return {
     'X-Client-Id': STATE.clientId,
     ...extra
   };
-  if (STATE.authToken) {
-    headers['Authorization'] = `Bearer ${STATE.authToken}`;
-  }
-  return headers;
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -468,10 +478,11 @@ async function confirmAndApplyDetectedHardware() {
     } catch (e) {}
   }
 
-  if (STATE.currentUser && STATE.authToken) {
+  if (STATE.currentUser) {
     try {
       await fetch('/api/auth/profile', {
         method: 'PUT',
+        credentials: 'same-origin',
         headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           system_specs: finalSpecs,
@@ -861,25 +872,22 @@ async function submitAddNewGame(e) {
   }
 }
 
-// --- 2-STEP EMAIL VERIFICATION & AUTHENTICATION ---
+// --- 2-STEP EMAIL VERIFICATION & AUTHENTICATION (HttpOnly Cookie Session) ---
 
 async function checkCurrentSession() {
-  if (!STATE.authToken) {
-    updateAuthUI();
-    return;
-  }
   try {
-    const res = await fetch('/api/auth/me', { headers: getAuthHeaders() });
+    const res = await fetch('/api/auth/me', {
+      credentials: 'same-origin',
+      headers: getAuthHeaders()
+    });
     if (res.ok) {
       const data = await res.json();
       STATE.currentUser = data.user;
     } else {
-      STATE.authToken = '';
       STATE.currentUser = null;
-      localStorage.removeItem('gamefix_auth_token');
     }
   } catch (err) {
-    console.error('Session check failed:', err);
+    STATE.currentUser = null;
   }
   updateAuthUI();
 }
@@ -999,15 +1007,6 @@ function backToRegisterStep1() {
   document.getElementById('registerFormStep1').classList.remove('hidden');
 }
 
-function fillPreviewVerificationCode() {
-  const previewCode = document.getElementById('localInboxPreviewCode');
-  const inp = document.getElementById('regVerificationCodeInput');
-  if (previewCode && inp && previewCode.textContent) {
-    inp.value = previewCode.textContent.trim();
-    inp.focus();
-  }
-}
-
 async function requestEmailVerificationCode(e) {
   e.preventDefault();
   clearAuthAlert();
@@ -1037,20 +1036,19 @@ async function requestEmailVerificationCode(e) {
   try {
     const res = await fetch('./api/auth/send-code', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify(payload)
     });
     const data = await res.json();
     if (!res.ok) {
-      showAuthAlert(`⚠️ ${data.detail || 'Kod gönderilemedi.'}`, 'error');
+      showAuthAlert(`⚠️ ${escapeHTML(data.detail || 'Kod gönderilemedi.')}`, 'error');
       showToast(data.detail || 'Kod gönderilemedi.');
       return;
     }
 
-    if (data.already_registered && data.token && data.user) {
-      STATE.authToken = data.token;
+    if (data.already_registered && data.user) {
       STATE.currentUser = data.user;
-      localStorage.setItem('gamefix_auth_token', data.token);
       updateAuthUI();
       closeAuthModal();
       await Promise.all([fetchIssues(), fetchThreads()]);
@@ -1061,23 +1059,14 @@ async function requestEmailVerificationCode(e) {
     STATE.pendingVerifyEmail = data.email;
     document.getElementById('registerFormStep1').classList.add('hidden');
     document.getElementById('registerFormStep2').classList.remove('hidden');
-    document.getElementById('verifyEmailTargetText').textContent = `${data.email} adresine gönderilen 6 haneli onay kodunu girin:`;
+    document.getElementById('verifyEmailTargetText').textContent = `${data.email} adresine gönderilen 6 haneli tek kullanımlık onay kodunu girin:`;
 
-    const previewBox = document.getElementById('localInboxPreviewBox');
-    const previewCode = document.getElementById('localInboxPreviewCode');
     const codeInp = document.getElementById('regVerificationCodeInput');
-
-    if (data.verification_code_preview) {
-      previewBox.classList.remove('hidden');
-      previewCode.textContent = data.verification_code_preview;
-      codeInp.value = data.verification_code_preview;
-    } else {
-      previewBox.classList.add('hidden');
+    if (codeInp) {
       codeInp.value = '';
+      setTimeout(() => codeInp.focus(), 80);
     }
-
-    setTimeout(() => codeInp.focus(), 80);
-    showToast('6 haneli e-posta doğrulama kodu oluşturuldu!');
+    showToast('6 haneli doğrulama kodu e-posta adresinize gönderildi!');
   } catch (err) {
     showAuthAlert('⚠️ Sunucuya bağlanılamadı. Lütfen tekrar deneyin.', 'error');
     showToast('İstek sırasında hata oluştu.');
@@ -1099,19 +1088,18 @@ async function verifyCodeAndCompleteRegister(e) {
   try {
     const res = await fetch('/api/auth/verify-register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ email: STATE.pendingVerifyEmail, code })
     });
     const data = await res.json();
     if (!res.ok) {
-      showAuthAlert(`⚠️ ${data.detail || 'Doğrulama başarısız.'}`, 'error');
+      showAuthAlert(`⚠️ ${escapeHTML(data.detail || 'Doğrulama başarısız.')}`, 'error');
       showToast(data.detail || 'Doğrulama başarısız.');
       return;
     }
 
-    STATE.authToken = data.token;
     STATE.currentUser = data.user;
-    localStorage.setItem('gamefix_auth_token', data.token);
     updateAuthUI();
     closeAuthModal();
     await Promise.all([fetchIssues(), fetchThreads()]);
@@ -1140,13 +1128,13 @@ async function submitLogin(e) {
   try {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ identifier, password })
     });
     const data = await res.json();
     if (!res.ok) {
       if (res.status === 404) {
-        // User has not created an account yet -> switch to Register tab and pre-fill!
         switchAuthTab('register');
         if (identifier.includes('@')) {
           document.getElementById('regEmail').value = identifier;
@@ -1161,14 +1149,12 @@ async function submitLogin(e) {
         );
         return;
       }
-      showAuthAlert(`⚠️ ${data.detail || 'Giriş başarısız.'}`, 'error');
+      showAuthAlert(`⚠️ ${escapeHTML(data.detail || 'Giriş başarısız.')}`, 'error');
       showToast(data.detail || 'Giriş başarısız.');
       return;
     }
 
-    STATE.authToken = data.token;
     STATE.currentUser = data.user;
-    localStorage.setItem('gamefix_auth_token', data.token);
     updateAuthUI();
     closeAuthModal();
     await Promise.all([fetchIssues(), fetchThreads()]);
@@ -1224,10 +1210,8 @@ async function saveUserProfile(e) {
 }
 
 async function logoutUser() {
-  await fetch('./api/auth/logout', { method: 'POST', headers: getAuthHeaders() });
-  STATE.authToken = '';
+  await fetch('./api/auth/logout', { method: 'POST', credentials: 'same-origin', headers: getAuthHeaders() });
   STATE.currentUser = null;
-  localStorage.removeItem('gamefix_auth_token');
   updateAuthUI();
   closeProfileModal();
   await Promise.all([fetchIssues(), fetchThreads()]);
@@ -1244,6 +1228,7 @@ async function deleteMyAccountPermanently() {
   try {
     const res = await fetch('./api/auth/account', {
       method: 'DELETE',
+      credentials: 'same-origin',
       headers: getAuthHeaders()
     });
     const data = await res.json();
@@ -1252,10 +1237,8 @@ async function deleteMyAccountPermanently() {
       return;
     }
 
-    STATE.authToken = '';
     STATE.currentUser = null;
     try {
-      localStorage.removeItem('gamefix_auth_token');
       localStorage.removeItem('oyuncoz_detected_specs');
       localStorage.removeItem(`oyuncoz_votes_${STATE.clientId}`);
     } catch (e) {}
@@ -2946,7 +2929,7 @@ function renderThreads() {
                 </button>
               </div>
             </div>
-            <p class="text-xs sm:text-sm text-gray-200">${escapeHTML(rep.content)}</p>
+            <p class="text-xs sm:text-sm text-gray-200">${renderSafeForumUserText(rep.content)}</p>
           </div>
         `;
       }
@@ -2991,7 +2974,7 @@ function renderThreads() {
 
         <div class="space-y-1.5">
           <h3 class="text-base sm:text-lg font-bold text-white">${escapeHTML(t.title)}</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${escapeHTML(t.content)}</p>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">${renderSafeForumUserText(t.content)}</p>
         </div>
 
         <div class="space-y-3 pt-2">

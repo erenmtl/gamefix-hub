@@ -462,11 +462,16 @@
   }
 
   function getAuthUser(headers) {
+    const sessions = loadStore(STORAGE_KEYS.sessions, {});
+    const users = loadStore(STORAGE_KEYS.users, []);
+    const cid = (headers && (headers['X-Client-Id'] || headers['x-client-id'])) || '';
+    if (cid && sessions[cid]) {
+      const found = users.find(u => u.id === sessions[cid]);
+      if (found) return found;
+    }
     const auth = (headers && (headers['Authorization'] || headers['authorization'])) || '';
     if (!auth.startsWith('Bearer ')) return null;
     const token = auth.replace('Bearer ', '').trim();
-    const sessions = loadStore(STORAGE_KEYS.sessions, {});
-    const users = loadStore(STORAGE_KEYS.users, []);
     const userId = sessions[token];
     if (!userId) return null;
     return users.find(u => u.id === userId) || null;
@@ -755,6 +760,9 @@
     }
 
     if (path === '/api/auth/send-code' && method === 'POST') {
+      const rlErr = checkRateLimitBucket(`reg_send:${clientId}`, 4, 60000, 'kayıt onay kodu isteme işlemi');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
       if (body.kvkk_consent === false) {
         return jsonResponse({ detail: 'Kayıt olabilmek için 6698 sayılı KVKK Aydınlatma Metni ve Kullanım Koşullarını onaylamanız zorunludur.' }, 400);
       }
@@ -771,17 +779,22 @@
       const existing = users.find(u => u.email.toLowerCase() === email || u.username.toLowerCase() === username.toLowerCase());
       if (existing) {
         if (existing.password === password) {
-          const token = 'tok_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
           const sessions = loadStore(STORAGE_KEYS.sessions, {});
-          sessions[token] = existing.id;
+          sessions[clientId] = existing.id;
           saveStore(STORAGE_KEYS.sessions, sessions);
-          return jsonResponse({ already_registered: true, token, user: existing });
+          return jsonResponse({ already_registered: true, user: existing });
         }
         return jsonResponse({ detail: 'Bu kullanıcı adı veya e-posta zaten kayıtlı. Lütfen Giriş Yap sekmesini kullanın.' }, 400);
       }
 
-      const code = String(Math.floor(100000 + Math.random() * 900000));
       const verifications = loadStore(STORAGE_KEYS.verifications, {});
+      const prevVer = verifications[email];
+      if (prevVer && prevVer.locked_until && Date.now() < prevVer.locked_until) {
+        const waitSec = Math.max(1, Math.ceil((prevVer.locked_until - Date.now()) / 1000));
+        return jsonResponse({ detail: `🔒 5 hatalı deneme nedeniyle doğrulama kilitlendi. Lütfen ${waitSec} saniye bekleyin.` }, 429);
+      }
+
+      const code = String(Math.floor(100000 + Math.random() * 900000));
       verifications[email] = {
         username,
         email,
@@ -789,25 +802,53 @@
         system_specs: sanitizeUserText(body.system_specs || ''),
         favorite_game: body.favorite_game || 'valorant',
         code,
-        expires_at: Date.now() + 900000
+        attempts: 0,
+        locked_until: 0,
+        expires_at: Date.now() + 600000 // 10 minutes
       };
       saveStore(STORAGE_KEYS.verifications, verifications);
       return jsonResponse({
         sent: true,
         email,
         smtp_sent: false,
-        verification_code_preview: code,
-        message: `6 haneli onay kodunuz oluşturuldu (${email}).`
+        expires_in_seconds: 600,
+        max_attempts: 5,
+        message: `${email} adresine tek kullanımlık 6 haneli doğrulama kodu gönderildi (10 dakika geçerlidir).`
       });
     }
 
     if (path === '/api/auth/verify-register' && method === 'POST') {
+      const rlErr = checkRateLimitBucket(`reg_verify:${clientId}`, 6, 60000, 'onay kodu doğrulama denemesi');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
       const email = String(body.email || '').trim().toLowerCase();
       const code = String(body.code || '').trim();
       const verifications = loadStore(STORAGE_KEYS.verifications, {});
       const pending = verifications[email];
       if (!pending) return jsonResponse({ detail: 'Bekleyen doğrulama işlemi bulunamadı.' }, 400);
-      if (pending.code !== code) return jsonResponse({ detail: 'Girdiğiniz 6 haneli onay kodu hatalı!' }, 400);
+
+      if (pending.locked_until && Date.now() < pending.locked_until) {
+        const waitSec = Math.max(1, Math.ceil((pending.locked_until - Date.now()) / 1000));
+        return jsonResponse({ detail: `🔒 5 kez hatalı kod girildiği için işlem kilitlendi (${waitSec} sn kaldı).` }, 429);
+      }
+
+      if (Date.now() > (pending.expires_at || 0)) {
+        delete verifications[email];
+        saveStore(STORAGE_KEYS.verifications, verifications);
+        return jsonResponse({ detail: 'Doğrulama kodunun 10 dakikalık geçerlilik süresi dolmuş. Lütfen yeni kod isteyin.' }, 400);
+      }
+
+      if (pending.code !== code) {
+        pending.attempts = (pending.attempts || 0) + 1;
+        if (pending.attempts >= 5) {
+          pending.locked_until = Date.now() + 600000;
+          pending.code = 'LOCKED_' + Math.random().toString(36);
+          saveStore(STORAGE_KEYS.verifications, verifications);
+          return jsonResponse({ detail: '🔒 5 kez hatalı onay kodu girdiniz! Güvenliğiniz için doğrulama kodu iptal edildi ve 10 dakika kilitlendi.' }, 429);
+        }
+        saveStore(STORAGE_KEYS.verifications, verifications);
+        return jsonResponse({ detail: `Girdiğiniz 6 haneli onay kodu hatalı! (Kalan deneme hakkınız: ${5 - pending.attempts})` }, 400);
+      }
 
       const users = loadStore(STORAGE_KEYS.users, []);
       const initials = pending.username.slice(0, 2).toUpperCase();
@@ -823,18 +864,20 @@
         created_at: new Date().toISOString().slice(0, 10)
       };
       users.push(newUser);
-      delete verifications[email];
-      const token = 'tok_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      delete verifications[email]; // Single-use deletion
       const sessions = loadStore(STORAGE_KEYS.sessions, {});
-      sessions[token] = newUser.id;
+      sessions[clientId] = newUser.id;
       saveStore(STORAGE_KEYS.users, users);
       saveStore(STORAGE_KEYS.verifications, verifications);
       saveStore(STORAGE_KEYS.sessions, sessions);
       log5651Audit('user_register_kvkk', newUser.id, newUser.id, clientId, `Yeni üye kaydı: ${newUser.username}`);
-      return jsonResponse({ token, user: newUser });
+      return jsonResponse({ user: newUser });
     }
 
     if (path === '/api/auth/login' && method === 'POST') {
+      const rlErr = checkRateLimitBucket(`login:${clientId}`, 5, 60000, 'giriş denemesi');
+      if (rlErr) return jsonResponse({ detail: rlErr }, 429);
+
       const ident = String(body.identifier || '').trim().toLowerCase();
       const password = String(body.password || '');
       const users = loadStore(STORAGE_KEYS.users, []);
@@ -845,11 +888,10 @@
       if (found.password !== password) {
         return jsonResponse({ detail: 'Girdiğiniz şifre hatalı. Lütfen kontrol edip tekrar deneyin.' }, 401);
       }
-      const token = 'tok_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
       const sessions = loadStore(STORAGE_KEYS.sessions, {});
-      sessions[token] = found.id;
+      sessions[clientId] = found.id;
       saveStore(STORAGE_KEYS.sessions, sessions);
-      return jsonResponse({ token, user: found });
+      return jsonResponse({ user: found });
     }
 
     if (path === '/api/auth/me' && method === 'GET') {
@@ -894,6 +936,9 @@
     }
 
     if (path === '/api/auth/logout' && method === 'POST') {
+      const sessions = loadStore(STORAGE_KEYS.sessions, {});
+      delete sessions[clientId];
+      saveStore(STORAGE_KEYS.sessions, sessions);
       return jsonResponse({ success: true });
     }
 

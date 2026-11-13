@@ -128,9 +128,20 @@ def init_db():
         favorite_game TEXT DEFAULT 'valorant',
         code TEXT NOT NULL,
         expires_at REAL NOT NULL,
+        attempts INTEGER DEFAULT 0,
+        locked_until REAL DEFAULT 0,
         created_at TEXT NOT NULL
     )
     """)
+
+    for alter_sql in (
+        "ALTER TABLE email_verifications ADD COLUMN attempts INTEGER DEFAULT 0",
+        "ALTER TABLE email_verifications ADD COLUMN locked_until REAL DEFAULT 0",
+    ):
+        try:
+            cursor.execute(alter_sql)
+        except Exception:
+            pass
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS ai_cache (
@@ -216,15 +227,21 @@ def init_db():
     )
     """)
 
-    # Load Gemini API key from local .env if present
+    # Load environment variables from local .env if present (never hardcode secrets)
     env_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     if os.path.exists(env_file):
         with open(env_file, "r", encoding="utf-8") as ef:
             for line in ef:
-                if line.strip().startswith("GEMINI_API_KEY="):
-                    val = line.strip().split("=", 1)[1].strip()
-                    if val:
-                        cursor.execute("INSERT OR IGNORE INTO site_settings (key, value) VALUES ('gemini_api_key', ?)", (val,))
+                stripped = line.strip()
+                if not stripped or stripped.startswith("#") or "=" not in stripped:
+                    continue
+                k, v = stripped.split("=", 1)
+                k = k.strip()
+                v = v.strip().strip('"').strip("'")
+                if k and v:
+                    os.environ.setdefault(k, v)
+                    if k == "GEMINI_API_KEY":
+                        cursor.execute("INSERT OR IGNORE INTO site_settings (key, value) VALUES ('gemini_api_key', ?)", (v,))
 
     cursor.execute("SELECT COUNT(*) as cnt FROM games")
     if cursor.fetchone()["cnt"] == 0:
