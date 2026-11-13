@@ -380,17 +380,45 @@ def get_server_gemini_key() -> str:
     return ""
 
 
-def build_ai_cache_key(game_slug: str, error_code: str, problem_description: str) -> str:
+AI_SOLUTION_DISCLAIMER = "Bu çözüm yapay zeka tarafından üretildi, uygulamadan önce geri yükleme noktası oluşturun."
+EDITOR_VERIFIED_LABEL = "Editör kontrolünden geçti"
+
+
+def normalize_ai_cache_components(game_slug: str, error_code: str, problem_description: str = "") -> tuple[str, str, str]:
     """
-    Creates a normalized semantic fingerprint so identical or near-identical error queries
-    for the same game hit the SQLite AI Cache (0 token cost!).
+    Stage 6.4: Normalizes game + error_code + problem text with lowercase, Turkish char folding,
+    and whitespace/punctuation cleanup so identical intents hit the Smart Cache reliably.
     """
-    tr_map = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
-    norm_code = re.sub(r"[^a-z0-9]+", "", (error_code or "").translate(tr_map).lower())
-    words = re.findall(r"[a-z0-9]{3,}", (problem_description or "").translate(tr_map).lower())
-    stopwords = {"bir", "ama", "icin", "olan", "গিয়ে", "sonra", "oyun", "oyunda", "hatasi", "hata", "aliyorum", "veriyor", "nasil", "cozulur"}
-    key_tokens = sorted(set(w for w in words if w not in stopwords))[:8]
-    raw_fingerprint = f"{game_slug.lower()}|{norm_code}|{'_'.join(key_tokens)}"
+    tr_map = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosucgiosu")
+    norm_game = re.sub(r"[^a-z0-9]+", "-", (game_slug or "").translate(tr_map).lower()).strip("-")
+    norm_code = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", (error_code or "").translate(tr_map).lower())).strip()
+    raw_prob = re.sub(r"\[crash_log_verisi\][\s\S]*$", "", (problem_description or ""), flags=re.IGNORECASE)
+    words = re.findall(r"[a-z0-9]{2,}", raw_prob.translate(tr_map).lower())
+    stopwords = {
+        "bir", "ama", "icin", "olan", "sonra", "oyun", "oyunda", "hatasi", "hata",
+        "aliyorum", "veriyor", "nasil", "cozulur", "lutfen", "yardim", "sorunu", "cozumu"
+    }
+    key_tokens = [w for w in words if w not in stopwords][:10]
+    norm_prob = " ".join(key_tokens)
+    return norm_game, norm_code, norm_prob
+
+
+def build_ai_cache_key(game_slug: str, error_code: str, problem_description: str = "") -> str:
+    """
+    Creates a normalized semantic fingerprint (game + error_code + lowercase/whitespace cleanup)
+    so identical or near-identical error queries for the same game hit the SQLite AI Cache.
+    """
+    norm_game, norm_code, norm_prob = normalize_ai_cache_components(game_slug, error_code, problem_description)
+    raw_fingerprint = f"{norm_game}|{norm_code}|{norm_prob}"
+    return hashlib.sha256(raw_fingerprint.encode("utf-8")).hexdigest()[:32]
+
+
+def build_ai_code_only_cache_key(game_slug: str, error_code: str) -> str:
+    """Secondary normalized key based strictly on (game + error_code) with lowercase/whitespace cleanup."""
+    norm_game, norm_code, _ = normalize_ai_cache_components(game_slug, error_code, "")
+    if not norm_code:
+        return ""
+    raw_fingerprint = f"{norm_game}|{norm_code}|__code_canonical__"
     return hashlib.sha256(raw_fingerprint.encode("utf-8")).hexdigest()[:32]
 
 
@@ -490,6 +518,142 @@ def try_send_smtp_email(to_email: str, username: str, code: str) -> bool:
         return False
 
 
+def write_ai_generated_game_hub_file(
+    slug: str,
+    game_name: str,
+    short_name: str,
+    engine: str,
+    anticheat: str,
+    issues_list: list,
+    updated_iso: str,
+    is_indexed: bool = False,
+    editor_verified: bool = False,
+) -> str:
+    """
+    Stage 6.1 & 6.2 & 6.3: Writes or updates the game hub HTML page for AI-generated games.
+    Defaults to <meta name="robots" content="noindex, follow" /> and displays the AI disclaimer.
+    When approved by admin (is_indexed=True, editor_verified=True), switches to index, follow
+    and displays 'Editör kontrolünden geçti'.
+    """
+    robots_val = "index, follow" if is_indexed else "noindex, follow"
+    date_tr = format_date_tr_ddmmyyyy(updated_iso)
+    status_badge_html = (
+        f'<span class="editor-verified-badge px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 text-xs font-bold">✓ {EDITOR_VERIFIED_LABEL}</span>'
+        if editor_verified else
+        '<span class="ai-draft-badge px-3 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-400/30 text-xs font-bold">🤖 Yapay Zeka Taslak Çözümü (İnceleme Bekliyor)</span>'
+    )
+    cards_html = []
+    for iss in issues_list:
+        err_code = html.escape(str(iss.get("error_code") or "GENEL"))
+        iss_title = html.escape(str(iss.get("title") or game_name))
+        symp = html.escape(str(iss.get("symptom_summary") or ""))
+        root_c = html.escape(str(iss.get("ai_root_cause") or ""))
+        cards_html.append(f"""
+        <article class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="px-2.5 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] font-mono text-xs font-bold">{err_code}</span>
+            {status_badge_html}
+          </div>
+          <h2 class="text-base font-extrabold text-white">{iss_title}</h2>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">{symp}</p>
+          <p class="text-xs text-gray-400 leading-relaxed">{root_c}</p>
+          <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-400/30 text-xs text-amber-200 font-semibold">
+            ⚠️ {AI_SOLUTION_DISCLAIMER}
+          </div>
+        </article>""")
+    cards_joined = "\n".join(cards_html)
+
+    hub_filename = f"{slug}-hata-cozumleri.html"
+    hub_path = os.path.join(ROOT_DIR, hub_filename)
+    html_content = f"""<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{html.escape(short_name[:32])} Hata Kodları ve Çözüm Rehberi | OyunÇöz</title>
+  <meta name="description" content="Windows 10 ve 11 bilgisayarlarda {html.escape(game_name[:40])} oynarken karşılaşılan hata kodları, çökme ve FPS sorunları için adım adım teknik çözüm rehberi." />
+  <meta name="robots" content="{robots_val}" />
+  <link rel="canonical" href="https://oyuncoz.com/{hub_filename}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:title" content="{html.escape(short_name[:32])} Hata Kodları ve Çözüm Rehberi | OyunÇöz" />
+  <meta property="og:description" content="Windows 10 ve 11 bilgisayarlarda {html.escape(game_name[:40])} oynarken karşılaşılan hata kodları, çökme ve FPS sorunları için adım adım teknik çözüm rehberi." />
+  <meta property="og:url" content="https://oyuncoz.com/{hub_filename}" />
+  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og-banner.png" />
+  <script type="application/ld+json">
+  {{
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "{html.escape(game_name)} Hata Kodları ve Çözüm Rehberi",
+    "inLanguage": "tr",
+    "datePublished": "{updated_iso}",
+    "dateModified": "{updated_iso}",
+    "author": {{
+      "@type": "Organization",
+      "name": "OyunÇöz Teknik Ekibi",
+      "url": "https://oyuncoz.com/hakkimizda.html"
+    }},
+    "publisher": {{
+      "@type": "Organization",
+      "name": "OyunÇöz",
+      "url": "https://oyuncoz.com/"
+    }}
+  }}
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#141922] text-gray-100 min-h-screen flex flex-col">
+  <header class="border-b border-white/10 bg-[#161c27]">
+    <nav aria-label="Üst Gezinme" class="max-w-5xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <a href="/" class="font-extrabold text-white text-sm">🔧 OyunÇöz</a>
+      <a href="/hata-kodlari" class="text-xs text-[#88c0a8] font-bold">🗂️ Hata Kodları Dizini</a>
+    </nav>
+  </header>
+  <main class="max-w-5xl mx-auto px-4 py-6 space-y-6 flex-1 w-full">
+    <nav aria-label="Sayfa Konumu (Breadcrumb)" class="text-xs text-gray-400 flex items-center gap-2">
+      <a href="/" class="text-[#88c0a8]">Ana Sayfa</a>
+      <span>›</span>
+      <span class="text-gray-200 font-semibold">{html.escape(game_name)}</span>
+    </nav>
+    <article class="space-y-5">
+      <div class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] text-xs font-bold">{html.escape(engine)} • {html.escape(anticheat)}</span>
+          {status_badge_html}
+        </div>
+        <h1 class="text-2xl font-extrabold text-white">{html.escape(game_name)} Hata Kodları ve Teknik Çözüm Rehberi</h1>
+        <div class="stage2-author-box p-3.5 rounded-xl bg-[#141a24] border border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div>Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] underline">OyunÇöz Teknik Ekibi</a></div>
+          <div>📅 Son güncelleme: <time datetime="{updated_iso}">{date_tr}</time> • 🧪 Test edilen sürüm: Windows 10 / 11</div>
+        </div>
+        <div class="ai-disclaimer-banner p-3.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-xs text-amber-100 font-semibold">
+          ⚠️ {AI_SOLUTION_DISCLAIMER}
+        </div>
+      </div>
+      <div class="space-y-4">
+        {cards_joined}
+      </div>
+      <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 flex items-center justify-between">
+        <h2 class="text-sm font-bold text-white">Bu çözüm işe yaradı mı?</h2>
+        <div class="flex gap-2">
+          <button type="button" class="px-3 py-1.5 rounded-lg bg-white/10 text-xs">👍 Evet</button>
+          <button type="button" class="px-3 py-1.5 rounded-lg bg-white/10 text-xs">👎 Hayır</button>
+        </div>
+      </section>
+    </article>
+  </main>
+  <footer class="border-t border-white/10 bg-[#11161f] py-5 text-xs text-gray-400 text-center">
+    <a href="/hakkimizda.html" class="hover:underline">Hakkımızda</a> • <a href="/iletisim.html" class="hover:underline">İletişim</a>
+  </footer>
+</body>
+</html>"""
+    with open(hub_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
+    return hub_filename
+
+
 def ensure_or_create_game_in_db(raw_game_input: str) -> dict:
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -508,6 +672,9 @@ def ensure_or_create_game_in_db(raw_game_input: str) -> dict:
         game_row["image_url"] = get_game_image_url(game_row["slug"])
         game_row["was_created"] = False
         game_row["corrected_from"] = resolved.get("corrected_from")
+        game_row["is_indexed"] = bool(game_row.get("is_indexed", 1))
+        game_row["editor_verified"] = bool(game_row.get("editor_verified", 1))
+        game_row["robots_meta"] = "index, follow" if game_row["is_indexed"] else "noindex, follow"
         conn.close()
         return game_row
 
@@ -520,13 +687,23 @@ def ensure_or_create_game_in_db(raw_game_input: str) -> dict:
         game_row["image_url"] = get_game_image_url(game_row["slug"])
         game_row["was_created"] = False
         game_row["corrected_from"] = resolved.get("corrected_from")
+        game_row["is_indexed"] = bool(game_row.get("is_indexed", 1))
+        game_row["editor_verified"] = bool(game_row.get("editor_verified", 1))
+        game_row["robots_meta"] = "index, follow" if game_row["is_indexed"] else "noindex, follow"
         conn.close()
         return game_row
 
     default_issues = resolved.get("default_issues", [])
+    now_str = datetime.now().strftime("%Y-%m-%d")
+
+    # Stage 6.1: User/AI-generated games default to is_indexed=0, editor_verified=0, is_ai_generated=1
     cursor.execute("""
-        INSERT INTO games (slug, name, short_name, category, developer, accent_color, secondary_color, banner_subtitle, engine, anticheat, common_tags, issue_count)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO games (
+            slug, name, short_name, category, developer, accent_color, secondary_color,
+            banner_subtitle, engine, anticheat, common_tags, issue_count,
+            is_indexed, editor_verified, is_ai_generated, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 1, ?)
     """, (
         slug,
         resolved["canonical_name"],
@@ -539,17 +716,18 @@ def ensure_or_create_game_in_db(raw_game_input: str) -> dict:
         resolved["engine"],
         resolved["anticheat"],
         json.dumps(resolved["common_tags"]),
-        len(default_issues)
+        len(default_issues),
+        now_str
     ))
 
-    now_str = datetime.now().strftime("%Y-%m-%d")
     for iss in default_issues:
         cursor.execute("""
             INSERT INTO issues (
                 game_slug, title, error_code, severity, category, symptom_summary,
                 forum_sources, ai_root_cause, ai_solution_steps, verify_command,
-                success_rate, views, helpful_votes, created_at, updated_at, tested_version, author_name, author_role
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?, ?, 'OyunÇöz Teknik Ekibi', 'Sistem & Oyun Arıza Editörleri')
+                success_rate, views, helpful_votes, created_at, updated_at, tested_version,
+                author_name, author_role, is_indexed, editor_verified, is_ai_generated
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, ?, ?, ?, 'OyunÇöz AI Otomatik Üretim', 'Yapay Zeka Taslak Çözümü (Editör Onayı Bekliyor)', 0, 0, 1)
         """, (
             slug,
             iss["title"],
@@ -575,8 +753,33 @@ def ensure_or_create_game_in_db(raw_game_input: str) -> dict:
     new_game["thread_count"] = 0
     new_game["was_created"] = True
     new_game["corrected_from"] = resolved.get("corrected_from")
+    new_game["is_indexed"] = False
+    new_game["editor_verified"] = False
+    new_game["is_ai_generated"] = True
+    new_game["robots_meta"] = "noindex, follow"
+    new_game["ai_disclaimer"] = AI_SOLUTION_DISCLAIMER
     conn.close()
+
+    hub_fname = write_ai_generated_game_hub_file(
+        slug=slug,
+        game_name=resolved["canonical_name"],
+        short_name=resolved["short_name"],
+        engine=resolved["engine"],
+        anticheat=resolved["anticheat"],
+        issues_list=default_issues,
+        updated_iso=now_str,
+        is_indexed=False,
+        editor_verified=False,
+    )
+    new_game["hub_url"] = f"/{hub_fname}"
     return new_game
+
+
+def ensure_ai_disclaimer_in_markdown(md_text: str) -> str:
+    txt = (md_text or "").strip()
+    if AI_SOLUTION_DISCLAIMER not in txt:
+        txt = f"{txt}\n\n---\n> ⚠️ **{AI_SOLUTION_DISCLAIMER}**"
+    return txt
 
 
 def generate_ai_solution(
@@ -588,21 +791,28 @@ def generate_ai_solution(
     system_specs: str,
     problem_description: str
 ) -> dict:
-    # 1. Check Smart SQLite AI Cache first
+    # 1. Check Smart SQLite AI Cache first (Stage 6.4: normalized game + error_code + lowercase/whitespace cleanup)
     cache_key = build_ai_cache_key(game_slug, error_code, problem_description)
+    code_only_key = build_ai_code_only_cache_key(game_slug, error_code)
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM ai_cache WHERE cache_key = ?", (cache_key,))
     cached_row = cursor.fetchone()
+    if not cached_row and code_only_key:
+        cursor.execute("SELECT * FROM ai_cache WHERE cache_key = ?", (code_only_key,))
+        cached_row = cursor.fetchone()
     if cached_row:
-        cursor.execute("UPDATE ai_cache SET hit_count = hit_count + 1 WHERE cache_key = ?", (cache_key,))
+        cursor.execute("UPDATE ai_cache SET hit_count = hit_count + 1 WHERE cache_key = ?", (cached_row["cache_key"],))
         conn.commit()
         conn.close()
         return {
             "mode": "OyunÇöz Akıllı Teşhis Motoru (Hızlı Önbellek)",
             "is_live_api": True,
             "cached": True,
-            "markdown": cached_row["markdown"],
+            "cache_key": cache_key,
+            "markdown": ensure_ai_disclaimer_in_markdown(cached_row["markdown"]),
+            "ai_disclaimer": AI_SOLUTION_DISCLAIMER,
+            "robots_meta": "noindex, follow",
             "matched_issue_title": None,
             "confidence": cached_row["confidence"]
         }
@@ -667,14 +877,20 @@ def generate_ai_solution(
                 system_instruction=system_instruction,
                 input=prompt
             )
-            output_text = sanitize_ai_commands((interaction.output_text or "").strip())
+            output_text = ensure_ai_disclaimer_in_markdown(sanitize_ai_commands((interaction.output_text or "").strip()))
             if output_text:
                 conn = get_db_connection()
                 cursor = conn.cursor()
+                now_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
                 cursor.execute("""
                     INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
                     VALUES (?, ?, ?, ?, ?, 95, 1, ?)
-                """, (cache_key, game_slug, error_code or "", problem_description[:120], output_text, datetime.now().strftime("%Y-%m-%d %H:%M")))
+                """, (cache_key, game_slug, error_code or "", problem_description[:120], output_text, now_ts))
+                if code_only_key:
+                    cursor.execute("""
+                        INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
+                        VALUES (?, ?, ?, ?, ?, 95, 1, ?)
+                    """, (code_only_key, game_slug, error_code or "", problem_description[:120], output_text, now_ts))
                 conn.commit()
                 conn.close()
 
@@ -682,7 +898,10 @@ def generate_ai_solution(
                     "mode": "OyunÇöz Teknik Analiz Motoru",
                     "is_live_api": True,
                     "cached": False,
+                    "cache_key": cache_key,
                     "markdown": output_text,
+                    "ai_disclaimer": AI_SOLUTION_DISCLAIMER,
+                    "robots_meta": "noindex, follow",
                     "matched_issue_title": matched_issue["title"] if matched_issue else None,
                     "confidence": 95
                 }
@@ -690,14 +909,23 @@ def generate_ai_solution(
             fallback_res = build_smart_simulation_response(
                 game_name, engine, anticheat, error_code, system_specs, problem_description, matched_issue
             )
-            fallback_res["markdown"] = sanitize_ai_commands(fallback_res["markdown"])
+            fallback_res["markdown"] = ensure_ai_disclaimer_in_markdown(sanitize_ai_commands(fallback_res["markdown"]))
             fallback_res["mode"] = "OyunÇöz Akıllı Teşhis Motoru (Forum Sentezi)"
+            fallback_res["cache_key"] = cache_key
+            fallback_res["ai_disclaimer"] = AI_SOLUTION_DISCLAIMER
+            fallback_res["robots_meta"] = "noindex, follow"
             conn = get_db_connection()
             cursor = conn.cursor()
+            now_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
             cursor.execute("""
                 INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, 1, ?)
-            """, (cache_key, game_slug, error_code or "", problem_description[:120], fallback_res["markdown"], fallback_res["confidence"], datetime.now().strftime("%Y-%m-%d %H:%M")))
+            """, (cache_key, game_slug, error_code or "", problem_description[:120], fallback_res["markdown"], fallback_res["confidence"], now_ts))
+            if code_only_key:
+                cursor.execute("""
+                    INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+                """, (code_only_key, game_slug, error_code or "", problem_description[:120], fallback_res["markdown"], fallback_res["confidence"], now_ts))
             conn.commit()
             conn.close()
             return fallback_res
@@ -705,13 +933,22 @@ def generate_ai_solution(
     sim_res = build_smart_simulation_response(
         game_name, engine, anticheat, error_code, system_specs, problem_description, matched_issue
     )
-    sim_res["markdown"] = sanitize_ai_commands(sim_res["markdown"])
+    sim_res["markdown"] = ensure_ai_disclaimer_in_markdown(sanitize_ai_commands(sim_res["markdown"]))
+    sim_res["cache_key"] = cache_key
+    sim_res["ai_disclaimer"] = AI_SOLUTION_DISCLAIMER
+    sim_res["robots_meta"] = "noindex, follow"
     conn = get_db_connection()
     cursor = conn.cursor()
+    now_ts = datetime.now().strftime("%Y-%m-%d %H:%M")
     cursor.execute("""
         INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
         VALUES (?, ?, ?, ?, ?, ?, 1, ?)
-    """, (cache_key, game_slug, error_code or "", problem_description[:120], sim_res["markdown"], sim_res["confidence"], datetime.now().strftime("%Y-%m-%d %H:%M")))
+    """, (cache_key, game_slug, error_code or "", problem_description[:120], sim_res["markdown"], sim_res["confidence"], now_ts))
+    if code_only_key:
+        cursor.execute("""
+            INSERT OR REPLACE INTO ai_cache (cache_key, game_slug, error_code, query_summary, markdown, confidence, hit_count, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+        """, (code_only_key, game_slug, error_code or "", problem_description[:120], sim_res["markdown"], sim_res["confidence"], now_ts))
     conn.commit()
     conn.close()
     return sim_res
@@ -1194,6 +1431,185 @@ def get_status():
     }
 
 
+class AdminApprovePageRequest(BaseModel):
+    slug: Optional[str] = ""
+    issue_id: Optional[int] = None
+    page_path: Optional[str] = ""
+    admin_key: Optional[str] = ""
+
+
+def verify_admin_access(
+    request: Request,
+    authorization: Optional[str] = None,
+    x_admin_key: Optional[str] = None,
+    payload_key: Optional[str] = None,
+) -> bool:
+    user = get_current_user(authorization, request)
+    if user and user.get("role") == "admin":
+        return True
+    env_admin_key = (os.environ.get("ADMIN_API_KEY") or os.environ.get("ADMIN_SECRET_TOKEN") or "").strip()
+    provided_key = (x_admin_key or payload_key or "").strip()
+    if env_admin_key and provided_key and secrets.compare_digest(env_admin_key, provided_key):
+        return True
+    raise HTTPException(
+        status_code=403,
+        detail="Bu işlem için Site Yöneticisi (Admin) oturumu veya geçerli ADMIN_API_KEY anahtarı gereklidir."
+    )
+
+
+@app.get("/api/admin/pending-pages")
+def list_pending_ai_pages(
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_admin_key: Optional[str] = Header(None),
+):
+    verify_admin_access(request, authorization, x_admin_key)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT slug, name, short_name, engine, anticheat, is_indexed, editor_verified, is_ai_generated, updated_at
+        FROM games
+        WHERE is_indexed = 0 OR is_ai_generated = 1
+        ORDER BY id DESC
+    """)
+    games_rows = [dict(r) for r in cursor.fetchall()]
+    for g in games_rows:
+        g["is_indexed"] = bool(g.get("is_indexed", 0))
+        g["editor_verified"] = bool(g.get("editor_verified", 0))
+        g["is_ai_generated"] = bool(g.get("is_ai_generated", 1))
+        g["robots_meta"] = "index, follow" if g["is_indexed"] else "noindex, follow"
+        g["hub_url"] = f"/{g['slug']}-hata-cozumleri.html"
+
+    cursor.execute("""
+        SELECT id, game_slug, title, error_code, is_indexed, editor_verified, is_ai_generated, updated_at
+        FROM issues
+        WHERE is_indexed = 0 OR is_ai_generated = 1
+        ORDER BY id DESC
+    """)
+    issues_rows = [dict(r) for r in cursor.fetchall()]
+    conn.close()
+    return {
+        "pending_games": games_rows,
+        "pending_issues": issues_rows,
+    }
+
+
+@app.post("/api/admin/approve-page")
+def approve_ai_generated_page(
+    req: AdminApprovePageRequest,
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_admin_key: Optional[str] = Header(None),
+):
+    """
+    Stage 6.2: Marks an AI-generated game page or issue as 'incelendi, indekslenebilir'.
+    Removes noindex, adds 'Editör kontrolünden geçti' badge, updates lastmod, and adds to sitemap.xml.
+    """
+    verify_admin_access(request, authorization, x_admin_key, req.admin_key)
+    today_iso = datetime.now().strftime("%Y-%m-%d")
+    today_tr = format_date_tr_ddmmyyyy(today_iso)
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    target_slug = (req.slug or "").strip().lower()
+    if req.issue_id and not target_slug:
+        cursor.execute("SELECT game_slug FROM issues WHERE id = ?", (req.issue_id,))
+        ir = cursor.fetchone()
+        if ir:
+            target_slug = ir["game_slug"]
+
+    if not target_slug and not req.page_path:
+        conn.close()
+        raise HTTPException(status_code=400, detail="Onaylanacak oyun slug'ı, issue_id veya sayfa yolu belirtilmelidir.")
+
+    if target_slug:
+        cursor.execute("""
+            UPDATE games
+            SET is_indexed = 1, editor_verified = 1, updated_at = ?
+            WHERE slug = ?
+        """, (today_iso, target_slug))
+        if req.issue_id:
+            cursor.execute("""
+                UPDATE issues
+                SET is_indexed = 1, editor_verified = 1, updated_at = ?,
+                    author_name = 'OyunÇöz Teknik Ekibi',
+                    author_role = 'Sistem & Oyun Arıza Editörleri (Editör Onaylı)'
+                WHERE id = ?
+            """, (today_iso, req.issue_id))
+        else:
+            cursor.execute("""
+                UPDATE issues
+                SET is_indexed = 1, editor_verified = 1, updated_at = ?,
+                    author_name = 'OyunÇöz Teknik Ekibi',
+                    author_role = 'Sistem & Oyun Arıza Editörleri (Editör Onaylı)'
+                WHERE game_slug = ?
+            """, (today_iso, target_slug))
+        conn.commit()
+
+        cursor.execute("SELECT * FROM games WHERE slug = ?", (target_slug,))
+        g_row = cursor.fetchone()
+        cursor.execute("SELECT * FROM issues WHERE game_slug = ?", (target_slug,))
+        g_issues = [dict(r) for r in cursor.fetchall()]
+        conn.close()
+
+        if g_row:
+            write_ai_generated_game_hub_file(
+                slug=target_slug,
+                game_name=g_row["name"],
+                short_name=g_row["short_name"],
+                engine=g_row["engine"],
+                anticheat=g_row["anticheat"],
+                issues_list=g_issues,
+                updated_iso=today_iso,
+                is_indexed=True,
+                editor_verified=True,
+            )
+    else:
+        conn.close()
+
+    # Also update any explicit page_path if provided
+    if req.page_path:
+        clean_rel = req.page_path.strip().lstrip("/")
+        cand_file = os.path.join(ROOT_DIR, clean_rel)
+        if os.path.isdir(cand_file):
+            cand_file = os.path.join(cand_file, "index.html")
+        elif not cand_file.endswith(".html") and os.path.isfile(os.path.join(ROOT_DIR, clean_rel, "index.html")):
+            cand_file = os.path.join(ROOT_DIR, clean_rel, "index.html")
+        if os.path.isfile(cand_file):
+            with open(cand_file, "r", encoding="utf-8") as f:
+                h_txt = f.read()
+            h_txt = re.sub(
+                r'<meta\s+name="robots"\s+content="noindex[^"]*"\s*/?>',
+                '<meta name="robots" content="index, follow" />',
+                h_txt,
+                flags=re.IGNORECASE,
+            )
+            h_txt = re.sub(r'"dateModified"\s*:\s*"\d{4}-\d{2}-\d{2}"', f'"dateModified": "{today_iso}"', h_txt)
+            h_txt = re.sub(
+                r'<time\s+datetime="\d{4}-\d{2}-\d{2}"([^>]*)>[^<]*</time>',
+                f'<time datetime="{today_iso}"\\1>{today_tr}</time>',
+                h_txt,
+            )
+            with open(cand_file, "w", encoding="utf-8") as f:
+                f.write(h_txt)
+
+    xml_out = regenerate_sitemap_xml()
+    approved_url = f"https://oyuncoz.com/{target_slug}-hata-cozumleri.html" if target_slug else f"https://oyuncoz.com/{req.page_path.strip().lstrip('/')}"
+    return {
+        "approved": True,
+        "slug": target_slug,
+        "is_indexed": True,
+        "editor_verified": True,
+        "robots_meta": "index, follow",
+        "editor_badge": EDITOR_VERIFIED_LABEL,
+        "lastmod": today_iso,
+        "in_sitemap": approved_url in xml_out,
+        "approved_url": approved_url,
+        "message": f"Sayfa 'incelendi, indekslenebilir' olarak işaretlendi, noindex kaldırıldı ve sitemap.xml ({today_iso}) güncellendi."
+    }
+
+
 @app.post("/api/admin/apikey")
 def set_server_api_key(req: AdminApiKeyRequest, request: Request, authorization: Optional[str] = Header(None)):
     user = get_current_user(authorization, request)
@@ -1438,6 +1854,12 @@ def list_issues(
         r["tested_version"] = r.get("tested_version") or f"{r.get('game_short_name') or 'Oyun'} Güncel Yapı • Windows 10/11 (23H2 & 24H2)"
         r["author_name"] = r.get("author_name") or "OyunÇöz Teknik Ekibi"
         r["author_role"] = r.get("author_role") or "Sistem & Oyun Arıza Editörleri"
+        r["is_indexed"] = bool(r.get("is_indexed", 1))
+        r["editor_verified"] = bool(r.get("editor_verified", 1))
+        r["is_ai_generated"] = bool(r.get("is_ai_generated", 0))
+        r["robots_meta"] = "index, follow" if r["is_indexed"] else "noindex, follow"
+        r["ai_disclaimer"] = AI_SOLUTION_DISCLAIMER
+        r["editor_badge_text"] = EDITOR_VERIFIED_LABEL if r["editor_verified"] else ""
 
     conn.close()
     return rows

@@ -2378,6 +2378,7 @@ function renderIssues() {
             <span class="text-xs font-semibold px-2.5 py-1 rounded-lg border ${sevClass}">
               Önem: ${escapeHTML(issue.severity)}
             </span>
+            ${issue.editor_verified !== false ? '<span class="editor-verified-badge text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-200 border border-emerald-400/30">✓ Editör kontrolünden geçti</span>' : '<span class="ai-draft-badge text-xs font-bold px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-200 border border-amber-400/30">🤖 Yapay Zeka Taslağı</span>'}
             <span class="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/10">
               ${escapeHTML(issue.category)}
             </span>
@@ -2433,6 +2434,7 @@ function renderIssues() {
             <span>🤖 Yapay Zeka Kök Neden Analizi (Root Cause)</span>
           </div>
           <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">${escapeHTML(issue.ai_root_cause)}</p>
+          <div class="pt-1.5 text-[11px] font-semibold text-amber-200 flex items-center gap-1.5"><span>⚠️</span><span>Bu çözüm yapay zeka tarafından üretildi, uygulamadan önce geri yükleme noktası oluşturun.</span></div>
         </div>
 
         <div class="space-y-3">
@@ -3035,6 +3037,7 @@ function renderThreads() {
             ${repSafetyHtml}
             <div class="ai-markdown text-xs sm:text-sm leading-relaxed">
               ${formatSimpleMarkdown(rep.content)}
+              <div class="mt-2 p-2.5 rounded-lg bg-amber-500/15 border border-amber-400/35 text-[11px] font-semibold text-amber-100 flex items-center gap-1.5"><span>⚠️</span><span>Bu çözüm yapay zeka tarafından üretildi, uygulamadan önce geri yükleme noktası oluşturun.</span></div>
             </div>
           </div>
         `;

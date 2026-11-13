@@ -217,6 +217,13 @@ def init_db():
         "ALTER TABLE issues ADD COLUMN tested_version TEXT DEFAULT 'Windows 10 / 11 (23H2 & 24H2) • Güncel İstemci Sürümü'",
         "ALTER TABLE issues ADD COLUMN author_name TEXT DEFAULT 'OyunÇöz Teknik Ekibi'",
         "ALTER TABLE issues ADD COLUMN author_role TEXT DEFAULT 'Sistem & Oyun Arıza Editörleri'",
+        "ALTER TABLE games ADD COLUMN is_indexed INTEGER DEFAULT 1",
+        "ALTER TABLE games ADD COLUMN editor_verified INTEGER DEFAULT 1",
+        "ALTER TABLE games ADD COLUMN is_ai_generated INTEGER DEFAULT 0",
+        "ALTER TABLE games ADD COLUMN updated_at TEXT DEFAULT '2026-03-15'",
+        "ALTER TABLE issues ADD COLUMN is_indexed INTEGER DEFAULT 1",
+        "ALTER TABLE issues ADD COLUMN editor_verified INTEGER DEFAULT 1",
+        "ALTER TABLE issues ADD COLUMN is_ai_generated INTEGER DEFAULT 0",
     ):
         try:
             cursor.execute(issue_alter_sql)
