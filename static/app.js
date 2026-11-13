@@ -1673,9 +1673,81 @@ function renderHomeShowcase() {
   }
 }
 
+// --- STAGE 7.2: COOKIE-CONSENT-AWARE ANALYTICS INTEGRATION (Plausible / Umami / GA4) ---
+window.__OYUNCOZ_ANALYTICS_ACTIVE = false;
+
+function hasAnalyticsCookieConsent() {
+  try {
+    const raw = localStorage.getItem('oyuncoz_cookie_consent');
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed && parsed.analytics === true);
+  } catch (e) {
+    return false;
+  }
+}
+
+function disableAnalyticsTracking() {
+  window.__OYUNCOZ_ANALYTICS_ACTIVE = false;
+  const existing = document.getElementById('oyuncozAnalyticsScript');
+  if (existing) existing.remove();
+}
+
+async function initConsentAwareAnalytics() {
+  // Stage 7.2: Strictly never start tracking unless analytics cookie consent is explicitly granted
+  if (!hasAnalyticsCookieConsent()) {
+    disableAnalyticsTracking();
+    return false;
+  }
+  if (window.__OYUNCOZ_ANALYTICS_ACTIVE || document.getElementById('oyuncozAnalyticsScript')) {
+    return true;
+  }
+  try {
+    const res = await fetch('/api/public-config');
+    if (!res.ok) return false;
+    const cfg = await res.json();
+    const ana = (cfg && cfg.analytics) || {};
+    const provider = String(ana.provider || 'none').toLowerCase();
+    const analyticsId = String(ana.id || '').trim();
+    const domain = String(ana.domain || 'oyuncoz.com').trim();
+    const customSrc = String(ana.script_url || '').trim();
+
+    if (provider === 'none' || (!analyticsId && provider !== 'plausible')) {
+      return false;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'oyuncozAnalyticsScript';
+    script.defer = true;
+
+    if (provider === 'plausible') {
+      script.src = customSrc || 'https://plausible.io/js/script.js';
+      script.setAttribute('data-domain', domain);
+      document.head.appendChild(script);
+    } else if (provider === 'umami') {
+      script.src = customSrc || 'https://cloud.umami.is/script.js';
+      script.setAttribute('data-website-id', analyticsId);
+      document.head.appendChild(script);
+    } else if (provider === 'ga4') {
+      window[`ga-disable-${analyticsId}`] = false;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analyticsId)}`;
+      document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function(){ window.dataLayer.push(arguments); };
+      window.gtag('js', new Date());
+      window.gtag('config', analyticsId, { anonymize_ip: true });
+    }
+    window.__OYUNCOZ_ANALYTICS_ACTIVE = true;
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function initCookieConsent() {
   try {
     const saved = localStorage.getItem('oyuncoz_cookie_consent');
+    if (saved) initConsentAwareAnalytics();
     if (!saved) {
       const mountBannerOnce = () => {
         window.removeEventListener('pointerdown', mountBannerOnce);
@@ -1703,6 +1775,7 @@ function acceptCookies(mode = 'all') {
   const banner = document.getElementById('cookieConsentBanner');
   if (banner) banner.classList.add('hidden');
   closeCookieSettingsModal();
+  initConsentAwareAnalytics();
   showToast(mode === 'all' ? '🍪 Tüm çerez tercihleri kaydedildi.' : '🍪 Yalnızca zorunlu çerezler aktif edildi.');
 }
 
@@ -1721,6 +1794,7 @@ function saveCustomCookiePrefs() {
   const banner = document.getElementById('cookieConsentBanner');
   if (banner) banner.classList.add('hidden');
   closeCookieSettingsModal();
+  initConsentAwareAnalytics();
   showToast('🍪 Özel çerez tercihleriniz kaydedildi.');
 }
 

@@ -2532,6 +2532,92 @@ def regenerate_sitemap_xml() -> str:
     return xml_str
 
 
+import logging
+from fastapi.responses import JSONResponse
+
+logger = logging.getLogger("oyuncoz")
+
+
+@app.exception_handler(Exception)
+async def global_turkish_exception_handler(request: Request, exc: Exception):
+    """
+    General Rule: Never expose stack traces or internal technical details to the user;
+    log full details server-side and return a clear Turkish message.
+    """
+    logger.exception("Sunucu tarafı beklenmeyen hata (%s %s): %s", request.method, request.url.path, exc)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": "İşleminiz sırasında beklenmeyen bir sunucu hatası oluştu. Lütfen kısa süre sonra tekrar deneyin."
+        },
+    )
+
+
+def get_webmaster_and_analytics_config() -> dict:
+    gsc_code = (
+        os.environ.get("GOOGLE_SITE_VERIFICATION")
+        or os.environ.get("GSC_VERIFICATION")
+        or ""
+    ).strip()
+    bing_code = (
+        os.environ.get("BING_SITE_VERIFICATION")
+        or os.environ.get("BING_VERIFICATION")
+        or ""
+    ).strip()
+    provider = (os.environ.get("ANALYTICS_PROVIDER") or "none").strip().lower()
+    if provider not in ("plausible", "umami", "ga4", "none"):
+        provider = "none"
+    analytics_id = (os.environ.get("ANALYTICS_ID") or "").strip()
+    analytics_domain = (os.environ.get("ANALYTICS_DOMAIN") or "oyuncoz.com").strip()
+    script_url = (os.environ.get("ANALYTICS_SCRIPT_URL") or "").strip()
+    return {
+        "google_site_verification": gsc_code,
+        "bing_site_verification": bing_code,
+        "analytics": {
+            "provider": provider,
+            "id": analytics_id,
+            "domain": analytics_domain,
+            "script_url": script_url,
+            "consent_required": True,
+        },
+    }
+
+
+@app.get("/api/public-config")
+def serve_public_config():
+    """Stage 7.1 & 7.2: Exposes configurable verification & consent-aware analytics settings."""
+    return get_webmaster_and_analytics_config()
+
+
+def serve_html_file_with_verification_tags(file_path: str) -> Response:
+    """
+    Stage 7.1: Dynamically injects Google Search Console (<meta name="google-site-verification">)
+    and Bing Webmaster (<meta name="msvalidate.01">) tags into <head> when configured in .env.
+    """
+    cfg = get_webmaster_and_analytics_config()
+    gsc = cfg["google_site_verification"]
+    bing = cfg["bing_site_verification"]
+    if not gsc and not bing:
+        return FileResponse(file_path, media_type="text/html")
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            html_text = f.read()
+    except Exception:
+        return FileResponse(file_path, media_type="text/html")
+
+    tags = []
+    if gsc and 'name="google-site-verification"' not in html_text:
+        tags.append(f'  <meta name="google-site-verification" content="{html.escape(gsc)}" />')
+    if bing and 'name="msvalidate.01"' not in html_text:
+        tags.append(f'  <meta name="msvalidate.01" content="{html.escape(bing)}" />')
+
+    if tags and "</head>" in html_text:
+        html_text = html_text.replace("</head>", "\n".join(tags) + "\n</head>", 1)
+
+    return Response(content=html_text, media_type="text/html")
+
+
 @app.get("/robots.txt")
 def serve_robots():
     return FileResponse(os.path.join(ROOT_DIR, "robots.txt"), media_type="text/plain")
@@ -2555,7 +2641,7 @@ def serve_manifest():
 
 @app.get("/")
 def serve_index():
-    return FileResponse(os.path.join(ROOT_DIR, "index.html"))
+    return serve_html_file_with_verification_tags(os.path.join(ROOT_DIR, "index.html"))
 
 
 @app.get("/{page_path:path}")
@@ -2566,16 +2652,16 @@ def serve_html_or_redirect(page_path: str):
 
     candidate = os.path.join(ROOT_DIR, clean_path)
     if os.path.isfile(candidate) and clean_path.endswith(".html"):
-        return FileResponse(candidate, media_type="text/html")
+        return serve_html_file_with_verification_tags(candidate)
 
     # Serve clean nested URLs like /valorant/van-9003 from valorant/van-9003/index.html
     nested_index = os.path.join(ROOT_DIR, clean_path, "index.html")
     if os.path.isfile(nested_index):
-        return FileResponse(nested_index, media_type="text/html")
+        return serve_html_file_with_verification_tags(nested_index)
 
     if not clean_path.endswith(".html"):
         html_candidate = os.path.join(ROOT_DIR, f"{clean_path}.html")
         if os.path.isfile(html_candidate):
-            return FileResponse(html_candidate, media_type="text/html")
+            return serve_html_file_with_verification_tags(html_candidate)
 
     raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
