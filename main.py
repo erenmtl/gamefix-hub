@@ -1494,6 +1494,63 @@ def list_pending_ai_pages(
     }
 
 
+@app.get("/api/admin/activity")
+def get_admin_activity_dashboard(
+    request: Request,
+    authorization: Optional[str] = Header(None),
+    x_admin_key: Optional[str] = Header(None),
+):
+    """Returns live AI query logs, top cached queries, contact messages, and pending AI pages for the owner."""
+    verify_admin_access(request, authorization, x_admin_key)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT game_slug, error_code, query_summary, hit_count, created_at
+        FROM ai_cache
+        WHERE cache_key NOT LIKE '%__code_canonical__%'
+        ORDER BY hit_count DESC, created_at DESC
+        LIMIT 50
+    """)
+    ai_queries = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("""
+        SELECT id, action_type, content_summary, ip_address, utc_timestamp
+        FROM legal_5651_logs
+        ORDER BY id DESC
+        LIMIT 50
+    """)
+    recent_logs = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("""
+        SELECT id, full_name, email, subject, message, created_at
+        FROM contact_messages
+        ORDER BY id DESC
+        LIMIT 30
+    """)
+    messages = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("""
+        SELECT slug, name, short_name, is_indexed, editor_verified, updated_at
+        FROM games
+        WHERE is_indexed = 0 OR is_ai_generated = 1
+        ORDER BY id DESC
+    """)
+    pending_games = [dict(r) for r in cursor.fetchall()]
+
+    cursor.execute("SELECT COUNT(*) as cnt FROM user_votes")
+    total_votes = cursor.fetchone()["cnt"]
+
+    conn.close()
+    return {
+        "ai_queries": ai_queries,
+        "recent_logs": recent_logs,
+        "contact_messages": messages,
+        "pending_games": pending_games,
+        "total_votes": total_votes,
+    }
+
+
 @app.post("/api/admin/approve-page")
 def approve_ai_generated_page(
     req: AdminApprovePageRequest,

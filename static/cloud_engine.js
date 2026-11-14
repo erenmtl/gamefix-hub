@@ -1153,6 +1153,28 @@
       });
     }
 
+    if (path === '/api/admin/activity' && method === 'GET') {
+      const aiCacheObj = loadStore(STORAGE_KEYS.aiCache, {});
+      const aiQueries = Object.keys(aiCacheObj).map(k => ({
+        game_slug: aiCacheObj[k].game_slug || k.split('::')[0] || 'genel',
+        error_code: aiCacheObj[k].error_code || 'AI Analiz',
+        query_summary: aiCacheObj[k].query_summary || k,
+        hit_count: Number(aiCacheObj[k].hit_count || 1),
+        created_at: aiCacheObj[k].created_at || new Date().toISOString().slice(0, 16).replace('T', ' ')
+      }));
+      const logs = loadStore(STORAGE_KEYS.logs5651, []);
+      const games = loadStore(STORAGE_KEYS.games, SEED.games);
+      const pendingGames = games.filter(g => g.is_ai_generated || g.is_indexed === false);
+      const votesObj = loadStore(STORAGE_KEYS.votes, {});
+      return jsonResponse({
+        ai_queries: aiQueries,
+        recent_logs: logs.slice(0, 50),
+        contact_messages: [],
+        pending_games: pendingGames,
+        total_votes: Object.keys(votesObj).length
+      });
+    }
+
     return jsonResponse({ detail: 'Not found' }, 404);
   }
 
