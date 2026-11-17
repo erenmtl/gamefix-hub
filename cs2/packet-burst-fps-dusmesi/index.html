@@ -87,8 +87,8 @@
 }
   </script>
   <style id="critical-css">
-    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
-    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#9fb0c7}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0;line-height:1.65}
     .text-white{color:#e6ecf5!important}
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -96,27 +96,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/styles.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/static/ui_components.js" defer></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
+  <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3">
-        <img src="/static/logo.svg" alt="OyunÇöz Logo" loading="lazy" decoding="async" class="w-10 h-10 rounded-xl bg-[#18212f] p-1 border border-[#88c0a8]/40" />
+        <span class="oc-monogram" aria-hidden="true">OÇ</span>
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hata Kodları ve FPS Çözümleri</span>
         </div>
       </a>
       <nav aria-label="Üst Hızlı Menü" class="flex items-center gap-2.5 text-xs">
-        <a href="/hata-kodlari" class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 font-semibold transition">🔎 Tüm Hata Kodları</a>
-        <a href="/cs2-hata-cozumleri.html" class="hidden sm:inline-block px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-[#a3d9c6] border border-white/10 font-semibold transition">Counter-Strike 2 Rehberleri</a>
+        <a href="/hata-kodlari" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs">Tüm Hata Kodları</a>
+        <a href="/cs2-hata-cozumleri.html" class="hidden sm:inline-flex oc-btn oc-btn-ghost !min-h-[38px] !py-1.5 !px-3 text-xs text-[#a3d9c6]">Counter-Strike 2 Rehberleri</a>
       </nav>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1 w-full">
+  <main id="ana-icerik" class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1 w-full">
     <!-- 1. Breadcrumb (Ana Sayfa › Oyun › Hata Kodu) -->
-    <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
+    <nav aria-label="Breadcrumb" class="oc-breadcrumb">
       <a href="/" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
       <span aria-hidden="true">›</span>
       <a href="/cs2-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">Counter-Strike 2</a>
@@ -124,25 +126,26 @@
       <span class="text-white font-semibold" aria-current="page">Packet Burst ve FPS Düşmesi</span>
     </nav>
 
-    <article class="space-y-7">
+    <article class="space-y-7 oc-prose">
       <!-- 2. H1 ve 3. Kısa Özet (Hatanın Anlamı, 2-3 Cümle) -->
-      <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="px-3 py-1 rounded-full font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">Counter-Strike 2</span>
-          <span class="px-3 py-1 rounded-full font-mono font-bold bg-white/10 text-amber-200 border border-white/15">Hata Kodu: Packet Burst ve FPS Düşmesi</span>
-          <span class="editor-verified-badge px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 font-semibold">✓ Editör kontrolünden geçti</span>
+      <section class="oc-card p-6 sm:p-8 space-y-4">
+        <div class="flex flex-wrap items-center gap-2.5 text-xs">
+          <span class="oc-monogram oc-monogram-sm" aria-hidden="true">CS2</span>
+          <span class="oc-badge oc-badge-accent font-bold">Counter-Strike 2</span>
+          <span class="oc-badge font-mono font-bold">Hata Kodu: Packet Burst ve FPS Düşmesi</span>
+          <span class="editor-verified-badge oc-badge oc-badge-success font-semibold"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Editör kontrolünden geçti</span></span>
         </div>
 
         <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">CS2 Packet Burst ve FPS Düşmesi Sorunu Nasıl Çözülür?</h1>
 
-        <p id="hata-anlami" class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+        <p id="hata-anlami" class="text-sm sm:text-base text-gray-200 leading-relaxed">
           CS2&#x27;de sağ üst köşede beliren &#x27;Packet Burst / Jitter&#x27; uyarısı ve çatışma anındaki ani kare süresi (frame-time) sıçramaları, Source 2 motorunun büyük sub-tick ağ paketlerini veya derlenmemiş DirectX gölgelendiricilerini zamanında işleyemediğini gösterir.
         </p>
       </section>
 
       <!-- 4. Bu Hatanın Nedenleri -->
-      <section id="hata-nedenleri" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-white">⚙️ Bu Hatanın Nedenleri</h2>
+      <section id="hata-nedenleri" class="oc-card p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">Bu Hatanın Nedenleri</h2>
         <ul class="list-disc pl-5 text-xs sm:text-sm text-gray-300 space-y-2">
           <li class="leading-relaxed">Oyun içi &#x27;Paket Kaybını / Gecikmeyi Dengelemek İçin Arabelleğe Alma&#x27; ayarının kapalı (Yok) olması.</li>
           <li class="leading-relaxed">Ekran kartı güncellemesi sonrasında eski DirectX Shader Cache dosyalarının çakışması.</li>
@@ -153,18 +156,19 @@
       <!-- 5. Adım Adım Çözüm -->
       <section id="cozum-adimlari" class="space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <h2 class="text-base sm:text-lg font-extrabold text-white">🛠️ Adım Adım Çözüm</h2>
-          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-200 border border-amber-400/30">
-            🛡️ İşlem öncesi Sistem Geri Yükleme Noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
-          </span>
+          <h2 class="text-base sm:text-lg font-extrabold text-white">Adım Adım Çözüm</h2>
+          <div class="oc-alert oc-alert-warning !py-2 !px-3 text-xs">
+            <svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+            <span>İşlem öncesi Sistem Geri Yükleme Noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code></span>
+          </div>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
+        <div class="oc-card p-5 space-y-3.5">
           <div class="flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
+            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 1</span>
             <h3 class="text-sm sm:text-base font-bold text-white">Oyun İçi Ağ Arabelleğe Alma Ayarını 1 Paket Yapın</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">CS2 Ayarlar &gt; Oyun &gt; &#x27;Paket kaybını / gecikmeyi dengelemek için arabelleğe alma&#x27; seçeneğini &#x27;Yok&#x27; yerine &#x27;1 Paket&#x27; olarak ayarlayın. Bu ayar sub-tick paket dalgalanmalarını dengeler.</p>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">CS2 Ayarlar &gt; Oyun &gt; &#x27;Paket kaybını / gecikmeyi dengelemek için arabelleğe alma&#x27; seçeneğini &#x27;Yok&#x27; yerine &#x27;1 Paket&#x27; olarak ayarlayın. Bu ayar sub-tick paket dalgalanmalarını dengeler.</p>
           <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="CS2 Oyun ayarlarında Paket kaybını dengelemek için arabelleğe alma seçeneğinin 1 Paket yapılması">
             <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
               <span>🖼️ Ekran Görüntüsü Alanı (Adım 1: Oyun İçi Ağ Arabelleğe Alma Ayarını 1 Paket Yapın)</span>
@@ -176,30 +180,30 @@
           </figure>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
+        <div class="oc-card p-5 space-y-3.5">
           <div class="flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
+            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 2</span>
             <h3 class="text-sm sm:text-base font-bold text-white">Bozuk DirectX Gölgelendirici Önbelleğini (Shader Cache) Temizleyin</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows Disk Temizleme (cleanmgr) aracını açıp &#x27;DirectX Gölgelendirici Önbelleği&#x27; kutucuğunu işaretleyerek temizleyin; NVIDIA Denetim Masası &gt; 3D Ayarları altından Gölgelendirici Önbellek Boyutu ayarını 10 GB yapın.</p>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Windows Disk Temizleme (cleanmgr) aracını açıp &#x27;DirectX Gölgelendirici Önbelleği&#x27; kutucuğunu işaretleyerek temizleyin; NVIDIA Denetim Masası &gt; 3D Ayarları altından Gölgelendirici Önbellek Boyutu ayarını 10 GB yapın.</p>
           <div class="space-y-2.5">
-            <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+            <div class="oc-codeblock flex items-center justify-between gap-3">
               <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">cleanmgr /d C</code>
-              <button type="button" data-cmd="cleanmgr /d C" onclick="copyTemplateCmd(this)" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+              <button type="button" data-cmd="cleanmgr /d C" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[34px] !py-1 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
             </div>
-            <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-2">
-              <div class="font-bold text-amber-200">⚠️ Komut Güvenlik ve Geri Alma Notu:</div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
+            <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik ve Geri Alma Notu:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed w-full">
                 <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-                  <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+                  <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
                   <span class="text-gray-200">Windows Disk Temizleme aracını C: sürücüsü için başlatır; DirectX Gölgelendirici Önbelleği seçilerek bozuk derlenmiş shader dosyaları temizlenir.</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-                  <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+                  <strong class="text-amber-300 block mb-0.5">Risk:</strong>
                   <span class="text-gray-200">Yalnızca geçici önbellek dosyalarını temizler; kişisel dosyalarınıza dokunmaz.</span>
                 </div>
                 <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-                  <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+                  <strong class="text-sky-300 block mb-0.5">Geri alma:</strong>
                   <span class="text-gray-200">Oyun açıldığında temiz gölgelendirici önbelleğini otomatik olarak yeniden derler.</span>
                 </div>
               </div>
@@ -216,12 +220,12 @@
           </figure>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
+        <div class="oc-card p-5 space-y-3.5">
           <div class="flex items-center gap-3">
-            <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
+            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 3</span>
             <h3 class="text-sm sm:text-base font-bold text-white">Eski CS:GO Başlatma Seçeneklerini Kaldırın</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Steam &gt; CS2 &gt; Özellikler &gt; Başlatma Seçenekleri kutusundaki -high, -threads veya +mat_queue_mode gibi eski CS:GO parametrelerini tamamen silin.</p>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Steam &gt; CS2 &gt; Özellikler &gt; Başlatma Seçenekleri kutusundaki -high, -threads veya +mat_queue_mode gibi eski CS:GO parametrelerini tamamen silin.</p>
           <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="Steam CS2 Özellikler Başlatma Seçenekleri kutusundaki eski -high ve -threads kodlarının silinmesi">
             <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
               <span>🖼️ Ekran Görüntüsü Alanı (Adım 3: Eski CS:GO Başlatma Seçeneklerini Kaldırın)</span>
@@ -235,55 +239,65 @@
       </section>
 
       <!-- 6. İşe Yaramazsa Bölümü -->
-      <section id="ise-yaramazsa" class="bg-[#18202c] border border-sky-400/30 rounded-2xl p-6 space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-sky-200">🧭 İşe Yaramazsa Ne Yapmalısınız?</h2>
+      <section id="ise-yaramazsa" class="oc-card p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">İşe Yaramazsa Ne Yapmalısınız?</h2>
         <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Oyun içi Gelişmiş Görüntü ayarlarında NVIDIA Reflex Düşük Gecikme Oranı ayarını &#x27;Etkin&#x27; (Etkin + Takviye değil), Parçacık Detayı ayarını &#x27;Düşük&#x27; olarak seçip test edin.</p>
-        <div class="pt-1 flex flex-wrap gap-3">
-          <a href="/#tabContent-ai-lab" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
-            🤖 Crash Log (.log) Yükleyip AI ile Özel Teşhis Al →
+        <div class="pt-2 flex flex-wrap gap-3">
+          <a href="/#tabContent-ai-lab" class="oc-btn oc-btn-primary text-xs">
+            <span>Crash Log (.log) Yükleyip AI ile Özel Teşhis Al</span>
           </a>
-          <a href="/#tabContent-forum" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition">
-            💬 Oyuncu Forumunda Konu Aç
+          <a href="/#tabContent-forum" class="oc-btn oc-btn-secondary text-xs">
+            <span>Oyuncu Forumunda Konu Aç</span>
           </a>
         </div>
       </section>
 
       <!-- 8. Resmi Kaynak Linki -->
-      <section id="resmi-kaynak" class="bg-[#18202c] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <section id="resmi-kaynak" class="oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-sm sm:text-base font-extrabold text-white">🌐 Resmi Destek ve Dokümantasyon Kaynağı</h2>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">Resmi Destek ve Dokümantasyon Kaynağı</h2>
           <p class="text-xs text-gray-400 mt-0.5">Yayıncı ve geliştirici ekibin güncel destek dokümanını resmi kaynağından inceleyebilirsiniz.</p>
         </div>
 
         <span class="px-3.5 py-2 rounded-xl text-xs font-mono bg-white/5 text-gray-400 border border-dashed border-white/15 shrink-0" data-official-url-slot="pending">
-          🔗 Resmi destek bağlantısı eklenecek (Steam / Valve Counter-Strike 2 Resmi Performans ve Ağ Rehberi)
+          Resmi destek bağlantısı eklenecek (Steam / Valve Counter-Strike 2 Resmi Performans ve Ağ Rehberi)
         </span>
       </section>
 
       <!-- 9. Sıkça Sorulan Sorular (SSS) -->
       <section id="sss" class="space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-white">❓ Sıkça Sorulan Sorular (SSS)</h2>
+        <h2 class="text-base sm:text-lg font-extrabold text-white">Sıkça Sorulan Sorular (SSS)</h2>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
-          <h3 class="text-xs sm:text-sm font-bold text-white">Eski CS:GO başlatma kodları (-threads, -high) CS2&#x27;de neden FPS düşürüyor?</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Source 2 motoru çoklu iş parçacığı zamanlamasını kendisi yönetir; -high ve -threads gibi eski kodlar işlemcinin P-Core / E-Core dağılımını bozarak %1 Low FPS düşüşüne yol açar.</p>
-        </div>
+        <details class="oc-accordion" open>
+          <summary>
+            <h3 class="text-xs sm:text-sm font-bold text-white">Eski CS:GO başlatma kodları (-threads, -high) CS2&#x27;de neden FPS düşürüyor?</h3>
+            <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="oc-accordion-body">
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Source 2 motoru çoklu iş parçacığı zamanlamasını kendisi yönetir; -high ve -threads gibi eski kodlar işlemcinin P-Core / E-Core dağılımını bozarak %1 Low FPS düşüşüne yol açar.</p>
+          </div>
+        </details>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
-          <h3 class="text-xs sm:text-sm font-bold text-white">Pingim düşük olduğu halde neden Packet Burst uyarısı çıkıyor?</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Sub-tick mimarisinde anlık büyük paket grupları geldiğinde arabellek &#x27;Yok&#x27; seçiliyse paket sıralaması bozulur; &#x27;1 Paket&#x27; arabelleğe alma ayarı bu dalgalanmayı sönümler.</p>
-        </div>
+        <details class="oc-accordion">
+          <summary>
+            <h3 class="text-xs sm:text-sm font-bold text-white">Pingim düşük olduğu halde neden Packet Burst uyarısı çıkıyor?</h3>
+            <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="oc-accordion-body">
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Sub-tick mimarisinde anlık büyük paket grupları geldiğinde arabellek &#x27;Yok&#x27; seçiliyse paket sıralaması bozulur; &#x27;1 Paket&#x27; arabelleğe alma ayarı bu dalgalanmayı sönümler.</p>
+          </div>
+        </details>
       </section>
 
       <!-- 10. İlgili Hatalar (İç Linkler) -->
-      <section id="ilgili-hatalar" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-4">
+      <section id="ilgili-hatalar" class="oc-card p-6 space-y-4">
         <div class="flex items-center justify-between">
-          <h2 class="text-base sm:text-lg font-extrabold text-white">🔗 İlgili Hatalar</h2>
+          <h2 class="text-base sm:text-lg font-extrabold text-white">İlgili Hatalar</h2>
           <a href="/hata-kodlari" class="text-xs font-semibold text-[#88c0a8] hover:underline">Tüm Hata Kodları →</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-          <a href="/cs2/vac-oturum-dogrulanamadi" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+          <a href="/cs2/vac-oturum-dogrulanamadi" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • VAC DOĞRULAMA</span>
               <span class="text-gray-200 font-semibold">CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözümü</span>
@@ -291,7 +305,7 @@
             <span class="text-[#88c0a8] font-bold shrink-0">→</span>
           </a>
 
-          <a href="/cs2-hata-cozumleri.html" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+          <a href="/cs2-hata-cozumleri.html" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • TÜM HATALAR</span>
               <span class="text-gray-200 font-semibold">Counter-Strike 2 (CS2) Hata Kodları ve Çözüm Merkezi</span>
@@ -299,7 +313,7 @@
             <span class="text-[#88c0a8] font-bold shrink-0">→</span>
           </a>
 
-          <a href="/valorant/val-62" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+          <a href="/valorant/val-62" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAL 62</span>
               <span class="text-gray-200 font-semibold">Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi</span>
@@ -310,7 +324,7 @@
       </section>
 
       <!-- 11. Yazar Kutusu, Son Güncelleme ve Test Edilen Sürüm -->
-      <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box p-5 rounded-2xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+      <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
             OÇ

@@ -880,71 +880,14 @@ MUTED_PALETTE = [
     "#639188", "#9c7a54"
 ]
 
-GAME_COVER_URLS = {
-    "valorant": "https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/en/b/ba/Valorant_cover.jpg",
-    "cs2": "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
-    "counter-strike-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/730/header.jpg",
-    "lol": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
-    "league-of-legends": "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Yasuo_0.jpg",
-    "gtav": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-    "gtav-fivem": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-    "gta-v": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/header.jpg",
-    "god-of-war-ragnarok": "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/header.jpg",
-    "minecraft": "https://cdn.cloudflare.steamstatic.com/steam/apps/1672970/header.jpg",
-    "fc25": "https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/header.jpg",
-    "ea-sports-fc-25": "https://cdn.cloudflare.steamstatic.com/steam/apps/2669320/header.jpg",
-    "cyberpunk": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
-    "cyberpunk-2077": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg",
-    "pubg": "https://cdn.cloudflare.steamstatic.com/steam/apps/578080/header.jpg",
-    "eldenring": "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
-    "elden-ring": "https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg",
-    "apex": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
-    "apex-legends": "https://cdn.cloudflare.steamstatic.com/steam/apps/1172470/header.jpg",
-    "warzone": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
-    "cod-warzone": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
-    "call-of-duty-warzone-bo6": "https://cdn.cloudflare.steamstatic.com/steam/apps/1938090/header.jpg",
-    "fortnite": "https://images.weserv.nl/?url=https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortnite_F_lettermark_logo.png",
-    "victoria-3": "https://cdn.cloudflare.steamstatic.com/steam/apps/529340/header.jpg",
-    "victoria3": "https://cdn.cloudflare.steamstatic.com/steam/apps/529340/header.jpg",
-    "hearts-of-iron-4": "https://cdn.cloudflare.steamstatic.com/steam/apps/394360/header.jpg",
-    "hearts-of-iron-iv": "https://cdn.cloudflare.steamstatic.com/steam/apps/394360/header.jpg",
-    "mount-and-blade-2-bannerlord": "https://cdn.cloudflare.steamstatic.com/steam/apps/261550/header.jpg",
-    "mount-blade-ii-bannerlord": "https://cdn.cloudflare.steamstatic.com/steam/apps/261550/header.jpg",
-    "red-dead-redemption-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/header.jpg",
-    "baldurs-gate-3": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/header.jpg",
-    "euro-truck-simulator-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/227300/header.jpg",
-    "forza-horizon-5": "https://cdn.cloudflare.steamstatic.com/steam/apps/1551360/header.jpg",
-    "helldivers-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/553850/header.jpg",
-    "rainbow-six-siege": "https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg",
-    "tom-clancy-s-rainbow-six-siege": "https://cdn.cloudflare.steamstatic.com/steam/apps/359550/header.jpg",
-    "football-manager-2024": "https://cdn.cloudflare.steamstatic.com/steam/apps/2252570/header.jpg",
-    "black-myth-wukong": "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/header.jpg",
-    "palworld": "https://cdn.cloudflare.steamstatic.com/steam/apps/1623730/header.jpg",
-    "dota-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/570/header.jpg",
-    "escape-from-tarkov": "https://cdn.cloudflare.steamstatic.com/steam/apps/221100/header.jpg",
-    "europa-universalis-iv": "https://cdn.cloudflare.steamstatic.com/steam/apps/236850/header.jpg",
-    "europa-universalis-4": "https://cdn.cloudflare.steamstatic.com/steam/apps/236850/header.jpg",
-    "cities-skylines-ii": "https://cdn.cloudflare.steamstatic.com/steam/apps/949230/header.jpg",
-    "cities-skylines-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/949230/header.jpg",
-    "dead-by-daylight": "https://cdn.cloudflare.steamstatic.com/steam/apps/381210/header.jpg",
-    "overwatch-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/2357570/header.jpg",
-    "the-witcher-3-wild-hunt": "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
-    "the-witcher-3": "https://cdn.cloudflare.steamstatic.com/steam/apps/292030/header.jpg",
-    "path-of-exile-2": "https://cdn.cloudflare.steamstatic.com/steam/apps/2694490/header.jpg",
-    "diablo-iv": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg",
-    "diablo-4": "https://cdn.cloudflare.steamstatic.com/steam/apps/2344520/header.jpg",
-    "sons-of-the-forest": "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg",
-    "ark-survival-ascended": "https://cdn.cloudflare.steamstatic.com/steam/apps/2399830/header.jpg",
-    "rust": "https://cdn.cloudflare.steamstatic.com/steam/apps/252490/header.jpg",
-    "crusader-kings-3": "https://cdn.cloudflare.steamstatic.com/steam/apps/1158310/header.jpg",
-    "crusader-kings-iii": "https://cdn.cloudflare.steamstatic.com/steam/apps/1158310/header.jpg"
-}
+GAME_COVER_URLS = {}
 
 
 def get_game_image_url(slug_or_name: str) -> str:
+    """
+    Stage 1.5: Copyright-free monogram badge route instead of third-party game covers/logos.
+    """
     s = slugify(slug_or_name)
-    if s in GAME_COVER_URLS:
-        return GAME_COVER_URLS[s]
     return f"./api/games/cover/{s}"
 
 

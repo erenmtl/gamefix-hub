@@ -769,11 +769,7 @@ function fallbackCover(slug, color, subtitle) {
 }
 
 function resolveSafeCoverUrl(rawUrl, slugOrName, accentColor, subtitle) {
-  const u = String(rawUrl || '').trim();
-  if (!u || u.includes('/api/games/cover/')) {
-    return fallbackCover(slugOrName, accentColor, subtitle);
-  }
-  return u;
+  return fallbackCover(slugOrName, accentColor, subtitle);
 }
 
 function renderSuggestionChips() {
@@ -2025,7 +2021,7 @@ async function renderLiveAutocomplete(rawVal, isMobile = false) {
         <div class="text-[10px] font-bold uppercase tracking-wider text-gray-400 px-1">🎮 Eşleşen Oyun Ekranları (${matchedGames.length})</div>
         <div class="space-y-1">
           ${matchedGames.map(g => {
-            const imgSrc = g.image_url || fallbackCover(g.slug, g.accent_color);
+            const imgSrc = fallbackCover(g.short_name || g.name || g.slug, g.accent_color);
             const gCount = Number(g.issue_count || 0);
             const gBadge = gCount > 0
               ? `<span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 shrink-0">${gCount} Çözüm</span>`
@@ -2439,7 +2435,7 @@ function renderIssues() {
           <div class="flex flex-wrap items-center gap-2">
             <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(issue.accent_color)}" onclick="selectGame('${escapeHTML(issue.game_slug)}')">
               <img loading="lazy" decoding="async"
-                src="${issue.game_image_url || fallbackCover(issue.game_slug, issue.accent_color)}"
+                src="${fallbackCover(issue.game_short_name || issue.game_slug, issue.accent_color)}"
                 onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(issue.game_slug)}','${escapeHTML(issue.accent_color)}')"
                 alt="${escapeHTML(issue.game_short_name)}"
                 class="w-6 h-4 rounded object-cover border border-white/20"
@@ -3163,7 +3159,7 @@ function renderThreads() {
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold px-2.5 py-1 rounded-lg text-white cursor-pointer flex items-center gap-2" style="background-color: ${escapeHTML(t.accent_color)}" onclick="selectGame('${escapeHTML(t.game_slug)}')">
               <img loading="lazy" decoding="async"
-                src="${t.game_image_url || fallbackCover(t.game_slug, t.accent_color)}"
+                src="${fallbackCover(t.game_short_name || t.game_slug, t.accent_color)}"
                 onerror="this.onerror=null;this.src=fallbackCover('${escapeHTML(t.game_slug)}','${escapeHTML(t.accent_color)}')"
                 alt="${escapeHTML(t.game_short_name)}"
                 class="w-6 h-4 rounded object-cover border border-white/20"
