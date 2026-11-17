@@ -92,91 +92,130 @@
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.7/dist/purify.min.js" defer></script>
 </head>
 <body class="min-h-screen flex flex-col">
+  <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>
 
   <!-- Shared Datalist for Autocomplete -->
   <datalist id="allGamesDatalist"></datalist>
 
-  <!-- TOP NAVBAR -->
+  <!-- AŞAMA 2: YAPIŞKAN (STICKY) ÜST MENÜ (Logo · Hata Kodları · Oyunlar · Rehberler · Araçlar · Forum · Giriş Yap) -->
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
-    <div class="max-w-[1600px] mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
-      <!-- Brand Logo & Identity -->
-      <a href="./" onclick="event.preventDefault(); selectGame('all');" class="flex items-center gap-3.5 cursor-pointer group" aria-label="OyunÇöz Ana Sayfa">
-        <div class="relative w-11 h-11 rounded-2xl bg-[#18212f] border border-[#88c0a8]/45 group-hover:border-[#88c0a8] flex items-center justify-center shadow-lg transition-all duration-200 group-hover:scale-105 overflow-hidden">
-          <img src="./static/logo.svg" alt="OyunÇöz Logo" class="w-10 h-10 object-contain"  loading="lazy" decoding="async" />
-        </div>
+    <div class="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-3">
+      <!-- 1. Brand Logo -->
+      <a href="./" onclick="event.preventDefault(); selectGame('all');" class="flex items-center gap-3 cursor-pointer group shrink-0" aria-label="OyunÇöz Ana Sayfa">
+        <span class="oc-monogram" aria-hidden="true">OÇ</span>
         <div>
           <div class="flex items-center gap-2">
-            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white group-hover:text-[#e2f1ec] transition">
+            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-white">
               Oyun<span class="text-[#88c0a8]">Çöz</span>
-              <span class="inline-flex items-center px-1.5 py-0.5 ml-0.5 text-[10px] font-black uppercase tracking-wider rounded-md bg-gradient-to-r from-[#5e9c88]/30 to-[#6b90b9]/30 text-[#a3d9c6] border border-[#88c0a8]/30">GAMING</span>
             </span>
-            <span id="navTotalGamesPill" class="text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 text-gray-300 font-semibold border border-white/10">30 Oyun</span>
+            <span id="navTotalGamesPill" class="hidden sm:inline-block text-[11px] px-2 py-0.5 rounded-full bg-white/5 text-gray-300 font-semibold border border-white/10">30 Oyun</span>
           </div>
-          <p class="text-[11px] text-gray-400 hidden sm:block">Oyun Hataları, Forum Derlemeleri & Akıllı Arıza Çözüm Merkezi</p>
+          <p class="text-[11px] text-gray-400 hidden xl:block">Oyun Hata Kodları ve Çözüm Rehberi</p>
         </div>
       </a>
 
-      <!-- Global Search with Live Autocomplete (Desktop) -->
-      <div class="flex-1 max-w-xl hidden md:block" id="desktopSearchWrapper">
+      <!-- 2. Ana Gezinme Bağlantıları (Masaüstü: Hata Kodları · Oyunlar · Rehberler · Araçlar · Forum) -->
+      <nav aria-label="Ana Gezinme Menüsü" class="hidden lg:flex items-center gap-1.5 text-sm font-semibold">
+        <a href="/hata-kodlari" class="oc-btn oc-btn-ghost !min-h-[42px] !px-3.5">Hata Kodları</a>
+
+        <!-- Oyunlar Açılır Panel Butonu -->
         <div class="relative">
-          <input
-            id="globalSearchInput"
-            type="text"
-            autocomplete="off"
-            placeholder="Canlı ara: VAN 9003, CS2 VAC, D3D, FPS artırma veya oyun adı..."
-            class="w-full bg-[#1d2430] text-sm text-white placeholder-gray-400 rounded-xl pl-10 pr-24 py-2.5 border border-white/10 focus:outline-none focus:border-[#88c0a8]/60 transition"
-            onfocus="openLiveAutocomplete(this.value)"
-            oninput="handleLiveSearchInput(this.value)"
-            onkeydown="handleSearchKeydown(event)"
-          />
-          <svg class="w-4 h-4 text-[#88c0a8] absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
-          <span class="hidden lg:inline-block absolute right-3 top-2.5 text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/5 text-gray-400 border border-white/10 pointer-events-none" id="searchShortcutHint">Canlı Filtre</span>
           <button
-            onclick="clearGlobalSearch()"
-            id="clearSearchBtn"
-            class="hidden absolute right-3 top-2 text-xs px-2 py-1 rounded bg-white/10 text-gray-300 hover:text-white"
+            type="button"
+            id="navGamesToggleBtn"
+            aria-expanded="false"
+            aria-controls="gamesMegaPanel"
+            onclick="toggleGamesNavPanel()"
+            class="oc-btn oc-btn-ghost !min-h-[42px] !px-3.5"
           >
-            Temizle
+            <span>Oyunlar</span>
+            <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
           </button>
-
-          <!-- Live Autocomplete Dropdown Panel -->
-          <div
-            id="liveSearchDropdown"
-            class="hidden absolute left-0 right-0 top-full mt-2 bg-[#171e2b]/98 backdrop-blur-xl border border-[#88c0a8]/40 rounded-2xl shadow-2xl z-50 max-h-[470px] overflow-y-auto divide-y divide-white/10"
-          ></div>
         </div>
-      </div>
 
-      <!-- Right Controls: Hardware Detect, Auth Area, New Game & Ask Question Button -->
-      <div class="flex items-center gap-2">
-        <button
-          onclick="triggerHardwareAutoDetect()"
-          title="WebGL ve Tarayıcı API ile GPU, CPU ve İşletim Sisteminizi Otomatik Tespit Edin"
-          class="hidden xl:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-[#88c0a8]/30 text-xs font-semibold text-[#a3d9c6] transition"
-        >
-          <span>🖥️ Donanımımı Algıla</span>
-        </button>
+        <a href="#populerCozumRehberleri" class="oc-btn oc-btn-ghost !min-h-[42px] !px-3.5">Rehberler</a>
 
-        <button
-          onclick="openAddGameModal()"
-          class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-xs font-semibold text-[#a3d9c6] transition"
-        >
-          <span>+ Oyun Ekle</span>
-        </button>
-
-        <!-- Guest Auth Buttons -->
-        <div id="guestAuthArea" class="flex items-center gap-2">
+        <!-- Araçlar (AI Çözümleyici, Log Analizi) Açılır Menüsü -->
+        <div class="relative">
           <button
+            type="button"
+            id="navToolsToggleBtn"
+            aria-expanded="false"
+            aria-controls="navToolsDropdown"
+            onclick="toggleToolsDropdown()"
+            class="oc-btn oc-btn-ghost !min-h-[42px] !px-3.5"
+          >
+            <span>Araçlar</span>
+            <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div
+            id="navToolsDropdown"
+            class="hidden absolute left-0 top-full mt-2 w-64 bg-[#1b2230] border border-white/15 rounded-2xl shadow-2xl p-2 z-50 space-y-1"
+            role="menu"
+          >
+            <a
+              href="#tabContent-ai-lab"
+              role="menuitem"
+              onclick="toggleToolsDropdown(false); switchTab('ai-lab');"
+              class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/5 transition"
+            >
+              <span class="oc-monogram oc-monogram-sm" aria-hidden="true">AI</span>
+              <div>
+                <div class="text-xs font-bold text-white">AI Arıza Çözümleyici</div>
+                <div class="text-[11px] text-gray-400">Listede olmayan hataları analiz et</div>
+              </div>
+            </a>
+            <a
+              href="#tabContent-ai-lab"
+              role="menuitem"
+              onclick="toggleToolsDropdown(false); switchTab('ai-lab'); setTimeout(function(){ document.getElementById('crashLogDropzone')?.scrollIntoView({behavior:'smooth'}); }, 80);"
+              class="flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/5 transition"
+            >
+              <span class="oc-monogram oc-monogram-sm" aria-hidden="true">LOG</span>
+              <div>
+                <div class="text-xs font-bold text-white">Crash Log (.log) Analizi</div>
+                <div class="text-[11px] text-gray-400">Çökme dosyasını yükleyip teşhis al</div>
+              </div>
+            </a>
+            <button
+              type="button"
+              role="menuitem"
+              onclick="toggleToolsDropdown(false); triggerHardwareAutoDetect();"
+              class="w-full text-left flex items-start gap-2.5 p-2.5 rounded-xl hover:bg-white/5 transition"
+            >
+              <span class="oc-monogram oc-monogram-sm" aria-hidden="true">GPU</span>
+              <div>
+                <div class="text-xs font-bold text-white">Donanımımı Algıla</div>
+                <div class="text-[11px] text-gray-400">İsteğe bağlı sistem tespiti</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <a
+          href="#tabContent-forum"
+          onclick="switchTab('forum');"
+          class="oc-btn oc-btn-ghost !min-h-[42px] !px-3.5"
+        >
+          Forum
+        </a>
+      </nav>
+
+      <!-- 3. Sağ Kontroller: Giriş Yap / Profil ve Mobil Çekmece Menü Butonu (>=44x44px) -->
+      <div class="flex items-center gap-2">
+        <!-- Guest Auth Buttons -->
+        <div id="guestAuthArea" class="hidden sm:flex items-center gap-2">
+          <button
+            type="button"
             onclick="openAuthModal('login')"
-            class="px-3.5 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-xs font-semibold text-gray-200 transition"
+            class="oc-btn oc-btn-secondary !min-h-[42px] !px-3.5 text-xs"
           >
             Giriş Yap
           </button>
           <button
+            type="button"
             onclick="openAuthModal('register')"
-            class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-xs font-semibold text-white transition"
+            class="oc-btn oc-btn-primary !min-h-[42px] !px-3.5 text-xs"
           >
             Hesap Aç
           </button>
@@ -185,8 +224,9 @@
         <!-- Logged-In User Badge -->
         <div id="userProfileArea" class="hidden flex items-center gap-2">
           <button
+            type="button"
             onclick="openProfileModal()"
-            class="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 transition"
+            class="flex items-center gap-2.5 px-3 py-1.5 min-h-[44px] rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 transition"
           >
             <div id="navUserAvatar" class="w-7 h-7 rounded-lg accent-btn flex items-center justify-center text-xs font-bold">
               OY
@@ -198,88 +238,130 @@
           </button>
         </div>
 
+        <!-- Mobil Çekmece Menü Butonu (Okunaklı Etiketli, >= 44x44px) -->
         <button
-          onclick="openAskModal()"
-          class="accent-btn px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-2 shadow"
+          type="button"
+          id="mobileDrawerToggleBtn"
+          aria-expanded="false"
+          aria-controls="mobileNavDrawer"
+          onclick="toggleMobileNavDrawer()"
+          class="lg:hidden oc-btn oc-btn-secondary !min-h-[44px] !min-w-[44px] !px-3.5 text-xs font-bold"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
-          <span>Foruma Soru Sor</span>
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+          <span>Menü</span>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Live Search Bar (Responsive for Phones & Tablets) -->
-    <div class="md:hidden px-4 pb-3" id="mobileSearchWrapper">
-      <div class="relative">
-        <input
-          id="mobileSearchInput"
-          type="text"
-          autocomplete="off"
-          placeholder="Hata kodu veya oyun ara... (VAN 9003, CS2 VAC, D3D, FPS)"
-          class="w-full bg-[#1d2430] text-xs text-white placeholder-gray-400 rounded-xl pl-9 pr-16 py-2.5 border border-white/10 focus:outline-none focus:border-[#88c0a8]/60"
-          onfocus="openLiveAutocomplete(this.value, true)"
-          oninput="handleLiveSearchInput(this.value, true)"
-        />
-        <svg class="w-4 h-4 text-[#88c0a8] absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-        <div
-          id="mobileLiveSearchDropdown"
-          class="hidden absolute left-0 right-0 top-full mt-1.5 bg-[#171e2b]/98 backdrop-blur-xl border border-[#88c0a8]/40 rounded-2xl shadow-2xl z-50 max-h-[380px] overflow-y-auto divide-y divide-white/10"
-        ></div>
+    <!-- OYUNLAR AÇILIR PANELİ / ÇEKMECESİ (Arama + 30 Oyun Listesi + Oyun Ekle) -->
+    <div
+      id="gamesMegaPanel"
+      class="hidden border-t border-white/10 bg-[#18202d]/98 backdrop-blur-xl shadow-2xl"
+      role="region"
+      aria-label="Oyun Seçimi ve Arama Paneli"
+    >
+      <div class="max-w-7xl mx-auto px-4 lg:px-8 py-5 space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-sm font-extrabold text-white">Oyunlar ve Çözüm Merkezleri</h2>
+            <span id="sidebarTotalGamesBadge" class="oc-badge oc-badge-accent">30 Oyun</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              onclick="toggleGamesNavPanel(false); openAddGameModal();"
+              class="oc-btn oc-btn-secondary !min-h-[40px] !py-1.5 !px-3 text-xs"
+            >
+              <span>+ Yeni Oyun Ekle</span>
+            </button>
+            <button
+              type="button"
+              onclick="toggleGamesNavPanel(false)"
+              class="oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs"
+            >
+              Kapat ✕
+            </button>
+          </div>
+        </div>
+
+        <div class="relative max-w-md">
+          <input
+            id="gamesDrawerSearchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="Oyun ara (Valorant, LoL, CS2, RDR2, GTA V...)"
+            oninput="filterDrawerGames(this.value)"
+            class="w-full bg-[#121822] text-base sm:text-sm text-white placeholder-gray-400 rounded-xl pl-10 pr-4 py-2.5 border border-white/15 focus:outline-none focus:border-[#88c0a8]"
+          />
+          <svg class="w-4 h-4 text-[#88c0a8] absolute left-3.5 top-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+
+        <!-- Game Selector List (Populated dynamically via app.js) -->
+        <div id="gameNavList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-[55vh] overflow-y-auto pr-1">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MOBİL ÇEKMECE MENÜ (Büyük Dokunma Alanlı >= 44x44px) -->
+    <div
+      id="mobileNavDrawer"
+      class="hidden lg:hidden fixed inset-x-0 top-16 bottom-0 z-50 bg-[#141923]/98 backdrop-blur-xl border-t border-white/10 p-4 overflow-y-auto space-y-4"
+      role="dialog"
+      aria-label="Mobil Gezinme Çekmecesi"
+    >
+      <div class="grid grid-cols-1 gap-2">
+        <a href="/hata-kodlari" class="oc-btn oc-btn-secondary justify-between w-full !min-h-[48px] text-sm">
+          <span>Hata Kodları Dizini</span>
+          <span>→</span>
+        </a>
+        <button
+          type="button"
+          onclick="toggleMobileNavDrawer(false); toggleGamesNavPanel(true);"
+          class="oc-btn oc-btn-secondary justify-between w-full !min-h-[48px] text-sm"
+        >
+          <span>Oyunlar (Arama ve Liste)</span>
+          <span>→</span>
+        </button>
+        <a
+          href="#populerCozumRehberleri"
+          onclick="toggleMobileNavDrawer(false);"
+          class="oc-btn oc-btn-secondary justify-between w-full !min-h-[48px] text-sm"
+        >
+          <span>Çözüm Rehberleri</span>
+          <span>→</span>
+        </a>
+        <a
+          href="#tabContent-ai-lab"
+          onclick="toggleMobileNavDrawer(false); switchTab('ai-lab');"
+          class="oc-btn oc-btn-secondary justify-between w-full !min-h-[48px] text-sm"
+        >
+          <span>Araçlar: AI Arıza Çözümleyici &amp; Log Analizi</span>
+          <span>→</span>
+        </a>
+        <a
+          href="#tabContent-forum"
+          onclick="toggleMobileNavDrawer(false); switchTab('forum');"
+          class="oc-btn oc-btn-secondary justify-between w-full !min-h-[48px] text-sm"
+        >
+          <span>Topluluk Forumu</span>
+          <span>→</span>
+        </a>
+      </div>
+      <div class="pt-3 border-t border-white/10 grid grid-cols-2 gap-2.5">
+        <button type="button" onclick="toggleMobileNavDrawer(false); openAuthModal('login');" class="oc-btn oc-btn-secondary !min-h-[48px] w-full">
+          Giriş Yap
+        </button>
+        <button type="button" onclick="toggleMobileNavDrawer(false); openAuthModal('register');" class="oc-btn oc-btn-primary !min-h-[48px] w-full">
+          Hesap Aç
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE -->
-  <div class="max-w-[1600px] w-full mx-auto px-4 lg:px-8 py-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-    <!-- LEFT SIDEBAR: DEDICATED GAME SCREENS -->
-    <aside class="lg:col-span-3 space-y-5">
-      <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-4 space-y-3">
-        <div class="flex items-center justify-between px-1">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400">Oyun Ekranları</h2>
-          <span id="sidebarTotalGamesBadge" class="text-[11px] text-[#88c0a8] font-semibold">30 Oyun Aktif</span>
-        </div>
-
-        <!-- Add Any Game Button in Sidebar -->
-        <button
-          onclick="openAddGameModal()"
-          class="w-full py-2.5 px-3 rounded-xl bg-[#212936] hover:bg-[#283242] border border-dashed border-[#5e9c88]/50 text-xs font-semibold text-[#a3d9c6] flex items-center justify-center gap-2 transition"
-        >
-          <span>✨ + Yeni Oyun Ekle / Sayfa Oluştur</span>
-        </button>
-
-        <!-- Game Selector List -->
-        <div id="gameNavList" class="space-y-1 max-h-[580px] overflow-y-auto pr-1">
-          <!-- Populated dynamically via app.js -->
-        </div>
-      </div>
-
-      <!-- Forum & Server AI Cache Info Card -->
-      <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-4 space-y-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 text-[#88c0a8] font-semibold text-xs uppercase tracking-wider">
-            <span id="aiStatusDot" class="w-2 h-2 rounded-full bg-[#88c0a8]"></span>
-            <span id="aiStatusLabel">OyunÇöz Teknik Analiz Motoru</span>
-          </div>
-        </div>
-        <p class="text-xs text-gray-400 leading-relaxed">
-          Akıllı Önbellek (Smart Cache) devrede: Daha önce çözümlenen benzer sorular veritabanından hızlıca yanıtlanır.
-        </p>
-        <div class="flex flex-wrap gap-1.5 pt-1">
-          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Reddit TechSupport</span>
-          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Technopat Sosyal</span>
-          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Steam Guides</span>
-          <span class="text-[11px] px-2.5 py-1 rounded-lg bg-white/5 text-gray-300 border border-white/5">Paradox & Cfx.re</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- RIGHT CONTENT AREA: GAME PORTAL SCREEN -->
-    <main class="lg:col-span-9 space-y-6">
+  <!-- MAIN WORKSPACE (Tam Genişlikli Odaklı İskelet) -->
+  <div class="max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex-1">
+    <main id="ana-icerik" class="space-y-6 w-full">
 
       <!-- DYNAMIC GAME HERO BANNER -->
       <section id="gameHeroBanner" class="hero-banner rounded-2xl p-6 lg:p-7 shadow-lg">

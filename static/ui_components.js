@@ -140,4 +140,77 @@
   window.makeGameCoverDataUri = makeGameMonogramSvgDataUri;
   window.renderGameMonogramBadge = renderGameMonogramBadge;
   window.OC_UI = OC_UI;
+
+  // --- AŞAMA 2: ÜST MENÜ, OYUNLAR AÇILIR PANELİ, ARAÇLAR MENÜSÜ VE MOBİL ÇEKMECE KONTROLLERİ ---
+  window.toggleGamesNavPanel = function (forceState) {
+    const panel = document.getElementById('gamesMegaPanel');
+    const btn = document.getElementById('navGamesToggleBtn');
+    if (!panel) return;
+    const willOpen = typeof forceState === 'boolean' ? forceState : panel.classList.contains('hidden');
+    panel.classList.toggle('hidden', !willOpen);
+    if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (willOpen) {
+      window.toggleToolsDropdown(false);
+      const searchInp = document.getElementById('gamesDrawerSearchInput');
+      if (searchInp) setTimeout(() => searchInp.focus(), 50);
+    }
+  };
+
+  window.filterDrawerGames = function (query) {
+    const q = String(query || '').trim().toLowerCase();
+    const list = document.getElementById('gameNavList');
+    if (!list) return;
+    const items = list.querySelectorAll('button, a, .game-nav-item');
+    items.forEach(el => {
+      const txt = (el.textContent || '').toLowerCase();
+      el.style.display = (!q || txt.includes(q)) ? '' : 'none';
+    });
+  };
+
+  window.toggleToolsDropdown = function (forceState) {
+    const menu = document.getElementById('navToolsDropdown');
+    const btn = document.getElementById('navToolsToggleBtn');
+    if (!menu) return;
+    const willOpen = typeof forceState === 'boolean' ? forceState : menu.classList.contains('hidden');
+    menu.classList.toggle('hidden', !willOpen);
+    if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if (willOpen) {
+      const gPanel = document.getElementById('gamesMegaPanel');
+      if (gPanel) gPanel.classList.add('hidden');
+    }
+  };
+
+  window.toggleMobileNavDrawer = function (forceState) {
+    const drawer = document.getElementById('mobileNavDrawer');
+    const btn = document.getElementById('mobileDrawerToggleBtn');
+    if (!drawer) return;
+    const willOpen = typeof forceState === 'boolean' ? forceState : drawer.classList.contains('hidden');
+    drawer.classList.toggle('hidden', !willOpen);
+    if (btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+  };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      window.toggleGamesNavPanel(false);
+      window.toggleToolsDropdown(false);
+      window.toggleMobileNavDrawer(false);
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    const gPanel = document.getElementById('gamesMegaPanel');
+    const gBtn = document.getElementById('navGamesToggleBtn');
+    if (gPanel && !gPanel.classList.contains('hidden')) {
+      if (!gPanel.contains(e.target) && (!gBtn || !gBtn.contains(e.target))) {
+        window.toggleGamesNavPanel(false);
+      }
+    }
+    const tMenu = document.getElementById('navToolsDropdown');
+    const tBtn = document.getElementById('navToolsToggleBtn');
+    if (tMenu && !tMenu.classList.contains('hidden')) {
+      if (!tMenu.contains(e.target) && (!tBtn || !tBtn.contains(e.target))) {
+        window.toggleToolsDropdown(false);
+      }
+    }
+  });
 })();
