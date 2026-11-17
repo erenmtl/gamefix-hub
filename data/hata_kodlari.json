@@ -116,123 +116,9 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi"
-    },
-    {
-      "slug": "lol/van-128",
-      "oyun": "League of Legends",
-      "oyun_hub_url": "/lol-hata-cozumleri.html",
-      "hata_kodu": "VAN 128",
-      "issue_id": 9,
-      "varyant_yazimlari": [
-        "VAN 128",
-        "Vanguard 128",
-        "van 128 lol",
-        "van128",
-        "LoL Vanguard VAN 128"
-      ],
-      "title": "LoL Vanguard VAN 128 Hatası Çözümü (Adım Adım)",
-      "meta_description": "League of Legends VAN 128 Vanguard başlatılamadı hatası için test imzalama modunu kapatma, vgc/vgk temiz kurulumu ve antivirüs istisnası çözüm rehberi.",
-      "h1": "League of Legends VAN 128 Hatası Nasıl Çözülür?",
-      "kisa_aciklama": "League of Legends VAN 128 hatası, Riot Vanguard çekirdek sürücüsünün (vgk.sys) işletim sistemi açılışında güvenli modda başlatılamadığını veya üçüncü parti bir sürücüyle çakıştığını belirten hata kodudur. Oyuncuların van 128 lol ve van128 aramalarında karşılaştığı bu sorun, Windows sınama modu ayarları ve Vanguard servis onarımı ile adım adım giderilebilir.",
-      "nedenler": [
-        "Windows önyükleme ayarlarında test imzalama modu (testsigning) veya bütünlük kontrolü devre dışı (nointegritychecks) bayrağının açık olması.",
-        "Üçüncü parti antivirüs yazılımlarının (Kaspersky, Avast, AVG, Malwarebytes) çekirdek kancalarının vgk.sys sürücüsüyle çakışması.",
-        "Vanguard vgc ve vgk servis kayıtlarının güncelleme sırasında bozulması."
-      ],
-      "cozum_adimlari": [
-        {
-          "baslik": "Windows Test İmzalama Modunu ve Bütünlük Bayraklarını Kapatın",
-          "aciklama": "Vanguard 128 hatasını gidermek için Komut İstemi'ni (CMD) Yönetici olarak açın. Windows sınama modunu kapatan ve çekirdek bütünlük doğrulamasını varsayılan haline getiren aşağıdaki komutları çalıştırın.",
-          "komut": "bcdedit /set testsigning off && bcdedit /deletevalue nointegritychecks",
-          "komut_notu": {
-            "ne_yapar": "Windows Önyükleme Yapılandırma Verilerini (BCD) güncelleyerek çekirdek bütünlük doğrulamasını ve sınama modunu varsayılan standart haline getirir.",
-            "risk": "Yanlış parametre kullanımı Windows açılış davranışını veya imzasız sürücü kontrolünü etkileyebilir.",
-            "geri_alma": "İşlem öncesi oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilir veya standart Windows önyükleme ayarlarını koruyabilirsiniz."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Yönetici Komut İstemi üzerinde bcdedit testsigning off komutunun çalıştırılması"
-        },
-        {
-          "baslik": "Riot Vanguard Servislerini (vgc ve vgk) Komut Satırından Temizleyin",
-          "aciklama": "Komut İstemi'ni (CMD) Yönetici olarak açın ve sırasıyla sc delete vgc ile sc delete vgk komutlarını çalıştırın. Ardından C:\\Program Files\\Riot Vanguard klasörünü silip bilgisayarınızı yeniden başlatın ve Riot İstemcisi üzerinden Vanguard'ı temiz kurun.",
-          "komut": "sc delete vgc && sc delete vgk",
-          "komut_notu": {
-            "ne_yapar": "Bozulmuş veya kilitlenmiş Riot Vanguard (vgc ve vgk) çekirdek hizmet kaydını Windows Hizmet Yöneticisi'nden kaldırır.",
-            "risk": "Hizmet silindikten sonra Riot İstemcisi üzerinden onarım yapılana kadar oyun açılmaz.",
-            "geri_alma": "Riot İstemcisi'ni Yönetici olarak açıp Onar / Güncelle seçeneğini çalıştırarak Vanguard hizmetini temiz şekilde yeniden kurun."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Yönetici Komut İstemi ekranında sc delete vgc ve sc delete vgk servis temizleme adımı"
-        },
-        {
-          "baslik": "Bellek Bütünlüğü ve 3. Parti Antivirüs Çakışmasını Giderin",
-          "aciklama": "Kaspersky, Avast, AVG veya Malwarebytes kullanıyorsanız C:\\Program Files\\Riot Vanguard ve C:\\Riot Games klasörlerini istisnalara (dışlamalara) ekleyin. Windows Güvenliği > Cihaz Güvenliği > Çekirdek Yalıtımı menüsünden Bellek Bütünlüğü durumunu kontrol edin.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "Windows Güvenliği Çekirdek Yalıtımı ve antivirüs dışlama klasörlerinin kontrol edilmesi"
-        },
-        {
-          "baslik": "vgc Hizmetinin Otomatik Başladığını Doğrulayın",
-          "aciklama": "Win + R tuşlarına basıp services.msc yazarak Hizmetler ekranını açın. Listeden vgc hizmetini bulun, Başlangıç Türünü Otomatik yapın ve hizmeti başlatın.",
-          "komut": "sc config vgc start= auto && net start vgc",
-          "komut_notu": {
-            "ne_yapar": "Riot Vanguard kullanıcı modu servisinin (vgc) başlangıç türünü Otomatik olarak ayarlar ve servisi başlatır.",
-            "risk": "Standart servis başlatma komutu sistem ayarlarına zarar vermez.",
-            "geri_alma": "services.msc üzerinden vgc hizmetinin başlangıç türünü tekrar Elle (Manual) konumuna alabilirsiniz."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Windows Hizmetler (services.msc) penceresinde vgc servisinin Otomatik olarak ayarlanması"
-        }
-      ],
-      "isle_yaramazsa": "Şampiyon seçimi sonrasında siyah ekran veya 'Yeniden Bağlan (Reconnect)' döngüsü devam ediyorsa C:\\Riot Games\\League of Legends\\Config klasöründeki game.cfg ve PersistedSettings.json dosyalarını silin; League of Legends.exe > Özellikler > Uyumluluk sekmesinden 'Tam ekran iyileştirmelerini devre dışı bırak' kutusunu işaretleyin ve uyumluluk modu seçiliyse kaldırın.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Riot Games League of Legends Vanguard Resmi Destek Sayfası",
-      "sss": [
-        {
-          "soru": "LoL VAN 128 hatası neden olur?",
-          "cevap": "VAN 128, Vanguard'ın çekirdek sürücüsünün (vgk.sys) Windows başlangıcında güvenilir modda yüklenemediğini gösterir. Genellikle Windows test imzalama modunun açık olması, üçüncü parti antivirüslerin çekirdek kancaları veya bozuk Vanguard servis kayıtları nedeniyle oluşur."
-        },
-        {
-          "soru": "League of Legends VAN 128 hatası donanımsal bir arızadan mı kaynaklanır?",
-          "cevap": "Çoğu durumda donanımsal arıza değildir; işletim sistemi önyükleme bayrakları (testsigning), antivirüs çakışmaları veya vgc/vgk servis izinlerinden kaynaklanır ve yazılımsal adımlarla giderilebilir."
-        },
-        {
-          "soru": "Çözüm adımlarını uygulamadan önce hangi yedeği almalıyım?",
-          "cevap": "PowerShell'i Yönetici olarak açıp Checkpoint-Computer -Description \"OyunCoz_Yedek\" komutuyla veya rstrui.exe arayüzüyle bir Sistem Geri Yükleme Noktası oluşturmanız önerilir."
-        }
-      ],
-      "ilgili_hatalar": [
-        {
-          "url": "/lol/van-185",
-          "oyun": "League of Legends",
-          "hata_kodu": "VAN 185",
-          "baslik": "LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)"
-        },
-        {
-          "url": "/lol-hata-cozumleri.html",
-          "oyun": "League of Legends",
-          "hata_kodu": "TÜM HATALAR",
-          "baslik": "League of Legends Hata Kodları ve Çözüm Merkezi"
-        },
-        {
-          "url": "/valorant/van-9003",
-          "oyun": "Valorant",
-          "hata_kodu": "VAN 9003",
-          "baslik": "Valorant VAN 9003 Secure Boot Çözüm Rehberi"
-        },
-        {
-          "url": "/valorant/van-1067",
-          "oyun": "Valorant",
-          "hata_kodu": "VAN 1067",
-          "baslik": "Valorant VAN 1067 Bağlantı Hatası Çözüm Rehberi"
-        }
-      ],
-      "video_embed_url": "",
-      "yazar": "OyunÇöz Teknik Ekibi",
-      "tarih_yayin": "2026-03-01",
-      "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
+      "oncelik": 1,
+      "tek_cumle_ozet": "LoL'de Riot İstemcisi ile Vanguard arasındaki oturum bağlantısı koptuğunda oluşan hata kodu."
     },
     {
       "slug": "valorant/van-9003",
@@ -365,7 +251,222 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
+      "oncelik": 2,
+      "tek_cumle_ozet": "Windows 11'de BIOS UEFI Secure Boot özelliği aktif olmadığında çıkan Vanguard uyumluluk hatası."
+    },
+    {
+      "slug": "lol/van-128",
+      "oyun": "League of Legends",
+      "oyun_hub_url": "/lol-hata-cozumleri.html",
+      "hata_kodu": "VAN 128",
+      "issue_id": 9,
+      "varyant_yazimlari": [
+        "VAN 128",
+        "Vanguard 128",
+        "van 128 lol",
+        "van128",
+        "LoL Vanguard VAN 128"
+      ],
+      "title": "LoL Vanguard VAN 128 Hatası Çözümü (Adım Adım)",
+      "meta_description": "League of Legends VAN 128 Vanguard başlatılamadı hatası için test imzalama modunu kapatma, vgc/vgk temiz kurulumu ve antivirüs istisnası çözüm rehberi.",
+      "h1": "League of Legends VAN 128 Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "League of Legends VAN 128 hatası, Riot Vanguard çekirdek sürücüsünün (vgk.sys) işletim sistemi açılışında güvenli modda başlatılamadığını veya üçüncü parti bir sürücüyle çakıştığını belirten hata kodudur. Oyuncuların van 128 lol ve van128 aramalarında karşılaştığı bu sorun, Windows sınama modu ayarları ve Vanguard servis onarımı ile adım adım giderilebilir.",
+      "nedenler": [
+        "Windows önyükleme ayarlarında test imzalama modu (testsigning) veya bütünlük kontrolü devre dışı (nointegritychecks) bayrağının açık olması.",
+        "Üçüncü parti antivirüs yazılımlarının (Kaspersky, Avast, AVG, Malwarebytes) çekirdek kancalarının vgk.sys sürücüsüyle çakışması.",
+        "Vanguard vgc ve vgk servis kayıtlarının güncelleme sırasında bozulması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Windows Test İmzalama Modunu ve Bütünlük Bayraklarını Kapatın",
+          "aciklama": "Vanguard 128 hatasını gidermek için Komut İstemi'ni (CMD) Yönetici olarak açın. Windows sınama modunu kapatan ve çekirdek bütünlük doğrulamasını varsayılan haline getiren aşağıdaki komutları çalıştırın.",
+          "komut": "bcdedit /set testsigning off && bcdedit /deletevalue nointegritychecks",
+          "komut_notu": {
+            "ne_yapar": "Windows Önyükleme Yapılandırma Verilerini (BCD) güncelleyerek çekirdek bütünlük doğrulamasını ve sınama modunu varsayılan standart haline getirir.",
+            "risk": "Yanlış parametre kullanımı Windows açılış davranışını veya imzasız sürücü kontrolünü etkileyebilir.",
+            "geri_alma": "İşlem öncesi oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilir veya standart Windows önyükleme ayarlarını koruyabilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi üzerinde bcdedit testsigning off komutunun çalıştırılması"
+        },
+        {
+          "baslik": "Riot Vanguard Servislerini (vgc ve vgk) Komut Satırından Temizleyin",
+          "aciklama": "Komut İstemi'ni (CMD) Yönetici olarak açın ve sırasıyla sc delete vgc ile sc delete vgk komutlarını çalıştırın. Ardından C:\\Program Files\\Riot Vanguard klasörünü silip bilgisayarınızı yeniden başlatın ve Riot İstemcisi üzerinden Vanguard'ı temiz kurun.",
+          "komut": "sc delete vgc && sc delete vgk",
+          "komut_notu": {
+            "ne_yapar": "Bozulmuş veya kilitlenmiş Riot Vanguard (vgc ve vgk) çekirdek hizmet kaydını Windows Hizmet Yöneticisi'nden kaldırır.",
+            "risk": "Hizmet silindikten sonra Riot İstemcisi üzerinden onarım yapılana kadar oyun açılmaz.",
+            "geri_alma": "Riot İstemcisi'ni Yönetici olarak açıp Onar / Güncelle seçeneğini çalıştırarak Vanguard hizmetini temiz şekilde yeniden kurun."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi ekranında sc delete vgc ve sc delete vgk servis temizleme adımı"
+        },
+        {
+          "baslik": "Bellek Bütünlüğü ve 3. Parti Antivirüs Çakışmasını Giderin",
+          "aciklama": "Kaspersky, Avast, AVG veya Malwarebytes kullanıyorsanız C:\\Program Files\\Riot Vanguard ve C:\\Riot Games klasörlerini istisnalara (dışlamalara) ekleyin. Windows Güvenliği > Cihaz Güvenliği > Çekirdek Yalıtımı menüsünden Bellek Bütünlüğü durumunu kontrol edin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Güvenliği Çekirdek Yalıtımı ve antivirüs dışlama klasörlerinin kontrol edilmesi"
+        },
+        {
+          "baslik": "vgc Hizmetinin Otomatik Başladığını Doğrulayın",
+          "aciklama": "Win + R tuşlarına basıp services.msc yazarak Hizmetler ekranını açın. Listeden vgc hizmetini bulun, Başlangıç Türünü Otomatik yapın ve hizmeti başlatın.",
+          "komut": "sc config vgc start= auto && net start vgc",
+          "komut_notu": {
+            "ne_yapar": "Riot Vanguard kullanıcı modu servisinin (vgc) başlangıç türünü Otomatik olarak ayarlar ve servisi başlatır.",
+            "risk": "Standart servis başlatma komutu sistem ayarlarına zarar vermez.",
+            "geri_alma": "services.msc üzerinden vgc hizmetinin başlangıç türünü tekrar Elle (Manual) konumuna alabilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Hizmetler (services.msc) penceresinde vgc servisinin Otomatik olarak ayarlanması"
+        }
+      ],
+      "isle_yaramazsa": "Şampiyon seçimi sonrasında siyah ekran veya 'Yeniden Bağlan (Reconnect)' döngüsü devam ediyorsa C:\\Riot Games\\League of Legends\\Config klasöründeki game.cfg ve PersistedSettings.json dosyalarını silin; League of Legends.exe > Özellikler > Uyumluluk sekmesinden 'Tam ekran iyileştirmelerini devre dışı bırak' kutusunu işaretleyin ve uyumluluk modu seçiliyse kaldırın.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Riot Games League of Legends Vanguard Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "LoL VAN 128 hatası neden olur?",
+          "cevap": "VAN 128, Vanguard'ın çekirdek sürücüsünün (vgk.sys) Windows başlangıcında güvenilir modda yüklenemediğini gösterir. Genellikle Windows test imzalama modunun açık olması, üçüncü parti antivirüslerin çekirdek kancaları veya bozuk Vanguard servis kayıtları nedeniyle oluşur."
+        },
+        {
+          "soru": "League of Legends VAN 128 hatası donanımsal bir arızadan mı kaynaklanır?",
+          "cevap": "Çoğu durumda donanımsal arıza değildir; işletim sistemi önyükleme bayrakları (testsigning), antivirüs çakışmaları veya vgc/vgk servis izinlerinden kaynaklanır ve yazılımsal adımlarla giderilebilir."
+        },
+        {
+          "soru": "Çözüm adımlarını uygulamadan önce hangi yedeği almalıyım?",
+          "cevap": "PowerShell'i Yönetici olarak açıp Checkpoint-Computer -Description \"OyunCoz_Yedek\" komutuyla veya rstrui.exe arayüzüyle bir Sistem Geri Yükleme Noktası oluşturmanız önerilir."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/lol/van-185",
+          "oyun": "League of Legends",
+          "hata_kodu": "VAN 185",
+          "baslik": "LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)"
+        },
+        {
+          "url": "/lol-hata-cozumleri.html",
+          "oyun": "League of Legends",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "League of Legends Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/valorant/van-9003",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 9003",
+          "baslik": "Valorant VAN 9003 Secure Boot Çözüm Rehberi"
+        },
+        {
+          "url": "/valorant/van-1067",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 1067",
+          "baslik": "Valorant VAN 1067 Bağlantı Hatası Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
+      "oncelik": 3,
+      "tek_cumle_ozet": "Windows sınama modu veya antivirüs çakışması nedeniyle Vanguard çekirdek sürücüsünün başlamama hatası."
+    },
+    {
+      "slug": "gta-v/err-gfx-d3d-init",
+      "oyun": "GTA V",
+      "oyun_hub_url": "/gtav-fivem-hata-cozumleri.html",
+      "hata_kodu": "ERR_GFX_D3D_INIT",
+      "issue_id": 12,
+      "varyant_yazimlari": [
+        "err_gfx_d3d_init gta 5",
+        "ERR_GFX_D3D_INIT",
+        "gta 5 err_gfx_d3d_init hatası",
+        "gta v err gfx d3d init"
+      ],
+      "title": "GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)",
+      "meta_description": "GTA 5 oynarken karşılaşılan err_gfx_d3d_init gta 5 DirectX 11 çökme hatası için settings.xml DX_Version ayarı, DLL temizliği ve sürücü çözüm rehberi.",
+      "h1": "GTA 5 ERR_GFX_D3D_INIT Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "GTA V'te karşılaşılan ERR_GFX_D3D_INIT hatası, RAGE oyun motorunun DirectX görüntü bağdaştırıcısını başlatamadığını veya oyun sırasında ekran kartı sürücüsünün yanıt vermeyi kestiğini gösterir. Oyuncuların err_gfx_d3d_init gta 5 aramalarında en sık karşılaştığı bu durum, settings.xml yapılandırması ve bozuk grafik kütüphanelerinin temizlenmesiyle adım adım giderilir.",
+      "nedenler": [
+        "Belgeler\\Rockstar Games\\GTA V\\settings.xml içindeki DX_Version değerinin uyumsuz kalması.",
+        "Oyun klasöründe kalan d3d11.dll veya dxgi.dll gibi bozuk ReShade / ENB grafik modu kalıntıları.",
+        "Arka planda çalışan ekran kaydı katmanları veya agresif ekran kartı hız aşırtma (Overclock) profilleri."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "settings.xml Dosyasında DX_Version Değerini 2 (DirectX 11) Yapın",
+          "aciklama": "Belgeler > Rockstar Games > GTA V klasöründeki settings.xml dosyasını Not Defteri ile açın. <DX_Version value=\"2\" /> satırının 2 olduğundan emin olup dosyayı kaydedin.",
+          "komut": "powershell -Command \"Test-Path $env:USERPROFILE\\Documents\\Rockstar*\\GTA*\\settings.xml\"",
+          "komut_notu": {
+            "ne_yapar": "Belgeler klasöründeki GTA V settings.xml yapılandırma dosyasının mevcut olup olmadığını salt-okunur kontrol eder.",
+            "risk": "Salt-okunur doğrulama komutudur; oyun kayıtlarına veya ayarlarına dokunmaz.",
+            "geri_alma": "Herhangi bir değişiklik yapmadığı için geri alma gerektirmez."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Belgeler Rockstar Games GTA V klasöründeki settings.xml dosyasında DX_Version value 2 ayarı"
+        },
+        {
+          "baslik": "Oyun Dizinindeki Bozuk d3d11.dll ve dxgi.dll Kalıntılarını Temizleyin",
+          "aciklama": "GTA V kurulum klasöründe veya Belgeler\\Rockstar Games\\GTA V dizininde daha önce kurulmuş ReShade/ENB modlarından kalan d3d11.dll ya da dxgi.dll dosyaları varsa bunları silin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "GTA V ana dizinindeki uyumsuz d3d11.dll ve dxgi.dll grafik modu dosyalarının kontrolü"
+        },
+        {
+          "baslik": "Ekran Kartı Sürücüsünü ve Hız Aşırtma (Overclock) Profilini Kontrol Edin",
+          "aciklama": "Ekran kartı sürücünüzü güncel WHQL sürüme yükseltin, MSI Afterburner üzerinde hız aşırtma (Overclock) profili açıksa varsayılan saat hızlarına çekin ve Windows sistem dosyalarını doğrulayın.",
+          "komut": "sfc /scannow",
+          "komut_notu": {
+            "ne_yapar": "Windows Sistem Dosyası Denetleyicisi'ni çalıştırarak bozuk DirectX ve sistem DLL kütüphanelerini onarır.",
+            "risk": "Standart Microsoft sistem bakım komutudur; kişisel verileri silmez.",
+            "geri_alma": "Orijinal Windows sistem dosyalarını doğruladığı için geri alma gerektirmez."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Ekran kartı hız aşırtma profilinin sıfırlanması ve sfc scannow sistem doğrulaması"
+        }
+      ],
+      "isle_yaramazsa": "Sorun devam ederse GTA V oyun dosyalarının bütünlüğünü Steam, Epic Games veya Rockstar Games Launcher üzerinden doğrulayın ve oyun içi grafik ayarlarından MSAA / Post FX değerlerini düşürerek test edin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Rockstar Games GTA V ERR_GFX_D3D_INIT Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "GTA V ERR_GFX_D3D_INIT hatası neden olur?",
+          "cevap": "Ekran kartı hız aşırtması (overclock), bozuk gölgelendirici önbelleği veya uyumsuz grafik modları (d3d11.dll / dxgi.dll) DirectX 11 cihazının sıfırlanmasına yol açar. GPU hız aşırtmasını varsayılana çekmek ve settings.xml'de DX_Version değerini 2 yapmak sorunu giderir."
+        },
+        {
+          "soru": "settings.xml dosyasını değiştirmek GTA 5 hikaye kaydımı (save) siler mi?",
+          "cevap": "Hayır, settings.xml yalnızca ekran çözünürlüğü ve DirectX sürümü gibi grafik ayarlarını tutar; hikaye kayıt dosyalarınız Profiles klasöründe yer alır."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/fivem/harita-yuklenmiyor-texture-loss",
+          "oyun": "FiveM",
+          "hata_kodu": "TEXTURE LOSS",
+          "baslik": "FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi"
+        },
+        {
+          "url": "/gtav-fivem-hata-cozumleri.html",
+          "oyun": "GTA V & FiveM",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "GTA V ve FiveM Hata Kodları Çözüm Merkezi"
+        },
+        {
+          "url": "/rdr2/err-gfx-state",
+          "oyun": "Red Dead Redemption 2",
+          "hata_kodu": "ERR_GFX_STATE",
+          "baslik": "RDR2 ERR_GFX_STATE Hatası Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • GTA V Güncel Sürüm",
+      "oncelik": 4,
+      "tek_cumle_ozet": "GTA 5'te DirectX 11 görüntü bağdaştırıcısının sıfırlanması veya settings.xml uyumsuzluğu hatası."
     },
     {
       "slug": "valorant/van-1067",
@@ -471,188 +572,194 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
+      "oncelik": 5,
+      "tek_cumle_ozet": "TPM 2.0 güvenlik yongası veya vgc arka plan servisi yanıt vermediğinde oluşan bağlantı hatası."
     },
     {
-      "slug": "gta-v/err-gfx-d3d-init",
-      "oyun": "GTA V",
-      "oyun_hub_url": "/gtav-fivem-hata-cozumleri.html",
-      "hata_kodu": "ERR_GFX_D3D_INIT",
-      "issue_id": 12,
+      "slug": "cs2/vac-oturum-dogrulanamadi",
+      "oyun": "Counter-Strike 2",
+      "oyun_hub_url": "/cs2-hata-cozumleri.html",
+      "hata_kodu": "VAC Oturum Doğrulanamadı",
+      "issue_id": 5,
       "varyant_yazimlari": [
-        "err_gfx_d3d_init gta 5",
-        "ERR_GFX_D3D_INIT",
-        "gta 5 err_gfx_d3d_init hatası",
-        "gta v err gfx d3d init"
+        "cs2 vac oyun oturumunuzu doğrulayamadı",
+        "vac oturum doğrulanamadı",
+        "vac was unable to verify your game session cs2",
+        "cs2 vac hatası"
       ],
-      "title": "GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)",
-      "meta_description": "GTA 5 oynarken karşılaşılan err_gfx_d3d_init gta 5 DirectX 11 çökme hatası için settings.xml DX_Version ayarı, DLL temizliği ve sürücü çözüm rehberi.",
-      "h1": "GTA 5 ERR_GFX_D3D_INIT Hatası Nasıl Çözülür?",
-      "kisa_aciklama": "GTA V'te karşılaşılan ERR_GFX_D3D_INIT hatası, RAGE oyun motorunun DirectX görüntü bağdaştırıcısını başlatamadığını veya oyun sırasında ekran kartı sürücüsünün yanıt vermeyi kestiğini gösterir. Oyuncuların err_gfx_d3d_init gta 5 aramalarında en sık karşılaştığı bu durum, settings.xml yapılandırması ve bozuk grafik kütüphanelerinin temizlenmesiyle adım adım giderilir.",
+      "title": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözümü",
+      "meta_description": "Counter-Strike 2 (CS2) 'VAC oyun oturumunuzu doğrulayamadı' hatası için dosya bütünlüğü doğrulama, SteamService.exe onarımı ve bcdedit çözüm rehberi.",
+      "h1": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "Counter-Strike 2 'VAC oyun oturumunuzu doğrulayamadı (VAC Was Unable to Verify Your Game Session)' uyarısı, Valve Anti-Cheat servisinin (SteamService.exe) oyun belleğindeki imzaları doğrulayamadığını ve resmi eşleştirme sunucularına girişi engellediğini belirtir. Bu uyarı bir VAC yasaklaması (ban) değildir; servis ve dosya doğrulamasıyla adım adım giderilir.",
       "nedenler": [
-        "Belgeler\\Rockstar Games\\GTA V\\settings.xml içindeki DX_Version değerinin uyumsuz kalması.",
-        "Oyun klasöründe kalan d3d11.dll veya dxgi.dll gibi bozuk ReShade / ENB grafik modu kalıntıları.",
-        "Arka planda çalışan ekran kaydı katmanları veya agresif ekran kartı hız aşırtma (Overclock) profilleri."
+        "Steam istemcisinin yetersiz yetkiyle çalışması veya arka planda SteamService.exe bileşeninin kilitlenmesi.",
+        "Güncelleme sonrasında pak01.vpk veya bin/win64 klasöründeki imza dosyalarının bozulması.",
+        "Windows önyükleme yapılandırmasında nointegritychecks değerinin açık kalması."
       ],
       "cozum_adimlari": [
         {
-          "baslik": "settings.xml Dosyasında DX_Version Değerini 2 (DirectX 11) Yapın",
-          "aciklama": "Belgeler > Rockstar Games > GTA V klasöründeki settings.xml dosyasını Not Defteri ile açın. <DX_Version value=\"2\" /> satırının 2 olduğundan emin olup dosyayı kaydedin.",
-          "komut": "powershell -Command \"Test-Path $env:USERPROFILE\\Documents\\Rockstar*\\GTA*\\settings.xml\"",
-          "komut_notu": {
-            "ne_yapar": "Belgeler klasöründeki GTA V settings.xml yapılandırma dosyasının mevcut olup olmadığını salt-okunur kontrol eder.",
-            "risk": "Salt-okunur doğrulama komutudur; oyun kayıtlarına veya ayarlarına dokunmaz.",
-            "geri_alma": "Herhangi bir değişiklik yapmadığı için geri alma gerektirmez."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Belgeler Rockstar Games GTA V klasöründeki settings.xml dosyasında DX_Version value 2 ayarı"
-        },
-        {
-          "baslik": "Oyun Dizinindeki Bozuk d3d11.dll ve dxgi.dll Kalıntılarını Temizleyin",
-          "aciklama": "GTA V kurulum klasöründe veya Belgeler\\Rockstar Games\\GTA V dizininde daha önce kurulmuş ReShade/ENB modlarından kalan d3d11.dll ya da dxgi.dll dosyaları varsa bunları silin.",
+          "baslik": "CS2 Oyun Dosyalarının Bütünlüğünü Doğrulayın",
+          "aciklama": "Steam Kütüphanesi > Counter-Strike 2 > Sağ Tık Özellikler > Yüklü Dosyalar menüsünden 'Oyun dosyalarının bütünlüğünü doğrula' işlemini tamamlayın.",
           "komut": "",
           "gorsel_yolu": "",
-          "alt_metin": "GTA V ana dizinindeki uyumsuz d3d11.dll ve dxgi.dll grafik modu dosyalarının kontrolü"
+          "alt_metin": "Steam Kütüphanesi Counter-Strike 2 Yüklü Dosyalar sekmesinde dosya bütünlüğü doğrulama adımı"
         },
         {
-          "baslik": "Ekran Kartı Sürücüsünü ve Hız Aşırtma (Overclock) Profilini Kontrol Edin",
-          "aciklama": "Ekran kartı sürücünüzü güncel WHQL sürüme yükseltin, MSI Afterburner üzerinde hız aşırtma (Overclock) profili açıksa varsayılan saat hızlarına çekin ve Windows sistem dosyalarını doğrulayın.",
-          "komut": "sfc /scannow",
+          "baslik": "Steam Client Service Bileşenini Onarın ve Yönetici Başlatın",
+          "aciklama": "Steam'i tamamen kapatın. Komut İstemi'ni Yönetici olarak açıp SteamService.exe /repair komutunu çalıştırın ve ardından Steam'i Yönetici Olarak başlatın.",
+          "komut": "\"C:\\Program Files (x86)\\Common Files\\Steam\\SteamService.exe\" /repair",
           "komut_notu": {
-            "ne_yapar": "Windows Sistem Dosyası Denetleyicisi'ni çalıştırarak bozuk DirectX ve sistem DLL kütüphanelerini onarır.",
-            "risk": "Standart Microsoft sistem bakım komutudur; kişisel verileri silmez.",
-            "geri_alma": "Orijinal Windows sistem dosyalarını doğruladığı için geri alma gerektirmez."
+            "ne_yapar": "VAC imza doğrulamasından sorumlu olan resmi Steam Client Service bileşenini onarır ve yeniden kaydeder.",
+            "risk": "Yalnızca Steam servis kayıtlarını onarır; oyun veya sistem dosyalarını silmez.",
+            "geri_alma": "Steam istemcisini normal şekilde yeniden başlatmanız yeterlidir."
           },
           "gorsel_yolu": "",
-          "alt_metin": "Ekran kartı hız aşırtma profilinin sıfırlanması ve sfc scannow sistem doğrulaması"
-        }
-      ],
-      "isle_yaramazsa": "Sorun devam ederse GTA V oyun dosyalarının bütünlüğünü Steam, Epic Games veya Rockstar Games Launcher üzerinden doğrulayın ve oyun içi grafik ayarlarından MSAA / Post FX değerlerini düşürerek test edin.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Rockstar Games GTA V ERR_GFX_D3D_INIT Resmi Destek Sayfası",
-      "sss": [
-        {
-          "soru": "GTA V ERR_GFX_D3D_INIT hatası neden olur?",
-          "cevap": "Ekran kartı hız aşırtması (overclock), bozuk gölgelendirici önbelleği veya uyumsuz grafik modları (d3d11.dll / dxgi.dll) DirectX 11 cihazının sıfırlanmasına yol açar. GPU hız aşırtmasını varsayılana çekmek ve settings.xml'de DX_Version değerini 2 yapmak sorunu giderir."
+          "alt_metin": "Yönetici Komut İstemi üzerinde SteamService.exe repair komutunun çalıştırılması"
         },
         {
-          "soru": "settings.xml dosyasını değiştirmek GTA 5 hikaye kaydımı (save) siler mi?",
-          "cevap": "Hayır, settings.xml yalnızca ekran çözünürlüğü ve DirectX sürümü gibi grafik ayarlarını tutar; hikaye kayıt dosyalarınız Profiles klasöründe yer alır."
+          "baslik": "Windows Çekirdek Bütünlük Kontrolünü Varsayılana Döndürün",
+          "aciklama": "Yönetici CMD penceresinde bcdedit /deletevalue nointegritychecks ve bcdedit /deletevalue loadoptions komutlarını uygulayın ve bilgisayarınızı yeniden başlatın.",
+          "komut": "bcdedit /deletevalue nointegritychecks && bcdedit /deletevalue loadoptions",
+          "komut_notu": {
+            "ne_yapar": "Windows Önyükleme Yapılandırma Verilerinde (BCD) devre dışı bırakılmış bütünlük kontrollerini varsayılan standart duruma döndürür.",
+            "risk": "Standart Windows güvenlik doğrulamasını etkinleştirir; imzasız test sürücüleri varsa yüklenmeyebilir.",
+            "geri_alma": "İşlem öncesi oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici CMD penceresinde bcdedit deletevalue nointegritychecks komutunun uygulanması"
+        }
+      ],
+      "isle_yaramazsa": "Steam > Ayarlar > İndirmeler menüsünden 'İndirme Önbelleğini Temizle' seçeneğini uygulayın ve oyunu masaüstü kısayolu yerine doğrudan Steam Kütüphanesi içerisinden başlatın.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Steam Destek — VAC Oyun Oturumunuzu Doğrulayamadı Resmi Makalesi",
+      "sss": [
+        {
+          "soru": "CS2 VAC oyun oturumunuzu doğrulayamadı hatası VAC ban mıdır?",
+          "cevap": "Hayır, bu uyarı kesinlikle bir VAC yasaklaması (ban) değildir. Yerel Steam Client Service bileşeninin veya oyun dosyası imzalarının o oturumda doğrulanamadığını belirtir."
+        },
+        {
+          "soru": "Dosya doğrulama yaptığım halde hata neden tekrar ediyor?",
+          "cevap": "Steam yönetici yetkisi olmadan açıldığında veya SteamService.exe arka planda durduğunda tek başına dosya doğrulama yetmez; SteamService.exe /repair işlemi uygulanıp bilgisayar yeniden başlatılmalıdır."
         }
       ],
       "ilgili_hatalar": [
         {
-          "url": "/fivem/harita-yuklenmiyor-texture-loss",
-          "oyun": "FiveM",
-          "hata_kodu": "TEXTURE LOSS",
-          "baslik": "FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi"
+          "url": "/cs2/packet-burst-fps-dusmesi",
+          "oyun": "Counter-Strike 2",
+          "hata_kodu": "PACKET BURST & FPS",
+          "baslik": "CS2 Packet Burst ve FPS Düşmesi Çözüm Rehberi"
         },
         {
-          "url": "/gtav-fivem-hata-cozumleri.html",
-          "oyun": "GTA V & FiveM",
+          "url": "/cs2-hata-cozumleri.html",
+          "oyun": "Counter-Strike 2",
           "hata_kodu": "TÜM HATALAR",
-          "baslik": "GTA V ve FiveM Hata Kodları Çözüm Merkezi"
+          "baslik": "Counter-Strike 2 (CS2) Hata Kodları ve Çözüm Merkezi"
         },
         {
-          "url": "/rdr2/err-gfx-state",
-          "oyun": "Red Dead Redemption 2",
-          "hata_kodu": "ERR_GFX_STATE",
-          "baslik": "RDR2 ERR_GFX_STATE Hatası Çözüm Rehberi"
+          "url": "/valorant/van-9003",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 9003",
+          "baslik": "Valorant VAN 9003 Hatası Çözümü (Secure Boot & BIOS)"
         }
       ],
       "video_embed_url": "",
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • GTA V Güncel Sürüm"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
+      "oncelik": 6,
+      "tek_cumle_ozet": "Steam Client Service veya oyun dosyası imzaları doğrulanamadığında eşleştirmeyi engelleyen uyarı."
     },
     {
-      "slug": "fivem/harita-yuklenmiyor-texture-loss",
-      "oyun": "FiveM",
-      "oyun_hub_url": "/gtav-fivem-hata-cozumleri.html",
-      "hata_kodu": "Texture Loss (Harita Yüklenmeme)",
-      "issue_id": 12,
+      "slug": "minecraft/exit-code-1",
+      "oyun": "Minecraft",
+      "oyun_hub_url": "/minecraft-hata-cozumleri.html",
+      "hata_kodu": "Exit Code 1 (Çıkış Kodu: 1)",
+      "issue_id": 15,
       "varyant_yazimlari": [
-        "fivem harita yüklenmiyor",
-        "fivem texture loss",
-        "fivem yollar kayboluyor",
-        "extended texture budget fivem"
+        "minecraft exit code 1",
+        "çıkış kodu 1 minecraft",
+        "exit code: 1",
+        "oyun beklenmedik şekilde çöktü çıkış kodu 1"
       ],
-      "title": "FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi",
-      "meta_description": "FiveM sunucularında yolların ve binaların kaybolması (harita yüklenmiyor / texture loss) sorunu için Extended Texture Budget ve cache temizleme rehberi.",
-      "h1": "FiveM Harita Yüklenmiyor (Texture Loss) Sorunu Nasıl Çözülür?",
-      "kisa_aciklama": "FiveM roleplay sunucularında şehir içinde hızla ilerlerken yolların, binaların ve zemin dokularının kaybolması (Texture Loss), özel sunucu varlıklarının (modlu araçlar, kıyafetler ve MLO haritalar) ekran kartı VRAM doku bütçesini aşmasından kaynaklanır. Extended Texture Budget ayarı ve CitizenFX önbellek temizliği ile bu sorun adım adım giderilebilir.",
+      "title": "Minecraft Exit Code 1 (Çıkış Kodu: 1) Hatası Çözüm Rehberi",
+      "meta_description": "Minecraft Launcher 'Oyun beklenmedik şekilde çöktü: Çıkış Kodu 1 (Exit Code 1)' hatası için Java 21 uyumu, mods klasörü ve JVM RAM argümanı çözüm rehberi.",
+      "h1": "Minecraft Exit Code 1 (Çıkış Kodu: 1) Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "Minecraft Launcher'da 'Oyun beklenmedik şekilde çöktü — Çıkış Kodu: 1 (Exit Code: 1)' hatası, Java Sanal Makinesi'nin (JVM) başlatma sırasında uyumsuz bir Forge/Fabric modu, bozuk yapılandırma dosyası veya yanlış Java sürümü nedeniyle sonlandığını gösterir.",
       "nedenler": [
-        "Oyun içi Grafik ayarlarındaki 'Extended Texture Budget' çubuğunun en solda (sıfırda) bırakılması nedeniyle özel sunucu dokularının VRAM'e yüklenememesi.",
-        "%localappdata%\\FiveM\\FiveM.app\\data altındaki cache ve server-cache klasörlerinde biriken bozuk sunucu varlıkları.",
-        "8 GB ve 16 GB RAM bulunan sistemlerde Windows Sanal Bellek (Pagefile) alanının kalabalık sunucular için yetersiz kalması."
+        "Minecraft 1.20.5 ve 1.21+ sürümleri Java 21 gerektirirken sistemde eski Java 8 veya Java 17 yolunun seçili olması.",
+        "%appdata%\\.minecraft\\mods klasöründe oyun sürümüyle uyumsuz bir .jar mod dosyasının bulunması.",
+        "JVM Başlatma Argümanlarında (-Xmx) sistemde bulunandan fazla RAM ayrılması."
       ],
       "cozum_adimlari": [
         {
-          "baslik": "Extended Texture Budget Ayarını Ekran Kartı Belleğinize Göre Yükseltin",
-          "aciklama": "FiveM'de tüm grafik ayarlarını en düşüğe çekmek VRAM doku bütçesini sıfırlar ve yolları yok eder. Ayarlar > Grafikler (Graphics) sekmesinde en altta yer alan 'Extended Texture Budget' çubuğunu ekran kartı belleğinize göre %50 ile %65 arasına yükseltin.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "FiveM Grafik ayarlarında Extended Texture Budget çubuğunun yüzde 50-65 seviyesine getirilmesi"
-        },
-        {
-          "baslik": "FiveM CitizenFX Önbellek (Cache) Klasörlerini Temizleyin",
-          "aciklama": "Win + R tuşlarına basıp %localappdata%\\FiveM\\FiveM.app\\data klasörünü açın. 'game-storage' klasörü HARİÇ içerideki 'cache', 'server-cache' ve 'server-cache-priv' klasörlerini silin. Bu işlem bozuk sunucu scriptlerini ve dokularını temizler.",
-          "komut": "powershell -Command \"Remove-Item -Path '$env:LOCALAPPDATA\\FiveM\\FiveM.app\\data\\cache\\*' -Recurse -Force -ErrorAction SilentlyContinue\"",
+          "baslik": "mods Klasöründeki Uyumsuz Modları ve latest.log Kaydını Kontrol Edin",
+          "aciklama": "Win + R tuşlarına basıp %appdata%\\.minecraft\\logs\\latest.log dosyasını açarak çökme satırını kontrol edin; uyumsuz modları mods klasöründen geçici olarak çıkarın.",
+          "komut": "java -version",
           "komut_notu": {
-            "ne_yapar": "FiveM'in geçici cache klasörü içindeki bozulmuş sunucu önbellek dosyalarını temizler; game-storage klasörüne dokunmaz.",
-            "risk": "Sunucuya ilk girişte güncel sunucu önbelleği yeniden indirilir; ana oyun dosyaları silinmez.",
-            "geri_alma": "FiveM istemcisini yeniden başlattığınızda temiz önbellek klasörü otomatik olarak oluşturulur."
+            "ne_yapar": "Sistemde kurulu olan varsayılan Java sürümünü ve 64-bit mimarisini salt-okunur olarak gösterir.",
+            "risk": "Salt-okunur sorgulama komutudur; hiçbir sistem ayarını değiştirmez.",
+            "geri_alma": "Geri alma işlemi gerektirmez."
           },
           "gorsel_yolu": "",
-          "alt_metin": "FiveM.app data klasöründe game-storage hariç cache ve server-cache klasörlerinin temizlenmesi"
+          "alt_metin": "appdata .minecraft logs klasöründeki latest.log dosyası ve mods klasörü kontrolü"
         },
         {
-          "baslik": "8 GB ve 16 GB RAM Sistemler İçin Sanal Bellek (Pagefile) Yapılandırması",
-          "aciklama": "Kalabalık FiveM sunucuları 14 GB'ın üzerinde bellek tüketir. Gelişmiş Sistem Ayarları > Performans > Gelişmiş > Sanal Bellek bölümünden SSD diskinizde Başlangıç: 16384 MB, En Yüksek: 24576 MB sanal bellek tanımlayın.",
+          "baslik": "Minecraft Yüklemeler Ayarından Java Yürütülebilir Dosya Yolunu Sıfırlayın",
+          "aciklama": "Minecraft Launcher > Yüklemeler (Installations) > Profilin yanındaki 3 nokta > Düzenle > Daha Fazla Seçenek altındaki 'Java Yürütülebilir Dosyası' kutusunu sıfırlayarak yerleşik Java 21'i kullanmasını sağlayın.",
           "komut": "",
           "gorsel_yolu": "",
-          "alt_metin": "Windows Gelişmiş Sistem Ayarları Sanal Bellek penceresinde 16384 MB - 24576 MB yapılandırması"
-        }
-      ],
-      "isle_yaramazsa": "Harita kaybolmasıyla birlikte DirectX çökmesi de yaşıyorsanız GTA V ERR_GFX_D3D_INIT çözüm rehberimizdeki settings.xml DX_Version ayarını kontrol edin ve oyun içi Doku Kalitesi (Texture Quality) ayarını Normal/Yüksek seviyesinde sabitleyin.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Cfx.re / FiveM Resmi İstemci Destek Dokümantasyonu",
-      "sss": [
-        {
-          "soru": "FiveM'de ayarları düşürdüğüm halde neden yollar ve binalar kayboluyor?",
-          "cevap": "Extended Texture Budget çubuğu en solda (sıfırda) kaldığında FiveM özel sunucu varlıklarını (modlu araçlar ve MLO binalar) VRAM'e yükleyemez. Bu çubuğu yarıya (%50-%65) getirmek doku kaybını çözer."
+          "alt_metin": "Minecraft Launcher Yüklemeler Düzenle ekranında Java Yürütülebilir Dosyası yolunun sıfırlanması"
         },
         {
-          "soru": "FiveM cache temizlerken hangi klasörü silmemeliyim?",
-          "cevap": "%localappdata%\\FiveM\\FiveM.app\\data içindeki 'game-storage' klasörünü silmemelisiniz; yalnızca cache, server-cache ve server-cache-priv klasörlerini temizlemeniz yeterlidir."
+          "baslik": "JVM RAM Argümanını (-Xmx) Dengeli Seviyeye Ayarlayın",
+          "aciklama": "16 GB RAM'li bir bilgisayarda JVM Argümanları satırındaki -Xmx değerini -Xmx4G veya modlu paketlerde -Xmx6G olarak ayarlayıp kaydedin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Minecraft Launcher JVM Bağımsız Değişkenleri satırında -Xmx4G RAM ayarı"
+        }
+      ],
+      "isle_yaramazsa": "Windows Grafik Ayarları üzerinden javaw.exe dosyasını Yüksek Performanslı harici ekran kartınıza (NVIDIA / AMD) atayın ve ekran kartı OpenGL sürücünüzü güncelleyin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Minecraft Help Center — Resmi Çökme ve Exit Code Destek Sayfası",
+      "sss": [
+        {
+          "soru": "Minecraft Exit Code 1 hatası neden olur?",
+          "cevap": "En yaygın sebebi Forge/Fabric mods klasöründeki uyumsuz bir .jar mod dosyası veya Minecraft 1.20.5+ sürümünde Java 21 yerine eski Java sürümünün seçili olmasıdır."
+        },
+        {
+          "soru": "mods klasöründeki modları taşımak dünyalarımı (saves) siler mi?",
+          "cevap": "Dünyalarınız saves klasöründe yer alır; ancak modlu bloklar içeren bir dünyayı modları çıkardıktan sonra açmadan önce saves klasörünüzün yedeğini almanız önerilir."
         }
       ],
       "ilgili_hatalar": [
         {
-          "url": "/gta-v/err-gfx-d3d-init",
-          "oyun": "GTA V",
-          "hata_kodu": "ERR_GFX_D3D_INIT",
-          "baslik": "GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)"
+          "url": "/minecraft/glfw-error-65542",
+          "oyun": "Minecraft",
+          "hata_kodu": "GLFW 65542",
+          "baslik": "Minecraft GLFW Error 65542 (WGL OpenGL) Çözüm Rehberi"
         },
         {
-          "url": "/gtav-fivem-hata-cozumleri.html",
-          "oyun": "GTA V & FiveM",
+          "url": "/minecraft-hata-cozumleri.html",
+          "oyun": "Minecraft",
           "hata_kodu": "TÜM HATALAR",
-          "baslik": "GTA V ve FiveM Hata Kodları Çözüm Merkezi"
+          "baslik": "Minecraft Hata Kodları ve Çözüm Merkezi"
         },
         {
-          "url": "/rdr2/err-gfx-state",
-          "oyun": "Red Dead Redemption 2",
-          "hata_kodu": "ERR_GFX_STATE",
-          "baslik": "RDR2 ERR_GFX_STATE Hatası Çözüm Rehberi"
+          "url": "/black-myth-wukong/out-of-video-memory",
+          "oyun": "Black Myth: Wukong",
+          "hata_kodu": "Out of Video Memory",
+          "baslik": "Black Myth: Wukong Out of Video Memory Hatası Çözümü"
         }
       ],
       "video_embed_url": "",
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • FiveM Cfx.re Güncel İstemci"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Minecraft 1.20.4 / 1.21 (Java 21)",
+      "oncelik": 7,
+      "tek_cumle_ozet": "Uyumsuz Forge/Fabric modları veya yanlış Java 21 yürütülebilir yolu nedeniyle oluşan çökme kodu."
     },
     {
       "slug": "rdr2/err-gfx-state",
@@ -751,7 +858,189 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • RDR2 Güncel Sürüm"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • RDR2 Güncel Sürüm",
+      "oncelik": 8,
+      "tek_cumle_ozet": "Belgeler klasöründeki sga_ Vulkan gölgelendirici önbelleği bozulduğunda oluşan RAGE motoru hatası."
+    },
+    {
+      "slug": "fivem/harita-yuklenmiyor-texture-loss",
+      "oyun": "FiveM",
+      "oyun_hub_url": "/gtav-fivem-hata-cozumleri.html",
+      "hata_kodu": "Texture Loss (Harita Yüklenmeme)",
+      "issue_id": 12,
+      "varyant_yazimlari": [
+        "fivem harita yüklenmiyor",
+        "fivem texture loss",
+        "fivem yollar kayboluyor",
+        "extended texture budget fivem"
+      ],
+      "title": "FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi",
+      "meta_description": "FiveM sunucularında yolların ve binaların kaybolması (harita yüklenmiyor / texture loss) sorunu için Extended Texture Budget ve cache temizleme rehberi.",
+      "h1": "FiveM Harita Yüklenmiyor (Texture Loss) Sorunu Nasıl Çözülür?",
+      "kisa_aciklama": "FiveM roleplay sunucularında şehir içinde hızla ilerlerken yolların, binaların ve zemin dokularının kaybolması (Texture Loss), özel sunucu varlıklarının (modlu araçlar, kıyafetler ve MLO haritalar) ekran kartı VRAM doku bütçesini aşmasından kaynaklanır. Extended Texture Budget ayarı ve CitizenFX önbellek temizliği ile bu sorun adım adım giderilebilir.",
+      "nedenler": [
+        "Oyun içi Grafik ayarlarındaki 'Extended Texture Budget' çubuğunun en solda (sıfırda) bırakılması nedeniyle özel sunucu dokularının VRAM'e yüklenememesi.",
+        "%localappdata%\\FiveM\\FiveM.app\\data altındaki cache ve server-cache klasörlerinde biriken bozuk sunucu varlıkları.",
+        "8 GB ve 16 GB RAM bulunan sistemlerde Windows Sanal Bellek (Pagefile) alanının kalabalık sunucular için yetersiz kalması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Extended Texture Budget Ayarını Ekran Kartı Belleğinize Göre Yükseltin",
+          "aciklama": "FiveM'de tüm grafik ayarlarını en düşüğe çekmek VRAM doku bütçesini sıfırlar ve yolları yok eder. Ayarlar > Grafikler (Graphics) sekmesinde en altta yer alan 'Extended Texture Budget' çubuğunu ekran kartı belleğinize göre %50 ile %65 arasına yükseltin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "FiveM Grafik ayarlarında Extended Texture Budget çubuğunun yüzde 50-65 seviyesine getirilmesi"
+        },
+        {
+          "baslik": "FiveM CitizenFX Önbellek (Cache) Klasörlerini Temizleyin",
+          "aciklama": "Win + R tuşlarına basıp %localappdata%\\FiveM\\FiveM.app\\data klasörünü açın. 'game-storage' klasörü HARİÇ içerideki 'cache', 'server-cache' ve 'server-cache-priv' klasörlerini silin. Bu işlem bozuk sunucu scriptlerini ve dokularını temizler.",
+          "komut": "powershell -Command \"Remove-Item -Path '$env:LOCALAPPDATA\\FiveM\\FiveM.app\\data\\cache\\*' -Recurse -Force -ErrorAction SilentlyContinue\"",
+          "komut_notu": {
+            "ne_yapar": "FiveM'in geçici cache klasörü içindeki bozulmuş sunucu önbellek dosyalarını temizler; game-storage klasörüne dokunmaz.",
+            "risk": "Sunucuya ilk girişte güncel sunucu önbelleği yeniden indirilir; ana oyun dosyaları silinmez.",
+            "geri_alma": "FiveM istemcisini yeniden başlattığınızda temiz önbellek klasörü otomatik olarak oluşturulur."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "FiveM.app data klasöründe game-storage hariç cache ve server-cache klasörlerinin temizlenmesi"
+        },
+        {
+          "baslik": "8 GB ve 16 GB RAM Sistemler İçin Sanal Bellek (Pagefile) Yapılandırması",
+          "aciklama": "Kalabalık FiveM sunucuları 14 GB'ın üzerinde bellek tüketir. Gelişmiş Sistem Ayarları > Performans > Gelişmiş > Sanal Bellek bölümünden SSD diskinizde Başlangıç: 16384 MB, En Yüksek: 24576 MB sanal bellek tanımlayın.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Gelişmiş Sistem Ayarları Sanal Bellek penceresinde 16384 MB - 24576 MB yapılandırması"
+        }
+      ],
+      "isle_yaramazsa": "Harita kaybolmasıyla birlikte DirectX çökmesi de yaşıyorsanız GTA V ERR_GFX_D3D_INIT çözüm rehberimizdeki settings.xml DX_Version ayarını kontrol edin ve oyun içi Doku Kalitesi (Texture Quality) ayarını Normal/Yüksek seviyesinde sabitleyin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Cfx.re / FiveM Resmi İstemci Destek Dokümantasyonu",
+      "sss": [
+        {
+          "soru": "FiveM'de ayarları düşürdüğüm halde neden yollar ve binalar kayboluyor?",
+          "cevap": "Extended Texture Budget çubuğu en solda (sıfırda) kaldığında FiveM özel sunucu varlıklarını (modlu araçlar ve MLO binalar) VRAM'e yükleyemez. Bu çubuğu yarıya (%50-%65) getirmek doku kaybını çözer."
+        },
+        {
+          "soru": "FiveM cache temizlerken hangi klasörü silmemeliyim?",
+          "cevap": "%localappdata%\\FiveM\\FiveM.app\\data içindeki 'game-storage' klasörünü silmemelisiniz; yalnızca cache, server-cache ve server-cache-priv klasörlerini temizlemeniz yeterlidir."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/gta-v/err-gfx-d3d-init",
+          "oyun": "GTA V",
+          "hata_kodu": "ERR_GFX_D3D_INIT",
+          "baslik": "GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)"
+        },
+        {
+          "url": "/gtav-fivem-hata-cozumleri.html",
+          "oyun": "GTA V & FiveM",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "GTA V ve FiveM Hata Kodları Çözüm Merkezi"
+        },
+        {
+          "url": "/rdr2/err-gfx-state",
+          "oyun": "Red Dead Redemption 2",
+          "hata_kodu": "ERR_GFX_STATE",
+          "baslik": "RDR2 ERR_GFX_STATE Hatası Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • FiveM Cfx.re Güncel İstemci",
+      "oncelik": 9,
+      "tek_cumle_ozet": "FiveM sunucularında Extended Texture Budget düşük kaldığında yolların ve binaların kaybolması sorunu."
+    },
+    {
+      "slug": "cs2/packet-burst-fps-dusmesi",
+      "oyun": "Counter-Strike 2",
+      "oyun_hub_url": "/cs2-hata-cozumleri.html",
+      "hata_kodu": "Packet Burst ve FPS Düşmesi",
+      "issue_id": 6,
+      "varyant_yazimlari": [
+        "cs2 packet burst",
+        "cs2 fps düşmesi",
+        "cs2 takılma sorunu",
+        "cs2 jitter çözümü"
+      ],
+      "title": "CS2 Packet Burst ve FPS Düşmesi Çözümü (Source 2 Rehberi)",
+      "meta_description": "Counter-Strike 2 (CS2) Packet Burst, Jitter ve çatışma anında ani FPS düşmesi sorunu için 1 Paket ağ arabelleği, Shader Cache ve başlatma kodu çözüm rehberi.",
+      "h1": "CS2 Packet Burst ve FPS Düşmesi Sorunu Nasıl Çözülür?",
+      "kisa_aciklama": "CS2'de sağ üst köşede beliren 'Packet Burst / Jitter' uyarısı ve çatışma anındaki ani kare süresi (frame-time) sıçramaları, Source 2 motorunun büyük sub-tick ağ paketlerini veya derlenmemiş DirectX gölgelendiricilerini zamanında işleyemediğini gösterir.",
+      "nedenler": [
+        "Oyun içi 'Paket Kaybını / Gecikmeyi Dengelemek İçin Arabelleğe Alma' ayarının kapalı (Yok) olması.",
+        "Ekran kartı güncellemesi sonrasında eski DirectX Shader Cache dosyalarının çakışması.",
+        "Eski CS:GO başlatma seçeneklerinin (-high, -threads, +mat_queue_mode) Source 2 işlemci zamanlamasını bozması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Oyun İçi Ağ Arabelleğe Alma Ayarını 1 Paket Yapın",
+          "aciklama": "CS2 Ayarlar > Oyun > 'Paket kaybını / gecikmeyi dengelemek için arabelleğe alma' seçeneğini 'Yok' yerine '1 Paket' olarak ayarlayın. Bu ayar sub-tick paket dalgalanmalarını dengeler.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "CS2 Oyun ayarlarında Paket kaybını dengelemek için arabelleğe alma seçeneğinin 1 Paket yapılması"
+        },
+        {
+          "baslik": "Bozuk DirectX Gölgelendirici Önbelleğini (Shader Cache) Temizleyin",
+          "aciklama": "Windows Disk Temizleme (cleanmgr) aracını açıp 'DirectX Gölgelendirici Önbelleği' kutucuğunu işaretleyerek temizleyin; NVIDIA Denetim Masası > 3D Ayarları altından Gölgelendirici Önbellek Boyutu ayarını 10 GB yapın.",
+          "komut": "cleanmgr /d C",
+          "komut_notu": {
+            "ne_yapar": "Windows Disk Temizleme aracını C: sürücüsü için başlatır; DirectX Gölgelendirici Önbelleği seçilerek bozuk derlenmiş shader dosyaları temizlenir.",
+            "risk": "Yalnızca geçici önbellek dosyalarını temizler; kişisel dosyalarınıza dokunmaz.",
+            "geri_alma": "Oyun açıldığında temiz gölgelendirici önbelleğini otomatik olarak yeniden derler."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Disk Temizleme aracında DirectX Gölgelendirici Önbelleği temizliği"
+        },
+        {
+          "baslik": "Eski CS:GO Başlatma Seçeneklerini Kaldırın",
+          "aciklama": "Steam > CS2 > Özellikler > Başlatma Seçenekleri kutusundaki -high, -threads veya +mat_queue_mode gibi eski CS:GO parametrelerini tamamen silin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Steam CS2 Özellikler Başlatma Seçenekleri kutusundaki eski -high ve -threads kodlarının silinmesi"
+        }
+      ],
+      "isle_yaramazsa": "Oyun içi Gelişmiş Görüntü ayarlarında NVIDIA Reflex Düşük Gecikme Oranı ayarını 'Etkin' (Etkin + Takviye değil), Parçacık Detayı ayarını 'Düşük' olarak seçip test edin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Steam / Valve Counter-Strike 2 Resmi Performans ve Ağ Rehberi",
+      "sss": [
+        {
+          "soru": "Eski CS:GO başlatma kodları (-threads, -high) CS2'de neden FPS düşürüyor?",
+          "cevap": "Source 2 motoru çoklu iş parçacığı zamanlamasını kendisi yönetir; -high ve -threads gibi eski kodlar işlemcinin P-Core / E-Core dağılımını bozarak %1 Low FPS düşüşüne yol açar."
+        },
+        {
+          "soru": "Pingim düşük olduğu halde neden Packet Burst uyarısı çıkıyor?",
+          "cevap": "Sub-tick mimarisinde anlık büyük paket grupları geldiğinde arabellek 'Yok' seçiliyse paket sıralaması bozulur; '1 Paket' arabelleğe alma ayarı bu dalgalanmayı sönümler."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/cs2/vac-oturum-dogrulanamadi",
+          "oyun": "Counter-Strike 2",
+          "hata_kodu": "VAC DOĞRULAMA",
+          "baslik": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözümü"
+        },
+        {
+          "url": "/cs2-hata-cozumleri.html",
+          "oyun": "Counter-Strike 2",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "Counter-Strike 2 (CS2) Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/valorant/val-62",
+          "oyun": "Valorant",
+          "hata_kodu": "VAL 62",
+          "baslik": "Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
+      "oncelik": 10,
+      "tek_cumle_ozet": "Source 2 motorunda sub-tick paket dalgalanması ve bozuk DirectX gölgelendirici önbelleği kaynaklı takılma."
     },
     {
       "slug": "bannerlord/d3d-device-context-map",
@@ -845,7 +1134,9 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Bannerlord Güncel Sürüm"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Bannerlord Güncel Sürüm",
+      "oncelik": 11,
+      "tek_cumle_ozet": "Kuşatma savaşlarında bozuk ProgramData Shaders önbelleği nedeniyle oluşan DirectX 11 GPU çökmesi."
     },
     {
       "slug": "fc-25/anticheat-hatasi",
@@ -939,7 +1230,9 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • EA Sports FC 25 Güncel Sürüm"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • EA Sports FC 25 Güncel Sürüm",
+      "oncelik": 12,
+      "tek_cumle_ozet": "EA App önbelleği veya EAAntiCheat servisi bozulduğunda oyunun açılış ekranında kapanması sorunu."
     },
     {
       "slug": "black-myth-wukong/out-of-video-memory",
@@ -1038,276 +1331,9 @@
       "yazar": "OyunÇöz Teknik Ekibi",
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Black Myth: Wukong Güncel Sürüm"
-    },
-    {
-      "slug": "cs2/vac-oturum-dogrulanamadi",
-      "oyun": "Counter-Strike 2",
-      "oyun_hub_url": "/cs2-hata-cozumleri.html",
-      "hata_kodu": "VAC Oturum Doğrulanamadı",
-      "issue_id": 5,
-      "varyant_yazimlari": [
-        "cs2 vac oyun oturumunuzu doğrulayamadı",
-        "vac oturum doğrulanamadı",
-        "vac was unable to verify your game session cs2",
-        "cs2 vac hatası"
-      ],
-      "title": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözümü",
-      "meta_description": "Counter-Strike 2 (CS2) 'VAC oyun oturumunuzu doğrulayamadı' hatası için dosya bütünlüğü doğrulama, SteamService.exe onarımı ve bcdedit çözüm rehberi.",
-      "h1": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Nasıl Çözülür?",
-      "kisa_aciklama": "Counter-Strike 2 'VAC oyun oturumunuzu doğrulayamadı (VAC Was Unable to Verify Your Game Session)' uyarısı, Valve Anti-Cheat servisinin (SteamService.exe) oyun belleğindeki imzaları doğrulayamadığını ve resmi eşleştirme sunucularına girişi engellediğini belirtir. Bu uyarı bir VAC yasaklaması (ban) değildir; servis ve dosya doğrulamasıyla adım adım giderilir.",
-      "nedenler": [
-        "Steam istemcisinin yetersiz yetkiyle çalışması veya arka planda SteamService.exe bileşeninin kilitlenmesi.",
-        "Güncelleme sonrasında pak01.vpk veya bin/win64 klasöründeki imza dosyalarının bozulması.",
-        "Windows önyükleme yapılandırmasında nointegritychecks değerinin açık kalması."
-      ],
-      "cozum_adimlari": [
-        {
-          "baslik": "CS2 Oyun Dosyalarının Bütünlüğünü Doğrulayın",
-          "aciklama": "Steam Kütüphanesi > Counter-Strike 2 > Sağ Tık Özellikler > Yüklü Dosyalar menüsünden 'Oyun dosyalarının bütünlüğünü doğrula' işlemini tamamlayın.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "Steam Kütüphanesi Counter-Strike 2 Yüklü Dosyalar sekmesinde dosya bütünlüğü doğrulama adımı"
-        },
-        {
-          "baslik": "Steam Client Service Bileşenini Onarın ve Yönetici Başlatın",
-          "aciklama": "Steam'i tamamen kapatın. Komut İstemi'ni Yönetici olarak açıp SteamService.exe /repair komutunu çalıştırın ve ardından Steam'i Yönetici Olarak başlatın.",
-          "komut": "\"C:\\Program Files (x86)\\Common Files\\Steam\\SteamService.exe\" /repair",
-          "komut_notu": {
-            "ne_yapar": "VAC imza doğrulamasından sorumlu olan resmi Steam Client Service bileşenini onarır ve yeniden kaydeder.",
-            "risk": "Yalnızca Steam servis kayıtlarını onarır; oyun veya sistem dosyalarını silmez.",
-            "geri_alma": "Steam istemcisini normal şekilde yeniden başlatmanız yeterlidir."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Yönetici Komut İstemi üzerinde SteamService.exe repair komutunun çalıştırılması"
-        },
-        {
-          "baslik": "Windows Çekirdek Bütünlük Kontrolünü Varsayılana Döndürün",
-          "aciklama": "Yönetici CMD penceresinde bcdedit /deletevalue nointegritychecks ve bcdedit /deletevalue loadoptions komutlarını uygulayın ve bilgisayarınızı yeniden başlatın.",
-          "komut": "bcdedit /deletevalue nointegritychecks && bcdedit /deletevalue loadoptions",
-          "komut_notu": {
-            "ne_yapar": "Windows Önyükleme Yapılandırma Verilerinde (BCD) devre dışı bırakılmış bütünlük kontrollerini varsayılan standart duruma döndürür.",
-            "risk": "Standart Windows güvenlik doğrulamasını etkinleştirir; imzasız test sürücüleri varsa yüklenmeyebilir.",
-            "geri_alma": "İşlem öncesi oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilirsiniz."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Yönetici CMD penceresinde bcdedit deletevalue nointegritychecks komutunun uygulanması"
-        }
-      ],
-      "isle_yaramazsa": "Steam > Ayarlar > İndirmeler menüsünden 'İndirme Önbelleğini Temizle' seçeneğini uygulayın ve oyunu masaüstü kısayolu yerine doğrudan Steam Kütüphanesi içerisinden başlatın.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Steam Destek — VAC Oyun Oturumunuzu Doğrulayamadı Resmi Makalesi",
-      "sss": [
-        {
-          "soru": "CS2 VAC oyun oturumunuzu doğrulayamadı hatası VAC ban mıdır?",
-          "cevap": "Hayır, bu uyarı kesinlikle bir VAC yasaklaması (ban) değildir. Yerel Steam Client Service bileşeninin veya oyun dosyası imzalarının o oturumda doğrulanamadığını belirtir."
-        },
-        {
-          "soru": "Dosya doğrulama yaptığım halde hata neden tekrar ediyor?",
-          "cevap": "Steam yönetici yetkisi olmadan açıldığında veya SteamService.exe arka planda durduğunda tek başına dosya doğrulama yetmez; SteamService.exe /repair işlemi uygulanıp bilgisayar yeniden başlatılmalıdır."
-        }
-      ],
-      "ilgili_hatalar": [
-        {
-          "url": "/cs2/packet-burst-fps-dusmesi",
-          "oyun": "Counter-Strike 2",
-          "hata_kodu": "PACKET BURST & FPS",
-          "baslik": "CS2 Packet Burst ve FPS Düşmesi Çözüm Rehberi"
-        },
-        {
-          "url": "/cs2-hata-cozumleri.html",
-          "oyun": "Counter-Strike 2",
-          "hata_kodu": "TÜM HATALAR",
-          "baslik": "Counter-Strike 2 (CS2) Hata Kodları ve Çözüm Merkezi"
-        },
-        {
-          "url": "/valorant/van-9003",
-          "oyun": "Valorant",
-          "hata_kodu": "VAN 9003",
-          "baslik": "Valorant VAN 9003 Hatası Çözümü (Secure Boot & BIOS)"
-        }
-      ],
-      "video_embed_url": "",
-      "yazar": "OyunÇöz Teknik Ekibi",
-      "tarih_yayin": "2026-03-01",
-      "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2"
-    },
-    {
-      "slug": "cs2/packet-burst-fps-dusmesi",
-      "oyun": "Counter-Strike 2",
-      "oyun_hub_url": "/cs2-hata-cozumleri.html",
-      "hata_kodu": "Packet Burst ve FPS Düşmesi",
-      "issue_id": 6,
-      "varyant_yazimlari": [
-        "cs2 packet burst",
-        "cs2 fps düşmesi",
-        "cs2 takılma sorunu",
-        "cs2 jitter çözümü"
-      ],
-      "title": "CS2 Packet Burst ve FPS Düşmesi Çözümü (Source 2 Rehberi)",
-      "meta_description": "Counter-Strike 2 (CS2) Packet Burst, Jitter ve çatışma anında ani FPS düşmesi sorunu için 1 Paket ağ arabelleği, Shader Cache ve başlatma kodu çözüm rehberi.",
-      "h1": "CS2 Packet Burst ve FPS Düşmesi Sorunu Nasıl Çözülür?",
-      "kisa_aciklama": "CS2'de sağ üst köşede beliren 'Packet Burst / Jitter' uyarısı ve çatışma anındaki ani kare süresi (frame-time) sıçramaları, Source 2 motorunun büyük sub-tick ağ paketlerini veya derlenmemiş DirectX gölgelendiricilerini zamanında işleyemediğini gösterir.",
-      "nedenler": [
-        "Oyun içi 'Paket Kaybını / Gecikmeyi Dengelemek İçin Arabelleğe Alma' ayarının kapalı (Yok) olması.",
-        "Ekran kartı güncellemesi sonrasında eski DirectX Shader Cache dosyalarının çakışması.",
-        "Eski CS:GO başlatma seçeneklerinin (-high, -threads, +mat_queue_mode) Source 2 işlemci zamanlamasını bozması."
-      ],
-      "cozum_adimlari": [
-        {
-          "baslik": "Oyun İçi Ağ Arabelleğe Alma Ayarını 1 Paket Yapın",
-          "aciklama": "CS2 Ayarlar > Oyun > 'Paket kaybını / gecikmeyi dengelemek için arabelleğe alma' seçeneğini 'Yok' yerine '1 Paket' olarak ayarlayın. Bu ayar sub-tick paket dalgalanmalarını dengeler.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "CS2 Oyun ayarlarında Paket kaybını dengelemek için arabelleğe alma seçeneğinin 1 Paket yapılması"
-        },
-        {
-          "baslik": "Bozuk DirectX Gölgelendirici Önbelleğini (Shader Cache) Temizleyin",
-          "aciklama": "Windows Disk Temizleme (cleanmgr) aracını açıp 'DirectX Gölgelendirici Önbelleği' kutucuğunu işaretleyerek temizleyin; NVIDIA Denetim Masası > 3D Ayarları altından Gölgelendirici Önbellek Boyutu ayarını 10 GB yapın.",
-          "komut": "cleanmgr /d C",
-          "komut_notu": {
-            "ne_yapar": "Windows Disk Temizleme aracını C: sürücüsü için başlatır; DirectX Gölgelendirici Önbelleği seçilerek bozuk derlenmiş shader dosyaları temizlenir.",
-            "risk": "Yalnızca geçici önbellek dosyalarını temizler; kişisel dosyalarınıza dokunmaz.",
-            "geri_alma": "Oyun açıldığında temiz gölgelendirici önbelleğini otomatik olarak yeniden derler."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "Windows Disk Temizleme aracında DirectX Gölgelendirici Önbelleği temizliği"
-        },
-        {
-          "baslik": "Eski CS:GO Başlatma Seçeneklerini Kaldırın",
-          "aciklama": "Steam > CS2 > Özellikler > Başlatma Seçenekleri kutusundaki -high, -threads veya +mat_queue_mode gibi eski CS:GO parametrelerini tamamen silin.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "Steam CS2 Özellikler Başlatma Seçenekleri kutusundaki eski -high ve -threads kodlarının silinmesi"
-        }
-      ],
-      "isle_yaramazsa": "Oyun içi Gelişmiş Görüntü ayarlarında NVIDIA Reflex Düşük Gecikme Oranı ayarını 'Etkin' (Etkin + Takviye değil), Parçacık Detayı ayarını 'Düşük' olarak seçip test edin.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Steam / Valve Counter-Strike 2 Resmi Performans ve Ağ Rehberi",
-      "sss": [
-        {
-          "soru": "Eski CS:GO başlatma kodları (-threads, -high) CS2'de neden FPS düşürüyor?",
-          "cevap": "Source 2 motoru çoklu iş parçacığı zamanlamasını kendisi yönetir; -high ve -threads gibi eski kodlar işlemcinin P-Core / E-Core dağılımını bozarak %1 Low FPS düşüşüne yol açar."
-        },
-        {
-          "soru": "Pingim düşük olduğu halde neden Packet Burst uyarısı çıkıyor?",
-          "cevap": "Sub-tick mimarisinde anlık büyük paket grupları geldiğinde arabellek 'Yok' seçiliyse paket sıralaması bozulur; '1 Paket' arabelleğe alma ayarı bu dalgalanmayı sönümler."
-        }
-      ],
-      "ilgili_hatalar": [
-        {
-          "url": "/cs2/vac-oturum-dogrulanamadi",
-          "oyun": "Counter-Strike 2",
-          "hata_kodu": "VAC DOĞRULAMA",
-          "baslik": "CS2 VAC Oyun Oturumunuzu Doğrulayamadı Hatası Çözümü"
-        },
-        {
-          "url": "/cs2-hata-cozumleri.html",
-          "oyun": "Counter-Strike 2",
-          "hata_kodu": "TÜM HATALAR",
-          "baslik": "Counter-Strike 2 (CS2) Hata Kodları ve Çözüm Merkezi"
-        },
-        {
-          "url": "/valorant/val-62",
-          "oyun": "Valorant",
-          "hata_kodu": "VAL 62",
-          "baslik": "Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi"
-        }
-      ],
-      "video_embed_url": "",
-      "yazar": "OyunÇöz Teknik Ekibi",
-      "tarih_yayin": "2026-03-01",
-      "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2"
-    },
-    {
-      "slug": "minecraft/exit-code-1",
-      "oyun": "Minecraft",
-      "oyun_hub_url": "/minecraft-hata-cozumleri.html",
-      "hata_kodu": "Exit Code 1 (Çıkış Kodu: 1)",
-      "issue_id": 15,
-      "varyant_yazimlari": [
-        "minecraft exit code 1",
-        "çıkış kodu 1 minecraft",
-        "exit code: 1",
-        "oyun beklenmedik şekilde çöktü çıkış kodu 1"
-      ],
-      "title": "Minecraft Exit Code 1 (Çıkış Kodu: 1) Hatası Çözüm Rehberi",
-      "meta_description": "Minecraft Launcher 'Oyun beklenmedik şekilde çöktü: Çıkış Kodu 1 (Exit Code 1)' hatası için Java 21 uyumu, mods klasörü ve JVM RAM argümanı çözüm rehberi.",
-      "h1": "Minecraft Exit Code 1 (Çıkış Kodu: 1) Hatası Nasıl Çözülür?",
-      "kisa_aciklama": "Minecraft Launcher'da 'Oyun beklenmedik şekilde çöktü — Çıkış Kodu: 1 (Exit Code: 1)' hatası, Java Sanal Makinesi'nin (JVM) başlatma sırasında uyumsuz bir Forge/Fabric modu, bozuk yapılandırma dosyası veya yanlış Java sürümü nedeniyle sonlandığını gösterir.",
-      "nedenler": [
-        "Minecraft 1.20.5 ve 1.21+ sürümleri Java 21 gerektirirken sistemde eski Java 8 veya Java 17 yolunun seçili olması.",
-        "%appdata%\\.minecraft\\mods klasöründe oyun sürümüyle uyumsuz bir .jar mod dosyasının bulunması.",
-        "JVM Başlatma Argümanlarında (-Xmx) sistemde bulunandan fazla RAM ayrılması."
-      ],
-      "cozum_adimlari": [
-        {
-          "baslik": "mods Klasöründeki Uyumsuz Modları ve latest.log Kaydını Kontrol Edin",
-          "aciklama": "Win + R tuşlarına basıp %appdata%\\.minecraft\\logs\\latest.log dosyasını açarak çökme satırını kontrol edin; uyumsuz modları mods klasöründen geçici olarak çıkarın.",
-          "komut": "java -version",
-          "komut_notu": {
-            "ne_yapar": "Sistemde kurulu olan varsayılan Java sürümünü ve 64-bit mimarisini salt-okunur olarak gösterir.",
-            "risk": "Salt-okunur sorgulama komutudur; hiçbir sistem ayarını değiştirmez.",
-            "geri_alma": "Geri alma işlemi gerektirmez."
-          },
-          "gorsel_yolu": "",
-          "alt_metin": "appdata .minecraft logs klasöründeki latest.log dosyası ve mods klasörü kontrolü"
-        },
-        {
-          "baslik": "Minecraft Yüklemeler Ayarından Java Yürütülebilir Dosya Yolunu Sıfırlayın",
-          "aciklama": "Minecraft Launcher > Yüklemeler (Installations) > Profilin yanındaki 3 nokta > Düzenle > Daha Fazla Seçenek altındaki 'Java Yürütülebilir Dosyası' kutusunu sıfırlayarak yerleşik Java 21'i kullanmasını sağlayın.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "Minecraft Launcher Yüklemeler Düzenle ekranında Java Yürütülebilir Dosyası yolunun sıfırlanması"
-        },
-        {
-          "baslik": "JVM RAM Argümanını (-Xmx) Dengeli Seviyeye Ayarlayın",
-          "aciklama": "16 GB RAM'li bir bilgisayarda JVM Argümanları satırındaki -Xmx değerini -Xmx4G veya modlu paketlerde -Xmx6G olarak ayarlayıp kaydedin.",
-          "komut": "",
-          "gorsel_yolu": "",
-          "alt_metin": "Minecraft Launcher JVM Bağımsız Değişkenleri satırında -Xmx4G RAM ayarı"
-        }
-      ],
-      "isle_yaramazsa": "Windows Grafik Ayarları üzerinden javaw.exe dosyasını Yüksek Performanslı harici ekran kartınıza (NVIDIA / AMD) atayın ve ekran kartı OpenGL sürücünüzü güncelleyin.",
-      "resmi_kaynak_url": "",
-      "resmi_kaynak_baslik": "Minecraft Help Center — Resmi Çökme ve Exit Code Destek Sayfası",
-      "sss": [
-        {
-          "soru": "Minecraft Exit Code 1 hatası neden olur?",
-          "cevap": "En yaygın sebebi Forge/Fabric mods klasöründeki uyumsuz bir .jar mod dosyası veya Minecraft 1.20.5+ sürümünde Java 21 yerine eski Java sürümünün seçili olmasıdır."
-        },
-        {
-          "soru": "mods klasöründeki modları taşımak dünyalarımı (saves) siler mi?",
-          "cevap": "Dünyalarınız saves klasöründe yer alır; ancak modlu bloklar içeren bir dünyayı modları çıkardıktan sonra açmadan önce saves klasörünüzün yedeğini almanız önerilir."
-        }
-      ],
-      "ilgili_hatalar": [
-        {
-          "url": "/minecraft/glfw-error-65542",
-          "oyun": "Minecraft",
-          "hata_kodu": "GLFW 65542",
-          "baslik": "Minecraft GLFW Error 65542 (WGL OpenGL) Çözüm Rehberi"
-        },
-        {
-          "url": "/minecraft-hata-cozumleri.html",
-          "oyun": "Minecraft",
-          "hata_kodu": "TÜM HATALAR",
-          "baslik": "Minecraft Hata Kodları ve Çözüm Merkezi"
-        },
-        {
-          "url": "/black-myth-wukong/out-of-video-memory",
-          "oyun": "Black Myth: Wukong",
-          "hata_kodu": "Out of Video Memory",
-          "baslik": "Black Myth: Wukong Out of Video Memory Hatası Çözümü"
-        }
-      ],
-      "video_embed_url": "",
-      "yazar": "OyunÇöz Teknik Ekibi",
-      "tarih_yayin": "2026-03-01",
-      "tarih_guncelleme": "2026-11-17",
-      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Minecraft 1.20.4 / 1.21 (Java 21)"
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Black Myth: Wukong Güncel Sürüm",
+      "oncelik": 13,
+      "tek_cumle_ozet": "Unreal Engine 5 gölgelendirici derlemesi sırasında sanal bellek veya işlemci kaynaklı bellek hatası."
     }
   ]
 }

@@ -361,625 +361,499 @@
 
   <!-- MAIN WORKSPACE (Tam Genişlikli Odaklı İskelet) -->
   <div class="max-w-7xl w-full mx-auto px-4 lg:px-8 py-6 flex-1">
-    <main id="ana-icerik" class="space-y-6 w-full">
+    <main id="ana-icerik" class="space-y-10 w-full">
 
-      <!-- DYNAMIC GAME HERO BANNER -->
-      <section id="gameHeroBanner" class="hero-banner rounded-2xl p-6 lg:p-7 shadow-lg">
-        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div class="flex flex-col sm:flex-row sm:items-center gap-5 max-w-3xl">
-            <div id="heroGameCoverWrapper" class="shrink-0">
-              <img
-                id="heroGameCoverImg"
-                src="./static/logo.svg"
-                alt="OyunÇöz Oyun Görseli"
-                class="w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-contain bg-[#151c27] p-2 border border-[#88c0a8]/35 shadow-xl transition-all duration-300"
-               loading="lazy" decoding="async" />
-            </div>
-            <div class="space-y-2.5">
-              <div class="flex flex-wrap items-center gap-2">
-                <span id="heroCategoryBadge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md accent-badge">
-                  Tüm Oyunlar Portalı
-                </span>
-                <span id="heroEngineBadge" class="text-xs px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/10">
-                  Motor: Çoklu Oyun Motoru
-                </span>
-                <span id="heroAnticheatBadge" class="text-xs px-2.5 py-1 rounded-md bg-white/5 text-gray-300 border border-white/10">
-                  Koruma: Vanguard / VAC / EAC / RICOCHET
-                </span>
-              </div>
-              <h1 id="heroGameTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                Popüler Oyun Sorunları & Yapay Zeka Çözüm Merkezi
-              </h1>
-              <p id="heroGameSubtitle" class="text-sm text-gray-300 leading-relaxed">
-                Sol menüden bir oyun seçebilir, istediğiniz yeni bir oyunu ekleyebilir veya AI Arıza Çözümleyici ile herhangi bir oyunu yazarak otomatik sayfa ve çözüm üretebilirsiniz.
-              </p>
-            </div>
+      <!-- 1. ÜST BÖLÜM (HERO): BÜYÜK ARAMA KUTUSU VE ANLIK OTOMATİK TAMAMLAMA -->
+      <section id="gameHeroBanner" class="oc-card p-6 sm:p-10 space-y-5">
+        <div class="max-w-3xl mx-auto text-center space-y-3">
+          <div class="inline-flex flex-wrap items-center justify-center gap-2">
+            <span id="heroCategoryBadge" class="oc-badge oc-badge-accent">Oyun Hata Kodları Rehberi</span>
+            <span id="heroEngineBadge" class="hidden oc-badge"></span>
+            <span id="heroAnticheatBadge" class="hidden oc-badge"></span>
           </div>
-
-          <!-- Quick Action Buttons on Game Screen -->
-          <div class="flex sm:flex-row lg:flex-col gap-2.5 shrink-0">
-            <button
-              onclick="switchTab('issues')"
-              class="accent-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow"
-            >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-              </svg>
-              <span>Hazır Forum Çözümlerini Gör</span>
-            </button>
-            <button
-              onclick="switchTab('forum')"
-              class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/5 hover:bg-white/10 text-white border border-white/10 flex items-center justify-center gap-2 transition"
-            >
-              <svg class="w-4 h-4 text-[#88c0a8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"/>
-              </svg>
-              <span>Topluluk Forumu & Soru Sor</span>
-            </button>
-          </div>
+          <h1 id="heroGameTitle" class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+            Hangi hatayı alıyorsun?
+          </h1>
+          <p id="heroGameSubtitle" class="text-sm sm:text-base text-gray-300 mx-auto">
+            Aldığın hata kodunu veya oyun adını yaz; doğrudan o hatanın adım adım çözüm sayfasına git.
+          </p>
+          <div id="heroGameCoverWrapper" class="hidden"><img id="heroGameCoverImg" src="./static/logo.svg" alt="OyunÇöz Rozeti" /></div>
         </div>
 
-        <!-- Common Error Tags Bar -->
-        <div class="mt-5 pt-4 border-t border-white/10 flex flex-wrap items-center gap-2">
-          <span class="text-xs text-gray-400 font-medium mr-1">Popüler Hata Kodları:</span>
-          <div id="heroCommonTags" class="flex flex-wrap gap-1.5">
-            <!-- Populated dynamically -->
+        <!-- Büyük Arama Kutusu -->
+        <div class="max-w-2xl mx-auto relative" id="desktopSearchWrapper">
+          <form onsubmit="handleHeroSearchSubmit(event)" class="relative">
+            <label for="globalSearchInput" class="sr-only">Hata kodu veya oyun ara</label>
+            <input
+              id="globalSearchInput"
+              type="search"
+              autocomplete="off"
+              placeholder="VAN 185, ERR_GFX_STATE, Exit Code 1…"
+              class="w-full bg-[#121822] text-base sm:text-lg text-white placeholder-gray-400 rounded-2xl pl-12 pr-28 py-4 border border-white/15 focus:outline-none focus:border-[#88c0a8] shadow-inner transition"
+              onfocus="openLiveAutocomplete(this.value)"
+              oninput="handleLiveSearchInput(this.value)"
+              onkeydown="handleSearchKeydown(event)"
+            />
+            <svg class="w-5 h-5 text-[#88c0a8] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+              <button
+                type="button"
+                onclick="clearGlobalSearch()"
+                id="clearSearchBtn"
+                class="hidden px-2.5 py-1.5 rounded-lg bg-white/10 text-xs text-gray-300 hover:text-white"
+              >
+                Temizle
+              </button>
+              <button
+                type="submit"
+                class="oc-btn oc-btn-primary !min-h-[40px] !py-1.5 !px-4 text-xs sm:text-sm font-bold"
+              >
+                Ara
+              </button>
+            </div>
+          </form>
+
+          <!-- Anlık Otomatik Tamamlama Açılır Listesi -->
+          <div
+            id="liveSearchDropdown"
+            class="hidden absolute left-0 right-0 top-full mt-2 bg-[#171e2b] border border-[#88c0a8]/45 rounded-2xl shadow-2xl z-50 max-h-[420px] overflow-y-auto divide-y divide-white/10"
+            role="listbox"
+            aria-label="Hata kodu ve oyun önerileri"
+          ></div>
+        </div>
+
+        <!-- Hızlı Etiketler -->
+        <div class="max-w-2xl mx-auto pt-1 flex flex-wrap items-center justify-center gap-2 text-xs">
+          <span class="text-gray-400 font-medium">Hızlı seçim:</span>
+          <a href="/lol/van-185" class="oc-badge hover:border-[#88c0a8]">VAN 185</a>
+          <a href="/valorant/van-9003" class="oc-badge hover:border-[#88c0a8]">VAN 9003</a>
+          <a href="/lol/van-128" class="oc-badge hover:border-[#88c0a8]">VAN 128</a>
+          <a href="/gta-v/err-gfx-d3d-init" class="oc-badge hover:border-[#88c0a8]">ERR_GFX_D3D_INIT</a>
+          <a href="/cs2/vac-oturum-dogrulanamadi" class="oc-badge hover:border-[#88c0a8]">CS2 VAC</a>
+          <a href="/minecraft/exit-code-1" class="oc-badge hover:border-[#88c0a8]">Exit Code 1</a>
+          <div id="heroCommonTags" class="hidden"></div>
+        </div>
+
+        <!-- Enter'a Basıldığında Açılan Arama Sonuçları Alanı -->
+        <div id="heroSearchResultsSection" class="hidden max-w-4xl mx-auto pt-4 border-t border-white/10 space-y-3"></div>
+      </section>
+
+      <!-- Donanım Darboğaz Uyarı Alanı (İsteğe Bağlı Tespit Sonrası) -->
+      <div id="hardwareBottleneckBanner" class="hidden"></div>
+
+      <!-- 2. EN ÇOK BAKILAN HATALAR (6-8 Kart, Veri Dosyasındaki Öncelik Sırasına Göre) -->
+      <section aria-labelledby="en-cok-bakilan-baslik" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 id="en-cok-bakilan-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+              En çok bakılan hatalar
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-400">
+              Oyuncuların en sık arattığı hata kodları ve doğrudan çözüm sayfaları
+            </p>
           </div>
+          <a href="/hata-kodlari" class="text-xs sm:text-sm font-bold text-[#88c0a8] hover:underline">
+            Tüm hata kodlarını gör →
+          </a>
+        </div>
+
+        <div id="homeTrendingIssuesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">LoL</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">League of Legends</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">VAN 185</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">LoL&#x27;de Riot İstemcisi ile Vanguard arasındaki oturum bağlantısı koptuğunda oluşan hata kodu.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/lol/van-185" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">VAL</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">Valorant</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">VAN 9003</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Windows 11&#x27;de BIOS UEFI Secure Boot özelliği aktif olmadığında çıkan Vanguard uyumluluk hatası.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/valorant/van-9003" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">LoL</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">League of Legends</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">VAN 128</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Windows sınama modu veya antivirüs çakışması nedeniyle Vanguard çekirdek sürücüsünün başlamama hatası.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/lol/van-128" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">GTA</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">GTA V</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">ERR_GFX_D3D_INIT</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">GTA 5&#x27;te DirectX 11 görüntü bağdaştırıcısının sıfırlanması veya settings.xml uyumsuzluğu hatası.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/gta-v/err-gfx-d3d-init" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">VAL</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">Valorant</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">VAN 1067</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">TPM 2.0 güvenlik yongası veya vgc arka plan servisi yanıt vermediğinde oluşan bağlantı hatası.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/valorant/van-1067" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">CS2</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">Counter-Strike 2</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">VAC Oturum Doğrulanamadı</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Steam Client Service veya oyun dosyası imzaları doğrulanamadığında eşleştirmeyi engelleyen uyarı.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/cs2/vac-oturum-dogrulanamadi" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">MC</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">Minecraft</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">Exit Code 1 (Çıkış Kodu: 1)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Uyumsuz Forge/Fabric modları veya yanlış Java 21 yürütülebilir yolu nedeniyle oluşan çökme kodu.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/minecraft/exit-code-1" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
+          <article class="oc-card oc-card-interactive p-4 flex flex-col justify-between gap-3">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="oc-monogram oc-monogram-sm" aria-hidden="true">RDR2</span>
+                  <span class="text-xs font-bold text-gray-200 truncate">Red Dead Redemption 2</span>
+                </div>
+                <span class="oc-badge oc-badge-accent font-mono font-bold shrink-0">ERR_GFX_STATE</span>
+              </div>
+              <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Belgeler klasöründeki sga_ Vulkan gölgelendirici önbelleği bozulduğunda oluşan RAGE motoru hatası.</p>
+            </div>
+            <div class="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+              <span class="text-gray-400">Adım adım rehber</span>
+              <a href="/rdr2/err-gfx-state" class="font-bold text-[#88c0a8] hover:underline">Çözümü gör →</a>
+            </div>
+          </article>
         </div>
       </section>
 
-      <!-- HARDWARE COMPATIBILITY & BOTTLENECK WARNING BANNER (Dynamic per Game & Saved User Specs) -->
-      <div id="hardwareBottleneckBanner" class="hidden"></div>
-
-      <!-- NAVIGATION TABS FOR CURRENT GAME SCREEN -->
-      <div class="border-b border-white/10 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <button id="tabBtn-ai-lab" onclick="switchTab('ai-lab')" class="tab-btn active flex items-center gap-2">
-            <span>🤖 Yapay Zeka Arıza Çözümleyici</span>
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30">Ana Ekran</span>
-          </button>
-          <button id="tabBtn-issues" onclick="switchTab('issues')" class="tab-btn flex items-center gap-2">
-            <span>📚 Forum Sorunları & AI Çözümleri</span>
-            <span id="issuesCountBadge" class="hidden text-xs px-2 py-0.5 rounded-full bg-white/10 text-white"></span>
-          </button>
-          <button id="tabBtn-forum" onclick="switchTab('forum')" class="tab-btn flex items-center gap-2">
-            <span>💬 Oyuncu Soru-Cevap Forumu</span>
-            <span id="threadsCountBadge" class="hidden text-xs px-2 py-0.5 rounded-full bg-white/10 text-white"></span>
-          </button>
-        </div>
-
-        <!-- Category Filter (shown on Issues Tab) -->
-        <div id="categoryFilterWrapper" class="hidden flex items-center gap-2 pb-2">
-          <span class="text-xs text-gray-400">Kategori:</span>
-          <select
-            id="categorySelect"
-            onchange="handleCategoryChange(this.value)"
-            class="bg-[#1d2430] text-xs text-white rounded-lg px-3 py-1.5 border border-white/10 focus:outline-none"
+      <!-- 3. OYUNLAR IZGARASI (Oyun Rozeti + Oyun Adı + Gerçek Hata Kodu Sayısı) -->
+      <section aria-labelledby="oyunlar-izgarasi-baslik" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <h2 id="oyunlar-izgarasi-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+              Oyunlar
+            </h2>
+            <p class="text-xs sm:text-sm text-gray-400">
+              Oyun seçerek o oyuna ait hata kodlarını ve çözüm rehberlerini filtreleyebilirsin
+            </p>
+          </div>
+          <button
+            type="button"
+            onclick="toggleGamesNavPanel(true)"
+            class="text-xs sm:text-sm font-bold text-[#88c0a8] hover:underline self-start sm:self-auto"
           >
-            <option value="all">Tüm Kategoriler</option>
-            <option value="Anti-Cheat & Güvenlik">Anti-Cheat & Güvenlik</option>
-            <option value="Performans & FPS">Performans & FPS</option>
-            <option value="Ağ & Bağlantı">Ağ & Bağlantı</option>
-            <option value="Çökme & Başlatma">Çökme & Başlatma</option>
-            <option value="Ses & Donanım">Ses & Donanım</option>
-          </select>
+            Tüm oyunları ara ve listele →
+          </button>
         </div>
-      </div>
 
-      <!-- TAB 1 (DEFAULT): AI DIAGNOSTIC & TROUBLESHOOTING LAB -->
-      <section id="tabContent-ai-lab" class="space-y-6">
+        <div id="homeGamesShowcaseGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <!-- Gerçek veriden static/app.js tarafından doldurulur -->
+        </div>
+      </section>
 
-        <!-- AI Diagnostic Form (Always visible as clean landing screen; submits redirect guests to Login/Register) -->
-        <div id="aiLabMemberArea" class="bg-[#1d2430] border border-white/10 rounded-2xl p-6 space-y-5">
+      <!-- Seçili Oyun Hata Listesi (Oyun seçildiğinde veya filtrelendiğinde görünür) -->
+      <section id="tabContent-issues" class="hidden space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">Seçili Oyun Hata Çözümleri</h2>
+          <div id="categoryFilterWrapper" class="flex items-center gap-2">
+            <label for="categorySelect" class="text-xs text-gray-400">Kategori:</label>
+            <select
+              id="categorySelect"
+              onchange="handleCategoryChange(this.value)"
+              class="bg-[#1b2230] text-xs text-white rounded-lg px-3 py-2 border border-white/10 focus:outline-none"
+            >
+              <option value="all">Tüm Kategoriler</option>
+              <option value="Anti-Cheat & Güvenlik">Anti-Cheat & Güvenlik</option>
+              <option value="Performans & FPS">Performans & FPS</option>
+              <option value="Ağ & Bağlantı">Ağ & Bağlantı</option>
+              <option value="Çökme & Başlatma">Çökme & Başlatma</option>
+              <option value="Ses & Donanım">Ses & Donanım</option>
+            </select>
+          </div>
+        </div>
+        <div id="issuesListContainer" class="space-y-4"></div>
+      </section>
+
+      <!-- 4. AI ÇÖZÜMLEYİCİ (Ortada Ayrı ve Sade Kart; Log Yükleme ve Donanım Algılama İkincil Açılır Kutuda) -->
+      <section id="tabContent-ai-lab" aria-labelledby="ai-cozumleyici-baslik" class="space-y-5">
+        <div id="aiLabMemberArea" class="oc-card p-6 sm:p-8 space-y-5">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
             <div>
-              <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <span>🧠 Yapay Zeka Destekli Özel Arıza Çözümleyici & Otomatik Sayfa Oluşturucu</span>
+              <h2 id="ai-cozumleyici-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+                Listede olmayan bir hata mı var? AI ile analiz et.
               </h2>
-              <p class="text-xs text-gray-400 mt-0.5">
-                İstediğiniz oyunun adını yazın (örn: <code>victorie 3</code>, <code>banerlord</code>, <code>rdr 2</code>) veya aşağıdaki rastgele oyun dünyası önerilerinden seçin; AI oyunu tanıyıp özel sayfasını ve çözümünü üretir!
+              <p class="text-xs sm:text-sm text-gray-400 mt-1">
+                Oyun adını, hata kodunu ve yaşadığın sorunu yaz; sistemine özel adım adım çözüm rehberi oluşturulsun.
               </p>
             </div>
-            <div id="aiLabGuestLock" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#5e9c88]/10 border border-[#5e9c88]/30 text-xs text-[#a3d9c6] shrink-0">
-              <span id="aiLabGuestTrialText">🎁 Misafir Hakkı: 1 Ücretsiz AI Analizi</span>
-              <button type="button" onclick="openAuthModal('login')" class="underline font-bold text-white hover:text-[#a3d9c6] ml-1">Üye Girişi</button>
-            </div>
-          </div>
-
-          <!-- Random World Games Picker Box -->
-          <div class="bg-[#181e29] border border-white/10 rounded-xl p-4 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-bold text-[#a3d9c6] flex items-center gap-1.5">
-                <span>🎲 Oyun Dünyasından Örnek Oyunlar (Tıklayıp Seçebilir veya Kendi Oyununuzu Yazabilirsiniz)</span>
-              </span>
-              <button
-                type="button"
-                onclick="refreshRandomSuggestions()"
-                class="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition"
-              >
-                🔄 Başka Oyunlar Öner
-              </button>
-            </div>
-            <div id="aiLabSuggestionsContainer" class="flex flex-wrap gap-2">
-              <!-- Populated dynamically -->
+            <div id="aiLabGuestLock" class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-gray-300 shrink-0">
+              <span id="aiLabGuestTrialText">Misafir Analiz Hakkı Aktif</span>
+              <button type="button" onclick="openAuthModal('login')" class="underline font-bold text-[#88c0a8] hover:text-white ml-1">Giriş Yap</button>
             </div>
           </div>
 
           <form onsubmit="submitAiDiagnostic(event)" class="space-y-4">
-            <!-- Honeypot Bot Trap (Hidden from real users) -->
+            <!-- Spam Koruması (Görünmez) -->
             <div class="hidden" aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;pointer-events:none;">
-              <input id="aiLabHoneypot" name="website_url" type="text" tabindex="-1" autocomplete="off" aria-label="Spam Koruması" />
+              <input id="aiLabHoneypot" name="hp_check_field" type="text" tabindex="-1" autocomplete="off" aria-label="Spam Koruması" />
             </div>
 
-            <!-- KILLER FEATURE 1: DRAG & DROP CRASH LOG / DUMP ANALYZER (Client-Side FileReader + Privacy Masking) -->
-            <div
-              id="crashLogDropZone"
-              ondragover="handleCrashLogDragOver(event)"
-              ondragleave="handleCrashLogDragLeave(event)"
-              ondrop="handleCrashLogDrop(event)"
-              class="rounded-2xl border-2 border-dashed border-[#88c0a8]/60 bg-[#151d2a] hover:bg-[#1b2536] hover:border-[#88c0a8] p-4 sm:p-5 transition cursor-pointer shadow-inner"
-              onclick="document.getElementById('crashLogFileInput').click()"
-            >
-              <input
-                id="crashLogFileInput"
-                type="file"
-                accept=".log,.txt,.crash,.dmp,.xml,.ini"
-                class="hidden"
-                onchange="handleCrashLogFileSelect(event)"
-              />
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div class="flex items-start sm:items-center gap-3.5">
-                  <div class="w-11 h-11 rounded-xl bg-[#5e9c88]/25 border border-[#88c0a8]/50 flex items-center justify-center text-xl shrink-0 shadow">📄</div>
-                  <div>
-                    <div class="text-xs sm:text-sm font-extrabold text-white flex flex-wrap items-center gap-2">
-                      <span>📄 Crash Log / Dump Dosyası (.log, .txt) Sürükle veya Seç</span>
-                      <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/35 font-semibold">🔒 %100 Tarayıcı İçi &amp; KVKK Maskeli</span>
-                    </div>
-                    <p class="text-[11px] text-gray-300 mt-1 leading-relaxed">
-                      Oyun çökme dosyanızı (<code>.log</code>, <code>.txt</code>, <code>.crash</code>) buraya sürükleyin veya tıklayıp seçin; <code>C:\Users\KullaniciAdi</code> yolları otomatik <code>C:\Users\[USER]</code> olarak gizlenir ve <code>Exception</code>, <code>0x...</code>, <code>.dll</code> hata satırları aşağıdaki sorun kutusuna aktarılır.
-                    </p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
-                  <button
-                    type="button"
-                    onclick="loadSampleCrashLog()"
-                    class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/15 text-xs font-semibold text-[#a3d9c6] transition"
-                  >
-                    🧪 Örnek Log Dene
-                  </button>
-                  <button
-                    type="button"
-                    onclick="document.getElementById('crashLogFileInput').click()"
-                    class="px-3.5 py-2 rounded-xl bg-[#5e9c88]/30 hover:bg-[#5e9c88]/45 border border-[#88c0a8]/50 text-xs font-extrabold text-white transition shadow"
-                  >
-                    📂 Dosya Seç (.log / .txt)
-                  </button>
-                </div>
-              </div>
-
-              <!-- Parsed & Anonymized Crash Log Preview -->
-              <div id="crashLogResultBox" class="hidden mt-3 pt-3 border-t border-white/10 space-y-2" onclick="event.stopPropagation()">
-                <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <div class="flex items-center gap-2">
-                    <span class="text-[#88c0a8] font-bold" id="crashLogFileNameBadge">📄 crash.log</span>
-                    <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 border border-amber-400/30 font-semibold" id="crashLogMatchCountBadge">Kritik Satırlar</span>
-                    <span class="text-[11px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 border border-emerald-400/30 font-semibold" id="crashLogMaskedCountBadge">🛡️ Kişisel Yollar Maskelendi</span>
-                  </div>
-                  <button type="button" onclick="clearCrashLogAnalysis()" class="text-[11px] text-gray-400 hover:text-white underline">Temizle</button>
-                </div>
-                <pre id="crashLogExtractedPreview" class="text-[11px] font-mono bg-[#11161f] text-amber-100/90 p-2.5 rounded-lg border border-white/10 overflow-x-auto max-h-36 whitespace-pre-wrap"></pre>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Oyun Adı (Yazın veya Seçin)</label>
+                <label for="aiLabGameInput" class="block text-xs font-semibold text-gray-300 mb-1.5">Oyun Adı</label>
                 <input
                   id="aiLabGameInput"
                   list="allGamesDatalist"
                   type="text"
                   required
-                  placeholder="Örn: victorie 3, Valorant, Bannerlord..."
+                  placeholder="Örn: Valorant, League of Legends, Bannerlord…"
                   oninput="previewSmartGameRecognition(this.value, 'aiLabSmartHint')"
-                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
+                  class="w-full bg-[#121822] text-base sm:text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/15 focus:outline-none focus:border-[#88c0a8]"
                 />
                 <div id="aiLabSmartHint" class="text-[11px] text-[#88c0a8] mt-1 min-h-[16px]"></div>
               </div>
               <div>
-                <label class="block text-xs font-semibold text-gray-300 mb-1.5">Hata Kodu / Konu (Opsiyonel)</label>
+                <label for="aiLabErrorCode" class="block text-xs font-semibold text-gray-300 mb-1.5">Hata Kodu veya Başlık (İsteğe Bağlı)</label>
                 <input
                   id="aiLabErrorCode"
                   type="text"
-                  placeholder="Örn: Late-Game Lag, VAN 9003, Exit Code 1"
-                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
-                />
-              </div>
-              <div>
-                <div class="flex items-center justify-between mb-1.5">
-                  <label class="block text-xs font-semibold text-gray-300">Sistem Özellikleriniz (GPU / CPU / OS)</label>
-                  <button
-                    type="button"
-                    onclick="triggerHardwareAutoDetect()"
-                    class="text-[11px] font-bold text-[#a3d9c6] hover:text-white px-2 py-0.5 rounded-md bg-[#5e9c88]/20 hover:bg-[#5e9c88]/35 border border-[#88c0a8]/35 transition flex items-center gap-1"
-                  >
-                    <span>🖥️ Otomatik Algıla</span>
-                  </button>
-                </div>
-                <input
-                  id="aiLabSpecs"
-                  type="text"
-                  placeholder="Örn: Win 11, Ryzen 5 5600, RTX 4060, 16GB RAM"
-                  class="w-full bg-[#212936] text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/10 focus:outline-none focus:border-white/25"
-                />
-              </div>
-            </div>
-
-            <!-- Interactive Hardware Detection Confirmation Banner (KVKK Compliant Opt-In) -->
-            <div id="hardwareConfirmBox" class="hidden bg-[#161e2b] border border-[#88c0a8]/45 rounded-xl p-4 space-y-3 shadow-lg">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                  <span class="w-8 h-8 rounded-lg bg-[#5e9c88]/20 border border-[#88c0a8]/40 flex items-center justify-center text-base">🖥️</span>
-                  <div>
-                    <div class="text-xs font-extrabold text-white">Tarayıcı (WebGL & Sistem API) Donanım Tespiti Tamamlandı</div>
-                    <p class="text-[11px] text-gray-400">Onay verirseniz aşağıdaki donanım profiliniz tüm arıza formlarına ve yerel profilinize otomatik doldurulacaktır.</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 shrink-0">
-                  <button
-                    type="button"
-                    onclick="confirmAndApplyDetectedHardware()"
-                    class="accent-btn px-3.5 py-1.5 rounded-lg text-xs font-bold shadow"
-                  >
-                    ✓ Onayla ve Formlara Doldur
-                  </button>
-                  <button
-                    type="button"
-                    onclick="dismissHardwareConfirmBox()"
-                    class="px-2.5 py-1.5 rounded-lg text-xs bg-white/5 hover:bg-white/10 text-gray-300"
-                  >
-                    Kapat
-                  </button>
-                </div>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
-                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
-                  <div class="text-[10px] text-gray-400 uppercase font-semibold">Ekran Kartı (WebGL GPU)</div>
-                  <div id="hwDetectGpuText" class="font-bold text-[#a3d9c6] truncate mt-0.5">-</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
-                  <div class="text-[10px] text-gray-400 uppercase font-semibold">İşlemci (CPU Çekirdek)</div>
-                  <div id="hwDetectCpuText" class="font-bold text-white truncate mt-0.5">-</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
-                  <div class="text-[10px] text-gray-400 uppercase font-semibold">İşletim Sistemi (OS)</div>
-                  <div id="hwDetectOsText" class="font-bold text-white truncate mt-0.5">-</div>
-                </div>
-                <div class="p-2.5 rounded-lg bg-[#1d2534] border border-white/5">
-                  <div class="text-[10px] text-gray-400 uppercase font-semibold">Bellek (RAM Tahmini)</div>
-                  <div id="hwDetectRamText" class="font-bold text-white truncate mt-0.5">-</div>
-                </div>
-              </div>
-              <div>
-                <label class="block text-[11px] text-gray-400 mb-1">Doldurulacak Tam Donanım Metni (İsterseniz düzenleyebilirsiniz):</label>
-                <input
-                  id="hwDetectEditableSummary"
-                  type="text"
-                  class="w-full bg-[#212936] text-xs text-white rounded-lg px-3 py-2 border border-[#88c0a8]/35 focus:outline-none"
+                  placeholder="Örn: VAN 185, ERR_GFX_STATE, FPS Düşmesi…"
+                  class="w-full bg-[#121822] text-base sm:text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/15 focus:outline-none focus:border-[#88c0a8]"
                 />
               </div>
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-1.5">Yaşadığınız Sorunun Detayları</label>
+              <label for="aiLabDescription" class="block text-xs font-semibold text-gray-300 mb-1.5">Sorun Detayı</label>
               <textarea
                 id="aiLabDescription"
                 rows="3"
                 required
-                placeholder="Sorun ne zaman başlıyor? Hangi hata mesajını alıyorsunuz? Şimdiye kadar hangi adımları denediniz?"
-                class="w-full bg-[#212936] text-sm text-white rounded-xl p-3.5 border border-white/10 focus:outline-none focus:border-white/25"
+                placeholder="Hata ne zaman çıkıyor? Ekranda hangi uyarı yazıyor?"
+                class="w-full bg-[#121822] text-base sm:text-sm text-white rounded-xl p-3.5 border border-white/15 focus:outline-none focus:border-[#88c0a8]"
               ></textarea>
             </div>
 
-            <div class="flex items-center justify-between pt-2">
+            <!-- İkincil Seçenekler: Crash Log Yükleme ve Donanım Algılama (Açılır Kutu İçinde) -->
+            <details class="oc-accordion">
+              <summary class="text-xs sm:text-sm font-semibold text-gray-200">
+                <span>İsteğe Bağlı: Crash Log (.log / .txt) Yükle veya Sistem Özelliklerini Ekle</span>
+                <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+              </summary>
+              <div class="oc-accordion-body space-y-4">
+                <!-- Sistem Özellikleri & Donanım Algılama -->
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label for="aiLabSpecs" class="block text-xs font-semibold text-gray-300">Sistem Özellikleri (GPU / CPU / İşletim Sistemi)</label>
+                    <button
+                      type="button"
+                      onclick="triggerHardwareAutoDetect()"
+                      class="oc-btn oc-btn-secondary !min-h-[34px] !py-1 !px-3 text-xs"
+                    >
+                      <span>Donanımımı Algıla</span>
+                    </button>
+                  </div>
+                  <input
+                    id="aiLabSpecs"
+                    type="text"
+                    placeholder="Örn: Windows 11, Ryzen 5 5600, RTX 4060, 16GB RAM"
+                    class="w-full bg-[#121822] text-base sm:text-sm text-white rounded-xl px-3.5 py-2.5 border border-white/15 focus:outline-none focus:border-[#88c0a8]"
+                  />
+                </div>
+
+                <!-- Donanım Onay Kutusu -->
+                <div id="hardwareConfirmBox" class="hidden bg-[#141a24] border border-[#88c0a8]/40 rounded-xl p-4 space-y-3">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <div class="text-xs font-bold text-white">Donanım Tespiti Tamamlandı</div>
+                      <p class="text-[11px] text-gray-400">Onaylarsanız aşağıdaki bilgiler forma aktarılır.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <button type="button" onclick="confirmAndApplyDetectedHardware()" class="oc-btn oc-btn-primary !min-h-[36px] !py-1 !px-3 text-xs">Onayla</button>
+                      <button type="button" onclick="dismissHardwareConfirmBox()" class="oc-btn oc-btn-ghost !min-h-[36px] !py-1 !px-3 text-xs">Kapat</button>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div class="p-2 rounded bg-[#1b2230]"><div class="text-[10px] text-gray-400">GPU</div><div id="hwDetectGpuText" class="font-bold text-white truncate">-</div></div>
+                    <div class="p-2 rounded bg-[#1b2230]"><div class="text-[10px] text-gray-400">CPU</div><div id="hwDetectCpuText" class="font-bold text-white truncate">-</div></div>
+                    <div class="p-2 rounded bg-[#1b2230]"><div class="text-[10px] text-gray-400">OS</div><div id="hwDetectOsText" class="font-bold text-white truncate">-</div></div>
+                    <div class="p-2 rounded bg-[#1b2230]"><div class="text-[10px] text-gray-400">RAM</div><div id="hwDetectRamText" class="font-bold text-white truncate">-</div></div>
+                  </div>
+                  <input id="hwDetectEditableSummary" type="text" aria-label="Tespit edilen donanım özeti" class="w-full bg-[#121822] text-xs text-white rounded-lg px-3 py-2 border border-white/15" />
+                </div>
+
+                <!-- Crash Log Sürükle-Bırak Alanı -->
+                <div
+                  id="crashLogDropZone"
+                  ondragover="handleCrashLogDragOver(event)"
+                  ondragleave="handleCrashLogDragLeave(event)"
+                  ondrop="handleCrashLogDrop(event)"
+                  class="rounded-xl border border-dashed border-[#88c0a8]/50 bg-[#121822] p-4 cursor-pointer transition"
+                  onclick="document.getElementById('crashLogFileInput').click()"
+                >
+                  <input
+                    id="crashLogFileInput"
+                    type="file"
+                    accept=".log,.txt,.crash,.dmp,.xml,.ini"
+                    class="hidden"
+                    onchange="handleCrashLogFileSelect(event)"
+                  />
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <div class="text-xs sm:text-sm font-bold text-white">Crash Log (.log, .txt) Dosyası Seç veya Sürükle</div>
+                      <p class="text-[11px] text-gray-400 mt-0.5">Kişisel dosya yolları tarayıcıda otomatik maskelenir ve kritik hata satırları çıkarılır.</p>
+                    </div>
+                    <div class="flex items-center gap-2 shrink-0" onclick="event.stopPropagation()">
+                      <button type="button" onclick="loadSampleCrashLog()" class="oc-btn oc-btn-ghost !min-h-[36px] !py-1 !px-3 text-xs">Örnek Log</button>
+                      <button type="button" onclick="document.getElementById('crashLogFileInput').click()" class="oc-btn oc-btn-secondary !min-h-[36px] !py-1 !px-3 text-xs">Dosya Seç</button>
+                    </div>
+                  </div>
+
+                  <div id="crashLogResultBox" class="hidden mt-3 pt-3 border-t border-white/10 space-y-2" onclick="event.stopPropagation()">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class="text-[#88c0a8] font-bold" id="crashLogFileNameBadge">crash.log</span>
+                        <span class="oc-badge oc-badge-warning" id="crashLogMatchCountBadge">Kritik Satırlar</span>
+                        <span class="oc-badge oc-badge-success" id="crashLogMaskedCountBadge">Kişisel Yollar Maskelendi</span>
+                      </div>
+                      <button type="button" onclick="clearCrashLogAnalysis()" class="text-xs text-gray-400 hover:text-white underline">Temizle</button>
+                    </div>
+                    <pre id="crashLogExtractedPreview" class="text-[11px] font-mono bg-[#10151e] text-gray-200 p-2.5 rounded-lg border border-white/10 overflow-x-auto max-h-36 whitespace-pre-wrap"></pre>
+                  </div>
+                </div>
+
+                <!-- Örnek Oyun Önerileri -->
+                <div class="space-y-1.5">
+                  <div class="flex items-center justify-between text-xs text-gray-400">
+                    <span>Hızlı oyun seçimi:</span>
+                    <button type="button" onclick="refreshRandomSuggestions()" class="text-[#88c0a8] hover:underline">Yenile</button>
+                  </div>
+                  <div id="aiLabSuggestionsContainer" class="flex flex-wrap gap-1.5"></div>
+                </div>
+              </div>
+            </details>
+
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
               <span class="text-xs text-gray-400">
-                💡 Yazdığınız oyun sol menüde yoksa, AI analiziyle birlikte <strong>o oyunun özel sayfası da otomatik oluşturulur</strong>.
+                Analiz tamamlandığında adım adım çözüm adımları aşağıda açılır.
               </span>
               <button
                 type="submit"
                 id="aiAnalyzeSubmitBtn"
-                class="accent-btn px-6 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow"
+                class="oc-btn oc-btn-primary px-6 py-2.5 text-sm font-bold"
               >
-                <span>🔍 Yapay Zeka İle Çözümle & Sayfasını Aç</span>
+                <span>AI ile Analiz Et</span>
               </button>
             </div>
           </form>
         </div>
 
-        <!-- AI Diagnostic Output Box -->
-        <div id="aiLabResultCard" class="hidden bg-[#1d2430] border border-[#5e9c88]/35 rounded-2xl p-6 space-y-4 shadow-xl">
+        <!-- AI Teşhis Sonuç Kartı -->
+        <div id="aiLabResultCard" class="hidden oc-card p-6 space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
             <div class="flex items-center gap-2.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-[#88c0a8]"></span>
               <h3 class="font-bold text-white text-base">OyunÇöz Teknik Teşhis Raporu</h3>
-              <span id="aiResultModeBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 font-medium"></span>
+              <span id="aiResultModeBadge" class="oc-badge oc-badge-accent"></span>
             </div>
             <span id="aiResultConfidence" class="text-xs font-bold text-[#88c0a8]"></span>
           </div>
-          <!-- Dynamic Safety Shield Banner for Critical AI Diagnostics -->
           <div id="aiResultSafetyBanner" class="hidden"></div>
           <div id="aiLabResultContent" class="ai-markdown text-sm leading-relaxed"></div>
-          <div id="aiResultMandatoryDisclaimer" class="p-3.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-xs font-semibold text-amber-100 flex items-center gap-2"><span>⚠️</span><span>Bu çözüm yapay zeka tarafından üretildi, uygulamadan önce geri yükleme noktası oluşturun.</span></div>
-          <!-- Solution Verification & Voting Bar for AI Diagnosis -->
+          <div id="aiResultMandatoryDisclaimer" class="oc-alert oc-alert-warning text-xs font-semibold">
+            <span>Bu çözüm yapay zeka ile üretildi, uygulamadan önce kontrol edin ve geri yükleme noktası oluşturun.</span>
+          </div>
           <div id="aiResultVoteBar" class="pt-4 border-t border-white/10"></div>
         </div>
-
-        <!-- GAMER TELEMETRY & LIVE STATS HUD -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="gamer-hud-card rounded-2xl p-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/30 flex items-center justify-center text-lg">🎮</div>
-            <div>
-              <div id="hudTotalGamesStat" class="text-lg font-extrabold text-white leading-tight">30 Oyun</div>
-              <div class="text-[11px] text-gray-400">Özel Çözüm Ekranı</div>
-            </div>
-          </div>
-          <div class="gamer-hud-card rounded-2xl p-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#6b90b9]/20 border border-[#6b90b9]/30 flex items-center justify-center text-lg">🛠️</div>
-            <div>
-              <div id="hudTotalIssuesStat" class="text-lg font-extrabold text-white leading-tight">50 Rehber</div>
-              <div class="text-[11px] text-gray-400">Teknik Çözüm Rehberi</div>
-            </div>
-          </div>
-          <div class="gamer-hud-card rounded-2xl p-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#d9c382]/20 border border-[#d9c382]/30 flex items-center justify-center text-lg">⚡</div>
-            <div>
-              <div class="text-lg font-extrabold text-[#a3d9c6] leading-tight">Adım Adım</div>
-              <div class="text-[11px] text-gray-400">Forum + AI Sentezi</div>
-            </div>
-          </div>
-          <div class="gamer-hud-card rounded-2xl p-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/30 flex items-center justify-center text-lg">
-              <span class="live-pulse-dot"></span>
-            </div>
-            <div>
-              <div class="text-lg font-extrabold text-white leading-tight">7/24 Aktif</div>
-              <div class="text-[11px] text-gray-400">Teknik Arıza Teşhisi</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- POPULAR GAMES VISUAL SHOWCASE GRID ON HOME -->
-        <div class="gamer-hud-card rounded-2xl p-5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-                <span>🔥 Popüler Oyun Çözüm Vitrinleri</span>
-                <span class="text-[11px] px-2 py-0.5 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 font-semibold">Hızlı Geçiş</span>
-              </h3>
-              <p class="text-xs text-gray-400">Oyununuzu seçerek o oyuna özel derlenmiş en popüler forum çözümlerini ve hata kodlarını inceleyin.</p>
-            </div>
-            <button id="allIssuesLinkBtn" onclick="switchTab('issues')" class="text-xs font-semibold text-[#88c0a8] hover:underline self-start sm:self-auto">
-              Tüm 50 Çözüm Rehberini Listele →
-            </button>
-          </div>
-          <div id="homeGamesShowcaseGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-3">
-            <!-- Populated dynamically via app.js -->
-          </div>
-        </div>
-
-        <!-- TRENDING TOP RESOLVED ERRORS SHOWCASE ON HOME -->
-        <div class="gamer-hud-card rounded-2xl p-5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <h3 class="text-base font-extrabold text-white flex items-center gap-2">
-                <span>⚡ En Çok İncelenen Kritik Hata Kodları</span>
-              </h3>
-              <p class="text-xs text-gray-400">Reddit, Technopat Sosyal ve Steam topluluklarından derlenen adım adım teknik çözüm rehberleri.</p>
-            </div>
-            <button onclick="switchTab('forum')" class="text-xs font-semibold text-[#88c0a8] hover:underline self-start sm:self-auto">
-              Oyuncu Forumuna Git →
-            </button>
-          </div>
-          <div id="homeTrendingIssuesGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5">
-            <!-- Populated dynamically via app.js -->
-          </div>
-        </div>
       </section>
 
-      <!-- TAB 2: CURATED FORUM ISSUES & AI SOLUTIONS (Hidden on initial load so screen stays clean) -->
-      <section id="tabContent-issues" class="hidden space-y-5">
-        <div id="issuesListContainer" class="space-y-5">
-          <!-- Populated dynamically via app.js -->
-        </div>
-      </section>
-
-      <!-- TAB 3: COMMUNITY & AI Q&A FORUM -->
-      <section id="tabContent-forum" class="hidden space-y-5">
-        <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <!-- 5. TOPLULUK FORUMU (Ana Sayfanın Alt Kısmında; Soru Sayısı 0 İse Sayaç Göstermez, "İlk soruyu sen sor" Gösterir) -->
+      <section id="tabContent-forum" aria-labelledby="topluluk-forumu-baslik" class="space-y-4">
+        <div class="oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 class="text-base font-bold text-white">💬 Oyuncu Soru-Cevap & Yardımlaşma Forumu</h2>
-            <p class="text-xs text-gray-400 mt-0.5">
-              E-posta onaylı üyeler tarafından açılan her soruya <strong>OyunÇöz AI</strong> adım adım otomatik teknik çözüm yanıtı yazar.
+            <div class="flex items-center gap-2">
+              <h2 id="topluluk-forumu-baslik" class="text-lg font-extrabold text-white">Oyuncu Soru-Cevap Forumu</h2>
+              <span id="threadsCountBadge" class="hidden oc-badge oc-badge-accent"></span>
+            </div>
+            <p class="text-xs sm:text-sm text-gray-400 mt-0.5">
+              Çözemediğin oyun hatalarını topluluğa sor veya diğer oyuncuların deneyimlerini incele.
             </p>
           </div>
           <button
+            type="button"
             onclick="openAskModal()"
-            class="accent-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm shrink-0"
+            class="oc-btn oc-btn-primary text-xs sm:text-sm shrink-0"
           >
-            + Yeni Konu / Soru Aç
+            <span>+ Soru Sor</span>
           </button>
         </div>
 
         <div id="threadsListContainer" class="space-y-4">
-          <!-- Populated dynamically via app.js -->
-        </div>
-      </section>
-
-      <!-- CRAWLABLE SEMANTIC SEO KNOWLEDGE BASE & DEDICATED GUIDE LINKS -->
-      <section aria-label="Popüler Oyun Hata Çözüm Rehberleri ve Teknik Bilgi Bankası" class="gamer-hud-card rounded-2xl p-6 space-y-5 border border-white/10">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3.5">
-          <div>
-            <h2 class="text-base sm:text-lg font-extrabold text-white">📚 OyunÇöz Teknik Bilgi Bankası: En Çok Aranan Oyun Hataları ve Çözüm Rehberleri</h2>
-            <p class="text-xs text-gray-400 mt-0.5">
-              Windows 10 ve Windows 11 sistemlerde karşılaşılan en kritik oyun çökme (crash), anti-cheat, DirectX/Vulkan ve FPS düşüşü sorunları için adım adım rehberler.
-            </p>
-          </div>
-          <span class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#5e9c88]/30 self-start sm:self-auto">
-            ✓ 2026 Güncel Çözümler
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 text-xs">
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#b85d66]/25 text-red-200 font-bold text-[11px]">VALORANT • VANGUARD</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">VAN 9003 / VAN 1067</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/valorant/van-9003" class="hover:text-[#88c0a8] transition">
-                Valorant VAN 9003 ve VAN 1067 Hatası Çözümü (Windows 11 Secure Boot &amp; TPM 2.0)
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              ASUS, MSI, Gigabyte ve ASRock anakartlarda BIOS üzerinden CSM kapatma, UEFI Secure Boot Key Management anahtarlarını yükleme, fTPM/PTT açma ve <code>vgc</code> hizmetini otomatik başlatma adımları.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/valorant/van-9003" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./valorant-hata-cozumleri.html" class="text-gray-400 hover:text-white">Valorant Ekranı</a>
-            </div>
-          </article>
-
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#b88b52]/25 text-amber-200 font-bold text-[11px]">COUNTER-STRIKE 2</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">VAC / PACKET BURST</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/cs2/vac-oturum-dogrulanamadi" class="hover:text-[#88c0a8] transition">
-                CS2 VAC Oturumunuzu Doğrulayamadı, Packet Burst ve FPS Düşmesi Çözümü
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              Source 2 motorunda <code>bcdedit /deletevalue nointegritychecks</code> ile VAC oturum hatasını giderme, DirectX gölgelendirici önbelleğini sıfırlama ve sub-tick paket kaybını önleme rehberi.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/cs2/vac-oturum-dogrulanamadi" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./cs2-hata-cozumleri.html" class="text-gray-400 hover:text-white">CS2 Ekranı</a>
-            </div>
-          </article>
-
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#5586ad]/25 text-blue-200 font-bold text-[11px]">LEAGUE OF LEGENDS</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">VAN 128 / VAN 185</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/lol/van-128" class="hover:text-[#88c0a8] transition">
-                LoL Vanguard VAN 128, VAN 185 ve Şampiyon Seçimi Sonrası Bağlantı Hatası
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              League of Legends istemcisinde siyah ekran, yeniden bağlan (reconnect) döngüsü, <code>sc delete vgc</code> / <code>sc delete vgk</code> temiz kurulumu ve DirectX 11 uyumluluk ayarları.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/lol/van-128" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./lol-hata-cozumleri.html" class="text-gray-400 hover:text-white">LoL Ekranı</a>
-            </div>
-          </article>
-
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#589471]/25 text-emerald-200 font-bold text-[11px]">GTA V &amp; FIVEM</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">ERR_GFX_D3D_INIT</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/gta-v/err-gfx-d3d-init" class="hover:text-[#88c0a8] transition">
-                GTA V &amp; FiveM ERR_GFX_D3D_INIT, Harita Yüklenmeme (Texture Loss) ve Crash Çözümü
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              FiveM roleplay sunucularında yolların kaybolması için <strong>Extended Texture Budget</strong> optimizasyonu, CitizenFX önbellek temizliği ve <code>settings.xml</code> DirectX 11 sabitleme.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/gta-v/err-gfx-d3d-init" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./gtav-fivem-hata-cozumleri.html" class="text-gray-400 hover:text-white">GTA V / FiveM Ekranı</a>
-            </div>
-          </article>
-
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#629660]/25 text-green-200 font-bold text-[11px]">MINECRAFT JAVA/BEDROCK</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">EXIT CODE 1 / 65542</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/minecraft/exit-code-1" class="hover:text-[#88c0a8] transition">
-                Minecraft Exit Code 1, GLFW Error 65542 (WGL) ve Java 21 Çökme Çözümü
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              Forge, Fabric ve CurseForge mod paketlerinde oyun beklenmedik şekilde çöktü (Çıkış Kodu: 1) hatası, OpenGL sürücü onarımı ve JVM RAM argümanları yapılandırması.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/minecraft/exit-code-1" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./minecraft-hata-cozumleri.html" class="text-gray-400 hover:text-white">Minecraft Ekranı</a>
-            </div>
-          </article>
-
-          <article class="bg-[#161c26]/90 border border-white/10 rounded-xl p-4 space-y-2 hover:border-[#88c0a8]/40 transition">
-            <div class="flex items-center justify-between gap-2">
-              <span class="px-2 py-0.5 rounded bg-[#a8555d]/25 text-rose-200 font-bold text-[11px]">RDR2 • BANNERLORD • UE5</span>
-              <span class="font-mono text-[#a3d9c6] font-bold">ERR_GFX / GPU CRASH</span>
-            </div>
-            <h3 class="text-sm font-bold text-white">
-              <a href="/rdr2/err-gfx-state" class="hover:text-[#88c0a8] transition">
-                RDR 2 ERR_GFX_STATE, Bannerlord d3d_device_context, FC 25 ve Wukong Çözümleri
-              </a>
-            </h3>
-            <p class="text-gray-400 leading-relaxed">
-              Red Dead Redemption 2 Vulkan <code>sga_</code> önbellek sıfırlama, Bannerlord kuşatma <code>Shaders</code> temizliği, EA Sports FC 25 AntiCheat onarımı ve UE5 Out of Video Memory çözümü.
-            </p>
-            <div class="pt-1 flex items-center justify-between">
-              <a href="/rdr2/err-gfx-state" class="text-[#88c0a8] font-semibold hover:underline">Tam Rehberi Oku →</a>
-              <a href="./red-dead-redemption-2-hata-cozumleri.html" class="text-gray-400 hover:text-white">RDR 2 Ekranı</a>
-            </div>
-          </article>
-        </div>
-
-        <!-- Complete 30-Game Static SEO Hub Directory for Search Engine Crawlers -->
-        <div class="pt-4 border-t border-white/10 space-y-2.5">
-          <h3 class="text-xs font-extrabold uppercase tracking-wider text-[#a3d9c6]">🎮 30 Popüler Oyunun Hata Kodları, Çökme (Crash) ve FPS Çözüm Sayfaları</h3>
-          <div class="flex flex-wrap gap-1.5 text-xs">
-            <a href="./valorant-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Valorant Hata Çözümleri</a>
-            <a href="./cs2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Counter-Strike 2 (CS2) Çözümleri</a>
-            <a href="./lol-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">League of Legends (LoL) Çözümleri</a>
-            <a href="./gtav-fivem-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">GTA V &amp; FiveM Çözümleri</a>
-            <a href="./fc25-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">EA Sports FC 25 Çözümleri</a>
-            <a href="./minecraft-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Minecraft Exit Code 1 Çözümleri</a>
-            <a href="./cod-warzone-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">CoD: Warzone &amp; BO6 Çözümleri</a>
-            <a href="./rust-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Rust EAC &amp; Crash Çözümleri</a>
-            <a href="./apex-legends-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Apex Legends Çözümleri</a>
-            <a href="./cyberpunk-2077-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Cyberpunk 2077 Flatlined</a>
-            <a href="./elden-ring-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Elden Ring Beyaz Ekran &amp; FPS</a>
-            <a href="./pubg-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">PUBG: Battlegrounds Çözümleri</a>
-            <a href="./victoria-3-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Victoria 3 Crash Çözümleri</a>
-            <a href="./hearts-of-iron-4-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Hearts of Iron IV (HOI4)</a>
-            <a href="./mount-and-blade-2-bannerlord-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Mount &amp; Blade II: Bannerlord</a>
-            <a href="./red-dead-redemption-2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Red Dead Redemption 2 (RDR2)</a>
-            <a href="./baldurs-gate-3-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Baldur's Gate 3 Çözümleri</a>
-            <a href="./euro-truck-simulator-2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Euro Truck Simulator 2 (ETS2)</a>
-            <a href="./forza-horizon-5-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Forza Horizon 5 Çözümleri</a>
-            <a href="./helldivers-2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Helldivers 2 GameGuard</a>
-            <a href="./rainbow-six-siege-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Rainbow Six Siege Çözümleri</a>
-            <a href="./football-manager-2024-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Football Manager 2024 (FM24)</a>
-            <a href="./black-myth-wukong-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Black Myth: Wukong Çözümleri</a>
-            <a href="./palworld-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Palworld EOS &amp; Save Çözümü</a>
-            <a href="./dota-2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Dota 2 Çözümleri</a>
-            <a href="./escape-from-tarkov-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Escape from Tarkov Çözümleri</a>
-            <a href="./the-witcher-3-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">The Witcher 3 Next-Gen</a>
-            <a href="./god-of-war-ragnarok-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">God of War Ragnarök PC</a>
-            <a href="./overwatch-2-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Overwatch 2 Çözümleri</a>
-            <a href="./diablo-iv-hata-cozumleri.html" class="px-2.5 py-1 rounded-lg bg-[#161c26] hover:bg-[#232d3d] text-gray-200 hover:text-white border border-white/10 transition">Diablo IV Fenris Crash</a>
-          </div>
+          <!-- static/app.js tarafından doldurulur -->
         </div>
       </section>
 
