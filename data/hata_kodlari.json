@@ -1,5 +1,122 @@
 {
   "schema_version": "1.0",
-  "description": "OyunÇöz 'Bir Hata Kodu = Bir Sayfa' merkezi veri kaynağı. Yeni hata kodu sayfası oluşturmak için pages dizisine yeni kayıt ekleyip error_page_builder.py çalıştırmanız yeterlidir.",
-  "pages": []
+  "description": "OyunÇöz 'Bir Hata Kodu = Bir Sayfa' merkezi veri kaynağı.",
+  "pages": [
+    {
+      "slug": "lol/van-185",
+      "oyun": "League of Legends",
+      "oyun_hub_url": "/lol-hata-cozumleri.html",
+      "hata_kodu": "VAN 185",
+      "issue_id": 10,
+      "varyant_yazimlari": [
+        "VAN 185",
+        "Vanguard 185",
+        "van 185 lol",
+        "LoL Vanguard hatası 185",
+        "League of Legends VAN 185"
+      ],
+      "title": "LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)",
+      "meta_description": "League of Legends oynarken karşılaşılan LoL Vanguard VAN 185 bağlantı hatası için oturum yenileme, vgc servisi ve ağ sıfırlama adımlarını içeren çözüm rehberi.",
+      "h1": "League of Legends VAN 185 Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "League of Legends VAN 185 hatası, oyun açıkken Riot İstemcisi ile Vanguard arka plan doğrulama servisi arasındaki kalp atışı (heartbeat) sinyalinin kesildiğini ve oturumun güvenlik nedeniyle sonlandırıldığını gösterir. Oyuncuların van 185 lol aramalarında sıkça karşılaştığı bu durum, genellikle açık kalan istemci oturumlarından veya yerel ağ kesintilerinden kaynaklanan bir LoL Vanguard hatası 185 uyarısıdır.",
+      "nedenler": [
+        "Arka planda asılı kalan çoklu RiotClientServices.exe süreçlerinin Vanguard 185 oturum jetonunu (token) kilitlemesi.",
+        "Windows Güç Seçenekleri veya ağ bağdaştırıcısı güç tasarrufu modunun kısa süreli paket ve DNS/IPv6 oturum kopmasına yol açması.",
+        "Riot Client yerel önbellek (Data/Logs) dosyalarının veya vgc/vgk servis durumunun bozulması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Asılı Kalan Tüm Riot ve Vanguard Süreçlerini Sonlandırın",
+          "aciklama": "Riot İstemcisi'nin arka planda açık kalmasından kaynaklanan VAN 185 oturum çakışmasını gidermek için Oturumu Kapat seçeneğiyle çıkış yapın ve Görev Yöneticisi'nden LeagueClient.exe, RiotClientServices.exe ile vgtray.exe süreçlerini tamamen kapatın.",
+          "komut": "taskkill /F /IM RiotClientServices.exe /IM LeagueClient.exe",
+          "komut_notu": {
+            "ne_yapar": "Arka planda asılı kalan Riot İstemcisi ve League of Legends süreçlerini zorla sonlandırır.",
+            "risk": "Açık olan oyun lobisi veya istemci penceresi kapanır; sistem dosyalarına zarar vermez.",
+            "geri_alma": "Riot İstemcisi'ni masaüstü kısayolundan Yönetici olarak yeniden başlatmanız yeterlidir."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Görev Yöneticisi üzerinden RiotClientServices.exe ve LeagueClient.exe süreçlerinin sonlandırılması"
+        },
+        {
+          "baslik": "Riot Client Yerel Oturum Önbelleğini Temizleyin",
+          "aciklama": "Win + R tuşlarına basıp %localappdata%\\Riot Games\\Riot Client\\Data klasörünü açın. İçindeki geçici oturum dosyalarını temizledikten sonra Riot İstemcisi'ni Yönetici olarak başlatıp hesabınıza yeniden giriş yapın.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Riot Client Data klasöründeki geçici oturum önbellek dosyalarının temizlenmesi"
+        },
+        {
+          "baslik": "VAN 185 Oturum Kopması İçin Winsock ve DNS Sıfırlama Uygulayın",
+          "aciklama": "Yerel ağ soketlerindeki tıkanıklığı ve DNS önbelleğindeki kopmaları gidermek için Komut İstemi'ni (CMD) Yönetici olarak açıp aşağıdaki ağ sıfırlama komutlarını çalıştırın ve bilgisayarı yeniden başlatın.",
+          "komut": "netsh winsock reset && netsh int ip reset && ipconfig /flushdns",
+          "komut_notu": {
+            "ne_yapar": "Windows TCP/IP ağ yığınını, Winsock soket katalog ayarlarını fabrika varsayılanlarına sıfırlar ve DNS önbelleğini temizler.",
+            "risk": "Ağ bağdaştırıcınızda elle (statik) girilmiş IP veya DNS yapılandırması varsa otomatik (DHCP) moda dönebilir.",
+            "geri_alma": "Yeniden başlatma sonrasında özel DNS veya statik IP kullanıyorsanız Ağ Bağdaştırıcısı Özellikleri (IPv4) üzerinden tekrar tanımlayın."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi üzerinde netsh winsock reset ve ipconfig flushdns komutlarının çalıştırılması"
+        },
+        {
+          "baslik": "Riot Vanguard Servislerini (vgc ve vgk) Komut Satırından Temiz Kurun",
+          "aciklama": "Oturum yenileme ve ağ sıfırlamasına rağmen Vanguard 185 hatası devam ediyorsa, Komut İstemi'ni Yönetici olarak açıp vgc ve vgk servislerini kaldırın. Ardından bilgisayarı yeniden başlatarak Riot İstemcisi üzerinden Vanguard'ı temiz kurun.",
+          "komut": "sc delete vgc && sc delete vgk",
+          "komut_notu": {
+            "ne_yapar": "Belirtilen Windows arka plan hizmet kaydını (bozuk vgc ve vgk anti-cheat servisini) hizmet tablosundan kaldırır.",
+            "risk": "Yanlış hizmet adı yazılması sistem veya oyun istemcisi servislerinin yeniden kurulana kadar çalışmamasına yol açabilir.",
+            "geri_alma": "Riot İstemcisi'ni Yönetici olarak çalıştırıp Güncelle / Onar seçeneğine tıklayarak Vanguard hizmetini temiz şekilde yeniden kurun."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi ile sc delete vgc ve sc delete vgk komutlarının uygulanması"
+        }
+      ],
+      "isle_yaramazsa": "Şampiyon seçimi sonrasında oyun ekranı gelmiyor ve 'Yeniden Bağlan (Reconnect)' döngüsüne giriyorsa C:\\Riot Games\\League of Legends\\Config klasöründeki game.cfg ve PersistedSettings.json dosyalarını silip League of Legends.exe > Özellikler > Uyumluluk sekmesinden 'Tam ekran iyileştirmelerini devre dışı bırak' seçeneğini işaretleyin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Riot Games League of Legends Vanguard Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "VAN 185 hatası neden olur?",
+          "cevap": "VAN 185 hatası, League of Legends açıkken Riot İstemcisi ile Vanguard arka plan doğrulama servisi arasındaki kalp atışı (heartbeat) oturum sinyalinin zaman aşımına uğraması, arka planda asılı kalan RiotClientServices.exe süreçlerinin oturum jetonunu kilitlemesi veya kısa süreli DNS/ağ kopmaları nedeniyle oluşur."
+        },
+        {
+          "soru": "LoL'de Vanguard 185 hatası nasıl düzelir?",
+          "cevap": "Riot İstemcisi'nden tamamen çıkış yapıp (Oturumu Kapat), Görev Yöneticisi'nden açık Riot süreçlerini sonlandırmak, %localappdata%\\Riot Games\\Riot Client\\Data önbelleğini temizlemek ve Yönetici CMD üzerinden Winsock/DNS sıfırlaması yaparak bilgisayarı yeniden başlatmak sorunu giderir."
+        },
+        {
+          "soru": "VAN 185 hatası hesabımın banlandığı anlamına mı gelir?",
+          "cevap": "Mevcut teknik kayıtlara göre VAN 185 bir hesap yasaklaması (ban) değil, Riot İstemcisi ile Vanguard servisi arasındaki yerel oturum ve bağlantı doğrulama kopmasıdır; oturumu kapatıp servisleri yenileyerek tekrar giriş yapılabilir."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/lol/van-128",
+          "oyun": "League of Legends",
+          "hata_kodu": "VAN 128",
+          "baslik": "LoL Vanguard VAN 128 Hatası Çözüm Rehberi"
+        },
+        {
+          "url": "/lol-hata-cozumleri.html",
+          "oyun": "League of Legends",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "League of Legends Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/valorant/van-9003",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 9003",
+          "baslik": "Valorant VAN 9003 Secure Boot Çözüm Rehberi"
+        },
+        {
+          "url": "/valorant/van-1067",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 1067",
+          "baslik": "Valorant VAN 1067 Bağlantı Hatası Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi"
+    }
+  ]
 }
