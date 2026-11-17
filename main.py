@@ -14,7 +14,10 @@ from fastapi import FastAPI, HTTPException, Query, Header, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, Response, JSONResponse
 from pydantic import BaseModel
-from google import genai
+try:
+    from google import genai
+except ImportError:
+    genai = None
 
 from database import init_db, get_db_connection, hash_password, verify_password
 from game_catalog import resolve_game_input, get_random_world_suggestions, get_game_image_url
@@ -2514,13 +2517,35 @@ LEGACY_301_REDIRECTS = {
 
 def regenerate_sitemap_xml() -> str:
     """
-    Stage 3.4 & Stage 5: Automatically builds sitemap.xml with only indexable pages,
+    Stage 3.4 & Stage 5 & /cozum/ SEO Pages: Automatically builds sitemap.xml with only indexable pages,
     real <lastmod> dates, and NO <changefreq> or <priority> tags.
-    Includes root .html pages and clean /<game>/<error-code> pages.
+    Includes homepage, /cozum/*.html static SEO pages, root .html pages, and clean /<game>/<error-code> pages.
     """
-    entries = [("https://oyuncoz.com/", "2026-03-15")]
+    entries = [("https://oyuncoz.com/", "2026-11-17")]
 
-    # 1. Root .html pages (excluding 301-redirected legacy files and verification files)
+    # 1. Programmatic Static SEO Pages under /cozum/
+    cozum_dir = os.path.join(ROOT_DIR, "cozum")
+    if os.path.isdir(cozum_dir):
+        for fname in sorted(os.listdir(cozum_dir)):
+            if not fname.endswith(".html"):
+                continue
+            fpath = os.path.join(cozum_dir, fname)
+            if not os.path.isfile(fpath):
+                continue
+            try:
+                with open(fpath, "r", encoding="utf-8") as f:
+                    html_text = f.read()
+            except Exception:
+                continue
+            if 'content="noindex' in html_text.lower():
+                continue
+            m_date = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html_text)
+            if not m_date:
+                m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
+            lastmod = m_date.group(1) if m_date else "2026-11-17"
+            entries.append((f"https://oyuncoz.com/cozum/{fname}", lastmod))
+
+    # 2. Root .html pages (excluding 301-redirected legacy files and verification files)
     for fname in sorted(os.listdir(ROOT_DIR)):
         if not fname.endswith(".html"):
             continue
@@ -2539,12 +2564,12 @@ def regenerate_sitemap_xml() -> str:
         m_date = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html_text)
         if not m_date:
             m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
-        lastmod = m_date.group(1) if m_date else "2026-03-15"
+        lastmod = m_date.group(1) if m_date else "2026-11-17"
         clean_loc = f"https://oyuncoz.com/{fname[:-5]}" if fname == "hata-kodlari.html" else f"https://oyuncoz.com/{fname}"
         entries.append((clean_loc, lastmod))
 
-    # 2. Clean nested /<game>/<error-code> pages (<game>/<error>/index.html)
-    excluded_dirs = {"static", ".git", ".venv", "__pycache__", ".pytest_cache"}
+    # 3. Clean nested /<game>/<error-code> pages (<game>/<error>/index.html)
+    excluded_dirs = {"static", "cozum", ".git", ".venv", "__pycache__", ".pytest_cache"}
     for dname in sorted(os.listdir(ROOT_DIR)):
         if dname in excluded_dirs or dname.startswith("."):
             continue
@@ -2565,7 +2590,7 @@ def regenerate_sitemap_xml() -> str:
             m_date = re.search(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"', html_text)
             if not m_date:
                 m_date = re.search(r'<time\s+datetime="(\d{4}-\d{2}-\d{2})"', html_text)
-            lastmod = m_date.group(1) if m_date else "2026-03-15"
+            lastmod = m_date.group(1) if m_date else "2026-11-17"
             entries.append((f"https://oyuncoz.com/{dname}/{subname}", lastmod))
 
     lines = [

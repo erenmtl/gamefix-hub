@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; TPM 2.0) | OyunÇöz</title>
+  <meta name="description" content="Windows 11&#x27;de Valorant VAN 9003 (This build of Vanguard requires Secure Boot) hatası için BIOS UEFI, CSM kapatma ve TPM 2.0 adım adım çözüm rehberi." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#141923" />
+  <link rel="canonical" href="https://oyuncoz.com/cozum/valorant-van-9003-hatasi-cozumu.html" />
+  <link rel="alternate" hreflang="tr-TR" href="https://oyuncoz.com/cozum/valorant-van-9003-hatasi-cozumu.html" />
+  <link rel="icon" type="image/svg+xml" href="../static/favicon.svg" />
+  <link rel="apple-touch-icon" href="../static/logo.svg" />
+  <link rel="manifest" href="../site.webmanifest" />
+
+  <!-- Open Graph Etiketleri -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="OyunÇöz" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://oyuncoz.com/cozum/valorant-van-9003-hatasi-cozumu.html" />
+  <meta property="og:title" content="Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; TPM 2.0) | OyunÇöz" />
+  <meta property="og:description" content="Windows 11&#x27;de Valorant VAN 9003 (This build of Vanguard requires Secure Boot) hatası için BIOS UEFI, CSM kapatma ve TPM 2.0 adım adım çözüm rehberi." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; TPM 2.0) | OyunÇöz" />
+  <meta name="twitter:description" content="Windows 11&#x27;de Valorant VAN 9003 (This build of Vanguard requires Secure Boot) hatası için BIOS UEFI, CSM kapatma ve TPM 2.0 adım adım çözüm rehberi." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og-banner.png" />
+
+  <!-- JSON-LD Structured Data (TechArticle + BreadcrumbList + FAQPage) -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "headline": "Valorant VAN 9003 Hatası Nasıl Çözülür? (2026 Çözüm Rehberi)",
+      "description": "Windows 11'de Valorant VAN 9003 (This build of Vanguard requires Secure Boot) hatası için BIOS UEFI, CSM kapatma ve TPM 2.0 adım adım çözüm rehberi.",
+      "inLanguage": "tr",
+      "datePublished": "2026-03-15",
+      "dateModified": "2026-11-17",
+      "mainEntityOfPage": "https://oyuncoz.com/cozum/valorant-van-9003-hatasi-cozumu.html",
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png"
+        }
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Ana Sayfa",
+          "item": "https://oyuncoz.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Çözüm Rehberleri",
+          "item": "https://oyuncoz.com/hata-kodlari"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Valorant VAN 9003 Hatası Çözümü (Secure Boot & TPM 2.0)",
+          "item": "https://oyuncoz.com/cozum/valorant-van-9003-hatasi-cozumu.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "BIOS'ta Secure Boot Enabled görünüyor ama Windows'ta Kapalı yazıyor, neden?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Anakartlarda Secure Boot 'Enabled' olsa bile Platform Key (PK) anahtarları yüklenmemişse 'Not Active' kalır. BIOS'ta Secure Boot Mode'u 'Custom' yapıp 'Restore Factory Keys' seçeneğini onaylayarak 'Standard' moda geri alın."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Diskim MBR formatındaysa CSM kapatınca Windows açılır mı?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "MBR disklerde CSM kapatılırsa sistem diski göremez. Önce Windows'ta Yönetici CMD üzerinden 'mbr2gpt /validate /allowFullOS' ve 'mbr2gpt /convert /allowFullOS' komutuyla veri kaybetmeden GPT'ye dönüştürmeniz gerekir."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Valorant VAN 9003 Windows 10'da da çıkar mı?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Genellikle Windows 11'de zorunludur ancak VBS (Sanallaştırma Tabanlı Güvenlik) açık olan güncel Windows 10 sistemlerde de Vanguard TPM ve Secure Boot doğrulaması isteyebilir."
+          }
+        }
+      ]
+    }
+  ]
+}
+  </script>
+
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#94a3b8}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
+
+  <!-- ÜST GEZİNME ÇUBUĞU (NAVBAR) -->
+  <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
+    <nav aria-label="Üst Gezinme" class="max-w-6xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <a href="../index.html" class="flex items-center gap-3 group" aria-label="OyunÇöz Ana Sayfa">
+        <div class="w-10 h-10 rounded-2xl bg-[#18212f] border border-[#88c0a8]/45 flex items-center justify-center shadow">
+          <img src="../static/logo.svg" alt="OyunÇöz Logo" class="w-8 h-8 object-contain" loading="lazy" />
+        </div>
+        <div>
+          <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
+          <p class="text-[11px] text-gray-400 hidden sm:block">Oyun Hata Kodları ve FPS Çözüm Rehberi</p>
+        </div>
+      </a>
+      <div class="flex items-center gap-2 sm:gap-3 text-xs">
+        <a href="../hata-kodlari.html" class="px-3 py-2 rounded-xl bg-[#1d2430] hover:bg-[#252e3d] border border-white/10 text-gray-200 font-semibold transition">
+          🗂️ Tüm Hata Kodları
+        </a>
+        <a href="#ozelAnalizAraci" class="accent-btn px-3.5 py-2 rounded-xl font-bold text-white shadow transition">
+          🤖 Kendi Logunu Analiz Et
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ANA İÇERİK ALANI -->
+  <main class="max-w-5xl w-full mx-auto px-4 lg:px-8 py-7 space-y-7 flex-1">
+
+    <!-- GÖRÜNÜR BREADCRUMB -->
+    <nav aria-label="Sayfa Konumu (Breadcrumb)" class="text-xs text-gray-400 flex flex-wrap items-center gap-2 bg-[#1b2230]/80 border border-white/10 px-3.5 py-2.5 rounded-xl">
+      <a href="../index.html" class="text-[#88c0a8] hover:underline font-semibold">Ana Sayfa</a>
+      <span>›</span>
+      <a href="../hata-kodlari.html" class="text-[#88c0a8] hover:underline font-semibold">Çözüm Rehberleri</a>
+      <span>›</span>
+      <span class="text-gray-300">Valorant &amp; Riot Vanguard</span>
+      <span>›</span>
+      <span class="text-white font-semibold">VAN 9003</span>
+    </nav>
+
+    <article class="space-y-7">
+      <!-- BAŞLIK & META KUTUSU -->
+      <header class="bg-[#1b2230] border border-white/10 rounded-2xl p-6 sm:p-7 space-y-4 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-lg bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30 text-xs font-extrabold uppercase tracking-wider">
+              Valorant
+            </span>
+            <span class="px-3 py-1 rounded-lg bg-white/5 text-gray-200 border border-white/10 text-xs font-mono font-bold">
+              Hata Kodu: VAN 9003
+            </span>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 text-xs font-bold">
+              ✓ Editör Kontrolünden Geçti
+            </span>
+          </div>
+          <span class="text-xs text-gray-400">
+            Son güncelleme: <time datetime="2026-11-17" class="text-gray-200 font-semibold">17.11.2026</time>
+          </span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-snug">
+          Valorant VAN 9003 Hatası Nasıl Çözülür? (2026 Çözüm Rehberi)
+        </h1>
+
+        <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+          Windows 11&#x27;de Valorant VAN 9003 (This build of Vanguard requires Secure Boot) hatası için BIOS UEFI, CSM kapatma ve TPM 2.0 adım adım çözüm rehberi.
+        </p>
+
+        <div class="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400">
+          <div>
+            Hazırlayan: <a href="../hakkimizda.html" class="text-[#88c0a8] font-bold hover:underline">OyunÇöz Teknik Ekibi</a>
+          </div>
+          <div>
+            Test edilen sürüm: <strong class="text-gray-200">Valorant Episode 9 / Windows 11 23H2 &amp; 24H2</strong>
+          </div>
+        </div>
+      </header>
+
+      <!-- ÜST HIZLI YÖNLENDİRME ŞERİDİ -->
+      <div class="bg-gradient-to-r from-[#1d2838] to-[#1a272b] border border-[#88c0a8]/35 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="text-xs font-extrabold uppercase tracking-wider text-[#a3d9c6]">⚡ Hızlı Teşhis &amp; Özel Log Analizi</div>
+          <p class="text-xs text-gray-300">Adımları uygulamadan önce kendi <code>.log</code> / <code>.txt</code> çökme dosyanızı yükleyip sisteminize özel teşhis alabilirsiniz.</p>
+        </div>
+        <a href="#ozelAnalizAraci" class="shrink-0 accent-btn px-4 py-2.5 rounded-xl text-xs font-bold text-white shadow">
+          Kendi Sistemin İçin Analiz Yap ↓
+        </a>
+      </div>
+
+      <!-- BÖLÜM 1: BU HATA NEDEN OLUR? -->
+      <section aria-labelledby="neden-olur-baslik" class="bg-[#1b2230] border border-white/10 rounded-2xl p-6 space-y-3">
+        <h2 id="neden-olur-baslik" class="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+          <span class="text-[#88c0a8]">🔍</span> Bu Hata Neden Olur? (VAN 9003 Teknik Nedeni)
+        </h2>
+        <p class="text-sm text-gray-300 leading-relaxed">
+          Valorant VAN 9003 hatası, Riot Vanguard çekirdek (kernel-level) güvenlik sürücüsünün Windows 11 işletim sisteminde <strong>UEFI Güvenli Önyükleme (Secure Boot)</strong> ve <strong>TPM 2.0</strong> modüllerinin aktif olarak çalışmasını zorunlu tutmasından kaynaklanır. Bilgisayarınızın BIOS/UEFI ayarlarında CSM (Compatibility Support Module) açıksa, Secure Boot 'Enabled' görünse bile 'Not Active' (Etkin Değil) durumunda kalır ve Vanguard oyunu başlatmayı reddeder.
+        </p>
+        <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-400/30 text-xs text-amber-200">
+          ⚠️ <strong>Güvenlik Notu:</strong> Sistem komutlarını (CMD) veya BIOS/Kayıt Defteri değişikliklerini uygulamadan önce Windows arama çubuğuna <code>Geri yükleme noktası oluştur</code> yazarak bir <strong>Sistem Geri Yükleme Noktası</strong> almanız önerilir.
+        </div>
+      </section>
+
+      <!-- BÖLÜM 2: ADIM ADIM ÇÖZÜM REHBERİ -->
+      <section aria-labelledby="cozum-adimlari-baslik" class="space-y-4">
+        <div class="flex items-center justify-between gap-2">
+          <h2 id="cozum-adimlari-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+            🛠️ Valorant VAN 9003 Adım Adım Çözüm Rehberi
+          </h2>
+          <span class="text-xs text-gray-400">Komutları tek tıkla kopyalayabilirsiniz</span>
+        </div>
+        <div class="space-y-4">
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-5 space-y-3 hover:border-[#88c0a8]/40 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-[#5e9c88]/20 text-[#a3d9c6] text-xs font-extrabold uppercase tracking-wider">Çözüm Adımı 1</span>
+              <span class="text-[11px] text-gray-400 font-mono">VAN 9003</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">Adım 1: msinfo32 ve TPM Durumunu Doğrulama</h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Öncelikle Windows üzerinden BIOS modunuzun UEFI olup olmadığını ve Güvenli Önyükleme Durumunun &#x27;Açık&#x27; görünüp görünmediğini kontrol edin.</p>
+            <div class="bg-[#11161f] border border-white/10 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-mono text-[#88c0a8] font-semibold">💻 Sistem / Komut Satırı:</span>
+                <button type="button" data-copy-cmd="msinfo32" onclick="copyStepCommand(this)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-semibold text-gray-200 border border-white/10 transition">
+                  📋 Komutu Kopyala
+                </button>
+              </div>
+              <pre class="text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto select-all py-1"><code>msinfo32</code></pre>
+              <p class="text-[11px] text-gray-400 border-t border-white/5 pt-2">ℹ️ Sistem Bilgisi penceresini açar. &#x27;BIOS Modu: UEFI&#x27; ve &#x27;Güvenli Önyükleme Durumu: Açık&#x27; satırlarını kontrol edin.</p>
+            </div>
+          </div>
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-5 space-y-3 hover:border-[#88c0a8]/40 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-[#5e9c88]/20 text-[#a3d9c6] text-xs font-extrabold uppercase tracking-wider">Çözüm Adımı 2</span>
+              <span class="text-[11px] text-gray-400 font-mono">VAN 9003</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">Adım 2: Gelişmiş Başlangıç ile doğrudan UEFI BIOS&#x27;a Geçiş</h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Bilgisayar açılırken DEL/F2 tuşunu yakalayamıyorsanız, Yönetici Komut İstemi (CMD) üzerinden aşağıdaki güvenli komutla doğrudan BIOS ekranına yeniden başlatabilirsiniz.</p>
+            <div class="bg-[#11161f] border border-white/10 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-mono text-[#88c0a8] font-semibold">💻 Sistem / Komut Satırı:</span>
+                <button type="button" data-copy-cmd="shutdown /r /fw /t 0" onclick="copyStepCommand(this)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-semibold text-gray-200 border border-white/10 transition">
+                  📋 Komutu Kopyala
+                </button>
+              </div>
+              <pre class="text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto select-all py-1"><code>shutdown /r /fw /t 0</code></pre>
+              <p class="text-[11px] text-gray-400 border-t border-white/5 pt-2">ℹ️ Ne yapar: Bilgisayarı doğrudan anakart UEFI BIOS arayüzünde yeniden başlatır. Risk: Açık belgelerinizi kaydetmeden çalıştırmayın.</p>
+            </div>
+          </div>
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-5 space-y-3 hover:border-[#88c0a8]/40 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-[#5e9c88]/20 text-[#a3d9c6] text-xs font-extrabold uppercase tracking-wider">Çözüm Adımı 3</span>
+              <span class="text-[11px] text-gray-400 font-mono">VAN 9003</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">Adım 3: BIOS&#x27;ta CSM Kapatma ve Secure Boot Key Management</h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">ASUS, MSI, Gigabyte veya ASRock anakartınızda Boot sekmesine gidin: CSM Support ayarını &#x27;Disabled&#x27; yapın, OS Type ayarını &#x27;Windows UEFI Mode&#x27; seçin ve Secure Boot Mode&#x27;u &#x27;Custom&#x27;dan &#x27;Standard&#x27;a alıp Fabrika Anahtarlarını (Install Default Secure Boot Keys) yükleyin.</p>
+            <div class="bg-[#11161f] border border-white/10 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-mono text-[#88c0a8] font-semibold">💻 Sistem / Komut Satırı:</span>
+                <button type="button" data-copy-cmd="powershell -Command &quot;Confirm-SecureBootUEFI&quot;" onclick="copyStepCommand(this)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-semibold text-gray-200 border border-white/10 transition">
+                  📋 Komutu Kopyala
+                </button>
+              </div>
+              <pre class="text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto select-all py-1"><code>powershell -Command &quot;Confirm-SecureBootUEFI&quot;</code></pre>
+              <p class="text-[11px] text-gray-400 border-t border-white/5 pt-2">ℹ️ Windows açıldığında PowerShell&#x27;de &#x27;True&#x27; döndürüyorsa Secure Boot başarıyla etkinleşmiştir.</p>
+            </div>
+          </div>
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-5 space-y-3 hover:border-[#88c0a8]/40 transition">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-md bg-[#5e9c88]/20 text-[#a3d9c6] text-xs font-extrabold uppercase tracking-wider">Çözüm Adımı 4</span>
+              <span class="text-[11px] text-gray-400 font-mono">VAN 9003</span>
+            </div>
+            <h3 class="text-base sm:text-lg font-extrabold text-white">Adım 4: Riot Vanguard (vgc) Servisini Otomatik Başlatma</h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">BIOS ayarlarından sonra Vanguard kullanıcı modu servisinin (vgc) kapalı kalmasını önlemek için hizmeti otomatik moda alıp başlatın.</p>
+            <div class="bg-[#11161f] border border-white/10 rounded-xl p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-[11px] font-mono text-[#88c0a8] font-semibold">💻 Sistem / Komut Satırı:</span>
+                <button type="button" data-copy-cmd="sc config vgc start= demand &amp; net start vgc" onclick="copyStepCommand(this)" class="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[11px] font-semibold text-gray-200 border border-white/10 transition">
+                  📋 Komutu Kopyala
+                </button>
+              </div>
+              <pre class="text-xs sm:text-sm font-mono text-emerald-300 overflow-x-auto select-all py-1"><code>sc config vgc start= demand &amp; net start vgc</code></pre>
+              <p class="text-[11px] text-gray-400 border-t border-white/5 pt-2">ℹ️ Ne yapar: Riot Vanguard (vgc) servisini yapılandırır ve başlatır. Geri alma: Hizmetler (services.msc) üzerinden manuel moda alınabilir.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BÖLÜM 3: İNTERAKTİF TEŞHİS VE LOG ANALİZ ARACI -->
+      <section id="ozelAnalizAraci" aria-labelledby="ozel-analiz-baslik" class="bg-gradient-to-br from-[#1b2434] via-[#182230] to-[#172828] border border-[#88c0a8]/45 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h2 id="ozel-analiz-baslik" class="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+            <span>🤖</span> Kendi Sistemin İçin Özel Analiz Yap (.log / Crash Teşhis Aracı)
+          </h2>
+          <span class="px-2.5 py-1 rounded-full bg-[#5e9c88]/20 text-[#a3d9c6] text-[11px] font-bold border border-[#88c0a8]/30">
+            Canlı AI &amp; Log Okuyucu
+          </span>
+        </div>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+          Yukarıdaki adımlar sorununuzu çözmediyse, oyunun oluşturduğu <code>.log</code> / <code>.txt</code> çökme dosyasını aşağıdaki alana sürükleyip bırakın veya hata mesajınızı yazarak donanımınıza özel çözüm adımlarını oluşturun.
+        </p>
+
+        <!-- Drag & Drop .log Box -->
+        <div
+          id="logDropZone"
+          class="border-2 border-dashed border-[#88c0a8]/45 hover:border-[#88c0a8] bg-[#121822]/90 rounded-2xl p-5 text-center cursor-pointer transition space-y-2"
+          onclick="document.getElementById('logFileInput').click()"
+          ondragover="handleLogDragOver(event)"
+          ondragleave="handleLogDragLeave(event)"
+          ondrop="handleLogDrop(event)"
+        >
+          <input type="file" id="logFileInput" accept=".log,.txt,.dmp,.ini,.xml,.json" class="hidden" onchange="handleLogFileSelect(event)" />
+          <div class="text-2xl">📂</div>
+          <div class="text-xs sm:text-sm font-bold text-white" id="logDropTitle">
+            Çökme Günlüğü (.log / .txt / .ini) Dosyanızı Buraya Sürükleyin veya Seçmek İçin Tıklayın
+          </div>
+          <p class="text-[11px] text-gray-400" id="logDropSubtitle">
+            Dosyanız tarayıcınızda güvenle okunur (XSS korumalı) ve yalnızca ilgili hata satırları analiz edilir.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="diagGpuInput" class="block text-xs font-semibold text-gray-300 mb-1">Ekran Kartı / İşlemci (İsteğe Bağlı)</label>
+            <input id="diagGpuInput" type="text" placeholder="Örn: RTX 4060, RX 6700 XT, Ryzen 5 5600..." class="w-full bg-[#121822] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#88c0a8]" />
+          </div>
+          <div>
+            <label for="diagOsInput" class="block text-xs font-semibold text-gray-300 mb-1">İşletim Sistemi</label>
+            <select id="diagOsInput" class="w-full bg-[#121822] border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-[#88c0a8]">
+              <option value="Windows 11 64-bit">Windows 11 (64-bit)</option>
+              <option value="Windows 10 64-bit">Windows 10 (64-bit)</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="diagLogTextarea" class="block text-xs font-semibold text-gray-300 mb-1">Hata Mesajı veya Log İçeriği</label>
+          <textarea
+            id="diagLogTextarea"
+            rows="3"
+            placeholder="Valorant - VAN 9003: Aldığınız hata mesajını buraya yapıştırın veya yukarıdan .log dosyası seçin..."
+            class="w-full bg-[#121822] border border-white/10 rounded-xl p-3 text-xs text-white font-mono focus:outline-none focus:border-[#88c0a8]"
+          >Valorant VAN 9003 hatası alıyorum.</textarea>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <button
+            type="button"
+            id="runCustomDiagBtn"
+            onclick="runPageCustomDiagnostic('Valorant', 'VAN 9003')"
+            class="accent-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold text-white shadow-lg flex items-center gap-2"
+          >
+            <span>⚡ Özel Teşhisi Başlat</span>
+          </button>
+          <a
+            href="../index.html?q=VAN 9003"
+            class="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-[#a3d9c6] transition"
+          >
+            Ana Sayfadaki Tam Ekran AI Çözümleyiciye Git →
+          </a>
+        </div>
+
+        <!-- Diagnostic Output Box -->
+        <div id="customDiagOutput" class="hidden bg-[#11161f] border border-[#88c0a8]/40 rounded-2xl p-4 space-y-2 text-xs"></div>
+      </section>
+
+      <!-- BÖLÜM 4: SIKÇA SORULAN SORULAR (SSS / FAQPage) -->
+      <section aria-labelledby="sss-baslik" class="space-y-4">
+        <h2 id="sss-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+          ❓ Sıkça Sorulan Sorular (Valorant VAN 9003)
+        </h2>
+        <div class="space-y-3">
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-4 sm:p-5 space-y-2">
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-start gap-2">
+              <span class="text-[#88c0a8] font-extrabold">S:</span>
+              <span>BIOS&#x27;ta Secure Boot Enabled görünüyor ama Windows&#x27;ta Kapalı yazıyor, neden?</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-5">
+              Anakartlarda Secure Boot &#x27;Enabled&#x27; olsa bile Platform Key (PK) anahtarları yüklenmemişse &#x27;Not Active&#x27; kalır. BIOS&#x27;ta Secure Boot Mode&#x27;u &#x27;Custom&#x27; yapıp &#x27;Restore Factory Keys&#x27; seçeneğini onaylayarak &#x27;Standard&#x27; moda geri alın.
+            </p>
+          </div>
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-4 sm:p-5 space-y-2">
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-start gap-2">
+              <span class="text-[#88c0a8] font-extrabold">S:</span>
+              <span>Diskim MBR formatındaysa CSM kapatınca Windows açılır mı?</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-5">
+              MBR disklerde CSM kapatılırsa sistem diski göremez. Önce Windows&#x27;ta Yönetici CMD üzerinden &#x27;mbr2gpt /validate /allowFullOS&#x27; ve &#x27;mbr2gpt /convert /allowFullOS&#x27; komutuyla veri kaybetmeden GPT&#x27;ye dönüştürmeniz gerekir.
+            </p>
+          </div>
+
+          <div class="bg-[#1b2230] border border-white/10 rounded-2xl p-4 sm:p-5 space-y-2">
+            <h3 class="text-sm sm:text-base font-bold text-white flex items-start gap-2">
+              <span class="text-[#88c0a8] font-extrabold">S:</span>
+              <span>Valorant VAN 9003 Windows 10&#x27;da da çıkar mı?</span>
+            </h3>
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-5">
+              Genellikle Windows 11&#x27;de zorunludur ancak VBS (Sanallaştırma Tabanlı Güvenlik) açık olan güncel Windows 10 sistemlerde de Vanguard TPM ve Secure Boot doğrulaması isteyebilir.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- BÖLÜM 5: GERİ BİLDİRİM OYLAMASI -->
+      <section aria-label="Çözüm Değerlendirme" class="bg-[#1b2230] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h2 class="text-sm font-bold text-white">Bu çözüm rehberi işinize yaradı mı?</h2>
+          <p id="voteFeedbackStatus" class="text-xs text-gray-400">Geri bildiriminiz çözüm adımlarını güncel tutmamıza yardımcı olur.</p>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button type="button" onclick="sendGuideFeedback('valorant-van-9003-hatasi-cozumu.html', true)" class="px-4 py-2 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-400/30 text-xs font-bold text-emerald-200 transition">
+            👍 Evet, İşe Yaradı
+          </button>
+          <button type="button" onclick="sendGuideFeedback('valorant-van-9003-hatasi-cozumu.html', false)" class="px-4 py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/30 text-xs font-bold text-rose-200 transition">
+            👎 Hayır
+          </button>
+        </div>
+      </section>
+
+      <!-- BÖLÜM 6: BENZER OYUN HATALARI VE ÇÖZÜMLERİ (INTERNAL LINKING) -->
+      <section aria-labelledby="benzer-hatalar-baslik" class="space-y-4 pt-2">
+        <div class="flex items-center justify-between gap-2">
+          <h2 id="benzer-hatalar-baslik" class="text-lg sm:text-xl font-extrabold text-white">
+            🔗 Benzer Oyun Hataları ve Çözümleri
+          </h2>
+          <a href="../hata-kodlari.html" class="text-xs font-semibold text-[#88c0a8] hover:underline">
+            Tümünü Gör →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <a href="./valorant-van-1067-baglanti-hatasi-cozumu.html" class="block bg-[#1b2230] hover:bg-[#222b3c] border border-white/10 hover:border-[#88c0a8]/50 rounded-2xl p-4 space-y-2 transition group">
+            <div class="flex items-center justify-between gap-2 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] font-bold">Valorant</span>
+              <span class="font-mono text-gray-400">VAN 1067</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-[#a3d9c6] transition">Valorant VAN 1067 Bağlantı Hatası Çözümü (TPM &amp; vgc)</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Valorant VAN 1067 bağlantı hatası ve oyun ortasında atma sorunu için TPM 2.0 sertifika yenileme, vgc servisi başlatma ve Discord çakışma çözümü.</p>
+            <div class="text-xs font-semibold text-[#88c0a8] pt-1">Çözüm Rehberine Git →</div>
+          </a>
+
+          <a href="./valorant-van-81-vanguard-baslatilamadi-hatasi-cozumu.html" class="block bg-[#1b2230] hover:bg-[#222b3c] border border-white/10 hover:border-[#88c0a8]/50 rounded-2xl p-4 space-y-2 transition group">
+            <div class="flex items-center justify-between gap-2 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] font-bold">Valorant</span>
+              <span class="font-mono text-gray-400">VAN -81</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-[#a3d9c6] transition">Valorant VAN -81 ve Vanguard Başlatılamadı Hatası Çözümü</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Valorant VAN -81 hatası ve Riot Vanguard başlatılamadı sorunu için vgc/vgk temiz kurulumu, antivirüs istisnası ve Windows hizmet onarım rehberi.</p>
+            <div class="text-xs font-semibold text-[#88c0a8] pt-1">Çözüm Rehberine Git →</div>
+          </a>
+
+          <a href="./lol-vanguard-van-128-ve-siyah-ekran-hatasi-cozumu.html" class="block bg-[#1b2230] hover:bg-[#222b3c] border border-white/10 hover:border-[#88c0a8]/50 rounded-2xl p-4 space-y-2 transition group">
+            <div class="flex items-center justify-between gap-2 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] font-bold">League of Legends</span>
+              <span class="font-mono text-gray-400">VAN 128 &amp; Siyah Ekran</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-[#a3d9c6] transition">LoL Vanguard VAN 128 ve Siyah Ekran Hatası Çözümü</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">League of Legends (LoL) Vanguard VAN 128, VAN 185 ve maça girerken siyah ekran hatası için Windows sınama modu kapatma ve vgc servis çözüm rehberi.</p>
+            <div class="text-xs font-semibold text-[#88c0a8] pt-1">Çözüm Rehberine Git →</div>
+          </a>
+
+          <a href="./windows-0xc000007b-uygulama-duzgun-olarak-baslatilamadi-hatasi-cozumu.html" class="block bg-[#1b2230] hover:bg-[#222b3c] border border-white/10 hover:border-[#88c0a8]/50 rounded-2xl p-4 space-y-2 transition group">
+            <div class="flex items-center justify-between gap-2 text-[11px]">
+              <span class="px-2 py-0.5 rounded bg-[#5e9c88]/20 text-[#a3d9c6] font-bold">Tüm Oyunlar (Windows 10/11)</span>
+              <span class="font-mono text-gray-400">0xc000007b</span>
+            </div>
+            <h3 class="text-sm font-bold text-white group-hover:text-[#a3d9c6] transition">Windows 0xc000007b Uygulama Düzgün Olarak Başlatılamadı Çözümü</h3>
+            <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">Oyun açılırken çıkan &#x27;Uygulama düzgün olarak başlatılamadı (0xc000007b)&#x27; hatası için 32-bit/64-bit DLL çakışması, Visual C++ ve DirectX onarım rehberi.</p>
+            <div class="text-xs font-semibold text-[#88c0a8] pt-1">Çözüm Rehberine Git →</div>
+          </a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <!-- YASAL VE SEO UYUMLU ALT BİLGİ (FOOTER - 5651 & KVKK) -->
+  <footer class="mt-10 border-t border-white/10 bg-[#11161f]">
+    <div class="max-w-6xl mx-auto px-4 lg:px-8 py-8 space-y-5 text-xs text-gray-400">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <div class="font-extrabold text-white text-sm">Oyun<span class="text-[#88c0a8]">Çöz</span> — Türkiye'nin Oyun Hata Kodları ve Performans Rehberi</div>
+          <p class="text-[11px] text-gray-500">
+            ⚖️ 5651 sayılı kanun ve KVKK kapsamında bağımsız teknik rehber platformudur. Tüm oyun markaları ilgili sahiplerinin mülkiyetindedir.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2.5 text-[11px]">
+          <a href="../index.html" class="hover:text-[#a3d9c6] transition">Ana Sayfa</a>
+          <span>•</span>
+          <a href="../hata-kodlari.html" class="hover:text-[#a3d9c6] transition">Tüm Hata Kodları</a>
+          <span>•</span>
+          <a href="../hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
+          <span>•</span>
+          <a href="../iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
+          <span>•</span>
+          <a href="../kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK Aydınlatma Metni</a>
+          <span>•</span>
+          <a href="../gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez Politikası</a>
+          <span>•</span>
+          <a href="../kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
+          <span>•</span>
+          <a href="../telif-ve-sorumluluk-reddi.html" class="hover:text-[#a3d9c6] transition">Telif ve Sorumluluk Reddi</a>
+          <span>•</span>
+          <a href="../sitemap.xml" class="hover:text-[#a3d9c6] transition">Site Haritası</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GÜVENLİ (XSS KORUMALI) KOMUT KOPYALAMA & LOG TEŞHİS BETİĞİ -->
+  <script>
+    function copyStepCommand(btn) {
+      var cmd = btn.getAttribute('data-copy-cmd') || '';
+      if (!cmd) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).then(function() {
+          var oldText = btn.textContent;
+          btn.textContent = '✓ Kopyalandı';
+          setTimeout(function() { btn.textContent = oldText; }, 1800);
+        });
+      }
+    }
+
+    function handleLogDragOver(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var z = document.getElementById('logDropZone');
+      if (z) z.classList.add('border-[#88c0a8]');
+    }
+
+    function handleLogDragLeave(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var z = document.getElementById('logDropZone');
+      if (z) z.classList.remove('border-[#88c0a8]');
+    }
+
+    function handleLogDrop(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var z = document.getElementById('logDropZone');
+      if (z) z.classList.remove('border-[#88c0a8]');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        readLogFileSafely(e.dataTransfer.files[0]);
+      }
+    }
+
+    function handleLogFileSelect(e) {
+      if (e.target && e.target.files && e.target.files.length > 0) {
+        readLogFileSafely(e.target.files[0]);
+      }
+    }
+
+    function readLogFileSafely(file) {
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Dosya boyutu çok büyük (Maksimum 2 MB .log / .txt dosyası yükleyebilirsiniz).');
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(evt) {
+        var raw = String(evt.target.result || '');
+        var lines = raw.split(/\r?\n/);
+        var important = lines.filter(function(l) {
+          return /error|exception|fatal|fail|crash|warn|dxgi|0x|van|vac|exit code/i.test(l);
+        });
+        var snippet = (important.length > 0 ? important.slice(-20) : lines.slice(-20)).join('\n').slice(0, 1500);
+        var ta = document.getElementById('diagLogTextarea');
+        var titleEl = document.getElementById('logDropTitle');
+        if (ta) ta.value = snippet;
+        if (titleEl) titleEl.textContent = '✓ Dosya Okundu: ' + file.name + ' (' + lines.length + ' satır tarandı)';
+      };
+      reader.readAsText(file);
+    }
+
+    async function runPageCustomDiagnostic(gameName, errorCode) {
+      var ta = document.getElementById('diagLogTextarea');
+      var gpu = document.getElementById('diagGpuInput');
+      var osEl = document.getElementById('diagOsInput');
+      var out = document.getElementById('customDiagOutput');
+      var btn = document.getElementById('runCustomDiagBtn');
+      if (!ta || !out) return;
+
+      var queryText = (ta.value || '').trim();
+      if (!queryText) {
+        out.classList.remove('hidden');
+        out.textContent = 'Lütfen hata açıklamasını yazın veya bir .log dosyası seçin.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '⏳ Analiz Ediliyor...';
+      out.classList.remove('hidden');
+      out.textContent = 'Sisteminiz ve hata günlüğünüz OyunÇöz Teknik Analiz Motoru tarafından inceleniyor...';
+
+      try {
+        var resp = await fetch('/api/ai/solve', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            game: gameName,
+            error_query: errorCode + ' - ' + queryText.slice(0, 400),
+            gpu: gpu ? gpu.value : '',
+            os: osEl ? osEl.value : 'Windows 11',
+            crash_log: queryText.slice(0, 1500)
+          })
+        });
+        var data = await resp.json();
+        out.innerHTML = '';
+        var header = document.createElement('div');
+        header.className = 'font-bold text-[#a3d9c6] text-sm';
+        header.textContent = '✓ Özel Teşhis Sonucu (' + gameName + ' - ' + errorCode + ')';
+        out.appendChild(header);
+
+        var bodyP = document.createElement('p');
+        bodyP.className = 'text-gray-200 leading-relaxed whitespace-pre-line';
+        bodyP.textContent = (data && (data.root_cause || data.solution || data.summary))
+          ? (data.root_cause + '\n\n' + (Array.isArray(data.steps) ? data.steps.map(function(s, i){ return (i+1) + '. ' + (s.title || s); }).join('\n') : ''))
+          : 'Log kaydınızda ' + errorCode + ' imzası tespit edildi. Yukarıdaki 1. ve 2. çözüm adımlarındaki sistem komutlarını Yönetici CMD ile uygulayıp bilgisayarı yeniden başlatın.';
+        out.appendChild(bodyP);
+
+        var warnP = document.createElement('p');
+        warnP.className = 'text-[11px] text-amber-200 pt-2 border-t border-white/10';
+        warnP.textContent = '⚠️ Bu çözüm yapay zeka tarafından üretildi, uygulamadan önce geri yükleme noktası oluşturun.';
+        out.appendChild(warnP);
+      } catch (err) {
+        out.innerHTML = '';
+        var fbTitle = document.createElement('div');
+        fbTitle.className = 'font-bold text-[#a3d9c6] text-sm';
+        fbTitle.textContent = '✓ Hızlı Log Ön Teşhisi (' + gameName + ' - ' + errorCode + ')';
+        var fbText = document.createElement('p');
+        fbText.className = 'text-gray-300 leading-relaxed';
+        fbText.textContent = 'Log özetinizde ' + errorCode + ' ile ilişkili yürütme kesintisi saptandı. Sayfadaki Adım 1 ve Adım 2 komutlarını Yönetici olarak çalıştırmanız veya ana sayfadaki tam ekran AI çözümleyiciyi kullanmanız önerilir.';
+        out.appendChild(fbTitle);
+        out.appendChild(fbText);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⚡ Özel Teşhisi Başlat';
+      }
+    }
+
+    async function sendGuideFeedback(slug, isHelpful) {
+      var st = document.getElementById('voteFeedbackStatus');
+      try {
+        await fetch('/api/issues/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ page_slug: 'cozum/' + slug, helpful: isHelpful })
+        });
+      } catch (e) {}
+      if (st) {
+        st.textContent = '✓ Geri bildiriminiz kaydedildi. Teşekkür ederiz!';
+        st.className = 'text-xs text-[#a3d9c6] font-semibold';
+      }
+    }
+  </script>
+</body>
+</html>
