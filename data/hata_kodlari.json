@@ -118,7 +118,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
       "oncelik": 1,
-      "tek_cumle_ozet": "LoL'de Riot İstemcisi ile Vanguard arasındaki oturum bağlantısı koptuğunda oluşan hata kodu."
+      "tek_cumle_ozet": "LoL'de Riot İstemcisi ile Vanguard arasındaki oturum bağlantısı koptuğunda oluşan hata kodu.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Açık Riot Süreçlerini Kapatıp Oturumu Yenileyin",
+        "aciklama": "Riot İstemcisi'nden 'Oturumu Kapat' diyerek çıkın, Görev Yöneticisi'nden RiotClientServices.exe ile vgtray.exe süreçlerini sonlandırıp istemciyi Yönetici olarak yeniden başlatın.",
+        "komut": "taskkill /F /IM RiotClientServices.exe /IM LeagueClient.exe"
+      }
     },
     {
       "slug": "valorant/van-9003",
@@ -253,7 +258,26 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
       "oncelik": 2,
-      "tek_cumle_ozet": "Windows 11'de BIOS UEFI Secure Boot özelliği aktif olmadığında çıkan Vanguard uyumluluk hatası."
+      "tek_cumle_ozet": "Windows 11'de BIOS UEFI Secure Boot özelliği aktif olmadığında çıkan Vanguard uyumluluk hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: BIOS'ta CSM Kapatıp Secure Boot Anahtarlarını Yükleyin",
+        "aciklama": "BIOS > Boot menüsünden CSM (Compatibility Support Module) ayarını Disabled yapın ve Secure Boot > Key Management altından 'Install Default Secure Boot Keys / Restore Factory Keys' seçeneğini onaylayın.",
+        "komut": "powershell -Command \"Confirm-SecureBootUEFI\""
+      },
+      "senaryolar": [
+        {
+          "id": "asus-msi",
+          "etiket": "ASUS / MSI Anakart",
+          "baslik": "ASUS ve MSI BIOS Üzerinden Secure Boot Aktifleştirme",
+          "aciklama": "ASUS anakartlarda BIOS > Boot > CSM > Launch CSM: Disabled yapın; ardından Secure Boot > OS Type: Windows UEFI Mode seçip Key Management > Install Default Secure Boot Keys onaylayın. MSI anakartlarda Settings > Advanced > Windows OS Configuration > BIOS UEFI/CSM Mode: UEFI seçip Secure Boot > Enroll all Factory Default keys adımını uygulayın."
+        },
+        {
+          "id": "gigabyte-asrock",
+          "etiket": "Gigabyte / ASRock Anakart",
+          "baslik": "Gigabyte ve ASRock BIOS Üzerinden Secure Boot Aktifleştirme",
+          "aciklama": "Gigabyte anakartlarda BIOS > Boot > CSM Support: Disabled yapın; Secure Boot menüsünde durum 'Not Active' ise Secure Boot Mode'u Custom yapıp 'Restore Factory Keys' seçin. ASRock anakartlarda Boot > CSM: Disabled yapıp Security > Secure Boot > Install default Secure Boot keys seçeneğine tıklayın."
+        }
+      ]
     },
     {
       "slug": "lol/van-128",
@@ -371,7 +395,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
       "oncelik": 3,
-      "tek_cumle_ozet": "Windows sınama modu veya antivirüs çakışması nedeniyle Vanguard çekirdek sürücüsünün başlamama hatası."
+      "tek_cumle_ozet": "Windows sınama modu veya antivirüs çakışması nedeniyle Vanguard çekirdek sürücüsünün başlamama hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Windows Sınama Modunu Kapatıp Bilgisayarı Yeniden Başlatın",
+        "aciklama": "Yönetici Komut İstemi'nde (CMD) sınama modunu ve bütünlük kontrolü devre dışı bayrağını kapatıp sistemi yeniden başlatın.",
+        "komut": "bcdedit /set testsigning off && bcdedit /deletevalue nointegritychecks"
+      }
     },
     {
       "slug": "gta-v/err-gfx-d3d-init",
@@ -466,7 +495,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • GTA V Güncel Sürüm",
       "oncelik": 4,
-      "tek_cumle_ozet": "GTA 5'te DirectX 11 görüntü bağdaştırıcısının sıfırlanması veya settings.xml uyumsuzluğu hatası."
+      "tek_cumle_ozet": "GTA 5'te DirectX 11 görüntü bağdaştırıcısının sıfırlanması veya settings.xml uyumsuzluğu hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: settings.xml İçinde DirectX 11 (DX_Version = 2) Ayarlayın",
+        "aciklama": "Belgeler\\Rockstar Games\\GTA V\\settings.xml dosyasını Not Defteri ile açıp <DX_Version value=\"2\" /> satırını 2 olarak kaydedin ve oyun klasöründeki eski d3d11.dll / dxgi.dll mod kalıntılarını silin.",
+        "komut": ""
+      }
     },
     {
       "slug": "valorant/van-1067",
@@ -574,7 +608,26 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
       "oncelik": 5,
-      "tek_cumle_ozet": "TPM 2.0 güvenlik yongası veya vgc arka plan servisi yanıt vermediğinde oluşan bağlantı hatası."
+      "tek_cumle_ozet": "TPM 2.0 güvenlik yongası veya vgc arka plan servisi yanıt vermediğinde oluşan bağlantı hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: BIOS'tan TPM 2.0 (fTPM / PTT) Açıp vgc Servisini Başlatın",
+        "aciklama": "tpm.msc ekranında TPM 2.0 hazır görünmüyorsa BIOS'tan AMD fTPM veya Intel PTT ayarını Enabled yapın; ardından Windows Hizmetleri'nde vgc servisini Otomatik moda alıp başlatın.",
+        "komut": "sc config vgc start= auto && net start vgc"
+      },
+      "senaryolar": [
+        {
+          "id": "amd-ftpm",
+          "etiket": "AMD Ryzen İşlemci (fTPM)",
+          "baslik": "AMD Ryzen Sistemlerde BIOS fTPM 2.0 Açma",
+          "aciklama": "BIOS'a girip Advanced > AMD fTPM Configuration menüsüne geçin ve 'AMD CPU fTPM' (veya Security Device Support) ayarını Enabled yaparak F10 ile kaydedin."
+        },
+        {
+          "id": "intel-ptt",
+          "etiket": "Intel Core İşlemci (PTT)",
+          "baslik": "Intel Sistemlerde BIOS PTT (Platform Trust Technology) Açma",
+          "aciklama": "BIOS'a girip Settings > Security > Trusted Computing (veya Peripherals) menüsüne geçin ve 'Intel Platform Trust Technology (PTT)' ayarını Enabled yaparak F10 ile kaydedin."
+        }
+      ]
     },
     {
       "slug": "cs2/vac-oturum-dogrulanamadi",
@@ -669,7 +722,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
       "oncelik": 6,
-      "tek_cumle_ozet": "Steam Client Service veya oyun dosyası imzaları doğrulanamadığında eşleştirmeyi engelleyen uyarı."
+      "tek_cumle_ozet": "Steam Client Service veya oyun dosyası imzaları doğrulanamadığında eşleştirmeyi engelleyen uyarı.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: SteamService.exe /repair Çalıştırıp Dosyaları Doğrulayın",
+        "aciklama": "Steam'i kapatıp Yönetici CMD üzerinde SteamService.exe /repair komutunu çalıştırın, ardından Steam'i Yönetici olarak açıp CS2 dosya bütünlüğünü doğrulayın.",
+        "komut": "\"C:\\Program Files (x86)\\Common Files\\Steam\\SteamService.exe\" /repair"
+      }
     },
     {
       "slug": "minecraft/exit-code-1",
@@ -759,7 +817,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Minecraft 1.20.4 / 1.21 (Java 21)",
       "oncelik": 7,
-      "tek_cumle_ozet": "Uyumsuz Forge/Fabric modları veya yanlış Java 21 yürütülebilir yolu nedeniyle oluşan çökme kodu."
+      "tek_cumle_ozet": "Uyumsuz Forge/Fabric modları veya yanlış Java 21 yürütülebilir yolu nedeniyle oluşan çökme kodu.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Uyumsuz Modları Çıkarın ve Yerleşik Java 21 Yolunu Sıfırlayın",
+        "aciklama": "%appdata%\\.minecraft\\mods klasöründeki uyumsuz .jar modlarını kontrol edin ve Minecraft Launcher > Yüklemeler > Düzenle altından Java Yürütülebilir Dosyası yolunu varsayılana sıfırlayın.",
+        "komut": "java -version"
+      }
     },
     {
       "slug": "rdr2/err-gfx-state",
@@ -860,7 +923,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • RDR2 Güncel Sürüm",
       "oncelik": 8,
-      "tek_cumle_ozet": "Belgeler klasöründeki sga_ Vulkan gölgelendirici önbelleği bozulduğunda oluşan RAGE motoru hatası."
+      "tek_cumle_ozet": "Belgeler klasöründeki sga_ Vulkan gölgelendirici önbelleği bozulduğunda oluşan RAGE motoru hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Belgeler Klasöründeki Bozuk sga_ Dosyalarını Silin",
+        "aciklama": "Belgeler\\Rockstar Games\\Red Dead Redemption 2\\Settings klasöründeki sga_vulkan_final_init ile başlayan 3 önbellek dosyasını silip oyunu yeniden başlatın.",
+        "komut": ""
+      }
     },
     {
       "slug": "fivem/harita-yuklenmiyor-texture-loss",
@@ -950,7 +1018,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • FiveM Cfx.re Güncel İstemci",
       "oncelik": 9,
-      "tek_cumle_ozet": "FiveM sunucularında Extended Texture Budget düşük kaldığında yolların ve binaların kaybolması sorunu."
+      "tek_cumle_ozet": "FiveM sunucularında Extended Texture Budget düşük kaldığında yolların ve binaların kaybolması sorunu.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Extended Texture Budget Çubuğunu %50-%65 Seviyesine Çekin",
+        "aciklama": "FiveM Grafik ayarlarının en altındaki 'Extended Texture Budget' çubuğunu sıfırda bırakmayın; ekran kartı belleğinize göre orta seviyeye (%50-%65) yükseltin.",
+        "komut": ""
+      }
     },
     {
       "slug": "cs2/packet-burst-fps-dusmesi",
@@ -1040,7 +1113,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
       "oncelik": 10,
-      "tek_cumle_ozet": "Source 2 motorunda sub-tick paket dalgalanması ve bozuk DirectX gölgelendirici önbelleği kaynaklı takılma."
+      "tek_cumle_ozet": "Source 2 motorunda sub-tick paket dalgalanması ve bozuk DirectX gölgelendirici önbelleği kaynaklı takılma.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Oyun İçi Ağ Arabelleğini '1 Paket' Yapın ve Eski Kodları Silin",
+        "aciklama": "CS2 Ayarlar > Oyun altından 'Paket kaybını / gecikmeyi dengelemek için arabelleğe alma' seçeneğini '1 Paket' yapın ve Steam başlatma seçeneklerindeki eski -threads / -high kodlarını silin.",
+        "komut": ""
+      }
     },
     {
       "slug": "bannerlord/d3d-device-context-map",
@@ -1136,7 +1214,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Bannerlord Güncel Sürüm",
       "oncelik": 11,
-      "tek_cumle_ozet": "Kuşatma savaşlarında bozuk ProgramData Shaders önbelleği nedeniyle oluşan DirectX 11 GPU çökmesi."
+      "tek_cumle_ozet": "Kuşatma savaşlarında bozuk ProgramData Shaders önbelleği nedeniyle oluşan DirectX 11 GPU çökmesi.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: ProgramData Altındaki Bozuk Shaders Klasörünü Silin",
+        "aciklama": "C:\\ProgramData\\Mount and Blade II Bannerlord\\Shaders klasörünü tamamen silip Steam üzerinden oyun dosyalarının bütünlüğünü doğrulayın.",
+        "komut": ""
+      }
     },
     {
       "slug": "fc-25/anticheat-hatasi",
@@ -1232,7 +1315,12 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • EA Sports FC 25 Güncel Sürüm",
       "oncelik": 12,
-      "tek_cumle_ozet": "EA App önbelleği veya EAAntiCheat servisi bozulduğunda oyunun açılış ekranında kapanması sorunu."
+      "tek_cumle_ozet": "EA App önbelleği veya EAAntiCheat servisi bozulduğunda oyunun açılış ekranında kapanması sorunu.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: EA App Recovery ile Önbelleği Temizleyip AntiCheat'i Onarın",
+        "aciklama": "EA App > App Recovery > Clear Cache işlemini uygulayın ve FC 25 kurulum dizinindeki EAAntiCheat.Installer.exe aracıyla Uninstall All / Install yapın.",
+        "komut": ""
+      }
     },
     {
       "slug": "black-myth-wukong/out-of-video-memory",
@@ -1333,7 +1421,26 @@
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Black Myth: Wukong Güncel Sürüm",
       "oncelik": 13,
-      "tek_cumle_ozet": "Unreal Engine 5 gölgelendirici derlemesi sırasında sanal bellek veya işlemci kaynaklı bellek hatası."
+      "tek_cumle_ozet": "Unreal Engine 5 gölgelendirici derlemesi sırasında sanal bellek veya işlemci kaynaklı bellek hatası.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: Sanal Belleği 16384 MB Yapın ve -dx11 Parametresiyle Başlatın",
+        "aciklama": "Windows Sanal Bellek (Pagefile) boyutunu 16384 MB olarak ayarlayın ve Steam Başlatma Seçenekleri kutusuna -dx11 parametresini ekleyin.",
+        "komut": "-dx11"
+      },
+      "senaryolar": [
+        {
+          "id": "amd-veya-genel",
+          "etiket": "AMD Ryzen / Genel Sistemler",
+          "baslik": "Sanal Bellek (16384 MB) ve -dx11 Başlatma Modu",
+          "aciklama": "sysdm.cpl > Gelişmiş > Performans > Sanal Bellek altından Başlangıç ve En Büyük boyutu 16384 MB yapın ve Steam Başlatma Seçenekleri'ne -dx11 parametresini ekleyin."
+        },
+        {
+          "id": "intel-13-14-nesil",
+          "etiket": "Intel 13. / 14. Nesil (i7 / i9 K)",
+          "baslik": "0x12B Mikro Kodlu BIOS Güncellemesi ve Geçici Güç Tasarrufu Modu",
+          "aciklama": "13. veya 14. nesil Intel işlemcilerde Oodle gölgelendirici açma çökmesini önlemek için anakartınızın 0x12B microcode (Intel Default Settings) BIOS güncellemesini kurun veya ilk derleme sırasında Windows Güç Seçenekleri'nden geçici olarak 'Güç Tasarrufu' modunu seçin."
+        }
+      ]
     }
   ]
 }

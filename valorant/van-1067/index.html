@@ -98,10 +98,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/static/ui_components.js" defer></script>
 </head>
-<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
+<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100 pb-20 lg:pb-0">
   <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
-    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3">
         <span class="oc-monogram" aria-hidden="true">OÇ</span>
         <div>
@@ -109,14 +109,16 @@
           <span class="block text-[11px] text-gray-400">Oyun Hata Kodları ve FPS Çözümleri</span>
         </div>
       </a>
-      <nav aria-label="Üst Hızlı Menü" class="flex items-center gap-2.5 text-xs">
-        <a href="/hata-kodlari" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs">Tüm Hata Kodları</a>
-        <a href="/valorant-hata-cozumleri.html" class="hidden sm:inline-flex oc-btn oc-btn-ghost !min-h-[38px] !py-1.5 !px-3 text-xs text-[#a3d9c6]">Valorant Rehberleri</a>
+      <nav aria-label="Üst Gezinme Menüsü" class="flex items-center gap-2 text-xs">
+        <a href="/hata-kodlari" class="oc-btn oc-btn-secondary !min-h-[40px] !py-1.5 !px-3 text-xs">Hata Kodları</a>
+        <a href="/valorant-hata-cozumleri.html" class="hidden sm:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs text-[#a3d9c6]">Valorant</a>
+        <a href="/#tabContent-ai-lab" class="hidden md:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs">AI Çözümleyici</a>
+        <a href="/#tabContent-forum" class="hidden md:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs">Forum</a>
       </nav>
     </div>
   </header>
 
-  <main id="ana-icerik" class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1 w-full">
+  <main id="ana-icerik" class="max-w-6xl mx-auto px-4 py-7 space-y-6 flex-1 w-full">
     <!-- 1. Breadcrumb (Ana Sayfa › Oyun › Hata Kodu) -->
     <nav aria-label="Breadcrumb" class="oc-breadcrumb">
       <a href="/" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
@@ -126,8 +128,9 @@
       <span class="text-white font-semibold" aria-current="page">VAN 1067</span>
     </nav>
 
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start"><div class="lg:col-span-9 space-y-7">
     <article class="space-y-7 oc-prose">
-      <!-- 2. H1 ve 3. Kısa Özet (Hatanın Anlamı, 2-3 Cümle) -->
+      <!-- 2. Üst Bölüm (Kaydırmadan Görünen Kısım: Rozetler, H1, Bu Hata Ne Anlama Geliyor, Hızlı Çözüm, Video) -->
       <section class="oc-card p-6 sm:p-8 space-y-4">
         <div class="flex flex-wrap items-center gap-2.5 text-xs">
           <span class="oc-monogram oc-monogram-sm" aria-hidden="true">VAL</span>
@@ -138,11 +141,47 @@
 
         <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">Valorant VAN 1067 Bağlantı Hatası Nasıl Çözülür?</h1>
 
-        <p id="hata-anlami" class="text-sm sm:text-base text-gray-200 leading-relaxed">
-          Valorant VAN 1067 hatası, Riot İstemcisi&#x27;nin arka planda çalışan Riot Vanguard kullanıcı modu hizmeti (vgc.exe) veya donanımsal TPM 2.0 güvenlik çipiyle olan şifreli oturum bağlantısının koptuğunu belirten hata kodudur. Genellikle BIOS güncellemesi sonrası fTPM/PTT modülünün kapanması veya vgc servisinin durması nedeniyle ortaya çıkar.
-        </p>
+        <div class="space-y-1">
+          <div class="text-xs font-bold uppercase tracking-wider text-[#88c0a8]">Bu hata ne anlama geliyor?</div>
+          <p id="hata-anlami" class="text-sm sm:text-base text-gray-200 leading-relaxed">
+            Valorant VAN 1067 hatası, Riot İstemcisi&#x27;nin arka planda çalışan Riot Vanguard kullanıcı modu hizmeti (vgc.exe) veya donanımsal TPM 2.0 güvenlik çipiyle olan şifreli oturum bağlantısının koptuğunu belirten hata kodudur. Genellikle BIOS güncellemesi sonrası fTPM/PTT modülünün kapanması veya vgc servisinin durması nedeniyle ortaya çıkar.
+          </p>
+        </div>
+
+
+        <div id="hizli-cozum" class="p-4 sm:p-5 rounded-xl bg-[#162228] border border-[#5e9c88]/45 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="oc-badge oc-badge-accent font-extrabold uppercase tracking-wider">Hızlı Çözüm (İlk Adım)</span>
+            <a href="#cozum-adimlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm adımlara in (4 adım) ↓</a>
+          </div>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">En Olası İlk Adım: BIOS&#x27;tan TPM 2.0 (fTPM / PTT) Açıp vgc Servisini Başlatın</h2>
+          <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">tpm.msc ekranında TPM 2.0 hazır görünmüyorsa BIOS&#x27;tan AMD fTPM veya Intel PTT ayarını Enabled yapın; ardından Windows Hizmetleri&#x27;nde vgc servisini Otomatik moda alıp başlatın.</p>
+          <div class="oc-codeblock flex items-center justify-between gap-3 mt-2">
+            <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">sc config vgc start= auto &amp;&amp; net start vgc</code>
+            <button type="button" data-cmd="sc config vgc start= auto &amp;&amp; net start vgc" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[36px] !py-1 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+          </div>
+        </div>
       </section>
 
+
+      <!-- Mobil İçindekiler ("Bu sayfada") -->
+      <details class="oc-accordion lg:hidden">
+        <summary class="text-xs sm:text-sm font-bold text-white">
+          <span>Bu sayfada (İçindekiler)</span>
+          <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="oc-accordion-body">
+          <ul class="space-y-1 text-xs">
+<li><a href="#hizli-cozum" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Hızlı Çözüm</a></li>
+<li><a href="#hata-nedenleri" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Bu Hatanın Nedenleri</a></li>
+<li><a href="#cozum-adimlari" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Adım Adım Çözüm (4 Adım)</a></li>
+<li><a href="#ise-yaramazsa" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İşe Yaramazsa</a></li>
+<li><a href="#sss" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Sıkça Sorulan Sorular</a></li>
+<li><a href="#ilgili-hatalar" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İlgili Hatalar</a></li>
+<li><a href="#stage2PageVoteSection" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Çözüm Değerlendirme</a></li>
+          </ul>
+        </div>
+      </details>
       <!-- 4. Bu Hatanın Nedenleri -->
       <section id="hata-nedenleri" class="oc-card p-6 space-y-3">
         <h2 class="text-base sm:text-lg font-extrabold text-white">Bu Hatanın Nedenleri</h2>
@@ -152,31 +191,51 @@
           <li class="leading-relaxed">Discord Donanım İvmesi, RivaTuner (RTSS) veya 3. parti antivirüs sürücülerinin vgc.exe iletişimini engellemesi.</li>
         </ul>
       </section>
-
-      <!-- 5. Adım Adım Çözüm -->
-      <section id="cozum-adimlari" class="space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <h2 class="text-base sm:text-lg font-extrabold text-white">Adım Adım Çözüm</h2>
-          <div class="oc-alert oc-alert-warning !py-2 !px-3 text-xs">
-            <svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
-            <span>İşlem öncesi Sistem Geri Yükleme Noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code></span>
+        <div id="senaryo-secici" class="oc-card p-5 space-y-3">
+          <div class="text-xs sm:text-sm font-bold text-white">Hangisi senin durumun? (Sistemine Göre Seç)</div>
+          <div class="oc-tabs" role="tablist" aria-label="Sistem senaryosu seçimi">
+            <button type="button" role="tab" aria-selected="true" data-scenario-target="scenarioPanel-amd-ftpm" onclick="switchPageScenario(this, 'scenarioPanel-amd-ftpm')" class="oc-tab-btn active">AMD Ryzen İşlemci (fTPM)</button><button type="button" role="tab" aria-selected="false" data-scenario-target="scenarioPanel-intel-ptt" onclick="switchPageScenario(this, 'scenarioPanel-intel-ptt')" class="oc-tab-btn ">Intel Core İşlemci (PTT)</button>
+          </div>
+          <div>
+            <div id="scenarioPanel-amd-ftpm" role="tabpanel" class="scenario-panel  p-4 rounded-xl bg-[#141923] border border-white/10 space-y-1.5"><h3 class="text-sm font-bold text-[#a3d9c6]">AMD Ryzen Sistemlerde BIOS fTPM 2.0 Açma</h3><p class="text-xs sm:text-sm text-gray-200 leading-relaxed">BIOS&#x27;a girip Advanced &gt; AMD fTPM Configuration menüsüne geçin ve &#x27;AMD CPU fTPM&#x27; (veya Security Device Support) ayarını Enabled yaparak F10 ile kaydedin.</p></div><div id="scenarioPanel-intel-ptt" role="tabpanel" class="scenario-panel hidden p-4 rounded-xl bg-[#141923] border border-white/10 space-y-1.5"><h3 class="text-sm font-bold text-[#a3d9c6]">Intel Sistemlerde BIOS PTT (Platform Trust Technology) Açma</h3><p class="text-xs sm:text-sm text-gray-200 leading-relaxed">BIOS&#x27;a girip Settings &gt; Security &gt; Trusted Computing (veya Peripherals) menüsüne geçin ve &#x27;Intel Platform Trust Technology (PTT)&#x27; ayarını Enabled yaparak F10 ile kaydedin.</p></div>
           </div>
         </div>
 
-        <div class="oc-card p-5 space-y-3.5">
-          <div class="flex items-center gap-3">
-            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 1</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">tpm.msc ile TPM 2.0 Hazırlık Durumunu Doğrulayın</h3>
+      <!-- 5. Adım Adım Çözüm (İlerleme Göstergesi + Geri Yükleme Uyarı Kutusu + Numaralı Kartlar) -->
+      <section id="cozum-adimlari" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">Adım Adım Çözüm</h2>
+          <span id="stepProgressBadge" class="oc-badge oc-badge-accent font-bold">İlerleme: 0/4 adım</span>
+        </div>
+
+        <!-- Sarı Uyarı Kutusu (Alert): Sistem ayarı değiştiren adımlardan önce Geri yükleme noktası uyarısı -->
+        <div class="oc-alert oc-alert-warning text-xs sm:text-sm">
+          <svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          <div>
+            <strong class="font-bold">Geri yükleme noktası oluşturun:</strong> Sistem veya servis ayarlarını değiştirmeden önce Windows'ta bir Sistem Geri Yükleme Noktası (<code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>) oluşturmanız önerilir.
+          </div>
+        </div>
+
+        <div id="adim-1" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 1</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">tpm.msc ile TPM 2.0 Hazırlık Durumunu Doğrulayın</h3>
+            </div>
           </div>
           <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Win + R tuşlarına basıp tpm.msc komutunu çalıştırın. Açılan pencerede &#x27;Durum: TPM kullanılmaya hazır&#x27; ve &#x27;Belirtim Sürümü: 2.0&#x27; yazdığını kontrol edin.</p>
           <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span class="inline-flex items-center gap-1.5 font-mono text-[#a3d9c6]"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg><span>Komut İstemi / PowerShell</span></span>
+              <span class="oc-badge oc-badge-warning">Yönetici olarak çalıştırın</span>
+            </div>
             <div class="oc-codeblock flex items-center justify-between gap-3">
               <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">powershell -Command &quot;Get-Tpm | Select-Object TpmPresent, TpmReady&quot;</code>
-              <button type="button" data-cmd="powershell -Command &quot;Get-Tpm | Select-Object TpmPresent, TpmReady&quot;" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[34px] !py-1 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+              <button type="button" data-cmd="powershell -Command &quot;Get-Tpm | Select-Object TpmPresent, TpmReady&quot;" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
             </div>
             <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
-              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik ve Geri Alma Notu:</span></div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed w-full">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik Bilgisi:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs leading-relaxed w-full">
                 <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
                   <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
                   <span class="text-gray-200">Sistemde TPM 2.0 güvenlik yongasının mevcut (TpmPresent) ve kullanıma hazır (TpmReady) olup olmadığını sorgular.</span>
@@ -192,48 +251,52 @@
               </div>
             </div>
           </div>
-          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="Windows tpm.msc ekranında TPM kullanılmaya hazır ve Belirtim Sürümü 2.0 doğrulaması">
-            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
-              <span>🖼️ Ekran Görüntüsü Alanı (Adım 1: tpm.msc ile TPM 2.0 Hazırlık Durumunu Doğrulayın)</span>
-              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-1067-adim-1.png</span>
-            </div>
-            <figcaption class="text-[11px] text-gray-400">
-              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">Windows tpm.msc ekranında TPM kullanılmaya hazır ve Belirtim Sürümü 2.0 doğrulaması</span>
-            </figcaption>
-          </figure>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
         </div>
 
-        <div class="oc-card p-5 space-y-3.5">
-          <div class="flex items-center gap-3">
-            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 2</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">BIOS Üzerinden AMD fTPM veya Intel PTT Özelliğini Açın</h3>
+        <div id="adim-2" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 2</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">BIOS Üzerinden AMD fTPM veya Intel PTT Özelliğini Açın</h3>
+            </div>
           </div>
           <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">tpm.msc ekranında TPM görünmüyorsa BIOS&#x27;a girin; AMD işlemcilerde Advanced &gt; AMD fTPM Configuration &gt; AMD fTPM Switch ayarını, Intel işlemcilerde Settings &gt; Security &gt; Trusted Computing &gt; Intel Platform Trust Technology (PTT) ayarını Enabled yapın ve F10 ile kaydedin.</p>
-          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="BIOS ayarlarında AMD fTPM Switch ve Intel PTT seçeneklerinin Enabled yapılması">
-            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
-              <span>🖼️ Ekran Görüntüsü Alanı (Adım 2: BIOS Üzerinden AMD fTPM veya Intel PTT Özelliğini Açın)</span>
-              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-1067-adim-2.png</span>
-            </div>
-            <figcaption class="text-[11px] text-gray-400">
-              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">BIOS ayarlarında AMD fTPM Switch ve Intel PTT seçeneklerinin Enabled yapılması</span>
-            </figcaption>
-          </figure>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
         </div>
 
-        <div class="oc-card p-5 space-y-3.5">
-          <div class="flex items-center gap-3">
-            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 3</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">vgc Hizmetini Otomatik Yapın ve Hata Kurtarma Seçeneğini Ayarlayın</h3>
+        <div id="adim-3" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 3</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">vgc Hizmetini Otomatik Yapın ve Hata Kurtarma Seçeneğini Ayarlayın</h3>
+            </div>
           </div>
           <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Win + R &gt; services.msc ekranında &#x27;vgc&#x27; hizmetine çift tıklayın. Başlangıç Türünü &#x27;Otomatik&#x27; yapın, Kurtarma sekmesinden &#x27;İlk Hata: Hizmeti Yeniden Başlat&#x27; seçeneğini işaretleyip kaydedin ve Yönetici CMD üzerinden servisi başlatın.</p>
           <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span class="inline-flex items-center gap-1.5 font-mono text-[#a3d9c6]"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg><span>Komut İstemi / PowerShell</span></span>
+              <span class="oc-badge oc-badge-warning">Yönetici olarak çalıştırın</span>
+            </div>
             <div class="oc-codeblock flex items-center justify-between gap-3">
               <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">sc config vgc start= auto &amp;&amp; net start vgc</code>
-              <button type="button" data-cmd="sc config vgc start= auto &amp;&amp; net start vgc" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[34px] !py-1 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+              <button type="button" data-cmd="sc config vgc start= auto &amp;&amp; net start vgc" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
             </div>
             <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
-              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik ve Geri Alma Notu:</span></div>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed w-full">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik Bilgisi:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs leading-relaxed w-full">
                 <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
                   <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
                   <span class="text-gray-200">Riot Vanguard (vgc) hizmetini Otomatik başlangıç moduna geçirir ve servisi başlatır.</span>
@@ -249,32 +312,30 @@
               </div>
             </div>
           </div>
-          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="services.msc penceresinde vgc hizmeti Başlangıç Türü Otomatik ve Kurtarma ayarları">
-            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
-              <span>🖼️ Ekran Görüntüsü Alanı (Adım 3: vgc Hizmetini Otomatik Yapın ve Hata Kurtarma Seçeneğini Ayarlayın)</span>
-              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-1067-adim-3.png</span>
-            </div>
-            <figcaption class="text-[11px] text-gray-400">
-              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">services.msc penceresinde vgc hizmeti Başlangıç Türü Otomatik ve Kurtarma ayarları</span>
-            </figcaption>
-          </figure>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
         </div>
 
-        <div class="oc-card p-5 space-y-3.5">
-          <div class="flex items-center gap-3">
-            <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 4</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">Çakışan Ekran Katmanlarını (Overlay) Kapatıp Yeniden Başlatın</h3>
+        <div id="adim-4" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 4</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">Çakışan Ekran Katmanlarını (Overlay) Kapatıp Yeniden Başlatın</h3>
+            </div>
           </div>
           <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Discord Ayarlar &gt; Oyun Arayüzü (Overlay) ve RivaTuner Statistics Server (RTSS) gibi üçüncü parti ekran katmanı uygulamalarını kapatıp bilgisayarınızı yeniden başlatın.</p>
-          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="Discord Oyun Arayüzü (Overlay) ve arka plan katman yazılımlarının kapatılması">
-            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
-              <span>🖼️ Ekran Görüntüsü Alanı (Adım 4: Çakışan Ekran Katmanlarını (Overlay) Kapatıp Yeniden Başlatın)</span>
-              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-1067-adim-4.png</span>
-            </div>
-            <figcaption class="text-[11px] text-gray-400">
-              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">Discord Oyun Arayüzü (Overlay) ve arka plan katman yazılımlarının kapatılması</span>
-            </figcaption>
-          </figure>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
         </div>
       </section>
 
@@ -283,27 +344,14 @@
         <h2 class="text-base sm:text-lg font-extrabold text-white">İşe Yaramazsa Ne Yapmalısınız?</h2>
         <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Sorun devam ediyorsa Windows Güvenliği &gt; Cihaz Güvenliği &gt; Çekirdek Yalıtım (Core Isolation) altındaki &#x27;Bellek Bütünlüğü&#x27; ayarını kontrol edin ve anakart üreticinizin web sitesinden güncel BIOS sürümünü kontrol edin.</p>
         <div class="pt-2 flex flex-wrap gap-3">
-          <a href="/#tabContent-ai-lab" class="oc-btn oc-btn-primary text-xs">
-            <span>Crash Log (.log) Yükleyip AI ile Özel Teşhis Al</span>
+          <a href="/#tabContent-ai-lab" class="oc-btn oc-btn-primary text-xs sm:text-sm">
+            <span>AI ile analiz et</span>
           </a>
-          <a href="/#tabContent-forum" class="oc-btn oc-btn-secondary text-xs">
-            <span>Oyuncu Forumunda Konu Aç</span>
+          <a href="/#tabContent-forum" class="oc-btn oc-btn-secondary text-xs sm:text-sm">
+            <span>Foruma sor</span>
           </a>
         </div>
       </section>
-
-      <!-- 8. Resmi Kaynak Linki -->
-      <section id="resmi-kaynak" class="oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <h2 class="text-sm sm:text-base font-extrabold text-white">Resmi Destek ve Dokümantasyon Kaynağı</h2>
-          <p class="text-xs text-gray-400 mt-0.5">Yayıncı ve geliştirici ekibin güncel destek dokümanını resmi kaynağından inceleyebilirsiniz.</p>
-        </div>
-
-        <span class="px-3.5 py-2 rounded-xl text-xs font-mono bg-white/5 text-gray-400 border border-dashed border-white/15 shrink-0" data-official-url-slot="pending">
-          Resmi destek bağlantısı eklenecek (Riot Games Valorant VAN 1067 Resmi Destek Sayfası)
-        </span>
-      </section>
-
       <!-- 9. Sıkça Sorulan Sorular (SSS) -->
       <section id="sss" class="space-y-3">
         <h2 class="text-base sm:text-lg font-extrabold text-white">Sıkça Sorulan Sorular (SSS)</h2>
@@ -317,7 +365,6 @@
             <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">VAN 1067 hatası TPM 2.0 servisinin yanıt vermemesi, vgc hizmetinin durması veya Discord/RivaTuner gibi 3. parti ekran katmanı (overlay) yazılımlarının Vanguard ile çakışmasından kaynaklanır.</p>
           </div>
         </details>
-
         <details class="oc-accordion">
           <summary>
             <h3 class="text-xs sm:text-sm font-bold text-white">VAN 1067 ile VAN 9003 arasındaki fark nedir?</h3>
@@ -328,7 +375,6 @@
           </div>
         </details>
       </section>
-
       <!-- 10. İlgili Hatalar (İç Linkler) -->
       <section id="ilgili-hatalar" class="oc-card p-6 space-y-4">
         <div class="flex items-center justify-between">
@@ -344,7 +390,6 @@
             </div>
             <span class="text-[#88c0a8] font-bold shrink-0">→</span>
           </a>
-
           <a href="/valorant/val-62" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAL 62</span>
@@ -352,7 +397,6 @@
             </div>
             <span class="text-[#88c0a8] font-bold shrink-0">→</span>
           </a>
-
           <a href="/valorant-hata-cozumleri.html" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • TÜM HATALAR</span>
@@ -360,7 +404,6 @@
             </div>
             <span class="text-[#88c0a8] font-bold shrink-0">→</span>
           </a>
-
           <a href="/lol/van-128" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
             <div>
               <span class="font-mono text-[#a3d9c6] font-bold block">League of Legends • VAN 128</span>
@@ -374,145 +417,108 @@
       <!-- 11. Yazar Kutusu, Son Güncelleme ve Test Edilen Sürüm -->
       <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
-            OÇ
-          </div>
+          <span class="oc-monogram" aria-hidden="true">OÇ</span>
           <div>
             <div class="text-white font-bold">
               Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
             </div>
-            <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Kontrolü</div>
+            <div class="text-xs text-gray-400">Sistem ve Oyun Arıza Editörleri • <a href="/hakkimizda.html" class="underline hover:text-white">Hakkımızda ve Metodoloji</a></div>
           </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
-          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-            📅 Son güncelleme: <time datetime="2026-11-17" class="font-semibold text-white">17.11.2026</time>
+        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-300">
+          <span class="oc-badge">
+            Son güncelleme: <time datetime="2026-11-17" class="font-semibold text-white">17.11.2026</time>
           </span>
-          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-            🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel Valorant İstemcisi</strong>
+          <span class="oc-badge">
+            Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel Valorant İstemcisi</strong>
           </span>
         </div>
       </section>
 
       <!-- 12. Bu çözüm işe yaradı mı? Evet / Hayır Butonu -->
-      <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 space-y-3 shadow-lg">
+      <section id="stage2PageVoteSection" class="oc-card p-5 space-y-3">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="space-y-1">
             <h2 class="text-sm sm:text-base font-extrabold text-white">Bu çözüm işe yaradı mı?</h2>
-            <p class="text-xs text-gray-400">Geri bildiriminiz veritabanına kaydedilir (istemci başına tek oy). Yeterli oy (20+) biriktiğinde gerçek işe yarama oranı gösterilir.</p>
+            <p class="text-xs text-gray-400">Oylar sunucuda tutulur (istemci başına tek oy). 20+ oy biriktiğinde gerçek işe yarama oranı gösterilir.</p>
           </div>
           <div class="flex flex-wrap items-center gap-2.5">
             <button
               type="button"
               id="staticVoteUpBtn"
               onclick="submitStaticPageVote(1, 'up')"
-              class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-[#5e9c88]/25 text-xs font-bold text-white flex items-center gap-1.5 transition"
+              class="oc-btn oc-btn-secondary text-xs font-bold"
             >
-              <span>👍 Evet</span>
+              <span>Evet</span>
               <span id="staticVoteUpCount" class="hidden"></span>
             </button>
             <button
               type="button"
               id="staticVoteDownBtn"
               onclick="submitStaticPageVote(1, 'down')"
-              class="px-4 py-2 rounded-xl border border-white/15 bg-white/5 hover:bg-red-500/20 text-xs font-bold text-gray-200 flex items-center gap-1.5 transition"
+              class="oc-btn oc-btn-ghost text-xs font-bold"
             >
-              <span>👎 Hayır</span>
+              <span>Hayır</span>
               <span id="staticVoteDownCount" class="hidden"></span>
             </button>
-            <span id="staticVoteRateBadge" class="hidden text-xs font-bold px-3 py-1.5 rounded-xl bg-[#5e9c88]/15 text-[#a3d9c6] border border-[#5e9c88]/30"></span>
+            <span id="staticVoteRateBadge" class="hidden oc-badge oc-badge-accent font-bold"></span>
           </div>
         </div>
         <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
       </section>
-      <script>
-        function copyTemplateCmd(btn) {
-          var c = btn.getAttribute('data-cmd') || '';
-          if (c && navigator.clipboard) {
-            navigator.clipboard.writeText(c).then(function() {
-              btn.textContent = '✓ Kopyalandı';
-              setTimeout(function() { btn.textContent = '📋 Kopyala'; }, 1800);
-            });
-          }
-        }
-        (function() {
-          function getClientId() {
-            try {
-              var k = 'oyuncoz_client_id';
-              var v = localStorage.getItem(k);
-              if (!v) {
-                v = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
-                localStorage.setItem(k, v);
-              }
-              return v;
-            } catch (e) {
-              return 'cid_anon';
-            }
-          }
-          function updateVoteUI(data) {
-            if (!data) return;
-            var upCnt = Number(data.helpful_votes || 0);
-            var downCnt = Number(data.unhelpful_votes || 0);
-            var total = Number(data.total_votes || (upCnt + downCnt));
-            var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
-            var upEl = document.getElementById('staticVoteUpCount');
-            var downEl = document.getElementById('staticVoteDownCount');
-            var rateEl = document.getElementById('staticVoteRateBadge');
-            if (upEl) {
-              upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
-              upEl.classList.toggle('hidden', upCnt === 0);
-            }
-            if (downEl) {
-              downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
-              downEl.classList.toggle('hidden', downCnt === 0);
-            }
-            if (rateEl) {
-              rateEl.textContent = showRate ? ('✓ İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
-              rateEl.classList.toggle('hidden', !showRate);
-            }
-          }
-          window.submitStaticPageVote = function(issueId, voteType) {
-            fetch('/api/issues/' + issueId + '/vote', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'X-Client-Id': getClientId() },
-              body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
-            }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
-              if (!d) return;
-              updateVoteUI(d);
-              var msg = document.getElementById('staticVoteFeedbackMsg');
-              if (msg) {
-                msg.classList.remove('hidden');
-                msg.textContent = d.user_vote === 'up'
-                  ? '👍 Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
-                  : (d.user_vote === 'down' ? '👎 Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
-              }
-            }).catch(function() {});
-          };
-          fetch('/api/issues', { headers: { 'X-Client-Id': getClientId() } })
-            .then(function(r) { return r.ok ? r.json() : []; })
-            .then(function(list) {
-              if (!Array.isArray(list)) return;
-              var found = list.find(function(x) { return Number(x.id) === 1; });
-              if (found) updateVoteUI(found);
-            }).catch(function() {});
-        })();
-      </script>
     </article>
+    </div>
+      <!-- Masaüstü Yapışkan İçindekiler Yan Paneli -->
+      <aside aria-label="Sayfa İçindekiler" class="hidden lg:block lg:col-span-3">
+        <div class="oc-card p-4 sticky top-20 space-y-3 text-xs">
+          <div class="font-extrabold uppercase tracking-wider text-[#88c0a8]">Bu Sayfada</div>
+          <ul class="space-y-1 border-l border-white/10 pl-3">
+<li><a href="#hizli-cozum" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Hızlı Çözüm</a></li>
+<li><a href="#hata-nedenleri" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Bu Hatanın Nedenleri</a></li>
+<li><a href="#cozum-adimlari" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Adım Adım Çözüm (4 Adım)</a></li>
+<li><a href="#ise-yaramazsa" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İşe Yaramazsa</a></li>
+<li><a href="#sss" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Sıkça Sorulan Sorular</a></li>
+<li><a href="#ilgili-hatalar" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İlgili Hatalar</a></li>
+<li><a href="#stage2PageVoteSection" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Çözüm Değerlendirme</a></li>
+          </ul>
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <div class="text-[11px] text-gray-400">İlerleme Durumu:</div>
+            <div id="sidebarStepProgressText" class="font-bold text-white">0/4 adım tamamlandı</div>
+          </div>
+        </div>
+      </aside></div>
   </main>
 
+  <!-- Mobilde Alt Sabit Çubuk (İşe Yaradı & Foruma Sor - İçeriği Örtmez) -->
+  <div id="mobileStickyActionBar" class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#141923]/95 backdrop-blur-md border-t border-white/15 px-4 py-2.5 flex items-center justify-between gap-3">
+    <button
+      type="button"
+      onclick="submitStaticPageVote(1, 'up'); document.getElementById('stage2PageVoteSection')?.scrollIntoView({behavior:'smooth'});"
+      class="oc-btn oc-btn-primary flex-1 !min-h-[44px] text-xs font-bold"
+    >
+      <span>İşe yaradı</span>
+    </button>
+    <a
+      href="/#tabContent-forum"
+      class="oc-btn oc-btn-secondary flex-1 !min-h-[44px] text-xs font-bold"
+    >
+      <span>Foruma sor</span>
+    </a>
+  </div>
+
   <footer class="border-t border-white/10 bg-[#11161f] py-6 text-xs text-gray-400 mt-10">
-    <div class="max-w-5xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-3">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-3">
       <div>© 2026 <strong>OyunÇöz (oyuncoz.com)</strong> — Oyun Hata Kodları ve FPS Çözüm Rehberi.</div>
-      <div class="flex flex-wrap items-center justify-center gap-2.5 text-[11px]">
-        <a href="/hata-kodlari" class="hover:text-[#a3d9c6] transition">Hata Kodları Dizini</a>
+      <div class="flex flex-wrap items-center justify-center gap-2.5 text-xs">
+        <a href="/hata-kodlari" class="hover:text-[#a3d9c6] transition">Hata Kodları</a>
         <span>•</span>
         <a href="/hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
         <span>•</span>
         <a href="/iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
         <span>•</span>
-        <a href="/kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK Aydınlatma Metni</a>
+        <a href="/gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez</a>
         <span>•</span>
-        <a href="/gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez Politikası</a>
+        <a href="/kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK</a>
         <span>•</span>
         <a href="/kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
         <span>•</span>
@@ -522,5 +528,128 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    function copyTemplateCmd(btn) {
+      var c = btn.getAttribute('data-cmd') || '';
+      if (!c) return;
+      var done = function() {
+        var span = btn.querySelector('span');
+        if (span) span.textContent = 'Kopyalandı';
+        else btn.textContent = 'Kopyalandı';
+        setTimeout(function() {
+          if (span) span.textContent = 'Kopyala';
+          else btn.textContent = 'Kopyala';
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(c).then(done).catch(function() { fallbackCopy(c, done); });
+      } else {
+        fallbackCopy(c, done);
+      }
+    }
+    function fallbackCopy(text, cb) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); cb(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    function toggleStepCompleted(checkbox, totalSteps) {
+      var card = checkbox.closest('.step-card');
+      var pill = card ? card.querySelector('.step-done-pill') : null;
+      if (card) {
+        card.classList.toggle('border-[#5e9c88]', checkbox.checked);
+      }
+      if (pill) {
+        pill.classList.toggle('hidden', !checkbox.checked);
+      }
+      var allChecked = document.querySelectorAll('.step-check-input:checked').length;
+      var badge = document.getElementById('stepProgressBadge');
+      var sideTxt = document.getElementById('sidebarStepProgressText');
+      if (badge) badge.textContent = 'İlerleme: ' + allChecked + '/' + totalSteps + ' adım';
+      if (sideTxt) sideTxt.textContent = allChecked + '/' + totalSteps + ' adım tamamlandı';
+    }
+    function switchPageScenario(btn, targetId) {
+      var parent = btn.closest('#senaryo-secici');
+      if (!parent) return;
+      parent.querySelectorAll('[role="tab"]').forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      parent.querySelectorAll('.scenario-panel').forEach(function(p) {
+        p.classList.toggle('hidden', p.id !== targetId);
+      });
+    }
+    (function() {
+      var pageSessionClientId = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      function getConsentSafeClientId() {
+        try {
+          var consentRaw = localStorage.getItem('oyuncoz_cookie_consent');
+          if (consentRaw) {
+            var k = 'oyuncoz_client_id';
+            var v = localStorage.getItem(k);
+            if (!v) {
+              v = pageSessionClientId;
+              localStorage.setItem(k, v);
+            }
+            return v;
+          }
+        } catch (e) {}
+        return pageSessionClientId;
+      }
+      function updateVoteUI(data) {
+        if (!data) return;
+        var upCnt = Number(data.helpful_votes || 0);
+        var downCnt = Number(data.unhelpful_votes || 0);
+        var total = Number(data.total_votes || (upCnt + downCnt));
+        var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
+        var upEl = document.getElementById('staticVoteUpCount');
+        var downEl = document.getElementById('staticVoteDownCount');
+        var rateEl = document.getElementById('staticVoteRateBadge');
+        if (upEl) {
+          upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
+          upEl.classList.toggle('hidden', upCnt === 0);
+        }
+        if (downEl) {
+          downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
+          downEl.classList.toggle('hidden', downCnt === 0);
+        }
+        if (rateEl) {
+          rateEl.textContent = showRate ? ('İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
+          rateEl.classList.toggle('hidden', !showRate);
+        }
+      }
+      window.submitStaticPageVote = function(issueId, voteType) {
+        fetch('/api/issues/' + issueId + '/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Client-Id': getConsentSafeClientId() },
+          body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
+        }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+          if (!d) return;
+          updateVoteUI(d);
+          var msg = document.getElementById('staticVoteFeedbackMsg');
+          if (msg) {
+            msg.classList.remove('hidden');
+            msg.textContent = d.user_vote === 'up'
+              ? 'Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
+              : (d.user_vote === 'down' ? 'Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
+          }
+        }).catch(function() {});
+      };
+      fetch('/api/issues', { headers: { 'X-Client-Id': getConsentSafeClientId() } })
+        .then(function(r) { return r.ok ? r.json() : []; })
+        .then(function(list) {
+          if (!Array.isArray(list)) return;
+          var found = list.find(function(x) { return Number(x.id) === 1; });
+          if (found) updateVoteUI(found);
+        }).catch(function() {});
+    })();
+  </script>
 </body>
 </html>
