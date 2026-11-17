@@ -558,3 +558,47 @@ article li,
   color: #a3d9c6;
   padding: 0;
 }
+
+/* ==========================================================================
+   AŞAMA 5: MOBİL ÖNCELİKLİ DÜZEN (360px, 390px, 768px, 1024px, 1440px)
+   - Yatay kaydırma engeli (overflow-x: hidden)
+   - Komut blokları ve tablolar kendi kutusu içinde yatay kaydırılabilir
+   - Form alanlarında en az 16px font (mobil zoom engeli)
+   - En az 44x44px dokunma alanları
+   - CLS (Cumulative Layout Shift) önleme için sabit aspect-ratio
+   ========================================================================== */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.oc-codeblock,
+pre,
+.table-responsive {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.step-screenshot-slot,
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+  .oc-btn,
+  .oc-tab-btn,
+  .game-nav-item,
+  .oc-accordion summary {
+    min-height: 44px;
+  }
+}
