@@ -1,0 +1,5 @@
+{
+  "schema_version": "1.0",
+  "description": "OyunÇöz 'Bir Hata Kodu = Bir Sayfa' merkezi veri kaynağı. Yeni hata kodu sayfası oluşturmak için pages dizisine yeni kayıt ekleyip error_page_builder.py çalıştırmanız yeterlidir.",
+  "pages": []
+}
