@@ -2499,20 +2499,27 @@ LEGACY_301_REDIRECTS = {
     "lol.html": "/lol-hata-cozumleri.html",
     "minecraft.html": "/minecraft-hata-cozumleri.html",
     "gtav-fivem.html": "/gtav-fivem-hata-cozumleri.html",
-    # Stage 5.1 & 5.2: Old combined .html error pages -> clean /<game>/<error-code> URLs (301)
+    # Stage 5.1 & 5.2 & Stage 4: Old combined .html and previous nested paths -> final /<game>/<error-code> URLs (301, no chains)
     "valorant-van-9003-van-1067-cozumu.html": "/valorant/van-9003",
     "valorant-van9003.html": "/valorant/van-9003",
     "valorant-van-9003-cozumu.html": "/valorant/van-9003",
-    "cs2-vac-oturum-dogrulama-fps-cozumu.html": "/cs2/vac-oturum-dogrulama",
-    "cs2-vac-hatasi-cozumu.html": "/cs2/vac-oturum-dogrulama",
+    "cs2-vac-oturum-dogrulama-fps-cozumu.html": "/cs2/vac-oturum-dogrulanamadi",
+    "cs2-vac-hatasi-cozumu.html": "/cs2/vac-oturum-dogrulanamadi",
+    "cs2/vac-oturum-dogrulama": "/cs2/vac-oturum-dogrulanamadi",
+    "cs2/packet-burst": "/cs2/packet-burst-fps-dusmesi",
     "lol-vanguard-van-128-van-185-cozumu.html": "/lol/van-185",
     "lol-van-185-cozumu.html": "/lol/van-185",
     "lol-van-128-cozumu.html": "/lol/van-128",
-    "gta5-fivem-err-gfx-d3d-init-texture-cozumu.html": "/gtav-fivem/err-gfx-d3d-init",
-    "gta5-err-gfx-d3d-init-cozumu.html": "/gtav-fivem/err-gfx-d3d-init",
+    "gta5-fivem-err-gfx-d3d-init-texture-cozumu.html": "/gta-v/err-gfx-d3d-init",
+    "gta5-err-gfx-d3d-init-cozumu.html": "/gta-v/err-gfx-d3d-init",
+    "gtav-fivem/err-gfx-d3d-init": "/gta-v/err-gfx-d3d-init",
+    "gtav-fivem/fivem-texture-loss": "/fivem/harita-yuklenmiyor-texture-loss",
     "minecraft-exit-code-1-glfw-65542-cozumu.html": "/minecraft/exit-code-1",
     "minecraft-exit-code-1-cozumu.html": "/minecraft/exit-code-1",
     "rdr2-bannerlord-fc25-wukong-crash-cozumu.html": "/rdr2/err-gfx-state",
+    "bannerlord/d3d-device-context": "/bannerlord/d3d-device-context-map",
+    "fc25/ea-anticheat": "/fc-25/anticheat-hatasi",
+    "wukong/out-of-video-memory": "/black-myth-wukong/out-of-video-memory",
 }
 
 
