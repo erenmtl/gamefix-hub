@@ -766,7 +766,7 @@
         "bannerlord d3d_device_context"
       ],
       "title": "Bannerlord d3d_device_context_map Hatası Çözüm Rehberi",
-      "meta_description": "Mount & Blade II: Bannerlord d3d_device_context_->Map at rglGPU_device::lock_texture çökmesi için ProgramData Shaders temizliği ve ses kanalı çözüm rehberi.",
+      "meta_description": "Mount & Blade II: Bannerlord d3d_device_context_map (lock_texture) çökmesi için ProgramData Shaders temizliği ve ses kanalı optimizasyonu çözüm rehberi.",
       "h1": "Bannerlord d3d_device_context_map Hatası Nasıl Çözülür?",
       "kisa_aciklama": "Mount & Blade II: Bannerlord 'd3d_device_context_->Map at rglGPU_device::lock_texture' hatası, büyük meydan ve kuşatma savaşlarında RGL motorunun ekran kartı belleğindeki (VRAM) bir dokuyu kilitlerken bozuk gölgelendirici önbelleği nedeniyle DirectX 11 cihazının yanıt vermeyi kestiğini gösterir.",
       "nedenler": [
