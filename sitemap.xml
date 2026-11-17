@@ -285,8 +285,12 @@
     <lastmod>2026-03-15</lastmod>
   </url>
   <url>
-    <loc>https://oyuncoz.com/bannerlord/d3d-device-context</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://oyuncoz.com/bannerlord/d3d-device-context-map</loc>
+    <lastmod>2026-11-17</lastmod>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/black-myth-wukong/out-of-video-memory</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/cod-warzone/cod-packet-burst</loc>
@@ -301,12 +305,12 @@
     <lastmod>2026-03-15</lastmod>
   </url>
   <url>
-    <loc>https://oyuncoz.com/cs2/packet-burst</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://oyuncoz.com/cs2/packet-burst-fps-dusmesi</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
-    <loc>https://oyuncoz.com/cs2/vac-oturum-dogrulama</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://oyuncoz.com/cs2/vac-oturum-dogrulanamadi</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/cs2/vpk-corrupt-01</loc>
@@ -349,12 +353,16 @@
     <lastmod>2026-03-15</lastmod>
   </url>
   <url>
-    <loc>https://oyuncoz.com/fc25/ea-anticheat</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://oyuncoz.com/fc-25/anticheat-hatasi</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/fc25/fc25-cutscene-fps</loc>
     <lastmod>2026-03-15</lastmod>
+  </url>
+  <url>
+    <loc>https://oyuncoz.com/fivem/harita-yuklenmiyor-texture-loss</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/football-manager-2024/fm24-cache-dump</loc>
@@ -369,8 +377,8 @@
     <lastmod>2026-03-15</lastmod>
   </url>
   <url>
-    <loc>https://oyuncoz.com/gtav-fivem/err-gfx-d3d-init</loc>
-    <lastmod>2026-03-15</lastmod>
+    <loc>https://oyuncoz.com/gta-v/err-gfx-d3d-init</loc>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/gtav-fivem/social-club-134</loc>
@@ -398,15 +406,15 @@
   </url>
   <url>
     <loc>https://oyuncoz.com/lol/van-128</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/lol/van-185</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/minecraft/exit-code-1</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/minecraft/glfw-error-65542</loc>
@@ -438,7 +446,7 @@
   </url>
   <url>
     <loc>https://oyuncoz.com/rdr2/err-gfx-state</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/rust/rust-gc-buffer</loc>
@@ -466,11 +474,11 @@
   </url>
   <url>
     <loc>https://oyuncoz.com/valorant/van-1067</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/valorant/van-9003</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-11-17</lastmod>
   </url>
   <url>
     <loc>https://oyuncoz.com/victoria-3/pdx-launcher-ctd</loc>
@@ -478,10 +486,6 @@
   </url>
   <url>
     <loc>https://oyuncoz.com/victoria-3/vic3-lategame-tick</loc>
-    <lastmod>2026-03-15</lastmod>
-  </url>
-  <url>
-    <loc>https://oyuncoz.com/wukong/out-of-video-memory</loc>
     <lastmod>2026-03-15</lastmod>
   </url>
 </urlset>

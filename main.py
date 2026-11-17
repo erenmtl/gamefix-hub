@@ -2577,7 +2577,7 @@ def regenerate_sitemap_xml() -> str:
         entries.append((clean_loc, lastmod))
 
     # 3. Clean nested /<game>/<error-code> pages (<game>/<error>/index.html)
-    excluded_dirs = {"static", "cozum", ".git", ".venv", "__pycache__", ".pytest_cache"}
+    excluded_dirs = {"static", "cozum", "data", "docs", ".git", ".venv", "__pycache__", ".pytest_cache"}
     for dname in sorted(os.listdir(ROOT_DIR)):
         if dname in excluded_dirs or dname.startswith("."):
             continue
@@ -2585,6 +2585,9 @@ def regenerate_sitemap_xml() -> str:
         if not os.path.isdir(dpath):
             continue
         for subname in sorted(os.listdir(dpath)):
+            rel_slug = f"{dname}/{subname}"
+            if rel_slug in LEGACY_301_REDIRECTS:
+                continue
             sub_index = os.path.join(dpath, subname, "index.html")
             if not os.path.isfile(sub_index):
                 continue
