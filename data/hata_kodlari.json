@@ -117,6 +117,361 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi"
+    },
+    {
+      "slug": "lol/van-128",
+      "oyun": "League of Legends",
+      "oyun_hub_url": "/lol-hata-cozumleri.html",
+      "hata_kodu": "VAN 128",
+      "issue_id": 9,
+      "varyant_yazimlari": [
+        "VAN 128",
+        "Vanguard 128",
+        "van 128 lol",
+        "van128",
+        "LoL Vanguard VAN 128"
+      ],
+      "title": "LoL Vanguard VAN 128 Hatası Çözümü (Adım Adım)",
+      "meta_description": "League of Legends VAN 128 Vanguard başlatılamadı hatası için test imzalama modunu kapatma, vgc/vgk temiz kurulumu ve antivirüs istisnası çözüm rehberi.",
+      "h1": "League of Legends VAN 128 Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "League of Legends VAN 128 hatası, Riot Vanguard çekirdek sürücüsünün (vgk.sys) işletim sistemi açılışında güvenli modda başlatılamadığını veya üçüncü parti bir sürücüyle çakıştığını belirten hata kodudur. Oyuncuların van 128 lol ve van128 aramalarında karşılaştığı bu sorun, Windows sınama modu ayarları ve Vanguard servis onarımı ile adım adım giderilebilir.",
+      "nedenler": [
+        "Windows önyükleme ayarlarında test imzalama modu (testsigning) veya bütünlük kontrolü devre dışı (nointegritychecks) bayrağının açık olması.",
+        "Üçüncü parti antivirüs yazılımlarının (Kaspersky, Avast, AVG, Malwarebytes) çekirdek kancalarının vgk.sys sürücüsüyle çakışması.",
+        "Vanguard vgc ve vgk servis kayıtlarının güncelleme sırasında bozulması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Windows Test İmzalama Modunu ve Bütünlük Bayraklarını Kapatın",
+          "aciklama": "Vanguard 128 hatasını gidermek için Komut İstemi'ni (CMD) Yönetici olarak açın. Windows sınama modunu kapatan ve çekirdek bütünlük doğrulamasını varsayılan haline getiren aşağıdaki komutları çalıştırın.",
+          "komut": "bcdedit /set testsigning off && bcdedit /deletevalue nointegritychecks",
+          "komut_notu": {
+            "ne_yapar": "Windows Önyükleme Yapılandırma Verilerini (BCD) güncelleyerek çekirdek bütünlük doğrulamasını ve sınama modunu varsayılan standart haline getirir.",
+            "risk": "Yanlış parametre kullanımı Windows açılış davranışını veya imzasız sürücü kontrolünü etkileyebilir.",
+            "geri_alma": "İşlem öncesi oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilir veya standart Windows önyükleme ayarlarını koruyabilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi üzerinde bcdedit testsigning off komutunun çalıştırılması"
+        },
+        {
+          "baslik": "Riot Vanguard Servislerini (vgc ve vgk) Komut Satırından Temizleyin",
+          "aciklama": "Komut İstemi'ni (CMD) Yönetici olarak açın ve sırasıyla sc delete vgc ile sc delete vgk komutlarını çalıştırın. Ardından C:\\Program Files\\Riot Vanguard klasörünü silip bilgisayarınızı yeniden başlatın ve Riot İstemcisi üzerinden Vanguard'ı temiz kurun.",
+          "komut": "sc delete vgc && sc delete vgk",
+          "komut_notu": {
+            "ne_yapar": "Bozulmuş veya kilitlenmiş Riot Vanguard (vgc ve vgk) çekirdek hizmet kaydını Windows Hizmet Yöneticisi'nden kaldırır.",
+            "risk": "Hizmet silindikten sonra Riot İstemcisi üzerinden onarım yapılana kadar oyun açılmaz.",
+            "geri_alma": "Riot İstemcisi'ni Yönetici olarak açıp Onar / Güncelle seçeneğini çalıştırarak Vanguard hizmetini temiz şekilde yeniden kurun."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi ekranında sc delete vgc ve sc delete vgk servis temizleme adımı"
+        },
+        {
+          "baslik": "Bellek Bütünlüğü ve 3. Parti Antivirüs Çakışmasını Giderin",
+          "aciklama": "Kaspersky, Avast, AVG veya Malwarebytes kullanıyorsanız C:\\Program Files\\Riot Vanguard ve C:\\Riot Games klasörlerini istisnalara (dışlamalara) ekleyin. Windows Güvenliği > Cihaz Güvenliği > Çekirdek Yalıtımı menüsünden Bellek Bütünlüğü durumunu kontrol edin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Güvenliği Çekirdek Yalıtımı ve antivirüs dışlama klasörlerinin kontrol edilmesi"
+        },
+        {
+          "baslik": "vgc Hizmetinin Otomatik Başladığını Doğrulayın",
+          "aciklama": "Win + R tuşlarına basıp services.msc yazarak Hizmetler ekranını açın. Listeden vgc hizmetini bulun, Başlangıç Türünü Otomatik yapın ve hizmeti başlatın.",
+          "komut": "sc config vgc start= auto && net start vgc",
+          "komut_notu": {
+            "ne_yapar": "Riot Vanguard kullanıcı modu servisinin (vgc) başlangıç türünü Otomatik olarak ayarlar ve servisi başlatır.",
+            "risk": "Standart servis başlatma komutu sistem ayarlarına zarar vermez.",
+            "geri_alma": "services.msc üzerinden vgc hizmetinin başlangıç türünü tekrar Elle (Manual) konumuna alabilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Hizmetler (services.msc) penceresinde vgc servisinin Otomatik olarak ayarlanması"
+        }
+      ],
+      "isle_yaramazsa": "Şampiyon seçimi sonrasında siyah ekran veya 'Yeniden Bağlan (Reconnect)' döngüsü devam ediyorsa C:\\Riot Games\\League of Legends\\Config klasöründeki game.cfg ve PersistedSettings.json dosyalarını silin; League of Legends.exe > Özellikler > Uyumluluk sekmesinden 'Tam ekran iyileştirmelerini devre dışı bırak' kutusunu işaretleyin ve uyumluluk modu seçiliyse kaldırın.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Riot Games League of Legends Vanguard Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "LoL VAN 128 hatası neden olur?",
+          "cevap": "VAN 128, Vanguard'ın çekirdek sürücüsünün (vgk.sys) Windows başlangıcında güvenilir modda yüklenemediğini gösterir. Genellikle Windows test imzalama modunun açık olması, üçüncü parti antivirüslerin çekirdek kancaları veya bozuk Vanguard servis kayıtları nedeniyle oluşur."
+        },
+        {
+          "soru": "League of Legends VAN 128 hatası donanımsal bir arızadan mı kaynaklanır?",
+          "cevap": "Çoğu durumda donanımsal arıza değildir; işletim sistemi önyükleme bayrakları (testsigning), antivirüs çakışmaları veya vgc/vgk servis izinlerinden kaynaklanır ve yazılımsal adımlarla giderilebilir."
+        },
+        {
+          "soru": "Çözüm adımlarını uygulamadan önce hangi yedeği almalıyım?",
+          "cevap": "PowerShell'i Yönetici olarak açıp Checkpoint-Computer -Description \"OyunCoz_Yedek\" komutuyla veya rstrui.exe arayüzüyle bir Sistem Geri Yükleme Noktası oluşturmanız önerilir."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/lol/van-185",
+          "oyun": "League of Legends",
+          "hata_kodu": "VAN 185",
+          "baslik": "LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)"
+        },
+        {
+          "url": "/lol-hata-cozumleri.html",
+          "oyun": "League of Legends",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "League of Legends Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/valorant/van-9003",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 9003",
+          "baslik": "Valorant VAN 9003 Secure Boot Çözüm Rehberi"
+        },
+        {
+          "url": "/valorant/van-1067",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 1067",
+          "baslik": "Valorant VAN 1067 Bağlantı Hatası Çözüm Rehberi"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi"
+    },
+    {
+      "slug": "valorant/van-9003",
+      "oyun": "Valorant",
+      "oyun_hub_url": "/valorant-hata-cozumleri.html",
+      "hata_kodu": "VAN 9003",
+      "issue_id": 1,
+      "varyant_yazimlari": [
+        "VAN 9003",
+        "van9003",
+        "valorant van 9003",
+        "van 9003 valorant",
+        "secure boot van 9003"
+      ],
+      "title": "Valorant VAN 9003 Hatası Çözümü (Secure Boot & BIOS)",
+      "meta_description": "Windows 11'de karşılaşılan Valorant VAN 9003 (van9003) Secure Boot ve UEFI BIOS hatası için ASUS, MSI, Gigabyte ve ASRock adım adım çözüm rehberi.",
+      "h1": "Valorant VAN 9003 Hatası Nasıl Çözülür? (UEFI Secure Boot)",
+      "kisa_aciklama": "Valorant VAN 9003 ('This build of Vanguard requires secure boot to be enabled in order to play'), Riot Vanguard çekirdek sürücüsünün (vgk.sys) Windows 11 önyükleme zincirinde UEFI Güvenli Önyükleme (Secure Boot) doğrulamasını aktif olarak bulamadığını gösteren hata kodudur. Oyuncuların valorant van 9003 veya bitişik yazımla van9003 olarak arattığı bu uyarı, anakart BIOS ayarlarında CSM kapatılıp Secure Boot anahtarları etkinleştirilerek çözülür.",
+      "nedenler": [
+        "Anakart BIOS ayarlarında CSM (Compatibility Support Module) özelliğinin açık (Enabled) bırakılması.",
+        "BIOS içinde Secure Boot seçeneği 'Enabled' görünmesine rağmen Platform Key (PK) fabrika anahtarlarının yüklenmemiş olması nedeniyle durumun 'Not Active' kalması.",
+        "Disk bölümleme tablosunun UEFI için gereken GPT yerine eski MBR (Legacy) formatında olması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Mevcut Güvenli Önyükleme (Secure Boot) ve BIOS Modunu Doğrulayın",
+          "aciklama": "Klavyeden Win + R tuşlarına basıp msinfo32 yazarak Sistem Bilgisi penceresini açın. 'BIOS Modu' satırının UEFI olduğundan ve 'Güvenli Önyükleme Durumu (Secure Boot State)' satırının Açık/Kapalı durumunu kontrol edin. Ayrıca tpm.msc komutuyla TPM 2.0 hazırlık durumunu doğrulayın.",
+          "komut": "powershell -Command \"Confirm-SecureBootUEFI\"",
+          "komut_notu": {
+            "ne_yapar": "Windows PowerShell üzerinden anakartta UEFI Secure Boot özelliğinin aktif (True) olup olmadığını salt-okunur olarak sorgular.",
+            "risk": "Salt-okunur bir doğrulama komutudur; sistem veya BIOS ayarlarında değişiklik yapmaz.",
+            "geri_alma": "Herhangi bir sistem değişikliği yapmadığı için geri alma işlemi gerektirmez."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows msinfo32 Sistem Bilgisi ekranında BIOS Modu UEFI ve Güvenli Önyükleme Durumu kontrolü"
+        },
+        {
+          "baslik": "Anakart BIOS Menüsünden CSM Kapatma ve Secure Boot Aktifleştirme",
+          "aciklama": "Bilgisayarı yeniden başlatırken DEL veya F2 tuşuna basarak BIOS'a girin. Boot menüsünden CSM (Compatibility Support Module) ayarını Disabled yapın, OS Type / Secure Boot Mode ayarını Windows UEFI Mode veya Standard konumuna getirin ve Key Management altından varsayılan fabrika anahtarlarını (Install Default Secure Boot Keys / Restore Factory Keys) yükleyin.",
+          "komut": "",
+          "anakart_bolumleri": [
+            {
+              "marka": "ASUS",
+              "adimlar": "BIOS > Boot > CSM (Compatibility Support Module) > Launch CSM: Disabled yapın. Ardından Boot > Secure Boot > OS Type: Windows UEFI Mode seçin ve Key Management > Install Default Secure Boot Keys seçeneğini onaylayıp F10 ile kaydedin.",
+              "alt_metin": "ASUS UEFI BIOS Boot sekmesinde CSM kapatma ve Windows UEFI Mode seçimi"
+            },
+            {
+              "marka": "MSI",
+              "adimlar": "BIOS > Settings > Advanced > Windows OS Configuration > BIOS UEFI/CSM Mode: UEFI seçin. Secure Boot menüsüne girip Secure BootMode: Custom > Enroll all Factory Default keys onaylayın ve tekrar Standard moda alıp F10 ile kaydedin.",
+              "alt_metin": "MSI Click BIOS 5 ekranında UEFI modu ve Enroll all Factory Default keys adımı"
+            },
+            {
+              "marka": "Gigabyte",
+              "adimlar": "BIOS > Boot > CSM Support: Disabled yapın. Açılan Secure Boot menüsünde Secure Boot: Enabled seçin. Durum 'Not Active' görünüyorsa Secure Boot Mode'u Custom yapıp 'Restore Factory Keys' seçin ve F10 ile kaydedin.",
+              "alt_metin": "Gigabyte UEFI BIOS ekranında CSM Support Disabled ve Restore Factory Keys adımı"
+            },
+            {
+              "marka": "ASRock",
+              "adimlar": "BIOS > Boot > CSM (Compatibility Support Module): Disabled yapın. Security > Secure Boot menüsüne geçip 'Install default Secure Boot keys' seçeneğine tıklayın ve Secure Boot: Enabled yaparak F10 ile kaydedin.",
+              "alt_metin": "ASRock UEFI Setup Utility ekranında Secure Boot ve varsayılan anahtar yükleme adımı"
+            }
+          ],
+          "gorsel_yolu": "",
+          "alt_metin": "BIOS Boot menüsünde CSM Disabled ve Secure Boot Key Management fabrika anahtarlarının yüklenmesi"
+        },
+        {
+          "baslik": "AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Etkinleştirin",
+          "aciklama": "AMD Ryzen işlemcili anakartlarda Advanced > AMD fTPM Configuration > AMD fTPM Switch ayarını Enabled yapın. Intel işlemcili anakartlarda Settings > Security > Trusted Computing > Intel Platform Trust Technology (PTT) ayarını Enabled konumuna getirin ve F10 ile kaydedip çıkın.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "BIOS güvenlik ayarlarında AMD fTPM ve Intel PTT (TPM 2.0) özelliğinin etkinleştirilmesi"
+        },
+        {
+          "baslik": "Riot Vanguard (vgc) Hizmetini Otomatik Başlatın",
+          "aciklama": "Windows açıldığında Hizmetler (services.msc) penceresinden 'vgc' hizmetini bulun, Başlangıç Türünü 'Otomatik' yapıp hizmeti başlatın. Komut İstemi'ni (CMD) Yönetici olarak açıp aşağıdaki komutu çalıştırarak servisin çalıştığını doğrulayın.",
+          "komut": "sc config vgc start= auto && net start vgc",
+          "komut_notu": {
+            "ne_yapar": "Riot Vanguard kullanıcı modu hizmetini (vgc) Otomatik başlangıç türüne alır ve servisi başlatır.",
+            "risk": "Standart Windows hizmet yapılandırma komutudur; sistem dosyalarını silmez.",
+            "geri_alma": "Hizmetler (services.msc) penceresinden vgc hizmetini tekrar Elle (Manual) durumuna getirebilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Hizmetler (services.msc) ekranında vgc servisinin Otomatik başlatılması"
+        }
+      ],
+      "isle_yaramazsa": "msinfo32 ekranında BIOS Modu 'Eski (Legacy)' görünüyorsa diskiniz MBR formatındadır; CSM kapatmadan önce diskin GPT formatında olması gerekir. Ayrıca Windows Güvenliği > Cihaz Güvenliği > Çekirdek Yalıtımı altındaki Bellek Bütünlüğü ayarını kontrol edin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Riot Games Valorant VAN 9003 ve Secure Boot Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "BIOS'ta Secure Boot Enabled görünmesine rağmen Valorant neden hala VAN 9003 (van9003) veriyor?",
+          "cevap": "ASUS, MSI, Gigabyte ve ASRock anakartlarda Secure Boot seçeneği Enabled olsa bile Platform Key (PK) anahtarları yüklenmemişse Secure Boot durumu 'Not Active' kalır. BIOS > Secure Boot > Key Management menüsünden 'Install Default Secure Boot Keys' (veya Restore Factory Keys) işlemini uyguladığınızda Secure Boot aktif hale gelir."
+        },
+        {
+          "soru": "valorant van 9003 hatası Windows 11'de neden ortaya çıkar?",
+          "cevap": "Windows 11 23H2 ve 24H2 sürümlerinde Riot Vanguard çekirdek sürücüsü (vgk.sys), önyükleme zincirinin güvenliğini doğrulamak için UEFI Secure Boot ve TPM 2.0 modüllerinin donanımsal olarak 'Aktif (Active)' durumda çalışmasını zorunlu tutar."
+        },
+        {
+          "soru": "BIOS ayarlarını değiştirmeden önce hangi önlemi almalıyım?",
+          "cevap": "İşlemlere başlamadan önce msinfo32 üzerinden BIOS Modunun UEFI olduğundan emin olun ve PowerShell'de Checkpoint-Computer -Description \"OyunCoz_Yedek\" komutuyla bir Sistem Geri Yükleme Noktası oluşturun."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/valorant/van-1067",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 1067",
+          "baslik": "Valorant VAN 1067 Bağlantı ve TPM 2.0 Hatası Çözümü"
+        },
+        {
+          "url": "/valorant/val-62",
+          "oyun": "Valorant",
+          "hata_kodu": "VAL 62",
+          "baslik": "Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi"
+        },
+        {
+          "url": "/valorant-hata-cozumleri.html",
+          "oyun": "Valorant",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "Valorant Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/lol/van-185",
+          "oyun": "League of Legends",
+          "hata_kodu": "VAN 185",
+          "baslik": "LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi"
+    },
+    {
+      "slug": "valorant/van-1067",
+      "oyun": "Valorant",
+      "oyun_hub_url": "/valorant-hata-cozumleri.html",
+      "hata_kodu": "VAN 1067",
+      "issue_id": 1,
+      "varyant_yazimlari": [
+        "VAN 1067",
+        "van1067",
+        "valorant van 1067",
+        "van 1067 hatası"
+      ],
+      "title": "Valorant VAN 1067 Hatası Çözümü (TPM 2.0 ve vgc Servisi)",
+      "meta_description": "Valorant VAN 1067 bağlantı hatası için TPM 2.0 (fTPM/PTT) kontrolü, vgc servisini otomatik başlatma ve ekran katmanı çakışmalarını giderme çözüm rehberi.",
+      "h1": "Valorant VAN 1067 Bağlantı Hatası Nasıl Çözülür?",
+      "kisa_aciklama": "Valorant VAN 1067 hatası, Riot İstemcisi'nin arka planda çalışan Riot Vanguard kullanıcı modu hizmeti (vgc.exe) veya donanımsal TPM 2.0 güvenlik çipiyle olan şifreli oturum bağlantısının koptuğunu belirten hata kodudur. Genellikle BIOS güncellemesi sonrası fTPM/PTT modülünün kapanması veya vgc servisinin durması nedeniyle ortaya çıkar.",
+      "nedenler": [
+        "BIOS güncellemesi sonrasında AMD fTPM veya Intel PTT (TPM 2.0) modülünün devre dışı kalması.",
+        "Windows Hizmetleri'nde (services.msc) 'vgc' servisinin durması veya başlangıç türünün 'Elle' kalması.",
+        "Discord Donanım İvmesi, RivaTuner (RTSS) veya 3. parti antivirüs sürücülerinin vgc.exe iletişimini engellemesi."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "tpm.msc ile TPM 2.0 Hazırlık Durumunu Doğrulayın",
+          "aciklama": "Win + R tuşlarına basıp tpm.msc komutunu çalıştırın. Açılan pencerede 'Durum: TPM kullanılmaya hazır' ve 'Belirtim Sürümü: 2.0' yazdığını kontrol edin.",
+          "komut": "powershell -Command \"Get-Tpm | Select-Object TpmPresent, TpmReady\"",
+          "komut_notu": {
+            "ne_yapar": "Sistemde TPM 2.0 güvenlik yongasının mevcut (TpmPresent) ve kullanıma hazır (TpmReady) olup olmadığını sorgular.",
+            "risk": "Salt-okunur sorgulama komutudur; hiçbir sistem ayarını değiştirmez.",
+            "geri_alma": "Geri alma işlemi gerektirmez."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows tpm.msc ekranında TPM kullanılmaya hazır ve Belirtim Sürümü 2.0 doğrulaması"
+        },
+        {
+          "baslik": "BIOS Üzerinden AMD fTPM veya Intel PTT Özelliğini Açın",
+          "aciklama": "tpm.msc ekranında TPM görünmüyorsa BIOS'a girin; AMD işlemcilerde Advanced > AMD fTPM Configuration > AMD fTPM Switch ayarını, Intel işlemcilerde Settings > Security > Trusted Computing > Intel Platform Trust Technology (PTT) ayarını Enabled yapın ve F10 ile kaydedin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "BIOS ayarlarında AMD fTPM Switch ve Intel PTT seçeneklerinin Enabled yapılması"
+        },
+        {
+          "baslik": "vgc Hizmetini Otomatik Yapın ve Hata Kurtarma Seçeneğini Ayarlayın",
+          "aciklama": "Win + R > services.msc ekranında 'vgc' hizmetine çift tıklayın. Başlangıç Türünü 'Otomatik' yapın, Kurtarma sekmesinden 'İlk Hata: Hizmeti Yeniden Başlat' seçeneğini işaretleyip kaydedin ve Yönetici CMD üzerinden servisi başlatın.",
+          "komut": "sc config vgc start= auto && net start vgc",
+          "komut_notu": {
+            "ne_yapar": "Riot Vanguard (vgc) hizmetini Otomatik başlangıç moduna geçirir ve servisi başlatır.",
+            "risk": "Standart Windows servis başlatma işlemidir; sistem kararlılığını bozmaz.",
+            "geri_alma": "services.msc üzerinden vgc hizmetinin başlangıç türünü tekrar Elle konumuna getirebilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "services.msc penceresinde vgc hizmeti Başlangıç Türü Otomatik ve Kurtarma ayarları"
+        },
+        {
+          "baslik": "Çakışan Ekran Katmanlarını (Overlay) Kapatıp Yeniden Başlatın",
+          "aciklama": "Discord Ayarlar > Oyun Arayüzü (Overlay) ve RivaTuner Statistics Server (RTSS) gibi üçüncü parti ekran katmanı uygulamalarını kapatıp bilgisayarınızı yeniden başlatın.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "Discord Oyun Arayüzü (Overlay) ve arka plan katman yazılımlarının kapatılması"
+        }
+      ],
+      "isle_yaramazsa": "Sorun devam ediyorsa Windows Güvenliği > Cihaz Güvenliği > Çekirdek Yalıtım (Core Isolation) altındaki 'Bellek Bütünlüğü' ayarını kontrol edin ve anakart üreticinizin web sitesinden güncel BIOS sürümünü kontrol edin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Riot Games Valorant VAN 1067 Resmi Destek Sayfası",
+      "sss": [
+        {
+          "soru": "Valorant VAN 1067 hatası neden kaynaklanır?",
+          "cevap": "VAN 1067 hatası TPM 2.0 servisinin yanıt vermemesi, vgc hizmetinin durması veya Discord/RivaTuner gibi 3. parti ekran katmanı (overlay) yazılımlarının Vanguard ile çakışmasından kaynaklanır."
+        },
+        {
+          "soru": "VAN 1067 ile VAN 9003 arasındaki fark nedir?",
+          "cevap": "VAN 9003 doğrudan BIOS üzerindeki UEFI Secure Boot (Güvenli Önyükleme) özelliğinin kapalı veya 'Not Active' olmasından kaynaklanırken, VAN 1067 daha çok TPM 2.0 iletişim kopması ve vgc arka plan servisinin durmasıyla ilişkilidir."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/valorant/van-9003",
+          "oyun": "Valorant",
+          "hata_kodu": "VAN 9003",
+          "baslik": "Valorant VAN 9003 Hatası Çözümü (Secure Boot & BIOS)"
+        },
+        {
+          "url": "/valorant/val-62",
+          "oyun": "Valorant",
+          "hata_kodu": "VAL 62",
+          "baslik": "Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi"
+        },
+        {
+          "url": "/valorant-hata-cozumleri.html",
+          "oyun": "Valorant",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "Valorant Hata Kodları ve Çözüm Merkezi"
+        },
+        {
+          "url": "/lol/van-128",
+          "oyun": "League of Legends",
+          "hata_kodu": "VAN 128",
+          "baslik": "LoL Vanguard VAN 128 Hatası Çözümü (Adım Adım)"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-03-01",
+      "tarih_guncelleme": "2026-11-17",
+      "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi"
     }
   ]
 }

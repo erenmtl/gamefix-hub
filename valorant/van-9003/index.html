@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Valorant VAN 9003 Secure Boot Çözüm Rehberi | OyunÇöz</title>
-  <meta name="description" content="Windows 11 bilgisayarlarda Valorant VAN 9003 (Secure Boot to be enabled) hatasını BIOS CSM kapatma ve UEFI anahtar yükleme adımlarıyla adım adım çözün." />
+  <title>Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; BIOS)</title>
+  <meta name="description" content="Windows 11&#x27;de karşılaşılan Valorant VAN 9003 (van9003) Secure Boot ve UEFI BIOS hatası için ASUS, MSI, Gigabyte ve ASRock adım adım çözüm rehberi." />
   <meta name="author" content="OyunÇöz Teknik Ekibi" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
@@ -15,16 +15,16 @@
   <meta property="og:site_name" content="OyunÇöz" />
   <meta property="og:locale" content="tr_TR" />
   <meta property="og:url" content="https://oyuncoz.com/valorant/van-9003" />
-  <meta property="og:title" content="Valorant VAN 9003 Secure Boot Çözüm Rehberi | OyunÇöz" />
-  <meta property="og:description" content="Windows 11 bilgisayarlarda Valorant VAN 9003 (Secure Boot to be enabled) hatasını BIOS CSM kapatma ve UEFI anahtar yükleme adımlarıyla adım adım çözün." />
-  <meta property="og:image" content="https://oyuncoz.com/static/og/valorant-van-9003.png" />
+  <meta property="og:title" content="Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; BIOS)" />
+  <meta property="og:description" content="Windows 11&#x27;de karşılaşılan Valorant VAN 9003 (van9003) Secure Boot ve UEFI BIOS hatası için ASUS, MSI, Gigabyte ve ASRock adım adım çözüm rehberi." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.png" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Valorant VAN 9003 Secure Boot Çözüm Rehberi | OyunÇöz" />
-  <meta name="twitter:description" content="Windows 11 bilgisayarlarda Valorant VAN 9003 (Secure Boot to be enabled) hatasını BIOS CSM kapatma ve UEFI anahtar yükleme adımlarıyla adım adım çözün." />
-  <meta name="twitter:image" content="https://oyuncoz.com/static/og/valorant-van-9003.png" />
+  <meta name="twitter:title" content="Valorant VAN 9003 Hatası Çözümü (Secure Boot &amp; BIOS)" />
+  <meta name="twitter:description" content="Windows 11&#x27;de karşılaşılan Valorant VAN 9003 (van9003) Secure Boot ve UEFI BIOS hatası için ASUS, MSI, Gigabyte ve ASRock adım adım çözüm rehberi." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og-banner.png" />
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -56,20 +56,14 @@
     {
       "@type": "TechArticle",
       "@id": "https://oyuncoz.com/valorant/van-9003#article",
-      "headline": "Valorant VAN 9003 Hatası Çözüm Rehberi (Windows 11 UEFI Secure Boot)",
-      "description": "Windows 11 bilgisayarlarda Valorant VAN 9003 (Secure Boot to be enabled) hatasını BIOS CSM kapatma ve UEFI anahtar yükleme adımlarıyla adım adım çözün.",
+      "headline": "Valorant VAN 9003 Hatası Nasıl Çözülür? (UEFI Secure Boot)",
+      "description": "Windows 11'de karşılaşılan Valorant VAN 9003 (van9003) Secure Boot ve UEFI BIOS hatası için ASUS, MSI, Gigabyte ve ASRock adım adım çözüm rehberi.",
       "inLanguage": "tr",
       "datePublished": "2026-03-01",
-      "dateModified": "2026-03-15",
+      "dateModified": "2026-11-17",
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://oyuncoz.com/valorant/van-9003"
-      },
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://oyuncoz.com/static/og/valorant-van-9003.png",
-        "width": 1200,
-        "height": 630
       },
       "author": {
         "@type": "Organization",
@@ -121,6 +115,7 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-4 py-8 space-y-7 flex-1 w-full">
+    <!-- 1. Breadcrumb (Ana Sayfa › Oyun › Hata Kodu) -->
     <nav aria-label="Breadcrumb" class="text-xs text-gray-400 flex flex-wrap items-center gap-2">
       <a href="/" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
       <span aria-hidden="true">›</span>
@@ -130,7 +125,7 @@
     </nav>
 
     <article class="space-y-7">
-      <!-- Hero & Yazar / Tarih / Sürüm -->
+      <!-- 2. H1 ve 3. Kısa Özet (Hatanın Anlamı, 2-3 Cümle) -->
       <section class="rounded-2xl p-6 sm:p-8 bg-gradient-to-br from-[#1d2534] to-[#141923] border border-white/15 space-y-4 shadow-xl">
         <div class="flex flex-wrap items-center gap-2 text-xs">
           <span class="px-3 py-1 rounded-full font-bold bg-[#5e9c88]/20 text-[#a3d9c6] border border-[#88c0a8]/30">Valorant</span>
@@ -138,192 +133,182 @@
           <span class="editor-verified-badge px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 font-semibold">✓ Editör kontrolünden geçti</span>
         </div>
 
-        <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">Valorant VAN 9003 Hatası Çözüm Rehberi (Windows 11 UEFI Secure Boot)</h1>
-        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows 11 bilgisayarlarda Valorant VAN 9003 (Secure Boot to be enabled) hatasını BIOS CSM kapatma ve UEFI anahtar yükleme adımlarıyla adım adım çözün.</p>
+        <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">Valorant VAN 9003 Hatası Nasıl Çözülür? (UEFI Secure Boot)</h1>
 
-        <!-- Stage 2.3 & 5.4: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
-        <div class="stage2-author-box p-4 rounded-xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
-              OÇ
-            </div>
-            <div>
-              <div class="text-white font-bold">
-                Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
-              </div>
-              <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Kontrolü</div>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
-            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-              📅 Son güncelleme: <time datetime="2026-03-15" class="font-semibold text-white">15.03.2026</time>
-            </span>
-            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
-              🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel İstemci</strong>
-            </span>
-          </div>
-        </div>
+        <p id="hata-anlami" class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+          Valorant VAN 9003 (&#x27;This build of Vanguard requires secure boot to be enabled in order to play&#x27;), Riot Vanguard çekirdek sürücüsünün (vgk.sys) Windows 11 önyükleme zincirinde UEFI Güvenli Önyükleme (Secure Boot) doğrulamasını aktif olarak bulamadığını gösteren hata kodudur. Oyuncuların valorant van 9003 veya bitişik yazımla van9003 olarak arattığı bu uyarı, anakart BIOS ayarlarında CSM kapatılıp Secure Boot anahtarları etkinleştirilerek çözülür.
+        </p>
       </section>
 
-      <!-- Bölüm 1: Hata Kodunun Anlamı -->
-      <section id="hata-anlami" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-2.5">
-        <h2 class="text-base sm:text-lg font-extrabold text-white">🔍 1. VAN 9003 Hata Kodunun Anlamı ve Belirtileri</h2>
-        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Valorant VAN 9003 ('This build of Vanguard requires secure boot to be enabled in order to play'), Riot Vanguard çekirdek sürücüsünün (vgk.sys) Windows 11 önyükleme zincirinde UEFI Güvenli Önyükleme (Secure Boot) doğrulamasını aktif olarak bulamadığını gösteren güvenlik hata kodudur.</p>
-      </section>
-
-      <!-- Bölüm 2: Nedenleri -->
+      <!-- 4. Bu Hatanın Nedenleri -->
       <section id="hata-nedenleri" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-white">⚙️ 2. Hatanın Başlıca Nedenleri (Kök Neden Analizi)</h2>
+        <h2 class="text-base sm:text-lg font-extrabold text-white">⚙️ Bu Hatanın Nedenleri</h2>
         <ul class="list-disc pl-5 text-xs sm:text-sm text-gray-300 space-y-2">
           <li class="leading-relaxed">Anakart BIOS ayarlarında CSM (Compatibility Support Module) özelliğinin açık (Enabled) bırakılması.</li>
-          <li class="leading-relaxed">BIOS içinde Secure Boot seçeneği 'Enabled' görünmesine rağmen Platform Key (PK) fabrika anahtarlarının yüklenmemiş olması ('Not Active' durumu).</li>
-          <li class="leading-relaxed">Disk bölümleme tablosunun UEFI için zorunlu olan GPT yerine eski MBR formatında olması.</li>
+          <li class="leading-relaxed">BIOS içinde Secure Boot seçeneği &#x27;Enabled&#x27; görünmesine rağmen Platform Key (PK) fabrika anahtarlarının yüklenmemiş olması nedeniyle durumun &#x27;Not Active&#x27; kalması.</li>
+          <li class="leading-relaxed">Disk bölümleme tablosunun UEFI için gereken GPT yerine eski MBR (Legacy) formatında olması.</li>
         </ul>
       </section>
 
-      <!-- Bölüm 3: Adım Adım Çözüm Adımları (Görsel Alanı ile) -->
+      <!-- 5. Adım Adım Çözüm -->
       <section id="cozum-adimlari" class="space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <h2 class="text-base sm:text-lg font-extrabold text-white">🛠️ 3. Adım Adım Çözüm Rehberi</h2>
+          <h2 class="text-base sm:text-lg font-extrabold text-white">🛠️ Adım Adım Çözüm</h2>
           <span class="text-[11px] px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-200 border border-amber-400/30">
             🛡️ İşlem öncesi Sistem Geri Yükleme Noktası oluşturun: <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>
           </span>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 1</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">msinfo32 ile BIOS Modu ve Güvenli Önyükleme Durumunu Kontrol Edin</h3>
+            <h3 class="text-sm sm:text-base font-bold text-white">Mevcut Güvenli Önyükleme (Secure Boot) ve BIOS Modunu Doğrulayın</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Klavyeden Win + R tuşlarına basıp msinfo32 yazarak Sistem Bilgisi ekranını açın. 'BIOS Modu' satırının UEFI ve 'Güvenli Önyükleme Durumu' satırının Açık olup olmadığını doğrulayın.</p>
-          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
-          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
-            <img
-              src="/static/screenshots/valorant-van-9003-adim-1.png"
-              alt="Valorant VAN 9003 - Adım 1: msinfo32 ile BIOS Modu ve Güvenli Önyükleme Durumunu Kontrol Edin ekran görüntüsü"
-              loading="lazy"
-              decoding="async"
-              width="600"
-              height="315"
-              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
-            />
-            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
-              <span>📸 <strong>Adım 1 Görseli:</strong> msinfo32 ile BIOS Modu ve Güvenli Önyükleme Durumunu Kontrol Edin uygulama ekranı</span>
-              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-van-9003-adim-1.png</span>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Klavyeden Win + R tuşlarına basıp msinfo32 yazarak Sistem Bilgisi penceresini açın. &#x27;BIOS Modu&#x27; satırının UEFI olduğundan ve &#x27;Güvenli Önyükleme Durumu (Secure Boot State)&#x27; satırının Açık/Kapalı durumunu kontrol edin. Ayrıca tpm.msc komutuyla TPM 2.0 hazırlık durumunu doğrulayın.</p>
+          <div class="space-y-2.5">
+            <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+              <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">powershell -Command &quot;Confirm-SecureBootUEFI&quot;</code>
+              <button type="button" data-cmd="powershell -Command &quot;Confirm-SecureBootUEFI&quot;" onclick="copyTemplateCmd(this)" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+            </div>
+            <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-2">
+              <div class="font-bold text-amber-200">⚠️ Komut Güvenlik ve Geri Alma Notu:</div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+                  <span class="text-gray-200">Windows PowerShell üzerinden anakartta UEFI Secure Boot özelliğinin aktif (True) olup olmadığını salt-okunur olarak sorgular.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+                  <span class="text-gray-200">Salt-okunur bir doğrulama komutudur; sistem veya BIOS ayarlarında değişiklik yapmaz.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+                  <span class="text-gray-200">Herhangi bir sistem değişikliği yapmadığı için geri alma işlemi gerektirmez.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="Windows msinfo32 Sistem Bilgisi ekranında BIOS Modu UEFI ve Güvenli Önyükleme Durumu kontrolü">
+            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
+              <span>🖼️ Ekran Görüntüsü Alanı (Adım 1: Mevcut Güvenli Önyükleme (Secure Boot) ve BIOS Modunu Doğrulayın)</span>
+              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-9003-adim-1.png</span>
+            </div>
+            <figcaption class="text-[11px] text-gray-400">
+              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">Windows msinfo32 Sistem Bilgisi ekranında BIOS Modu UEFI ve Güvenli Önyükleme Durumu kontrolü</span>
             </figcaption>
           </figure>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 2</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">BIOS Üzerinden CSM Kapatma ve Windows UEFI Moduna Geçiş</h3>
+            <h3 class="text-sm sm:text-base font-bold text-white">Anakart BIOS Menüsünden CSM Kapatma ve Secure Boot Aktifleştirme</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Bilgisayarı yeniden başlatırken DEL veya F2 tuşuyla BIOS'a girin. Boot sekmesinden CSM (Compatibility Support Module) ayarını Disabled yapın ve OS Type ayarını Windows UEFI Mode olarak seçin.</p>
-          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
-          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
-            <img
-              src="/static/screenshots/valorant-van-9003-adim-2.png"
-              alt="Valorant VAN 9003 - Adım 2: BIOS Üzerinden CSM Kapatma ve Windows UEFI Moduna Geçiş ekran görüntüsü"
-              loading="lazy"
-              decoding="async"
-              width="600"
-              height="315"
-              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
-            />
-            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
-              <span>📸 <strong>Adım 2 Görseli:</strong> BIOS Üzerinden CSM Kapatma ve Windows UEFI Moduna Geçiş uygulama ekranı</span>
-              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-van-9003-adim-2.png</span>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Bilgisayarı yeniden başlatırken DEL veya F2 tuşuna basarak BIOS&#x27;a girin. Boot menüsünden CSM (Compatibility Support Module) ayarını Disabled yapın, OS Type / Secure Boot Mode ayarını Windows UEFI Mode veya Standard konumuna getirin ve Key Management altından varsayılan fabrika anahtarlarını (Install Default Secure Boot Keys / Restore Factory Keys) yükleyin.</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+
+              <div class="p-3.5 rounded-xl bg-[#141923] border border-white/10 space-y-2">
+                <div class="font-bold text-xs text-[#a3d9c6]">ASUS Anakart BIOS Adımları</div>
+                <p class="text-xs text-gray-300 leading-relaxed">BIOS &gt; Boot &gt; CSM (Compatibility Support Module) &gt; Launch CSM: Disabled yapın. Ardından Boot &gt; Secure Boot &gt; OS Type: Windows UEFI Mode seçin ve Key Management &gt; Install Default Secure Boot Keys seçeneğini onaylayıp F10 ile kaydedin.</p>
+                <div class="text-[11px] text-gray-400 border border-dashed border-white/10 rounded-lg px-2.5 py-1.5 bg-[#10151e]">
+                  🖼️ Görsel Alanı (Alt metin: <span class="text-gray-300">ASUS UEFI BIOS Boot sekmesinde CSM kapatma ve Windows UEFI Mode seçimi</span>)
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#141923] border border-white/10 space-y-2">
+                <div class="font-bold text-xs text-[#a3d9c6]">MSI Anakart BIOS Adımları</div>
+                <p class="text-xs text-gray-300 leading-relaxed">BIOS &gt; Settings &gt; Advanced &gt; Windows OS Configuration &gt; BIOS UEFI/CSM Mode: UEFI seçin. Secure Boot menüsüne girip Secure BootMode: Custom &gt; Enroll all Factory Default keys onaylayın ve tekrar Standard moda alıp F10 ile kaydedin.</p>
+                <div class="text-[11px] text-gray-400 border border-dashed border-white/10 rounded-lg px-2.5 py-1.5 bg-[#10151e]">
+                  🖼️ Görsel Alanı (Alt metin: <span class="text-gray-300">MSI Click BIOS 5 ekranında UEFI modu ve Enroll all Factory Default keys adımı</span>)
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#141923] border border-white/10 space-y-2">
+                <div class="font-bold text-xs text-[#a3d9c6]">Gigabyte Anakart BIOS Adımları</div>
+                <p class="text-xs text-gray-300 leading-relaxed">BIOS &gt; Boot &gt; CSM Support: Disabled yapın. Açılan Secure Boot menüsünde Secure Boot: Enabled seçin. Durum &#x27;Not Active&#x27; görünüyorsa Secure Boot Mode&#x27;u Custom yapıp &#x27;Restore Factory Keys&#x27; seçin ve F10 ile kaydedin.</p>
+                <div class="text-[11px] text-gray-400 border border-dashed border-white/10 rounded-lg px-2.5 py-1.5 bg-[#10151e]">
+                  🖼️ Görsel Alanı (Alt metin: <span class="text-gray-300">Gigabyte UEFI BIOS ekranında CSM Support Disabled ve Restore Factory Keys adımı</span>)
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#141923] border border-white/10 space-y-2">
+                <div class="font-bold text-xs text-[#a3d9c6]">ASRock Anakart BIOS Adımları</div>
+                <p class="text-xs text-gray-300 leading-relaxed">BIOS &gt; Boot &gt; CSM (Compatibility Support Module): Disabled yapın. Security &gt; Secure Boot menüsüne geçip &#x27;Install default Secure Boot keys&#x27; seçeneğine tıklayın ve Secure Boot: Enabled yaparak F10 ile kaydedin.</p>
+                <div class="text-[11px] text-gray-400 border border-dashed border-white/10 rounded-lg px-2.5 py-1.5 bg-[#10151e]">
+                  🖼️ Görsel Alanı (Alt metin: <span class="text-gray-300">ASRock UEFI Setup Utility ekranında Secure Boot ve varsayılan anahtar yükleme adımı</span>)
+                </div>
+              </div>
+          </div>
+          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="BIOS Boot menüsünde CSM Disabled ve Secure Boot Key Management fabrika anahtarlarının yüklenmesi">
+            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
+              <span>🖼️ Ekran Görüntüsü Alanı (Adım 2: Anakart BIOS Menüsünden CSM Kapatma ve Secure Boot Aktifleştirme)</span>
+              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-9003-adim-2.png</span>
+            </div>
+            <figcaption class="text-[11px] text-gray-400">
+              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">BIOS Boot menüsünde CSM Disabled ve Secure Boot Key Management fabrika anahtarlarının yüklenmesi</span>
             </figcaption>
           </figure>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 3</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">Key Management Altından Varsayılan Secure Boot Anahtarlarını Yükleyin</h3>
+            <h3 class="text-sm sm:text-base font-bold text-white">AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Etkinleştirin</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">ASUS, Gigabyte ve MSI anakartlarda Secure Boot > Key Management menüsüne girip 'Install Default Secure Boot Keys / Restore Factory Keys' seçeneğini onaylayın ve F10 ile kaydedip çıkın.</p>
-          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
-          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
-            <img
-              src="/static/screenshots/valorant-van-9003-adim-3.png"
-              alt="Valorant VAN 9003 - Adım 3: Key Management Altından Varsayılan Secure Boot Anahtarlarını Yükleyin ekran görüntüsü"
-              loading="lazy"
-              decoding="async"
-              width="600"
-              height="315"
-              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
-            />
-            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
-              <span>📸 <strong>Adım 3 Görseli:</strong> Key Management Altından Varsayılan Secure Boot Anahtarlarını Yükleyin uygulama ekranı</span>
-              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-van-9003-adim-3.png</span>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">AMD Ryzen işlemcili anakartlarda Advanced &gt; AMD fTPM Configuration &gt; AMD fTPM Switch ayarını Enabled yapın. Intel işlemcili anakartlarda Settings &gt; Security &gt; Trusted Computing &gt; Intel Platform Trust Technology (PTT) ayarını Enabled konumuna getirin ve F10 ile kaydedip çıkın.</p>
+          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="BIOS güvenlik ayarlarında AMD fTPM ve Intel PTT (TPM 2.0) özelliğinin etkinleştirilmesi">
+            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
+              <span>🖼️ Ekran Görüntüsü Alanı (Adım 3: AMD fTPM ve Intel PTT (TPM 2.0) Modülünü Etkinleştirin)</span>
+              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-9003-adim-3.png</span>
+            </div>
+            <figcaption class="text-[11px] text-gray-400">
+              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">BIOS güvenlik ayarlarında AMD fTPM ve Intel PTT (TPM 2.0) özelliğinin etkinleştirilmesi</span>
             </figcaption>
           </figure>
         </div>
 
-        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3">
+        <div class="bg-[#18202c] border border-white/10 rounded-2xl p-5 space-y-3.5">
           <div class="flex items-center gap-3">
             <span class="w-7 h-7 rounded-lg bg-[#5e9c88]/25 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold text-xs flex items-center justify-center shrink-0">Adım 4</span>
-            <h3 class="text-sm sm:text-base font-bold text-white">VGC Hizmetini Otomatik Başlatın ve Durumu Doğrulayın</h3>
+            <h3 class="text-sm sm:text-base font-bold text-white">Riot Vanguard (vgc) Hizmetini Otomatik Başlatın</h3>
           </div>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed pl-10">Windows açıldığında services.msc ekranından 'vgc' hizmetinin Başlangıç Türünü Otomatik yapıp başlatın ve PowerShell'de Confirm-SecureBootUEFI komutuyla True yanıtını doğrulayın.</p>
-          <!-- Stage 5.4 & 5.5: Görsel ve Ekran Görüntüsü Alanı (Zorunlu alt metni ile) -->
-          <figure class="step-screenshot-slot ml-0 sm:ml-10 rounded-xl overflow-hidden border border-dashed border-[#88c0a8]/35 bg-[#121722] p-3 space-y-2">
-            <img
-              src="/static/screenshots/valorant-van-9003-adim-4.png"
-              alt="Valorant VAN 9003 - Adım 4: VGC Hizmetini Otomatik Başlatın ve Durumu Doğrulayın ekran görüntüsü"
-              loading="lazy"
-              decoding="async"
-              width="600"
-              height="315"
-              class="w-full max-h-52 object-cover rounded-lg border border-white/10"
-            />
-            <figcaption class="text-[11px] text-gray-400 flex items-center justify-between gap-2">
-              <span>📸 <strong>Adım 4 Görseli:</strong> VGC Hizmetini Otomatik Başlatın ve Durumu Doğrulayın uygulama ekranı</span>
-              <span class="text-[#88c0a8] font-mono">/static/screenshots/valorant-van-9003-adim-4.png</span>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows açıldığında Hizmetler (services.msc) penceresinden &#x27;vgc&#x27; hizmetini bulun, Başlangıç Türünü &#x27;Otomatik&#x27; yapıp hizmeti başlatın. Komut İstemi&#x27;ni (CMD) Yönetici olarak açıp aşağıdaki komutu çalıştırarak servisin çalıştığını doğrulayın.</p>
+          <div class="space-y-2.5">
+            <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
+              <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">sc config vgc start= auto &amp;&amp; net start vgc</code>
+              <button type="button" data-cmd="sc config vgc start= auto &amp;&amp; net start vgc" onclick="copyTemplateCmd(this)" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
+            </div>
+            <div class="stage2-risky-cmd-note p-3.5 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-2">
+              <div class="font-bold text-amber-200">⚠️ Komut Güvenlik ve Geri Alma Notu:</div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
+                  <span class="text-gray-200">Riot Vanguard kullanıcı modu hizmetini (vgc) Otomatik başlangıç türüne alır ve servisi başlatır.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
+                  <span class="text-gray-200">Standart Windows hizmet yapılandırma komutudur; sistem dosyalarını silmez.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
+                  <span class="text-gray-200">Hizmetler (services.msc) penceresinden vgc hizmetini tekrar Elle (Manual) durumuna getirebilirsiniz.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <figure class="step-screenshot-slot rounded-xl border border-dashed border-[#88c0a8]/35 bg-[#121722]/90 p-4 space-y-1.5" role="group" aria-label="Windows Hizmetler (services.msc) ekranında vgc servisinin Otomatik başlatılması">
+            <div class="flex items-center justify-between gap-2 text-xs text-[#a3d9c6] font-semibold">
+              <span>🖼️ Ekran Görüntüsü Alanı (Adım 4: Riot Vanguard (vgc) Hizmetini Otomatik Başlatın)</span>
+              <span class="text-[11px] font-mono text-gray-400">/static/screenshots/valorant-van-9003-adim-4.png</span>
+            </div>
+            <figcaption class="text-[11px] text-gray-400">
+              <strong>Alt Metin (Zorunlu):</strong> <span class="text-gray-300">Windows Hizmetler (services.msc) ekranında vgc servisinin Otomatik başlatılması</span>
             </figcaption>
           </figure>
         </div>
       </section>
 
-      <!-- Hızlı Doğrulama Komutu & Risk Notları -->
-      <section class="bg-[#1b2230] border border-amber-400/35 rounded-2xl p-5 space-y-3">
-        <div class="flex items-center justify-between gap-2">
-          <h2 class="text-sm sm:text-base font-extrabold text-amber-200">💻 Doğrulama ve Onarım Komutu (CMD / PowerShell)</h2>
-          <span class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-semibold">Yönetici Olarak Çalıştırın</span>
-        </div>
-        <div class="bg-[#11161f] border border-[#88c0a8]/30 rounded-xl px-4 py-2.5 flex items-center justify-between gap-3">
-          <code class="text-xs font-mono text-[#a3d9c6] overflow-x-auto">powershell -Command "Confirm-SecureBootUEFI"</code>
-          <button onclick="navigator.clipboard.writeText(this.previousElementSibling.textContent);this.textContent='✓ Kopyalandı';" class="px-3 py-1 rounded-lg bg-[#5e9c88]/25 hover:bg-[#5e9c88]/40 text-[#e2f1ec] text-xs font-bold shrink-0 transition">📋 Kopyala</button>
-        </div>
-
-        <div class="stage2-risky-cmd-note p-4 rounded-xl bg-[#141a24] border border-amber-400/35 text-xs space-y-2">
-          <div class="font-extrabold text-amber-200 flex items-center gap-2">
-            <span>⚠️ Komut Güvenlik Notu:</span>
-            <code class="px-2 py-0.5 rounded bg-black/40 text-amber-100 font-mono">Sistem ve Servis Doğrulama Komutu</code>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px] leading-relaxed">
-            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-[#88c0a8] block mb-0.5">🔍 Ne yapar?</strong>
-              <span class="text-gray-200">İlgili oyun servisinin, sistem dosyalarının veya grafik/ağ önbelleğinin mevcut durumunu salt-okunur veya standart Windows aracıyla doğrular.</span>
-            </div>
-            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-amber-300 block mb-0.5">⚡ Risk:</strong>
-              <span class="text-gray-200">Standart doğrulama komutları sistem ayarlarını bozmaz; ancak servis yeniden başlatma işlemleri açık oyun istemcisini kapatabilir.</span>
-            </div>
-            <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
-              <strong class="text-sky-300 block mb-0.5">↩️ Geri alma:</strong>
-              <span class="text-gray-200">Herhangi bir sistem değişikliği öncesinde oluşturduğunuz Sistem Geri Yükleme Noktasına (rstrui.exe) dönebilir veya istemciyi yeniden başlatabilirsiniz.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bölüm 4: İşe Yaramazsa Bölümü -->
+      <!-- 6. İşe Yaramazsa Bölümü -->
       <section id="ise-yaramazsa" class="bg-[#18202c] border border-sky-400/30 rounded-2xl p-6 space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-sky-200">🧭 4. Bu Çözümler İşe Yaramazsa Ne Yapmalısınız?</h2>
-        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Yukarıdaki adımlara rağmen BIOS'ta CSM kapatıldığında Windows hiç açılmıyor ve tekrar BIOS ekranına atıyorsa, sistem diskiniz MBR formatındadır. Veri kaybı olmadan diski GPT formatına çevirmek için Yönetici CMD'de mbr2gpt /validate /allowFullOS ve ardından mbr2gpt /convert /allowFullOS komutunu çalıştırıp BIOS'tan UEFI modunu tekrar aktif edin.</p>
+        <h2 class="text-base sm:text-lg font-extrabold text-sky-200">🧭 İşe Yaramazsa Ne Yapmalısınız?</h2>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">msinfo32 ekranında BIOS Modu &#x27;Eski (Legacy)&#x27; görünüyorsa diskiniz MBR formatındadır; CSM kapatmadan önce diskin GPT formatında olması gerekir. Ayrıca Windows Güvenliği &gt; Cihaz Güvenliği &gt; Çekirdek Yalıtımı altındaki Bellek Bütünlüğü ayarını kontrol edin.</p>
         <div class="pt-1 flex flex-wrap gap-3">
           <a href="/#tabContent-ai-lab" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#5e9c88] hover:bg-[#4e8775] text-white transition">
             🤖 Crash Log (.log) Yükleyip AI ile Özel Teşhis Al →
@@ -334,47 +319,104 @@
         </div>
       </section>
 
-      <!-- Bölüm 5: Resmi Kaynak Linki -->
+      <!-- 8. Resmi Kaynak Linki -->
       <section id="resmi-kaynak" class="bg-[#18202c] border border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 class="text-sm sm:text-base font-extrabold text-white">🌐 5. Resmi Destek ve Dokümantasyon Kaynağı</h2>
-          <p class="text-xs text-gray-400 mt-0.5">Yayıncı ve geliştirici ekibin güncel yama/destek dokümanını resmi kaynağından inceleyebilirsiniz.</p>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">🌐 Resmi Destek ve Dokümantasyon Kaynağı</h2>
+          <p class="text-xs text-gray-400 mt-0.5">Yayıncı ve geliştirici ekibin güncel destek dokümanını resmi kaynağından inceleyebilirsiniz.</p>
         </div>
-        <a href="https://support-valorant.riotgames.com/hc/tr/articles/360045619633-VALORANT-Hata-Kodlar%C4%B1" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl text-xs font-bold bg-white/10 hover:bg-white/15 text-[#a3d9c6] border border-white/15 shrink-0 transition">
-          🔗 Riot Games Valorant Resmi Destek Merkezi (Hata Kodları) ↗
-        </a>
+
+        <span class="px-3.5 py-2 rounded-xl text-xs font-mono bg-white/5 text-gray-400 border border-dashed border-white/15 shrink-0" data-official-url-slot="pending">
+          🔗 Resmi destek bağlantısı eklenecek (Riot Games Valorant VAN 9003 ve Secure Boot Resmi Destek Sayfası)
+        </span>
       </section>
 
-      <!-- Bölüm 6: Sıkça Sorulan Sorular (SSS) -->
+      <!-- 9. Sıkça Sorulan Sorular (SSS) -->
       <section id="sss" class="space-y-3">
-        <h2 class="text-base sm:text-lg font-extrabold text-white">❓ 6. Sıkça Sorulan Sorular (SSS)</h2>
+        <h2 class="text-base sm:text-lg font-extrabold text-white">❓ Sıkça Sorulan Sorular (SSS)</h2>
+
         <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
-          <h3 class="text-xs sm:text-sm font-bold text-white">Valorant VAN 9003 hatası donanımsal bir arızadan mı kaynaklanır?</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Çoğu durumda donanımsal arıza değildir; işletim sistemi güvenlik politikaları, bozuk gölgelendirici önbelleği (Shader Cache) veya anti-cheat servis izinlerinden kaynaklanır ve yukarıdaki adımlarla yazılımsal olarak giderilebilir.</p>
+          <h3 class="text-xs sm:text-sm font-bold text-white">BIOS&#x27;ta Secure Boot Enabled görünmesine rağmen Valorant neden hala VAN 9003 (van9003) veriyor?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">ASUS, MSI, Gigabyte ve ASRock anakartlarda Secure Boot seçeneği Enabled olsa bile Platform Key (PK) anahtarları yüklenmemişse Secure Boot durumu &#x27;Not Active&#x27; kalır. BIOS &gt; Secure Boot &gt; Key Management menüsünden &#x27;Install Default Secure Boot Keys&#x27; (veya Restore Factory Keys) işlemini uyguladığınızda Secure Boot aktif hale gelir.</p>
         </div>
+
         <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
-          <h3 class="text-xs sm:text-sm font-bold text-white">Çözüm adımlarını uygulamadan önce hangi yedeği almalıyım?</h3>
-          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">PowerShell'i Yönetici olarak açıp <code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code> komutuyla veya <code>rstrui.exe</code> arayüzüyle bir Sistem Geri Yükleme Noktası oluşturmanız önerilir.</p>
+          <h3 class="text-xs sm:text-sm font-bold text-white">valorant van 9003 hatası Windows 11&#x27;de neden ortaya çıkar?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows 11 23H2 ve 24H2 sürümlerinde Riot Vanguard çekirdek sürücüsü (vgk.sys), önyükleme zincirinin güvenliğini doğrulamak için UEFI Secure Boot ve TPM 2.0 modüllerinin donanımsal olarak &#x27;Aktif (Active)&#x27; durumda çalışmasını zorunlu tutar.</p>
+        </div>
+
+        <div class="bg-[#18202c] border border-white/10 rounded-xl p-4 space-y-1.5">
+          <h3 class="text-xs sm:text-sm font-bold text-white">BIOS ayarlarını değiştirmeden önce hangi önlemi almalıyım?</h3>
+          <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">İşlemlere başlamadan önce msinfo32 üzerinden BIOS Modunun UEFI olduğundan emin olun ve PowerShell&#x27;de Checkpoint-Computer -Description &quot;OyunCoz_Yedek&quot; komutuyla bir Sistem Geri Yükleme Noktası oluşturun.</p>
         </div>
       </section>
 
-      <!-- Bölüm 7: İlgili Hatalar (İç Linkler) -->
+      <!-- 10. İlgili Hatalar (İç Linkler) -->
       <section id="ilgili-hatalar" class="bg-[#18202c] border border-white/10 rounded-2xl p-6 space-y-4">
         <div class="flex items-center justify-between">
-          <h2 class="text-base sm:text-lg font-extrabold text-white">🔗 7. İlgili Hata Kodları ve Benzer Çözüm Rehberleri</h2>
+          <h2 class="text-base sm:text-lg font-extrabold text-white">🔗 İlgili Hatalar</h2>
           <a href="/hata-kodlari" class="text-xs font-semibold text-[#88c0a8] hover:underline">Tüm Hata Kodları →</a>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <a href="/valorant/van-1067" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAN 1067</span><span class="text-gray-200 font-semibold">Valorant VAN 1067 TPM 2.0 ve VGC Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
-          <a href="/valorant/val-62" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAL 62</span><span class="text-gray-200 font-semibold">Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
-          <a href="/valorant/perf-stutter" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">VALORANT • PERF-STUTTER</span><span class="text-gray-200 font-semibold">Valorant PERF-STUTTER Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
-          <a href="/valorant/val-5-val-43" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">VALORANT • VAL 5 / VAL 43</span><span class="text-gray-200 font-semibold">Valorant VAL 5 Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
-          <a href="/cs2/vac-oturum-dogrulama" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • VAC Oturum Doğrulama</span><span class="text-gray-200 font-semibold">CS2 VAC Oturumunuzu Doğrulayamadı Çözüm Rehberi</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
-          <a href="/cs2/packet-burst" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs"><div><span class="font-mono text-[#a3d9c6] font-bold block">Counter-Strike 2 • Packet Burst & FPS</span><span class="text-gray-200 font-semibold">CS2 Packet Burst, Jitter ve FPS Düşmesi Çözümü</span></div><span class="text-[#88c0a8] font-bold shrink-0">→</span></a>
+
+          <a href="/valorant/van-1067" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAN 1067</span>
+              <span class="text-gray-200 font-semibold">Valorant VAN 1067 Bağlantı ve TPM 2.0 Hatası Çözümü</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+
+          <a href="/valorant/val-62" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • VAL 62</span>
+              <span class="text-gray-200 font-semibold">Valorant VAL 62 ve Paket Kaybı Çözüm Rehberi</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+
+          <a href="/valorant-hata-cozumleri.html" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">Valorant • TÜM HATALAR</span>
+              <span class="text-gray-200 font-semibold">Valorant Hata Kodları ve Çözüm Merkezi</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+
+          <a href="/lol/van-185" class="p-3.5 rounded-xl bg-[#141923] hover:bg-[#1e2636] border border-white/10 hover:border-[#88c0a8]/40 transition flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">League of Legends • VAN 185</span>
+              <span class="text-gray-200 font-semibold">LoL Vanguard VAN 185 Hatası Çözümü (Adım Adım)</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
         </div>
       </section>
 
-      <!-- Bölüm 8: Bu çözüm işe yaradı mı? Evet / Hayır -->
+      <!-- 11. Yazar Kutusu, Son Güncelleme ve Test Edilen Sürüm -->
+      <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box p-5 rounded-2xl bg-[#151c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#5e9c88]/20 border border-[#88c0a8]/40 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
+            OÇ
+          </div>
+          <div>
+            <div class="text-white font-bold">
+              Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
+            </div>
+            <div class="text-[11px] text-gray-400">Sistem &amp; Oyun Arıza Editörleri • Topluluk + Editör Kontrolü</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-[11px] text-gray-300">
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            📅 Son güncelleme: <time datetime="2026-11-17" class="font-semibold text-white">17.11.2026</time>
+          </span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10">
+            🧪 Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 10 / 11 (23H2 &amp; 24H2) • Güncel Valorant İstemcisi</strong>
+          </span>
+        </div>
+      </section>
+
+      <!-- 12. Bu çözüm işe yaradı mı? Evet / Hayır Butonu -->
       <section id="stage2PageVoteSection" class="bg-[#18202c] border border-white/15 rounded-2xl p-5 space-y-3 shadow-lg">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div class="space-y-1">
@@ -406,6 +448,15 @@
         <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
       </section>
       <script>
+        function copyTemplateCmd(btn) {
+          var c = btn.getAttribute('data-cmd') || '';
+          if (c && navigator.clipboard) {
+            navigator.clipboard.writeText(c).then(function() {
+              btn.textContent = '✓ Kopyalandı';
+              setTimeout(function() { btn.textContent = '📋 Kopyala'; }, 1800);
+            });
+          }
+        }
         (function() {
           function getClientId() {
             try {
@@ -477,17 +528,17 @@
       <div class="flex flex-wrap items-center justify-center gap-2.5 text-[11px]">
         <a href="/hata-kodlari" class="hover:text-[#a3d9c6] transition">Hata Kodları Dizini</a>
         <span>•</span>
-        <a href="./hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
+        <a href="/hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
         <span>•</span>
-        <a href="./iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
+        <a href="/iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
         <span>•</span>
-        <a href="./kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK Aydınlatma Metni</a>
+        <a href="/kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK Aydınlatma Metni</a>
         <span>•</span>
-        <a href="./gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez Politikası</a>
+        <a href="/gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez Politikası</a>
         <span>•</span>
-        <a href="./kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
+        <a href="/kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
         <span>•</span>
-        <a href="./telif-ve-sorumluluk-reddi.html" class="hover:text-[#a3d9c6] transition">Telif ve Sorumluluk Reddi</a>
+        <a href="/telif-ve-sorumluluk-reddi.html" class="hover:text-[#a3d9c6] transition">Telif ve Sorumluluk Reddi</a>
         <span>•</span>
         <a href="/sitemap.xml" class="hover:text-gray-200 transition">Site Haritası</a>
       </div>
