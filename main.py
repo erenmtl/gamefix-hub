@@ -541,9 +541,9 @@ def write_ai_generated_game_hub_file(
     robots_val = "index, follow" if is_indexed else "noindex, follow"
     date_tr = format_date_tr_ddmmyyyy(updated_iso)
     status_badge_html = (
-        f'<span class="editor-verified-badge px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 text-xs font-bold">✓ {EDITOR_VERIFIED_LABEL}</span>'
+        f'<span class="editor-verified-badge oc-badge oc-badge-success px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-200 border border-emerald-400/30 text-xs font-bold">✓ {EDITOR_VERIFIED_LABEL}</span>'
         if editor_verified else
-        '<span class="ai-draft-badge px-3 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-400/30 text-xs font-bold">🤖 Yapay Zeka Taslak Çözümü (İnceleme Bekliyor)</span>'
+        '<span class="ai-generated-badge oc-badge oc-badge-warning px-3 py-1 rounded-full bg-amber-500/15 text-amber-200 border border-amber-400/30 text-xs font-bold">⚠️ Yapay zeka ile üretildi, uygulamadan önce kontrol edin</span>'
     )
     cards_html = []
     for iss in issues_list:

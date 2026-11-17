@@ -132,6 +132,28 @@
       const iconMap = { info: 'info', warning: 'alert-triangle', danger: 'alert-circle', success: 'check-circle' };
       const iconHtml = renderOcIcon(iconMap[variant] || 'info', 'w-5 h-5 mt-0.5');
       return `<div class="oc-alert oc-alert-${variant}" role="status">${iconHtml}<div>${title ? `<strong class="block font-bold mb-0.5">${title}</strong>` : ''}<span>${message}</span></div></div>`;
+    },
+    ContentStatusBadge: function (editorVerified) {
+      if (editorVerified) {
+        return `<span class="editor-verified-badge oc-badge oc-badge-success font-semibold">${renderOcIcon('check-circle', 'w-3.5 h-3.5')}<span>Editör kontrolünden geçti</span></span>`;
+      }
+      return `<span class="ai-generated-badge oc-badge oc-badge-warning font-semibold">${renderOcIcon('alert-triangle', 'w-3.5 h-3.5')}<span>Yapay zeka ile üretildi, uygulamadan önce kontrol edin</span></span>`;
+    },
+    AuthorBox: function ({ authorName = 'OyunÇöz Teknik Ekibi', updatedIso = '2026-11-17', updatedDisplay = '17.11.2026', testedVersion = 'Windows 10 / 11 (64-bit)' }) {
+      return `
+        <div class="stage2-author-box oc-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-3">
+            <span class="oc-monogram" aria-hidden="true">OÇ</span>
+            <div>
+              <div class="text-white font-bold">Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">${authorName}</a></div>
+              <div class="text-gray-400">Sistem ve Oyun Arıza Editörleri • <a href="/hakkimizda.html" class="underline hover:text-white">Hakkımızda</a></div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 text-gray-300">
+            <span class="oc-badge">Son güncelleme: <time datetime="${updatedIso}" class="font-semibold text-white">${updatedDisplay}</time></span>
+            <span class="oc-badge">Test edilen sürüm: <strong class="text-[#a3d9c6]">${testedVersion}</strong></span>
+          </div>
+        </div>`;
     }
   };
 
