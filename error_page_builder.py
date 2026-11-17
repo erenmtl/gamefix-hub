@@ -85,6 +85,23 @@ def format_date_tr(iso_date: str) -> str:
     return raw
 
 
+def normalize_video_embed_url(raw_url: str) -> str:
+    """
+    Stage 6.1: Converts YouTube watch/short/youtu.be or TikTok URLs into clean embed URLs,
+    or returns already-formatted embed URLs unchanged. Returns '' if empty.
+    """
+    url = (raw_url or "").strip()
+    if not url:
+        return ""
+    m_yt = re.search(r"(?:youtube\.com/(?:watch\?v=|shorts/)|youtu\.be/)([A-Za-z0-9_-]{6,})", url)
+    if m_yt:
+        return f"https://www.youtube-nocookie.com/embed/{m_yt.group(1)}"
+    m_tt = re.search(r"tiktok\.com/.*/video/(\d+)", url)
+    if m_tt:
+        return f"https://www.tiktok.com/embed/v2/{m_tt.group(1)}"
+    return url
+
+
 def validate_record(record: Dict[str, Any]) -> List[str]:
     """
     Validates a single error code page record and prints/returns warnings if limits are exceeded.
@@ -362,7 +379,7 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
         isle_yaramazsa_inner = f'<p class="text-xs sm:text-sm text-gray-300 leading-relaxed">{html.escape(str(isle_yaramazsa_val))}</p>'
 
     # 7. Video (varsa - Stage 1.2 & Stage 6.1: lazy-loaded iframe only when video_embed_url is non-empty)
-    video_embed_url = str(record.get("video_embed_url") or "").strip()
+    video_embed_url = normalize_video_embed_url(str(record.get("video_embed_url") or ""))
     video_section_html = ""
     if video_embed_url:
         video_section_html = f"""
