@@ -3,6 +3,152 @@
   "description": "OyunÇöz 'Bir Hata Kodu = Bir Sayfa' merkezi veri kaynağı.",
   "pages": [
     {
+      "slug": "gta-6/err-gfx-state-cokme-hatasi",
+      "oyun": "GTA 6",
+      "oyun_hub_url": "/gta-6-hata-cozumleri.html",
+      "hata_kodu": "ERR_GFX_STATE / DX12 Crash",
+      "issue_id": 12,
+      "oncelik": 1,
+      "tek_cumle_ozet": "GTA 6'da RAGE 9 motoru DirectX 12 gölgelendirici önbelleği, VRAM taşması ve Rockstar Launcher kaynaklı açılmama/çökme çözümü.",
+      "varyant_yazimlari": [
+        "gta 6 açılmıyor",
+        "gta 6 err_gfx_state",
+        "gta 6 çökme hatası",
+        "gta 6 kasma ve fps düşmesi",
+        "gta 6 dx12 hatası",
+        "gta 6 sistem gereksinimleri vram hatası"
+      ],
+      "title": "GTA 6 Açılmıyor ve ERR_GFX_STATE Çökme Hatası Çözümü",
+      "meta_description": "GTA 6 açılmıyor, ERR_GFX_STATE DirectX 12 çökmesi, Rockstar Launcher SDK hatası ve Vice City FPS düşmesi sorunları için adım adım teknik çözüm rehberi.",
+      "h1": "GTA 6 Açılmıyor, ERR_GFX_STATE ve FPS Düşmesi Nasıl Çözülür?",
+      "kisa_aciklama": "Grand Theft Auto VI (GTA 6) oynarken karşılaşılan ERR_GFX_STATE, açılış ekranında kapanma (gta 6 açılmıyor) ve ani FPS düşmesi sorunları; RAGE 9 oyun motorunun DirectX 12 Ultimate gölgelendirici önbelleği (Shader Cache) bozulmasından, 8 GB / 12 GB VRAM sınırının aşılmasından veya Rockstar Games Launcher SDK servisinin yanıt vermemesinden kaynaklanır.",
+      "hizli_cozum": {
+        "baslik": "En Olası İlk Adım: RAGE Gölgelendirici Önbelleğini Sıfırlayıp VRAM Hedefini Dengeleyin",
+        "aciklama": "Belgeler\\Rockstar Games\\GTA VI\\Settings klasöründeki geçici pipeline önbellek dosyalarını temizleyin, Windows Grafik Ayarlarında Donanım Hızlandırmalı GPU Zamanlamasını (HAGS) kontrol edin ve Rockstar Games Launcher'ı Yönetici olarak başlatın.",
+        "komut": "cleanmgr /d C"
+      },
+      "senaryolar": [
+        {
+          "id": "vram-8-12gb",
+          "etiket": "8 GB / 12 GB Ekran Kartı (VRAM Hatası)",
+          "baslik": "8 GB ve 12 GB VRAM Ekran Kartlarında Çökme ve Doku Kaybı Önleme",
+          "aciklama": "RAGE 9 motorunda Işın İzleme (Ray Traced Global Illumination) ve Yüksek Çözünürlüklü Dokular aynı anda açıldığında 8-10 GB VRAM sınırını aşar. Doku Kalitesini 'Yüksek', Ray Tracing Yansımaları 'Kapalı/Orta' seviyesine alıp DLSS / FSR Kalite modunu etkinleştirin ve Windows Sanal Belleğini 16384 MB yapın."
+        },
+        {
+          "id": "rockstar-launcher",
+          "etiket": "Oyun Hiç Açılmıyor (Rockstar Launcher)",
+          "baslik": "Rockstar Games Launcher 'Quitting Unexpectedly' ve SDK Döngüsü",
+          "aciklama": "Oyun 'Başlatılıyor' yazıp kapanıyorsa Belgeler\\Rockstar Games\\Launcher klasöründeki geçici oturum önbelleğini temizleyin, OneDrive'ın Belgeler klasörünü kilitlemesini durdurun ve hem Steam/Epic hem de Rockstar Launcher'ı Yönetici olarak çalıştırın."
+        },
+        {
+          "id": "dx12-stutter",
+          "etiket": "Anlık Takılma & FPS Düşmesi (Stutter)",
+          "baslik": "Vice City Şehir İçi Gezinme Takılması (Traversal & Shader Stutter)",
+          "aciklama": "Sürücü güncellemesi sonrası ilk girişte gölgelendirici derlemesinin (%100) ana menüde tamamlanmasını bekleyin, NVIDIA Denetim Masası'ndan Gölgelendirici Önbellek Boyutunu 10 GB yapın ve DirectStorage için oyunun NVMe SSD üzerinde kurulu olduğundan emin olun."
+        }
+      ],
+      "nedenler": [
+        "Belgeler\\Rockstar Games\\GTA VI\\Settings klasöründeki derlenmiş DirectX 12 / Vulkan boru hattı (pipeline) önbellek dosyalarının ekran kartı sürücü güncellemesi sonrası bozulması.",
+        "8 GB veya 12 GB VRAM'e sahip ekran kartlarında Işın İzleme (Ray Tracing) ve kalabalık yoğunluğu ayarlarının video belleğini taşırması.",
+        "Rockstar Games Launcher Service veya Social Club SDK bileşeninin arka planda yetki kaybetmesi ya da Windows Defender Kontrollü Klasör Erişimi tarafından Belgeler klasörünün engellenmesi.",
+        "Oyunun NVMe SSD yerine SATA disk üzerinde çalıştırılması nedeniyle DirectStorage doku akışının zaman aşımına uğraması."
+      ],
+      "cozum_adimlari": [
+        {
+          "baslik": "Settings Klasöründeki Bozuk RAGE Grafik Önbelleğini ve DirectX Shader Cache'i Temizleyin",
+          "aciklama": "ERR_GFX_STATE veya yükleme ekranında çökme yaşıyorsanız Belgeler\\Rockstar Games\\GTA VI\\Settings klasöründeki geçici sga_ / pipeline önbellek dosyalarını silin (hikaye kayıtlarınıza dokunmayın) ve Windows Disk Temizleme aracıyla DirectX Gölgelendirici Önbelleğini sıfırlayın.",
+          "komut": "cleanmgr /d C",
+          "komut_notu": {
+            "ne_yapar": "Windows Disk Temizleme aracını açarak bozulmuş DirectX 12 gölgelendirici önbellek dosyalarını güvenli şekilde temizlemenizi sağlar.",
+            "risk": "Yalnızca geçici grafik önbelleğini siler; oyun kayıt (save) dosyalarınıza zarar vermez.",
+            "geri_alma": "Oyun yeniden başlatıldığında güncel ekran kartı sürücünüze uygun temiz gölgelendirici önbelleğini otomatik oluşturur."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Disk Temizleme aracında DirectX Gölgelendirici Önbelleği ve RAGE Settings temizliği"
+        },
+        {
+          "baslik": "VRAM Taşmasını Önlemek İçin Sanal Belleği (Pagefile) 16384 MB - 24576 MB Yapın",
+          "aciklama": "GTA 6 açık dünya akışında hem VRAM hem sistem RAM'ini yoğun kullanır. Win + R > SystemPropertiesPerformance.exe > Gelişmiş > Sanal Bellek (Değiştir) penceresinden hızlı NVMe SSD diskinizde Başlangıç: 16384 MB, En Büyük: 24576 MB sanal bellek tanımlayın.",
+          "komut": "SystemPropertiesPerformance.exe",
+          "komut_notu": {
+            "ne_yapar": "Windows Performans Seçenekleri ve Sanal Bellek yapılandırma penceresini doğrudan açar.",
+            "risk": "Salt ayar penceresi açma komutudur; sistem dosyalarını değiştirmez.",
+            "geri_alma": "Sanal Bellek penceresinden istediğiniz zaman tekrar 'Tüm sürücülerde disk belleği dosyası boyutunu otomatik yönet' seçeneğini işaretleyebilirsiniz."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Windows Performans Seçenekleri Sanal Bellek ekranında 16384 MB - 24576 MB yapılandırması"
+        },
+        {
+          "baslik": "Rockstar Games Launcher Servisini ve Sistem Dosya Bütünlüğünü Onarın",
+          "aciklama": "Oyun hiç tepki vermiyor veya Rockstar Games Launcher hata kodu veriyorsa arka planda kilitli kalan Launcher süreçlerini kapatın, sistem kütüphanelerini doğrulayın ve başlatıcıyı Yönetici olarak çalıştırın.",
+          "komut": "sfc /scannow",
+          "komut_notu": {
+            "ne_yapar": "Windows Sistem Dosyası Denetleyicisi ile bozuk DirectX 12, Visual C++ ve sistem DLL dosyalarını tarar ve onarır.",
+            "risk": "Resmi Microsoft bakım komutudur; kişisel dosyaları veya oyun verilerini silmez.",
+            "geri_alma": "Orijinal Windows sistem bileşenlerini onardığı için geri alma işlemi gerektirmez."
+          },
+          "gorsel_yolu": "",
+          "alt_metin": "Yönetici Komut İstemi üzerinde sfc scannow sistem doğrulaması ve Rockstar Launcher onarımı"
+        },
+        {
+          "baslik": "Oyun İçi Grafik, Işın İzleme (Ray Tracing) ve Kalabalık Yoğunluğu Ayarlarını Dengeleyin",
+          "aciklama": "Şehir merkezinde ani FPS düşmesi yaşıyorsanız Grafik ayarlarından Nüfus/Trafik Yoğunluğu (Population Density) çubuğunu %70 seviyesine çekin, Gölgelendirici Kalitesini Yüksek yapın ve DLSS / FSR / XeSS Ölçekleme modunu 'Kalite (Quality)' konumuna getirin.",
+          "komut": "",
+          "gorsel_yolu": "",
+          "alt_metin": "GTA 6 Grafik ayarlarında VRAM kullanımı, Kalabalık Yoğunluğu ve DLSS/FSR Kalite modu seçimi"
+        }
+      ],
+      "isle_yaramazsa": "Ekran kartınızda MSI Afterburner hız aşırtma (Overclock) profili açıksa varsayılan değerlere döndürün, Discord ve GeForce Experience oyun içi ekran katmanlarını (Overlay) kapatın ve DDU ile en güncel WHQL Game Ready / Adrenalin sürücüsünü temiz kurulumla yükleyin.",
+      "resmi_kaynak_url": "",
+      "resmi_kaynak_baslik": "Rockstar Games Resmi Destek Merkezi",
+      "sss": [
+        {
+          "soru": "GTA 6 ERR_GFX_STATE hatası neden olur?",
+          "cevap": "RAGE oyun motorunun DirectX 12 gölgelendirici boru hattı (pipeline) önbelleğinin bozulması, ekran kartı VRAM sınırının aşılması veya kararsız GPU hız aşırtma (overclock) ayarları nedeniyle grafik sürücüsünün yanıt vermeyi kesmesinden kaynaklanır."
+        },
+        {
+          "soru": "GTA 6 açılmıyor, Rockstar Games Launcher 'Çıkılıyor' deyip kapanıyor; nasıl düzelir?",
+          "cevap": "Windows Güvenliği > Virüs ve tehdit koruması > Fidye yazılımına karşı koruma altındaki 'Denetimli klasör erişimi' özelliğinin Belgeler\\Rockstar Games klasörünü engellemediğinden emin olun ve Rockstar Games Launcher'ı Yönetici olarak başlatıp oyun dosyalarını doğrulayın."
+        },
+        {
+          "soru": "8 GB VRAM ekran kartında GTA 6 kasma ve doku yüklenmeme sorunu nasıl önlenir?",
+          "cevap": "8 GB VRAM'li kartlarda Işın İzleme (Ray Tracing) kapatılmalı, Doku Kalitesi Orta/Yüksek seviyesinde tutulmalı, DLSS/FSR Kalite modu açılmalı ve SSD üzerinde en az 16 GB Windows Sanal Belleği (Pagefile) tanımlanmalıdır."
+        }
+      ],
+      "ilgili_hatalar": [
+        {
+          "url": "/gta-6-hata-cozumleri.html",
+          "oyun": "GTA 6",
+          "hata_kodu": "TÜM HATALAR",
+          "baslik": "GTA 6 Hata Kodları, Açılmama ve FPS Çözüm Merkezi"
+        },
+        {
+          "url": "/gta-v/err-gfx-d3d-init",
+          "oyun": "GTA V",
+          "hata_kodu": "ERR_GFX_D3D_INIT",
+          "baslik": "GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)"
+        },
+        {
+          "url": "/fivem/harita-yuklenmiyor-texture-loss",
+          "oyun": "FiveM",
+          "hata_kodu": "TEXTURE LOSS",
+          "baslik": "FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi"
+        },
+        {
+          "url": "/rdr2/err-gfx-state",
+          "oyun": "Red Dead Redemption 2",
+          "hata_kodu": "ERR_GFX_STATE",
+          "baslik": "RDR2 ERR_GFX_STATE Hatası Çözümü (sga_ Vulkan Temizliği)"
+        }
+      ],
+      "video_embed_url": "",
+      "yazar": "OyunÇöz Teknik Ekibi",
+      "tarih_yayin": "2026-11-18",
+      "tarih_guncelleme": "2026-11-18",
+      "test_edilen_surum": "Windows 11 (23H2 & 24H2) • DirectX 12 Ultimate",
+      "editor_verified": true
+    },
+    {
       "slug": "lol/van-185",
       "oyun": "League of Legends",
       "oyun_hub_url": "/lol-hata-cozumleri.html",
@@ -117,7 +263,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
-      "oncelik": 1,
+      "oncelik": 2,
       "tek_cumle_ozet": "LoL'de Riot İstemcisi ile Vanguard arasındaki oturum bağlantısı koptuğunda oluşan hata kodu.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Açık Riot Süreçlerini Kapatıp Oturumu Yenileyin",
@@ -257,7 +403,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
-      "oncelik": 2,
+      "oncelik": 3,
       "tek_cumle_ozet": "Windows 11'de BIOS UEFI Secure Boot özelliği aktif olmadığında çıkan Vanguard uyumluluk hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: BIOS'ta CSM Kapatıp Secure Boot Anahtarlarını Yükleyin",
@@ -394,7 +540,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel LoL İstemcisi",
-      "oncelik": 3,
+      "oncelik": 4,
       "tek_cumle_ozet": "Windows sınama modu veya antivirüs çakışması nedeniyle Vanguard çekirdek sürücüsünün başlamama hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Windows Sınama Modunu Kapatıp Bilgisayarı Yeniden Başlatın",
@@ -494,7 +640,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • GTA V Güncel Sürüm",
-      "oncelik": 4,
+      "oncelik": 5,
       "tek_cumle_ozet": "GTA 5'te DirectX 11 görüntü bağdaştırıcısının sıfırlanması veya settings.xml uyumsuzluğu hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: settings.xml İçinde DirectX 11 (DX_Version = 2) Ayarlayın",
@@ -607,7 +753,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Güncel Valorant İstemcisi",
-      "oncelik": 5,
+      "oncelik": 6,
       "tek_cumle_ozet": "TPM 2.0 güvenlik yongası veya vgc arka plan servisi yanıt vermediğinde oluşan bağlantı hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: BIOS'tan TPM 2.0 (fTPM / PTT) Açıp vgc Servisini Başlatın",
@@ -721,7 +867,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
-      "oncelik": 6,
+      "oncelik": 7,
       "tek_cumle_ozet": "Steam Client Service veya oyun dosyası imzaları doğrulanamadığında eşleştirmeyi engelleyen uyarı.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: SteamService.exe /repair Çalıştırıp Dosyaları Doğrulayın",
@@ -816,7 +962,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Minecraft 1.20.4 / 1.21 (Java 21)",
-      "oncelik": 7,
+      "oncelik": 8,
       "tek_cumle_ozet": "Uyumsuz Forge/Fabric modları veya yanlış Java 21 yürütülebilir yolu nedeniyle oluşan çökme kodu.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Uyumsuz Modları Çıkarın ve Yerleşik Java 21 Yolunu Sıfırlayın",
@@ -922,7 +1068,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • RDR2 Güncel Sürüm",
-      "oncelik": 8,
+      "oncelik": 9,
       "tek_cumle_ozet": "Belgeler klasöründeki sga_ Vulkan gölgelendirici önbelleği bozulduğunda oluşan RAGE motoru hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Belgeler Klasöründeki Bozuk sga_ Dosyalarını Silin",
@@ -1017,7 +1163,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • FiveM Cfx.re Güncel İstemci",
-      "oncelik": 9,
+      "oncelik": 10,
       "tek_cumle_ozet": "FiveM sunucularında Extended Texture Budget düşük kaldığında yolların ve binaların kaybolması sorunu.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Extended Texture Budget Çubuğunu %50-%65 Seviyesine Çekin",
@@ -1112,7 +1258,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Counter-Strike 2 Source 2",
-      "oncelik": 10,
+      "oncelik": 11,
       "tek_cumle_ozet": "Source 2 motorunda sub-tick paket dalgalanması ve bozuk DirectX gölgelendirici önbelleği kaynaklı takılma.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Oyun İçi Ağ Arabelleğini '1 Paket' Yapın ve Eski Kodları Silin",
@@ -1213,7 +1359,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Bannerlord Güncel Sürüm",
-      "oncelik": 11,
+      "oncelik": 12,
       "tek_cumle_ozet": "Kuşatma savaşlarında bozuk ProgramData Shaders önbelleği nedeniyle oluşan DirectX 11 GPU çökmesi.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: ProgramData Altındaki Bozuk Shaders Klasörünü Silin",
@@ -1314,7 +1460,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • EA Sports FC 25 Güncel Sürüm",
-      "oncelik": 12,
+      "oncelik": 13,
       "tek_cumle_ozet": "EA App önbelleği veya EAAntiCheat servisi bozulduğunda oyunun açılış ekranında kapanması sorunu.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: EA App Recovery ile Önbelleği Temizleyip AntiCheat'i Onarın",
@@ -1420,7 +1566,7 @@
       "tarih_yayin": "2026-03-01",
       "tarih_guncelleme": "2026-11-17",
       "test_edilen_surum": "Windows 10 / 11 (23H2 & 24H2) • Black Myth: Wukong Güncel Sürüm",
-      "oncelik": 13,
+      "oncelik": 14,
       "tek_cumle_ozet": "Unreal Engine 5 gölgelendirici derlemesi sırasında sanal bellek veya işlemci kaynaklı bellek hatası.",
       "hizli_cozum": {
         "baslik": "En Olası İlk Adım: Sanal Belleği 16384 MB Yapın ve -dx11 Parametresiyle Başlatın",

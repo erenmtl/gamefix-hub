@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GTA 6 Açılmıyor ve ERR_GFX_STATE Çökme Hatası Çözümü</title>
+  <meta name="description" content="GTA 6 açılmıyor, ERR_GFX_STATE DirectX 12 çökmesi, Rockstar Launcher SDK hatası ve Vice City FPS düşmesi sorunları için adım adım teknik çözüm rehberi." />
+  <meta name="author" content="OyunÇöz Teknik Ekibi" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi" />
+  <link rel="alternate" hreflang="tr-TR" href="https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi" />
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="OyunÇöz" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:url" content="https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi" />
+  <meta property="og:title" content="GTA 6 Açılmıyor ve ERR_GFX_STATE Çökme Hatası Çözümü" />
+  <meta property="og:description" content="GTA 6 açılmıyor, ERR_GFX_STATE DirectX 12 çökmesi, Rockstar Launcher SDK hatası ve Vice City FPS düşmesi sorunları için adım adım teknik çözüm rehberi." />
+  <meta property="og:image" content="https://oyuncoz.com/static/og-banner.png" />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="GTA 6 Açılmıyor ve ERR_GFX_STATE Çökme Hatası Çözümü" />
+  <meta name="twitter:description" content="GTA 6 açılmıyor, ERR_GFX_STATE DirectX 12 çökmesi, Rockstar Launcher SDK hatası ve Vice City FPS düşmesi sorunları için adım adım teknik çözüm rehberi." />
+  <meta name="twitter:image" content="https://oyuncoz.com/static/og-banner.png" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Ana Sayfa",
+          "item": "https://oyuncoz.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "GTA 6",
+          "item": "https://oyuncoz.com/gta-6-hata-cozumleri.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "ERR_GFX_STATE / DX12 Crash",
+          "item": "https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi"
+        }
+      ]
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi#article",
+      "headline": "GTA 6 Açılmıyor, ERR_GFX_STATE ve FPS Düşmesi Nasıl Çözülür?",
+      "description": "GTA 6 açılmıyor, ERR_GFX_STATE DirectX 12 çökmesi, Rockstar Launcher SDK hatası ve Vice City FPS düşmesi sorunları için adım adım teknik çözüm rehberi.",
+      "inLanguage": "tr",
+      "datePublished": "2026-11-18",
+      "dateModified": "2026-11-18",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://oyuncoz.com/gta-6/err-gfx-state-cokme-hatasi"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "OyunÇöz Teknik Ekibi",
+        "url": "https://oyuncoz.com/hakkimizda.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://oyuncoz.com/#organization",
+        "name": "OyunÇöz",
+        "url": "https://oyuncoz.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://oyuncoz.com/static/og-banner.png",
+          "width": 1200,
+          "height": 630
+        }
+      }
+    }
+  ]
+}
+  </script>
+  <style id="critical-css">
+    :root{--accent:#5e9c88;--bg-dark:#141923;--bg-panel:#1b2230;--bg-card:#202838;--text-main:#d8dee9;--text-muted:#9fb0c7}
+    html,body{background-color:#141923;color:#d8dee9;font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;padding:0;line-height:1.65}
+    .text-white{color:#e6ecf5!important}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/static/ui_components.js" defer></script>
+</head>
+<body class="min-h-screen flex flex-col bg-[#141923] text-gray-100 pb-20 lg:pb-0">
+  <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>
+  <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      <a href="/" class="flex items-center gap-3">
+        <span class="oc-monogram" aria-hidden="true">OÇ</span>
+        <div>
+          <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
+          <span class="block text-[11px] text-gray-400">Oyun Hata Kodları ve FPS Çözümleri</span>
+        </div>
+      </a>
+      <nav aria-label="Üst Gezinme Menüsü" class="flex items-center gap-2 text-xs">
+        <a href="/hata-kodlari" class="oc-btn oc-btn-secondary !min-h-[40px] !py-1.5 !px-3 text-xs">Hata Kodları</a>
+        <a href="/gta-6-hata-cozumleri.html" class="hidden sm:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs text-[#a3d9c6]">GTA 6</a>
+        <a href="/#tabContent-ai-lab" class="hidden md:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs">AI Çözümleyici</a>
+        <a href="/#tabContent-forum" class="hidden md:inline-flex oc-btn oc-btn-ghost !min-h-[40px] !py-1.5 !px-3 text-xs">Forum</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="ana-icerik" class="max-w-6xl mx-auto px-4 py-7 space-y-6 flex-1 w-full">
+    <!-- 1. Breadcrumb (Ana Sayfa › Oyun › Hata Kodu) -->
+    <nav aria-label="Breadcrumb" class="oc-breadcrumb">
+      <a href="/" class="hover:text-[#88c0a8] transition">Ana Sayfa</a>
+      <span aria-hidden="true">›</span>
+      <a href="/gta-6-hata-cozumleri.html" class="hover:text-[#88c0a8] transition">GTA 6</a>
+      <span aria-hidden="true">›</span>
+      <span class="text-white font-semibold" aria-current="page">ERR_GFX_STATE / DX12 Crash</span>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start"><div class="lg:col-span-9 space-y-7">
+    <article class="space-y-7 oc-prose">
+      <!-- 2. Üst Bölüm (Kaydırmadan Görünen Kısım: Rozetler, H1, Bu Hata Ne Anlama Geliyor, Hızlı Çözüm, Video) -->
+      <section class="oc-card p-6 sm:p-8 space-y-4">
+        <div class="flex flex-wrap items-center gap-2.5 text-xs">
+          <span class="oc-monogram oc-monogram-sm" aria-hidden="true">GTA6</span>
+          <span class="oc-badge oc-badge-accent font-bold">GTA 6</span>
+          <span class="oc-badge font-mono font-bold">Hata Kodu: ERR_GFX_STATE / DX12 Crash</span>
+          <span class="editor-verified-badge oc-badge oc-badge-success font-semibold"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg><span>Editör kontrolünden geçti</span></span>
+        </div>
+
+        <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">GTA 6 Açılmıyor, ERR_GFX_STATE ve FPS Düşmesi Nasıl Çözülür?</h1>
+
+        <div class="space-y-1">
+          <div class="text-xs font-bold uppercase tracking-wider text-[#88c0a8]">Bu hata ne anlama geliyor?</div>
+          <p id="hata-anlami" class="text-sm sm:text-base text-gray-200 leading-relaxed">
+            Grand Theft Auto VI (GTA 6) oynarken karşılaşılan ERR_GFX_STATE, açılış ekranında kapanma (gta 6 açılmıyor) ve ani FPS düşmesi sorunları; RAGE 9 oyun motorunun DirectX 12 Ultimate gölgelendirici önbelleği (Shader Cache) bozulmasından, 8 GB / 12 GB VRAM sınırının aşılmasından veya Rockstar Games Launcher SDK servisinin yanıt vermemesinden kaynaklanır.
+          </p>
+        </div>
+
+
+        <div id="hizli-cozum" class="p-4 sm:p-5 rounded-xl bg-[#162228] border border-[#5e9c88]/45 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <span class="oc-badge oc-badge-accent font-extrabold uppercase tracking-wider">Hızlı Çözüm (İlk Adım)</span>
+            <a href="#cozum-adimlari" class="text-xs font-bold text-[#88c0a8] hover:underline">Tüm adımlara in (4 adım) ↓</a>
+          </div>
+          <h2 class="text-sm sm:text-base font-extrabold text-white">En Olası İlk Adım: RAGE Gölgelendirici Önbelleğini Sıfırlayıp VRAM Hedefini Dengeleyin</h2>
+          <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Belgeler\Rockstar Games\GTA VI\Settings klasöründeki geçici pipeline önbellek dosyalarını temizleyin, Windows Grafik Ayarlarında Donanım Hızlandırmalı GPU Zamanlamasını (HAGS) kontrol edin ve Rockstar Games Launcher&#x27;ı Yönetici olarak başlatın.</p>
+          <div class="oc-codeblock flex items-center justify-between gap-3 mt-2">
+            <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">cleanmgr /d C</code>
+            <button type="button" data-cmd="cleanmgr /d C" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[36px] !py-1 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Mobil İçindekiler ("Bu sayfada") -->
+      <details class="oc-accordion lg:hidden">
+        <summary class="text-xs sm:text-sm font-bold text-white">
+          <span>Bu sayfada (İçindekiler)</span>
+          <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </summary>
+        <div class="oc-accordion-body">
+          <ul class="space-y-1 text-xs">
+<li><a href="#hizli-cozum" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Hızlı Çözüm</a></li>
+<li><a href="#hata-nedenleri" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Bu Hatanın Nedenleri</a></li>
+<li><a href="#cozum-adimlari" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Adım Adım Çözüm (4 Adım)</a></li>
+<li><a href="#ise-yaramazsa" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İşe Yaramazsa</a></li>
+<li><a href="#sss" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Sıkça Sorulan Sorular</a></li>
+<li><a href="#ilgili-hatalar" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İlgili Hatalar</a></li>
+<li><a href="#stage2PageVoteSection" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Çözüm Değerlendirme</a></li>
+          </ul>
+        </div>
+      </details>
+      <!-- 4. Bu Hatanın Nedenleri -->
+      <section id="hata-nedenleri" class="oc-card p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">Bu Hatanın Nedenleri</h2>
+        <ul class="list-disc pl-5 text-xs sm:text-sm text-gray-300 space-y-2">
+          <li class="leading-relaxed">Belgeler\Rockstar Games\GTA VI\Settings klasöründeki derlenmiş DirectX 12 / Vulkan boru hattı (pipeline) önbellek dosyalarının ekran kartı sürücü güncellemesi sonrası bozulması.</li>
+          <li class="leading-relaxed">8 GB veya 12 GB VRAM&#x27;e sahip ekran kartlarında Işın İzleme (Ray Tracing) ve kalabalık yoğunluğu ayarlarının video belleğini taşırması.</li>
+          <li class="leading-relaxed">Rockstar Games Launcher Service veya Social Club SDK bileşeninin arka planda yetki kaybetmesi ya da Windows Defender Kontrollü Klasör Erişimi tarafından Belgeler klasörünün engellenmesi.</li>
+          <li class="leading-relaxed">Oyunun NVMe SSD yerine SATA disk üzerinde çalıştırılması nedeniyle DirectStorage doku akışının zaman aşımına uğraması.</li>
+        </ul>
+      </section>
+        <div id="senaryo-secici" class="oc-card p-5 space-y-3">
+          <div class="text-xs sm:text-sm font-bold text-white">Hangisi senin durumun? (Sistemine Göre Seç)</div>
+          <div class="oc-tabs" role="tablist" aria-label="Sistem senaryosu seçimi">
+            <button type="button" role="tab" aria-selected="true" data-scenario-target="scenarioPanel-vram-8-12gb" onclick="switchPageScenario(this, 'scenarioPanel-vram-8-12gb')" class="oc-tab-btn active">8 GB / 12 GB Ekran Kartı (VRAM Hatası)</button><button type="button" role="tab" aria-selected="false" data-scenario-target="scenarioPanel-rockstar-launcher" onclick="switchPageScenario(this, 'scenarioPanel-rockstar-launcher')" class="oc-tab-btn ">Oyun Hiç Açılmıyor (Rockstar Launcher)</button><button type="button" role="tab" aria-selected="false" data-scenario-target="scenarioPanel-dx12-stutter" onclick="switchPageScenario(this, 'scenarioPanel-dx12-stutter')" class="oc-tab-btn ">Anlık Takılma &amp; FPS Düşmesi (Stutter)</button>
+          </div>
+          <div>
+            <div id="scenarioPanel-vram-8-12gb" role="tabpanel" class="scenario-panel  p-4 rounded-xl bg-[#141923] border border-white/10 space-y-1.5"><h3 class="text-sm font-bold text-[#a3d9c6]">8 GB ve 12 GB VRAM Ekran Kartlarında Çökme ve Doku Kaybı Önleme</h3><p class="text-xs sm:text-sm text-gray-200 leading-relaxed">RAGE 9 motorunda Işın İzleme (Ray Traced Global Illumination) ve Yüksek Çözünürlüklü Dokular aynı anda açıldığında 8-10 GB VRAM sınırını aşar. Doku Kalitesini &#x27;Yüksek&#x27;, Ray Tracing Yansımaları &#x27;Kapalı/Orta&#x27; seviyesine alıp DLSS / FSR Kalite modunu etkinleştirin ve Windows Sanal Belleğini 16384 MB yapın.</p></div><div id="scenarioPanel-rockstar-launcher" role="tabpanel" class="scenario-panel hidden p-4 rounded-xl bg-[#141923] border border-white/10 space-y-1.5"><h3 class="text-sm font-bold text-[#a3d9c6]">Rockstar Games Launcher &#x27;Quitting Unexpectedly&#x27; ve SDK Döngüsü</h3><p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Oyun &#x27;Başlatılıyor&#x27; yazıp kapanıyorsa Belgeler\Rockstar Games\Launcher klasöründeki geçici oturum önbelleğini temizleyin, OneDrive&#x27;ın Belgeler klasörünü kilitlemesini durdurun ve hem Steam/Epic hem de Rockstar Launcher&#x27;ı Yönetici olarak çalıştırın.</p></div><div id="scenarioPanel-dx12-stutter" role="tabpanel" class="scenario-panel hidden p-4 rounded-xl bg-[#141923] border border-white/10 space-y-1.5"><h3 class="text-sm font-bold text-[#a3d9c6]">Vice City Şehir İçi Gezinme Takılması (Traversal &amp; Shader Stutter)</h3><p class="text-xs sm:text-sm text-gray-200 leading-relaxed">Sürücü güncellemesi sonrası ilk girişte gölgelendirici derlemesinin (%100) ana menüde tamamlanmasını bekleyin, NVIDIA Denetim Masası&#x27;ndan Gölgelendirici Önbellek Boyutunu 10 GB yapın ve DirectStorage için oyunun NVMe SSD üzerinde kurulu olduğundan emin olun.</p></div>
+          </div>
+        </div>
+
+      <!-- 5. Adım Adım Çözüm (İlerleme Göstergesi + Geri Yükleme Uyarı Kutusu + Numaralı Kartlar) -->
+      <section id="cozum-adimlari" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">Adım Adım Çözüm</h2>
+          <span id="stepProgressBadge" class="oc-badge oc-badge-accent font-bold">İlerleme: 0/4 adım</span>
+        </div>
+
+        <!-- Sarı Uyarı Kutusu (Alert): Sistem ayarı değiştiren adımlardan önce Geri yükleme noktası uyarısı -->
+        <div class="oc-alert oc-alert-warning text-xs sm:text-sm">
+          <svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+          <div>
+            <strong class="font-bold">Geri yükleme noktası oluşturun:</strong> Sistem veya servis ayarlarını değiştirmeden önce Windows'ta bir Sistem Geri Yükleme Noktası (<code>Checkpoint-Computer -Description "OyunCoz_Yedek"</code>) oluşturmanız önerilir.
+          </div>
+        </div>
+
+        <div id="adim-1" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 1</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">Settings Klasöründeki Bozuk RAGE Grafik Önbelleğini ve DirectX Shader Cache&#x27;i Temizleyin</h3>
+            </div>
+          </div>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">ERR_GFX_STATE veya yükleme ekranında çökme yaşıyorsanız Belgeler\Rockstar Games\GTA VI\Settings klasöründeki geçici sga_ / pipeline önbellek dosyalarını silin (hikaye kayıtlarınıza dokunmayın) ve Windows Disk Temizleme aracıyla DirectX Gölgelendirici Önbelleğini sıfırlayın.</p>
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span class="inline-flex items-center gap-1.5 font-mono text-[#a3d9c6]"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg><span>Komut İstemi / PowerShell</span></span>
+              <span class="oc-badge oc-badge-warning">Yönetici olarak çalıştırın</span>
+            </div>
+            <div class="oc-codeblock flex items-center justify-between gap-3">
+              <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">cleanmgr /d C</code>
+              <button type="button" data-cmd="cleanmgr /d C" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+            </div>
+            <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik Bilgisi:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs leading-relaxed w-full">
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
+                  <span class="text-gray-200">Windows Disk Temizleme aracını açarak bozulmuş DirectX 12 gölgelendirici önbellek dosyalarını güvenli şekilde temizlemenizi sağlar.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-amber-300 block mb-0.5">Risk:</strong>
+                  <span class="text-gray-200">Yalnızca geçici grafik önbelleğini siler; oyun kayıt (save) dosyalarınıza zarar vermez.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-sky-300 block mb-0.5">Geri alma:</strong>
+                  <span class="text-gray-200">Oyun yeniden başlatıldığında güncel ekran kartı sürücünüze uygun temiz gölgelendirici önbelleğini otomatik oluşturur.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
+        </div>
+
+        <div id="adim-2" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 2</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">VRAM Taşmasını Önlemek İçin Sanal Belleği (Pagefile) 16384 MB - 24576 MB Yapın</h3>
+            </div>
+          </div>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">GTA 6 açık dünya akışında hem VRAM hem sistem RAM&#x27;ini yoğun kullanır. Win + R &gt; SystemPropertiesPerformance.exe &gt; Gelişmiş &gt; Sanal Bellek (Değiştir) penceresinden hızlı NVMe SSD diskinizde Başlangıç: 16384 MB, En Büyük: 24576 MB sanal bellek tanımlayın.</p>
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span class="inline-flex items-center gap-1.5 font-mono text-[#a3d9c6]"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg><span>Komut İstemi / PowerShell</span></span>
+              <span class="oc-badge oc-badge-warning">Yönetici olarak çalıştırın</span>
+            </div>
+            <div class="oc-codeblock flex items-center justify-between gap-3">
+              <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">SystemPropertiesPerformance.exe</code>
+              <button type="button" data-cmd="SystemPropertiesPerformance.exe" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+            </div>
+            <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik Bilgisi:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs leading-relaxed w-full">
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
+                  <span class="text-gray-200">Windows Performans Seçenekleri ve Sanal Bellek yapılandırma penceresini doğrudan açar.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-amber-300 block mb-0.5">Risk:</strong>
+                  <span class="text-gray-200">Salt ayar penceresi açma komutudur; sistem dosyalarını değiştirmez.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-sky-300 block mb-0.5">Geri alma:</strong>
+                  <span class="text-gray-200">Sanal Bellek penceresinden istediğiniz zaman tekrar &#x27;Tüm sürücülerde disk belleği dosyası boyutunu otomatik yönet&#x27; seçeneğini işaretleyebilirsiniz.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
+        </div>
+
+        <div id="adim-3" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 3</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">Rockstar Games Launcher Servisini ve Sistem Dosya Bütünlüğünü Onarın</h3>
+            </div>
+          </div>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Oyun hiç tepki vermiyor veya Rockstar Games Launcher hata kodu veriyorsa arka planda kilitli kalan Launcher süreçlerini kapatın, sistem kütüphanelerini doğrulayın ve başlatıcıyı Yönetici olarak çalıştırın.</p>
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span class="inline-flex items-center gap-1.5 font-mono text-[#a3d9c6]"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg><span>Komut İstemi / PowerShell</span></span>
+              <span class="oc-badge oc-badge-warning">Yönetici olarak çalıştırın</span>
+            </div>
+            <div class="oc-codeblock flex items-center justify-between gap-3">
+              <code class="text-xs sm:text-sm font-mono text-[#a3d9c6] overflow-x-auto select-all">sfc /scannow</code>
+              <button type="button" data-cmd="sfc /scannow" onclick="copyTemplateCmd(this)" class="oc-btn oc-btn-secondary !min-h-[38px] !py-1.5 !px-3 text-xs shrink-0"><svg class="w-3.5 h-3.5 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span>Kopyala</span></button>
+            </div>
+            <div class="stage2-risky-cmd-note oc-alert oc-alert-warning flex-col space-y-2 text-xs">
+              <div class="font-bold text-amber-200 flex items-center gap-1.5"><svg class="w-4 h-4 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span>Komut Güvenlik Bilgisi:</span></div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs leading-relaxed w-full">
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-[#88c0a8] block mb-0.5">Ne yapar?</strong>
+                  <span class="text-gray-200">Windows Sistem Dosyası Denetleyicisi ile bozuk DirectX 12, Visual C++ ve sistem DLL dosyalarını tarar ve onarır.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-amber-300 block mb-0.5">Risk:</strong>
+                  <span class="text-gray-200">Resmi Microsoft bakım komutudur; kişisel dosyaları veya oyun verilerini silmez.</span>
+                </div>
+                <div class="p-2.5 rounded-lg bg-white/5 border border-white/5">
+                  <strong class="text-sky-300 block mb-0.5">Geri alma:</strong>
+                  <span class="text-gray-200">Orijinal Windows sistem bileşenlerini onardığı için geri alma işlemi gerektirmez.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
+        </div>
+
+        <div id="adim-4" class="step-card oc-card p-5 space-y-3.5 transition">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="oc-badge oc-badge-accent font-extrabold shrink-0">Adım 4</span>
+              <h3 class="text-sm sm:text-base font-bold text-white">Oyun İçi Grafik, Işın İzleme (Ray Tracing) ve Kalabalık Yoğunluğu Ayarlarını Dengeleyin</h3>
+            </div>
+          </div>
+          <p class="oc-step-desc text-xs sm:text-sm text-gray-300 leading-relaxed">Şehir merkezinde ani FPS düşmesi yaşıyorsanız Grafik ayarlarından Nüfus/Trafik Yoğunluğu (Population Density) çubuğunu %70 seviyesine çekin, Gölgelendirici Kalitesini Yüksek yapın ve DLSS / FSR / XeSS Ölçekleme modunu &#x27;Kalite (Quality)&#x27; konumuna getirin.</p>
+          <div class="pt-2 border-t border-white/5 flex items-center justify-between">
+            <label class="inline-flex items-center gap-2.5 cursor-pointer min-h-[44px] text-xs sm:text-sm font-semibold text-gray-300 hover:text-white select-none">
+              <input type="checkbox" class="step-check-input w-4 h-4 rounded accent-[#5e9c88]" onchange="toggleStepCompleted(this, 4)" />
+              <span>Bu adımı tamamladım</span>
+            </label>
+            <span class="step-done-pill hidden oc-badge oc-badge-success">Tamamlandı</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. İşe Yaramazsa Bölümü -->
+      <section id="ise-yaramazsa" class="oc-card p-6 space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">İşe Yaramazsa Ne Yapmalısınız?</h2>
+        <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Ekran kartınızda MSI Afterburner hız aşırtma (Overclock) profili açıksa varsayılan değerlere döndürün, Discord ve GeForce Experience oyun içi ekran katmanlarını (Overlay) kapatın ve DDU ile en güncel WHQL Game Ready / Adrenalin sürücüsünü temiz kurulumla yükleyin.</p>
+        <div class="pt-2 flex flex-wrap gap-3">
+          <a href="/#tabContent-ai-lab" class="oc-btn oc-btn-primary text-xs sm:text-sm">
+            <span>AI ile analiz et</span>
+          </a>
+          <a href="/#tabContent-forum" class="oc-btn oc-btn-secondary text-xs sm:text-sm">
+            <span>Foruma sor</span>
+          </a>
+        </div>
+      </section>
+      <!-- 9. Sıkça Sorulan Sorular (SSS) -->
+      <section id="sss" class="space-y-3">
+        <h2 class="text-base sm:text-lg font-extrabold text-white">Sıkça Sorulan Sorular (SSS)</h2>
+
+        <details class="oc-accordion" open>
+          <summary>
+            <h3 class="text-xs sm:text-sm font-bold text-white">GTA 6 ERR_GFX_STATE hatası neden olur?</h3>
+            <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="oc-accordion-body">
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">RAGE oyun motorunun DirectX 12 gölgelendirici boru hattı (pipeline) önbelleğinin bozulması, ekran kartı VRAM sınırının aşılması veya kararsız GPU hız aşırtma (overclock) ayarları nedeniyle grafik sürücüsünün yanıt vermeyi kesmesinden kaynaklanır.</p>
+          </div>
+        </details>
+        <details class="oc-accordion">
+          <summary>
+            <h3 class="text-xs sm:text-sm font-bold text-white">GTA 6 açılmıyor, Rockstar Games Launcher &#x27;Çıkılıyor&#x27; deyip kapanıyor; nasıl düzelir?</h3>
+            <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="oc-accordion-body">
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">Windows Güvenliği &gt; Virüs ve tehdit koruması &gt; Fidye yazılımına karşı koruma altındaki &#x27;Denetimli klasör erişimi&#x27; özelliğinin Belgeler\Rockstar Games klasörünü engellemediğinden emin olun ve Rockstar Games Launcher&#x27;ı Yönetici olarak başlatıp oyun dosyalarını doğrulayın.</p>
+          </div>
+        </details>
+        <details class="oc-accordion">
+          <summary>
+            <h3 class="text-xs sm:text-sm font-bold text-white">8 GB VRAM ekran kartında GTA 6 kasma ve doku yüklenmeme sorunu nasıl önlenir?</h3>
+            <svg class="w-4 h-4 shrink-0 inline-block text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="oc-accordion-body">
+            <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">8 GB VRAM&#x27;li kartlarda Işın İzleme (Ray Tracing) kapatılmalı, Doku Kalitesi Orta/Yüksek seviyesinde tutulmalı, DLSS/FSR Kalite modu açılmalı ve SSD üzerinde en az 16 GB Windows Sanal Belleği (Pagefile) tanımlanmalıdır.</p>
+          </div>
+        </details>
+      </section>
+      <!-- 10. İlgili Hatalar (İç Linkler) -->
+      <section id="ilgili-hatalar" class="oc-card p-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base sm:text-lg font-extrabold text-white">İlgili Hatalar</h2>
+          <a href="/hata-kodlari" class="text-xs font-semibold text-[#88c0a8] hover:underline">Tüm Hata Kodları →</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+          <a href="/gta-6-hata-cozumleri.html" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">GTA 6 • TÜM HATALAR</span>
+              <span class="text-gray-200 font-semibold">GTA 6 Hata Kodları, Açılmama ve FPS Çözüm Merkezi</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+          <a href="/gta-v/err-gfx-d3d-init" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">GTA V • ERR_GFX_D3D_INIT</span>
+              <span class="text-gray-200 font-semibold">GTA 5 ERR_GFX_D3D_INIT Hatası Çözümü (DirectX 11)</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+          <a href="/fivem/harita-yuklenmiyor-texture-loss" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">FiveM • TEXTURE LOSS</span>
+              <span class="text-gray-200 font-semibold">FiveM Harita Yüklenmiyor (Texture Loss) Çözüm Rehberi</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+          <a href="/rdr2/err-gfx-state" class="oc-card oc-card-interactive p-3.5 flex items-center justify-between gap-2 text-xs">
+            <div>
+              <span class="font-mono text-[#a3d9c6] font-bold block">Red Dead Redemption 2 • ERR_GFX_STATE</span>
+              <span class="text-gray-200 font-semibold">RDR2 ERR_GFX_STATE Hatası Çözümü (sga_ Vulkan Temizliği)</span>
+            </div>
+            <span class="text-[#88c0a8] font-bold shrink-0">→</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 11. Yazar Kutusu, Son Güncelleme ve Test Edilen Sürüm -->
+      <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div class="flex items-center gap-3">
+          <span class="oc-monogram" aria-hidden="true">OÇ</span>
+          <div>
+            <div class="text-white font-bold">
+              Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">OyunÇöz Teknik Ekibi</a>
+            </div>
+            <div class="text-xs text-gray-400">Sistem ve Oyun Arıza Editörleri • <a href="/hakkimizda.html" class="underline hover:text-white">Hakkımızda ve Metodoloji</a></div>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 text-xs text-gray-300">
+          <span class="oc-badge">
+            Son güncelleme: <time datetime="2026-11-18" class="font-semibold text-white">18.11.2026</time>
+          </span>
+          <span class="oc-badge">
+            Test edilen sürüm: <strong class="text-[#a3d9c6]">Windows 11 (23H2 &amp; 24H2) • DirectX 12 Ultimate</strong>
+          </span>
+        </div>
+      </section>
+
+      <!-- 12. Bu çözüm işe yaradı mı? Evet / Hayır Butonu -->
+      <section id="stage2PageVoteSection" class="oc-card p-5 space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h2 class="text-sm sm:text-base font-extrabold text-white">Bu çözüm işe yaradı mı?</h2>
+            <p class="text-xs text-gray-400">Oylar sunucuda tutulur (istemci başına tek oy). 20+ oy biriktiğinde gerçek işe yarama oranı gösterilir.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button
+              type="button"
+              id="staticVoteUpBtn"
+              onclick="submitStaticPageVote(12, 'up')"
+              class="oc-btn oc-btn-secondary text-xs font-bold"
+            >
+              <span>Evet</span>
+              <span id="staticVoteUpCount" class="hidden"></span>
+            </button>
+            <button
+              type="button"
+              id="staticVoteDownBtn"
+              onclick="submitStaticPageVote(12, 'down')"
+              class="oc-btn oc-btn-ghost text-xs font-bold"
+            >
+              <span>Hayır</span>
+              <span id="staticVoteDownCount" class="hidden"></span>
+            </button>
+            <span id="staticVoteRateBadge" class="hidden oc-badge oc-badge-accent font-bold"></span>
+          </div>
+        </div>
+        <p id="staticVoteFeedbackMsg" class="hidden text-xs text-[#88c0a8] font-semibold"></p>
+      </section>
+    </article>
+    </div>
+      <!-- Masaüstü Yapışkan İçindekiler Yan Paneli -->
+      <aside aria-label="Sayfa İçindekiler" class="hidden lg:block lg:col-span-3">
+        <div class="oc-card p-4 sticky top-20 space-y-3 text-xs">
+          <div class="font-extrabold uppercase tracking-wider text-[#88c0a8]">Bu Sayfada</div>
+          <ul class="space-y-1 border-l border-white/10 pl-3">
+<li><a href="#hizli-cozum" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Hızlı Çözüm</a></li>
+<li><a href="#hata-nedenleri" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Bu Hatanın Nedenleri</a></li>
+<li><a href="#cozum-adimlari" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Adım Adım Çözüm (4 Adım)</a></li>
+<li><a href="#ise-yaramazsa" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İşe Yaramazsa</a></li>
+<li><a href="#sss" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Sıkça Sorulan Sorular</a></li>
+<li><a href="#ilgili-hatalar" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">İlgili Hatalar</a></li>
+<li><a href="#stage2PageVoteSection" class="block py-1 text-gray-300 hover:text-[#88c0a8] transition">Çözüm Değerlendirme</a></li>
+          </ul>
+          <div class="pt-3 border-t border-white/10 space-y-2">
+            <div class="text-[11px] text-gray-400">İlerleme Durumu:</div>
+            <div id="sidebarStepProgressText" class="font-bold text-white">0/4 adım tamamlandı</div>
+          </div>
+        </div>
+      </aside></div>
+  </main>
+
+  <!-- Mobilde Alt Sabit Çubuk (İşe Yaradı & Foruma Sor - İçeriği Örtmez) -->
+  <div id="mobileStickyActionBar" class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-[#141923]/95 backdrop-blur-md border-t border-white/15 px-4 py-2.5 flex items-center justify-between gap-3">
+    <button
+      type="button"
+      onclick="submitStaticPageVote(12, 'up'); document.getElementById('stage2PageVoteSection')?.scrollIntoView({behavior:'smooth'});"
+      class="oc-btn oc-btn-primary flex-1 !min-h-[44px] text-xs font-bold"
+    >
+      <span>İşe yaradı</span>
+    </button>
+    <a
+      href="/#tabContent-forum"
+      class="oc-btn oc-btn-secondary flex-1 !min-h-[44px] text-xs font-bold"
+    >
+      <span>Foruma sor</span>
+    </a>
+  </div>
+
+  <footer class="border-t border-white/10 bg-[#11161f] py-6 text-xs text-gray-400 mt-10">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center justify-between gap-3">
+      <div>© 2026 <strong>OyunÇöz (oyuncoz.com)</strong> — Oyun Hata Kodları ve FPS Çözüm Rehberi.</div>
+      <div class="flex flex-wrap items-center justify-center gap-2.5 text-xs">
+        <a href="/hata-kodlari" class="hover:text-[#a3d9c6] transition">Hata Kodları</a>
+        <span>•</span>
+        <a href="/hakkimizda.html" class="hover:text-[#a3d9c6] transition">Hakkımızda</a>
+        <span>•</span>
+        <a href="/iletisim.html" class="hover:text-[#a3d9c6] transition">İletişim</a>
+        <span>•</span>
+        <a href="/gizlilik-ve-cerez-politikasi.html" class="hover:text-[#a3d9c6] transition">Gizlilik ve Çerez</a>
+        <span>•</span>
+        <a href="/kvkk-aydinlatma-metni.html" class="hover:text-[#a3d9c6] transition">KVKK</a>
+        <span>•</span>
+        <a href="/kullanim-kosullari.html" class="hover:text-[#a3d9c6] transition">Kullanım Koşulları</a>
+        <span>•</span>
+        <a href="/telif-ve-sorumluluk-reddi.html" class="hover:text-[#a3d9c6] transition">Telif ve Sorumluluk Reddi</a>
+        <span>•</span>
+        <a href="/sitemap.xml" class="hover:text-gray-200 transition">Site Haritası</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyTemplateCmd(btn) {
+      var c = btn.getAttribute('data-cmd') || '';
+      if (!c) return;
+      var done = function() {
+        var span = btn.querySelector('span');
+        if (span) span.textContent = 'Kopyalandı';
+        else btn.textContent = 'Kopyalandı';
+        setTimeout(function() {
+          if (span) span.textContent = 'Kopyala';
+          else btn.textContent = 'Kopyala';
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(c).then(done).catch(function() { fallbackCopy(c, done); });
+      } else {
+        fallbackCopy(c, done);
+      }
+    }
+    function fallbackCopy(text, cb) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); cb(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    function toggleStepCompleted(checkbox, totalSteps) {
+      var card = checkbox.closest('.step-card');
+      var pill = card ? card.querySelector('.step-done-pill') : null;
+      if (card) {
+        card.classList.toggle('border-[#5e9c88]', checkbox.checked);
+      }
+      if (pill) {
+        pill.classList.toggle('hidden', !checkbox.checked);
+      }
+      var allChecked = document.querySelectorAll('.step-check-input:checked').length;
+      var badge = document.getElementById('stepProgressBadge');
+      var sideTxt = document.getElementById('sidebarStepProgressText');
+      if (badge) badge.textContent = 'İlerleme: ' + allChecked + '/' + totalSteps + ' adım';
+      if (sideTxt) sideTxt.textContent = allChecked + '/' + totalSteps + ' adım tamamlandı';
+    }
+    function switchPageScenario(btn, targetId) {
+      var parent = btn.closest('#senaryo-secici');
+      if (!parent) return;
+      parent.querySelectorAll('[role="tab"]').forEach(function(b) {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      parent.querySelectorAll('.scenario-panel').forEach(function(p) {
+        p.classList.toggle('hidden', p.id !== targetId);
+      });
+    }
+    (function() {
+      var pageSessionClientId = 'cid_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+      function getConsentSafeClientId() {
+        try {
+          var consentRaw = localStorage.getItem('oyuncoz_cookie_consent');
+          if (consentRaw) {
+            var k = 'oyuncoz_client_id';
+            var v = localStorage.getItem(k);
+            if (!v) {
+              v = pageSessionClientId;
+              localStorage.setItem(k, v);
+            }
+            return v;
+          }
+        } catch (e) {}
+        return pageSessionClientId;
+      }
+      function updateVoteUI(data) {
+        if (!data) return;
+        var upCnt = Number(data.helpful_votes || 0);
+        var downCnt = Number(data.unhelpful_votes || 0);
+        var total = Number(data.total_votes || (upCnt + downCnt));
+        var showRate = Boolean(data.show_success_rate && total >= 20 && data.success_rate != null);
+        var upEl = document.getElementById('staticVoteUpCount');
+        var downEl = document.getElementById('staticVoteDownCount');
+        var rateEl = document.getElementById('staticVoteRateBadge');
+        if (upEl) {
+          upEl.textContent = upCnt > 0 ? '(' + upCnt + ')' : '';
+          upEl.classList.toggle('hidden', upCnt === 0);
+        }
+        if (downEl) {
+          downEl.textContent = downCnt > 0 ? '(' + downCnt + ')' : '';
+          downEl.classList.toggle('hidden', downCnt === 0);
+        }
+        if (rateEl) {
+          rateEl.textContent = showRate ? ('İşe yarama oranı: %' + data.success_rate + ' (' + total + ' Oy)') : '';
+          rateEl.classList.toggle('hidden', !showRate);
+        }
+      }
+      window.submitStaticPageVote = function(issueId, voteType) {
+        fetch('/api/issues/' + issueId + '/vote', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Client-Id': getConsentSafeClientId() },
+          body: JSON.stringify({ vote_type: voteType, hardware_tag: 'Web' })
+        }).then(function(r) { return r.ok ? r.json() : null; }).then(function(d) {
+          if (!d) return;
+          updateVoteUI(d);
+          var msg = document.getElementById('staticVoteFeedbackMsg');
+          if (msg) {
+            msg.classList.remove('hidden');
+            msg.textContent = d.user_vote === 'up'
+              ? 'Geri bildiriminiz (Evet) kaydedildi. Teşekkürler!'
+              : (d.user_vote === 'down' ? 'Geri bildiriminiz (Hayır) kaydedildi.' : 'Oyunuz geri alındı.');
+          }
+        }).catch(function() {});
+      };
+      fetch('/api/issues', { headers: { 'X-Client-Id': getConsentSafeClientId() } })
+        .then(function(r) { return r.ok ? r.json() : []; })
+        .then(function(list) {
+          if (!Array.isArray(list)) return;
+          var found = list.find(function(x) { return Number(x.id) === 12; });
+          if (found) updateVoteUI(found);
+        }).catch(function() {});
+    })();
+  </script>
+</body>
+</html>

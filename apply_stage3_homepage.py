@@ -94,7 +94,7 @@ def update_index_html_main(pages):
     with open(index_path, "r", encoding="utf-8") as f:
         txt = f.read()
 
-    start_marker = '    <main id="ana-icerik" class="space-y-6 w-full">'
+    start_marker = '    <main id="ana-icerik"'
     end_marker = '    </main>'
     idx_s = txt.index(start_marker)
     idx_e = txt.index(end_marker, idx_s) + len(end_marker)

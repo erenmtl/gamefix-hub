@@ -43,6 +43,8 @@
     lol: { code: 'LoL', color: '#5586ad' },
     'league-of-legends': { code: 'LoL', color: '#5586ad' },
     'gtav-fivem': { code: 'GTA', color: '#589471' },
+    'gta-6': { code: 'GTA6', color: '#d96b98' },
+    'gta6': { code: 'GTA6', color: '#d96b98' },
     'gta-v': { code: 'GTA', color: '#589471' },
     fivem: { code: 'FVM', color: '#589471' },
     fc25: { code: 'FC25', color: '#5e9c88' },
