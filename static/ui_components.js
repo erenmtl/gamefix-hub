@@ -145,7 +145,7 @@
       return `
         <div class="stage2-author-box oc-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-3">
-            <span class="oc-monogram" aria-hidden="true">OÇ</span>
+            <span class="oc-brand-icon !w-9 !h-9" aria-hidden="true"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
             <div>
               <div class="text-white font-bold">Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">${authorName}</a></div>
               <div class="text-gray-400">Sistem ve Oyun Arıza Editörleri • <a href="/hakkimizda.html" class="underline hover:text-white">Hakkımızda</a></div>

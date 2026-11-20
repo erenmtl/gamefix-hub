@@ -6,21 +6,21 @@
 
 :root {
   /* 1. Renk Paleti (Koyu Tema & WCAG AA Kontrast Uyumlu) */
-  --color-bg: #141923;
-  --color-surface: #1b2230;
-  --color-surface-elevated: #202838;
-  --color-surface-hover: #263144;
+  --color-bg: #0b101b;
+  --color-surface: #131c2e;
+  --color-surface-elevated: #19253c;
+  --color-surface-hover: #21304d;
 
   /* Metin Renkleri (Saf beyaz yerine göz yormayan kırık beyaz) */
-  --color-text: #e6ecf5;           /* Kontrast vs #141923: 13.52:1 (AAA) */
-  --color-text-body: #d8dee9;      /* Kontrast vs #141923: 11.73:1 (AAA) */
-  --color-text-secondary: #9fb0c7; /* Kontrast vs #141923: 6.86:1, vs #202838: 5.41:1 (AA) */
+  --color-text: #f1f5f9;           /* Kontrast vs #141923: 13.52:1 (AAA) */
+  --color-text-body: #e2e8f0;      /* Kontrast vs #141923: 11.73:1 (AAA) */
+  --color-text-secondary: #a8b8d0; /* Kontrast vs #141923: 6.86:1, vs #202838: 5.41:1 (AA) */
 
   /* Tek Vurgu Rengi (Yalnızca birincil eylemler, bağlantılar, aktif durumlar) */
-  --color-accent: #5e9c88;
-  --color-accent-hover: #4e8775;
-  --color-accent-text: #88c0a8;    /* Kontrast vs #141923: 7.45:1 (AAA) */
-  --color-accent-subtle: rgba(94, 156, 136, 0.14);
+  --color-accent: #10b981;
+  --color-accent-hover: #059669;
+  --color-accent-text: #34d399;    /* Kontrast vs #141923: 7.45:1 (AAA) */
+  --color-accent-subtle: rgba(16, 185, 129, 0.16);
 
   /* Durum Renkleri (Başarı, Uyarı, Tehlike, Bilgi) */
   --color-success: #3fb984;
@@ -601,4 +601,105 @@ pre,
   .oc-accordion summary {
     min-height: 44px;
   }
+}
+
+
+/* ─── GÖRSEL ZENGİNLEŞTİRME: ORTAM IŞIĞI, MİKRO-IZGARA VE MARKA İKONU ─── */
+body {
+  background-color: var(--color-bg) !important;
+  background-image:
+    radial-gradient(at 15% 0%, rgba(16, 185, 129, 0.14) 0px, transparent 45%),
+    radial-gradient(at 85% 5%, rgba(6, 182, 212, 0.13) 0px, transparent 45%),
+    radial-gradient(at 50% 45%, rgba(99, 102, 241, 0.07) 0px, transparent 55%),
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px !important;
+  background-attachment: fixed !important;
+}
+
+.oc-brand-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.85rem;
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.38), inset 0 1px 1px rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+a:hover .oc-brand-icon {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 22px rgba(6, 182, 212, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.45);
+}
+
+.oc-card {
+  background: linear-gradient(180deg, rgba(25, 37, 60, 0.92) 0%, rgba(19, 28, 46, 0.96) 100%) !important;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.oc-card-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.oc-card-interactive:hover {
+  transform: translateY(-3px);
+  border-color: rgba(52, 211, 153, 0.55) !important;
+  box-shadow: 0 18px 38px -10px rgba(0, 0, 0, 0.65), 0 0 24px rgba(16, 185, 129, 0.16) !important;
+}
+
+.oc-hero-glow {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(800px circle at 15% 20%, rgba(16, 185, 129, 0.18), transparent 45%),
+    radial-gradient(700px circle at 88% 80%, rgba(6, 182, 212, 0.16), transparent 45%),
+    linear-gradient(180deg, rgba(25, 37, 60, 0.95) 0%, rgba(17, 25, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(52, 211, 153, 0.32) !important;
+}
+
+.oc-gradient-text {
+  background: linear-gradient(90deg, #34d399 0%, #38bdf8 55%, #a78bfa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.oc-btn-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(52, 211, 153, 0.45) !important;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.30) !important;
+}
+
+.oc-btn-primary:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
+  box-shadow: 0 6px 22px rgba(16, 185, 129, 0.45) !important;
+}
+
+.oc-monogram {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.oc-cat-bento {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgba(15, 23, 38, 0.78);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  transition: all 0.2s ease;
+}
+
+.oc-cat-bento:hover {
+  transform: translateY(-2px);
+  background: rgba(23, 35, 58, 0.92);
 }

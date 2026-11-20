@@ -57,8 +57,8 @@ def render_og_png_bytes(
     font_footer = _get_font(21, bold=True)
 
     # Brand header badge
-    draw.rounded_rectangle([92, 86, 164, 158], radius=18, fill=(32, 46, 62), outline=(136, 192, 168), width=2)
-    draw.text((108, 102), "OÇ", font=font_brand, fill=(136, 192, 168))
+    draw.rounded_rectangle([92, 86, 164, 158], radius=18, fill=(16, 185, 129), outline=(52, 211, 153), width=2)
+    draw.text((103, 104), "FIX", font=_get_font(28, bold=True), fill=(255, 255, 255))
     draw.text((182, 92), "OyunÇöz", font=font_brand, fill=(235, 242, 250))
     draw.text((182, 132), "oyuncoz.com • Oyun Hata Kodları ve FPS Çözümleri", font=_get_font(20, False), fill=(154, 172, 194))
 

@@ -550,16 +550,44 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
       </details>"""
 
         desktop_toc_aside_html = f"""
-      <!-- Masaüstü Yapışkan İçindekiler Yan Paneli -->
+      <!-- Masaüstü Yapışkan İçindekiler ve Hızlı Teknik Araçlar Yan Paneli -->
       <aside aria-label="Sayfa İçindekiler" class="hidden lg:block lg:col-span-3">
-        <div class="oc-card p-4 sticky top-20 space-y-3 text-xs">
-          <div class="font-extrabold uppercase tracking-wider text-[#88c0a8]">Bu Sayfada</div>
-          <ul class="space-y-1 border-l border-white/10 pl-3">
+        <div class="sticky top-20 space-y-4">
+          <div class="oc-card p-4 space-y-3 text-xs" style="border-top: 3px solid #10b981 !important;">
+            <div class="font-extrabold uppercase tracking-wider text-[#34d399]">Bu Sayfada</div>
+            <ul class="space-y-1.5 border-l-2 border-[#10b981]/30 pl-3">
 {toc_links_html}
-          </ul>
-          <div class="pt-3 border-t border-white/10 space-y-2">
-            <div class="text-[11px] text-gray-400">İlerleme Durumu:</div>
-            <div id="sidebarStepProgressText" class="font-bold text-white">0/{total_steps} adım tamamlandı</div>
+            </ul>
+            <div class="pt-3 border-t border-white/10 space-y-1.5">
+              <div class="text-[11px] text-gray-400">İlerleme Durumu:</div>
+              <div id="sidebarStepProgressText" class="font-extrabold text-[#34d399]">0/{total_steps} adım tamamlandı</div>
+            </div>
+          </div>
+
+          <div class="oc-card p-4 space-y-3 text-xs" style="border-top: 3px solid #06b6d4 !important;">
+            <div class="font-extrabold uppercase tracking-wider text-[#38bdf8]">Hızlı Teknik Özet</div>
+            <div class="space-y-2 text-gray-300">
+              <div class="flex items-center justify-between gap-2 py-1 border-b border-white/5">
+                <span class="text-gray-400">Oyun:</span>
+                <a href="{html.escape(oyun_hub_url)}" class="font-bold text-white hover:text-[#34d399]">{html.escape(oyun)}</a>
+              </div>
+              <div class="flex items-center justify-between gap-2 py-1 border-b border-white/5">
+                <span class="text-gray-400">Hata Kodu:</span>
+                <span class="font-mono font-bold text-[#34d399]">{html.escape(hata_kodu)}</span>
+              </div>
+              <div class="flex items-center justify-between gap-2 py-1 border-b border-white/5">
+                <span class="text-gray-400">Toplam Adım:</span>
+                <span class="font-bold text-white">{total_steps} Adım</span>
+              </div>
+              <div class="flex items-center justify-between gap-2 py-1">
+                <span class="text-gray-400">Güncelleme:</span>
+                <span class="font-semibold text-white">{html.escape(tarih_guncelleme_tr)}</span>
+              </div>
+            </div>
+            <div class="pt-2 space-y-2">
+              <a href="/#tabContent-ai-lab" class="oc-btn oc-btn-primary w-full !min-h-[38px] text-xs font-extrabold">AI ile Özel Analiz Et</a>
+              <a href="{html.escape(oyun_hub_url)}" class="oc-btn oc-btn-secondary w-full !min-h-[38px] text-xs font-bold">Tüm {html.escape(oyun)} Hataları</a>
+            </div>
           </div>
         </div>
       </aside>"""
@@ -615,7 +643,7 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
   <header class="sticky top-0 z-40 bg-[#141923]/95 backdrop-blur-md border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
       <a href="/" class="flex items-center gap-3">
-        <span class="oc-monogram" aria-hidden="true">OÇ</span>
+        <span class="oc-brand-icon" aria-hidden="true"><svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="17.5" cy="13" r="1" fill="currentColor"/></svg></span>
         <div>
           <span class="font-extrabold text-lg text-white">Oyun<span class="text-[#88c0a8]">Çöz</span></span>
           <span class="block text-[11px] text-gray-400">Oyun Hata Kodları ve FPS Çözümleri</span>
@@ -642,19 +670,39 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
 
     {grid_wrapper_open}
     <article class="space-y-7 oc-prose">
-      <!-- 2. Üst Bölüm (Kaydırmadan Görünen Kısım: Rozetler, H1, Bu Hata Ne Anlama Geliyor, Hızlı Çözüm, Video) -->
-      <section class="oc-card p-6 sm:p-8 space-y-4">
+      <!-- 2. Üst Bölüm (Kaydırmadan Görünen Kısım: Rozetler, H1, Bu Hata Ne Anlama Geliyor, Görsel Teşhis Özeti, Hızlı Çözüm, Video) -->
+      <section class="oc-card oc-hero-glow p-6 sm:p-8 space-y-5">
         <div class="flex flex-wrap items-center gap-2.5 text-xs">
-          <span class="oc-monogram oc-monogram-sm" aria-hidden="true">{monogram_code}</span>
+          <span class="oc-monogram oc-monogram-sm" style="background: linear-gradient(135deg, #10b981, #06b6d4);" aria-hidden="true">{monogram_code}</span>
           <span class="oc-badge oc-badge-accent font-bold">{html.escape(oyun)}</span>
-          <span class="oc-badge font-mono font-bold">Hata Kodu: {html.escape(hata_kodu)}</span>
+          <span class="px-2.5 py-1 rounded-lg bg-[#10b981]/20 border border-[#34d399]/40 text-white font-mono font-extrabold">Hata Kodu: {html.escape(hata_kodu)}</span>
           {status_badge_html}
         </div>
 
         <h1 class="text-xl sm:text-3xl font-extrabold text-white leading-tight">{html.escape(h1_raw)}</h1>
 
+        <!-- 4'lü Görsel Teknik Özet Şeridi -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+          <div class="p-3 rounded-xl bg-[#0b101b]/85 border border-white/10">
+            <div class="text-[11px] text-gray-400">Hata Kodu</div>
+            <div class="font-mono font-extrabold text-[#34d399] truncate mt-0.5">{html.escape(hata_kodu)}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0b101b]/85 border border-white/10">
+            <div class="text-[11px] text-gray-400">Çözüm Planı</div>
+            <div class="font-extrabold text-white truncate mt-0.5">{total_steps} Doğrulanmış Adım</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0b101b]/85 border border-white/10">
+            <div class="text-[11px] text-gray-400">Test Edilen Sistem</div>
+            <div class="font-bold text-[#38bdf8] truncate mt-0.5">{html.escape(test_edilen_surum.split('•')[0].strip())}</div>
+          </div>
+          <div class="p-3 rounded-xl bg-[#0b101b]/85 border border-white/10">
+            <div class="text-[11px] text-gray-400">Son Güncelleme</div>
+            <div class="font-bold text-white truncate mt-0.5">{html.escape(tarih_guncelleme_tr)}</div>
+          </div>
+        </div>
+
         <div class="space-y-1">
-          <div class="text-xs font-bold uppercase tracking-wider text-[#88c0a8]">Bu hata ne anlama geliyor?</div>
+          <div class="text-xs font-extrabold uppercase tracking-wider text-[#34d399]">Bu hata ne anlama geliyor?</div>
           <p id="hata-anlami" class="text-sm sm:text-base text-gray-200 leading-relaxed">
             {html.escape(kisa_aciklama_raw)}
           </p>
@@ -699,7 +747,7 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
       <!-- 11. Yazar Kutusu, Son Güncelleme ve Test Edilen Sürüm -->
       <section aria-label="Yazar ve Sürüm Bilgisi" class="stage2-author-box oc-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div class="flex items-center gap-3">
-          <span class="oc-monogram" aria-hidden="true">OÇ</span>
+          <span class="oc-brand-icon" aria-hidden="true"><svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="4"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="17.5" cy="13" r="1" fill="currentColor"/></svg></span>
           <div>
             <div class="text-white font-bold">
               Yazar: <a href="/hakkimizda.html" class="text-[#88c0a8] hover:underline">{html.escape(yazar_raw)}</a>

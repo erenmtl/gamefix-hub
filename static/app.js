@@ -1419,24 +1419,21 @@ function updateHeroBanner() {
   const coverImg = document.getElementById('heroGameCoverImg');
 
   if (STATE.selectedGame === 'all') {
-    applyGameTheme('#5e9c88');
-    if (coverWrapper && coverImg) {
-      coverWrapper.classList.remove('hidden');
-      coverImg.onerror = null;
-      coverImg.src = './static/logo.svg';
-      coverImg.alt = 'OyunÇöz Tüm Oyunlar';
-      coverImg.className = 'w-32 h-20 sm:w-40 sm:h-24 rounded-2xl object-contain bg-[#151c27] p-2 border border-[#88c0a8]/35 shadow-xl transition-all duration-300';
+    applyGameTheme('#10b981');
+    if (coverWrapper) {
+      coverWrapper.classList.add('hidden');
     }
-    catBadge.textContent = 'Tüm Oyunlar Portalı';
-    engBadge.textContent = 'Motor: UE4/5 / Source 2 / Clausewitz / RAGE / LWJGL';
-    acBadge.textContent = 'Koruma: Vanguard • VAC • EAC • RICOCHET';
-    titleEl.textContent = 'Popüler Oyun Sorunları & Yapay Zeka Çözüm Merkezi';
-    subEl.textContent = 'Sol menüden bir oyun seçebilir, "+ Yeni Oyun Ekle" ile istediğiniz oyunu (örn: Victoria 3, Bannerlord, RDR 2) ekleyebilir veya AI Çözümleyiciye yazarak otomatik sayfa oluşturabilirsiniz.';
-
-    const globalTags = ['VAN 9003', 'VAC Verify', 'Exit Code 1', 'Packet Burst', 'EA AntiCheat', 'FIVEM Texture Loss', 'Asset Warmup', 'CP77 Flatlined'];
-    tagsEl.innerHTML = globalTags
-      .map(t => `<button onclick="filterByTag('${t}')" class="text-xs px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 transition font-mono">${t}</button>`)
-      .join('');
+    if (engBadge) engBadge.classList.add('hidden');
+    if (acBadge) acBadge.classList.add('hidden');
+    if (catBadge) {
+      catBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span><span>CANLI OYUN ARIZA &amp; FPS ÇÖZÜM MERKEZİ</span>';
+    }
+    if (titleEl) {
+      titleEl.textContent = 'Hangi hatayı alıyorsun?';
+    }
+    if (subEl) {
+      subEl.innerHTML = 'Aldığın hata kodunu (<code class="text-[#34d399] font-mono font-bold">VAN 185</code>, <code class="text-[#38bdf8] font-mono font-bold">ERR_GFX_STATE</code>, <code class="text-[#f43f5e] font-mono font-bold">VAN 9003</code>) veya oyun adını yaz; doğrudan test edilmiş adım adım çözüm sayfasına git.';
+    }
   } else {
     const game = STATE.games.find(g => g.slug === STATE.selectedGame);
     if (!game) return;
@@ -2247,7 +2244,8 @@ async function fetchIssues() {
 }
 
 function renderIssues() {
-  const container = document.getElementById('issuesListContainer');
+  const container = document.getElementById('issuesListContainer') || document.getElementById('issuesContainer');
+  if (!container) return;
   if (STATE.issues.length === 0) {
     container.innerHTML = `
       <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-8 text-center space-y-3">
@@ -2470,9 +2468,7 @@ function renderIssues() {
         <!-- Stage 2.3: Yazar Kutusu, Son Güncelleme (dateModified) ve Test Edilen Sürüm -->
         <div class="p-3.5 rounded-xl bg-[#161c27] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-[#5e9c88]/20 border border-[#88c0a8]/35 text-[#a3d9c6] font-extrabold flex items-center justify-center shrink-0">
-              OÇ
-            </div>
+            <span class="oc-brand-icon !w-9 !h-9" aria-hidden="true"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
             <div>
               <div class="text-white font-bold">
                 Yazar: <a href="./hakkimizda.html" class="text-[#88c0a8] hover:underline">${escapeHTML(authorName)}</a>
@@ -3080,7 +3076,8 @@ async function fetchThreads() {
 }
 
 function renderThreads() {
-  const container = document.getElementById('threadsListContainer');
+  const container = document.getElementById('threadsListContainer') || document.getElementById('forumThreadsContainer');
+  if (!container) return;
   if (STATE.threads.length === 0) {
     container.innerHTML = `
       <div class="oc-card p-8 text-center space-y-3">
@@ -3451,22 +3448,26 @@ window.renderHomeShowcase = function() {
   try {
     const gamesGrid = document.getElementById('homeGamesShowcaseGrid');
     if (gamesGrid && STATE.games.length > 0) {
-      // Calculate real error count per game from STATE.issues + DEDICATED_ERROR_PAGES
-      const featuredGames = STATE.games.slice(0, 18);
+      const featuredGames = STATE.games.slice(0, 16);
       gamesGrid.innerHTML = featuredGames.map(g => {
-        const mono = window.getGameMonogramInfo ? window.getGameMonogramInfo(g.slug, g.accent_color) : { code: (g.short_name || 'OYN').slice(0,3).toUpperCase(), color: '#5e9c88' };
+        const mono = window.getGameMonogramInfo ? window.getGameMonogramInfo(g.slug, g.accent_color) : { code: (g.short_name || 'OYN').slice(0,3).toUpperCase(), color: '#10b981' };
         const realCount = Math.max(Number(g.issue_count || 0), 1);
+        const engineInfo = escapeHTML((g.engine || 'PC').split('(')[0].trim());
         return `
           <a
             href="/${g.slug}-hata-cozumleri.html"
             onclick="event.preventDefault(); selectGame('${g.slug}'); switchTab('issues'); document.getElementById('tabContent-issues')?.scrollIntoView({behavior:'smooth'});"
-            class="oc-card oc-card-interactive p-3.5 flex items-center gap-3"
+            class="oc-card oc-card-interactive p-4 flex items-center justify-between gap-3 group"
+            style="border-left: 3px solid ${mono.color} !important;"
           >
-            <span class="oc-monogram" style="border-color:${mono.color}66;background-color:${mono.color}1f" aria-hidden="true">${mono.code}</span>
-            <div class="min-w-0">
-              <div class="text-xs sm:text-sm font-bold text-white truncate">${escapeHTML(g.short_name || g.name)}</div>
-              <div class="text-[11px] text-gray-400">${realCount} Hata Kodu</div>
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="oc-monogram" style="background: linear-gradient(135deg, ${mono.color}, ${mono.color}bb); border-color: rgba(255,255,255,0.28);" aria-hidden="true">${mono.code}</span>
+              <div class="min-w-0">
+                <div class="text-xs sm:text-sm font-extrabold text-white group-hover:text-[#34d399] transition truncate">${escapeHTML(g.short_name || g.name)}</div>
+                <div class="text-[11px] text-gray-400 truncate">${engineInfo}</div>
+              </div>
             </div>
+            <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[11px] font-bold text-gray-200 shrink-0">${realCount} Hata Kodu</span>
           </a>
         `;
       }).join('');
@@ -3639,5 +3640,25 @@ window.handleSearchKeydown = function(e) {
     window.handleHeroSearchSubmit(e);
   } else if (e.key === 'Escape') {
     closeLiveAutocomplete();
+  }
+};
+
+
+window.filterHomeTopErrors = function(catKey, btnEl) {
+  const cards = document.querySelectorAll('#homeTopErrorsGrid > article[data-error-cat]');
+  cards.forEach(card => {
+    const c = card.getAttribute('data-error-cat');
+    if (!catKey || catKey === 'all' || c === catKey) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  const btns = document.querySelectorAll('.home-err-filter-btn');
+  btns.forEach(b => {
+    b.className = 'home-err-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white/5 text-gray-300 hover:text-white border border-white/10 transition';
+  });
+  if (btnEl) {
+    btnEl.className = 'home-err-filter-btn px-3 py-1.5 rounded-xl text-xs font-extrabold bg-[#10b981] text-white border border-[#34d399]/50 transition';
   }
 };
