@@ -18,7 +18,7 @@ def clean_seed_data():
     )
     with open(seed_path, "w", encoding="utf-8") as wf:
         wf.write(txt)
-    print("[OK] Removed third-party game cover URLs from static/seed_data.js")
+    print("[OK] Removed third-party game cover URLs from static/seed_data.js?v=20261120v4")
 
 
 def clean_game_catalog():
@@ -64,7 +64,7 @@ def update_app_js():
 
     with open(app_path, "w", encoding="utf-8") as wf:
         wf.write(txt)
-    print("[OK] Updated static/app.js to use copyright-free monogram SVG badges everywhere")
+    print("[OK] Updated static/app.js?v=20261120v4 to use copyright-free monogram SVG badges everywhere")
 
 
 def update_index_html():
@@ -74,12 +74,12 @@ def update_index_html():
 
     if "ui_components.js" not in txt:
         txt = txt.replace(
-            '<script src="./static/seed_data.js"></script>',
-            '<script src="./static/ui_components.js"></script>\n  <script src="./static/seed_data.js"></script>',
+            '<script src="./static/seed_data.js?v=20261120v4"></script>',
+            '<script src="./static/ui_components.js?v=20261120v4"></script>\n  <script src="./static/seed_data.js?v=20261120v4"></script>',
         )
         with open(idx_path, "w", encoding="utf-8") as wf:
             wf.write(txt)
-        print("[OK] Included static/ui_components.js in index.html")
+        print("[OK] Included static/ui_components.js?v=20261120v4 in index.html")
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@ Oluşturulan / Güncellenen Sayfalar:
 3. /cozum/gta-6-acilmiyor-cokme-ve-fps-dusmesi-cozumu.html (/cozum/ statik rehber sayfası)
 4. index.html (Hero hızlı seçim etiketi, "En çok bakılan hatalar" vitrini, Oyunlar listesi ve /cozum/ dizini)
 5. hata-kodlari.html (GTA 6 filtresi ve hata kartı)
-6. static/ui_components.js, static/seed_data.js, game_catalog.py, database.py ve sitemap.xml
+6. static/ui_components.js?v=20261120v4, static/seed_data.js?v=20261120v4, game_catalog.py, database.py ve sitemap.xml
 """
 import os
 import json
@@ -216,9 +216,9 @@ def build_gta6_hub_html() -> str:
   ]
 }
   </script>
-  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/styles.css?v=20261120v4" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/static/ui_components.js" defer></script>
+  <script src="/static/ui_components.js?v=20261120v4" defer></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100">
   <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>
@@ -374,7 +374,7 @@ def main_run():
         with open(epb_path, "w", encoding="utf-8") as wf:
             wf.write(epb_txt)
 
-    # 2. Update static/ui_components.js monogram map for gta-6
+    # 2. Update static/ui_components.js?v=20261120v4 monogram map for gta-6
     uic_path = os.path.join(ROOT_DIR, "static", "ui_components.js")
     with open(uic_path, "r", encoding="utf-8") as f:
         uic_txt = f.read()
@@ -421,7 +421,7 @@ def main_run():
         wf.write(cozum_html)
     print("[OK] Created /cozum/gta-6-acilmiyor-cokme-ve-fps-dusmesi-cozumu.html")
 
-    # 6. Insert GTA 6 into SQLite database (games + issues) & static/seed_data.js
+    # 6. Insert GTA 6 into SQLite database (games + issues) & static/seed_data.js?v=20261120v4
     db_path = os.path.join(ROOT_DIR, "gamefix.db")
     if os.path.isfile(db_path):
         conn = sqlite3.connect(db_path)
@@ -467,13 +467,13 @@ def main_run():
         conn.close()
         print("[OK] Inserted GTA 6 into SQLite gamefix.db")
 
-    # 7. Update index.html (Hero quick tag + Top 8 Trending cards + /cozum/ link + footer link), static/app.js, and static/seed_data.js
+    # 7. Update index.html (Hero quick tag + Top 8 Trending cards + /cozum/ link + footer link), static/app.js?v=20261120v4, and static/seed_data.js?v=20261120v4
     import apply_stage3_homepage as s3
     import re
     s3.MONOGRAM_BY_GAME["GTA 6"] = "GTA6"
     s3.update_index_html_main(pages)
 
-    # Update DEDICATED_ERROR_PAGES in static/app.js so live autocomplete & Enter search suggest GTA 6 immediately
+    # Update DEDICATED_ERROR_PAGES in static/app.js?v=20261120v4 so live autocomplete & Enter search suggest GTA 6 immediately
     app_js_path = os.path.join(ROOT_DIR, "static", "app.js")
     with open(app_js_path, "r", encoding="utf-8") as af:
         app_js_txt = af.read()
@@ -486,9 +486,9 @@ def main_run():
     )
     with open(app_js_path, "w", encoding="utf-8") as af:
         af.write(app_js_txt)
-    print("[OK] Updated DEDICATED_ERROR_PAGES in static/app.js with GTA 6")
+    print("[OK] Updated DEDICATED_ERROR_PAGES in static/app.js?v=20261120v4 with GTA 6")
 
-    # Update static/seed_data.js so static fallback / Oyunlar grid has GTA 6 at the top
+    # Update static/seed_data.js?v=20261120v4 so static fallback / Oyunlar grid has GTA 6 at the top
     seed_js_path = os.path.join(ROOT_DIR, "static", "seed_data.js")
     if os.path.exists(seed_js_path):
         with open(seed_js_path, "r", encoding="utf-8") as sf:
@@ -570,7 +570,7 @@ def main_run():
             seed_obj["issues"] = issues_list
             with open(seed_js_path, "w", encoding="utf-8") as sf:
                 sf.write(prefix + json.dumps(seed_obj, ensure_ascii=False) + ";\n")
-            print("[OK] Updated static/seed_data.js with GTA 6")
+            print("[OK] Updated static/seed_data.js?v=20261120v4 with GTA 6")
 
     idx_path = os.path.join(ROOT_DIR, "index.html")
     with open(idx_path, "r", encoding="utf-8") as f:

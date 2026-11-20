@@ -98,7 +98,7 @@ def test_existing_features():
     r_login = c.post("/api/auth/login", json={"username": "nonexistent_stage7", "password": "wrong"})
     assert r_login.status_code in (400, 401, 403, 404, 422, 429)
 
-    # 5. Frontend JS handlers exist in static/app.js for log upload, hardware detect, cookie prefs, auth, forum
+    # 5. Frontend JS handlers exist in static/app.js?v=20261120v4 for log upload, hardware detect, cookie prefs, auth, forum
     with open(os.path.join(ROOT_DIR, "static", "app.js"), "r", encoding="utf-8") as f:
         app_js = f.read()
 

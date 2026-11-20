@@ -634,9 +634,9 @@ def render_error_code_page(record: Dict[str, Any]) -> Tuple[str, List[str]]:
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="stylesheet" href="/static/styles.css?v=20261120v4" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/static/ui_components.js" defer></script>
+  <script src="/static/ui_components.js?v=20261120v4" defer></script>
 </head>
 <body class="min-h-screen flex flex-col bg-[#141923] text-gray-100 pb-20 lg:pb-0">
   <a href="#ana-icerik" class="oc-skip-link">İçeriğe geç</a>

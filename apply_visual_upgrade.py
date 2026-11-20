@@ -2,8 +2,8 @@
 """
 OyunÇöz Görsel Zenginleştirme (Visual Upgrade) ve "OÇ" Rozeti Kaldırma Betiği:
 1. Sol üstteki ve yazar kutusundaki tüm "OÇ" metin rozetlerini tüm dosyalardan kaldırır; yerine özel tasarım parlak SVG Gamepad+Şimşek marka ikonu (oc-brand-icon) koyar.
-2. static/styles.css dosyasını soluk/mat görünümden çıkarıp derin gece mavisi (#0b0f17), radyal ortam ışığı (ambient mesh glow), teknik mikro-ızgara, parlak zümrüt-camgöbeği (#10b981 / #06b6d4) vurgular ve oyun rengi üst şeritli zengin kartlarla günceller (WCAG AA kontrastını koruyarak).
-3. Ana sayfada (index.html) ve static/app.js içinde:
+2. static/styles.css?v=20261120v4 dosyasını soluk/mat görünümden çıkarıp derin gece mavisi (#0b0f17), radyal ortam ışığı (ambient mesh glow), teknik mikro-ızgara, parlak zümrüt-camgöbeği (#10b981 / #06b6d4) vurgular ve oyun rengi üst şeritli zengin kartlarla günceller (WCAG AA kontrastını koruyarak).
+3. Ana sayfada (index.html) ve static/app.js?v=20261120v4 içinde:
    - updateHeroBanner() fonksiyonunun ana sayfa Hero alanını ezmesini engeller.
    - Hero bölümünü masaüstünde 2 sütunlu Görsel Teşhis & Arama Merkezi (sol: arama + popüler rozetler, sağ: 4 renkli SVG ikonlu Hata Kategorisi Bento kartı) haline getirir.
    - "En çok bakılan hatalar" bölümüne kategori filtre sekmeleri, her karta oyun renginde üst vurgu şeridi, SVG kategori ikonu, adım sayısı rozeti ve sistem etiketi ekler.
@@ -183,7 +183,7 @@ a:hover .oc-brand-icon {
 
     with open(css_path, "w", encoding="utf-8") as f:
         f.write(css)
-    print("[OK] Updated static/styles.css with vibrant dark theme, ambient mesh glow, and brand icon styles")
+    print("[OK] Updated static/styles.css?v=20261120v4 with vibrant dark theme, ambient mesh glow, and brand icon styles")
 
 
 def build_enriched_top8_cards_html(pages):
@@ -830,7 +830,7 @@ def update_index_html(pages):
 
 
 def update_app_js_and_ui_components():
-    # 1. Update static/ui_components.js to remove "OÇ" in AuthorBox and use vibrant monogram styles
+    # 1. Update static/ui_components.js?v=20261120v4 to remove "OÇ" in AuthorBox and use vibrant monogram styles
     ui_path = os.path.join(ROOT_DIR, "static", "ui_components.js")
     with open(ui_path, "r", encoding="utf-8") as f:
         ui_txt = f.read()
@@ -838,9 +838,9 @@ def update_app_js_and_ui_components():
     ui_txt = ui_txt.replace('<span class="oc-monogram" aria-hidden="true">OÇ</span>', AUTHOR_ICON_HTML)
     with open(ui_path, "w", encoding="utf-8") as f:
         f.write(ui_txt)
-    print("[OK] Removed OÇ from static/ui_components.js AuthorBox")
+    print("[OK] Removed OÇ from static/ui_components.js?v=20261120v4 AuthorBox")
 
-    # 2. Update static/app.js:
+    # 2. Update static/app.js?v=20261120v4:
     # - Remove "OÇ" in dynamic issue AuthorBox
     # - Fix updateHeroBanner() when STATE.selectedGame === 'all' so it preserves our new visual Split-Hero title, subtitle, hidden coverWrapper, and colorful Popular Searches tags!
     # - Add filterHomeTopErrors(cat, btn) for the new visual category filter tabs on the homepage
@@ -849,7 +849,7 @@ def update_app_js_and_ui_components():
     with open(app_path, "r", encoding="utf-8") as f:
         app_txt = f.read()
 
-    # Replace any raw OÇ inside static/app.js author box
+    # Replace any raw OÇ inside static/app.js?v=20261120v4 author box
     app_txt = re.sub(
         r'<div class="w-9 h-9 rounded-xl[^"]*">\s*OÇ\s*</div>',
         AUTHOR_ICON_HTML,
@@ -898,7 +898,7 @@ def update_app_js_and_ui_components():
 
     if old_hero_branch in app_txt:
         app_txt = app_txt.replace(old_hero_branch, new_hero_branch, 1)
-        print("[OK] Fixed updateHeroBanner() in static/app.js so it never overwrites the homepage Hero")
+        print("[OK] Fixed updateHeroBanner() in static/app.js?v=20261120v4 so it never overwrites the homepage Hero")
 
     # Add filterHomeTopErrors and upgraded renderHomeShowcase
     filter_helper_js = """
@@ -924,7 +924,7 @@ window.filterHomeTopErrors = function(catKey, btnEl) {
     if "window.filterHomeTopErrors =" not in app_txt:
         app_txt += "\n" + filter_helper_js
 
-    # Also update renderHomeShowcase in static/app.js so dynamic render keeps colorful left borders & engine info
+    # Also update renderHomeShowcase in static/app.js?v=20261120v4 so dynamic render keeps colorful left borders & engine info
     old_showcase_fn = """window.renderHomeShowcase = function() {
   try {
     const gamesGrid = document.getElementById('homeGamesShowcaseGrid');
@@ -989,7 +989,7 @@ window.filterHomeTopErrors = function(catKey, btnEl) {
 
     if old_showcase_fn in app_txt:
         app_txt = app_txt.replace(old_showcase_fn, new_showcase_fn, 1)
-        print("[OK] Upgraded renderHomeShowcase() in static/app.js with colorful cards")
+        print("[OK] Upgraded renderHomeShowcase() in static/app.js?v=20261120v4 with colorful cards")
 
     with open(app_path, "w", encoding="utf-8") as f:
         f.write(app_txt)

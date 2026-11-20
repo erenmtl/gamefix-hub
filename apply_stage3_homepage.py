@@ -223,7 +223,7 @@ def update_index_html_main(pages):
         </div>
 
         <div id="homeGamesShowcaseGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          <!-- Gerçek veriden static/app.js tarafından doldurulur -->
+          <!-- Gerçek veriden static/app.js?v=20261120v4 tarafından doldurulur -->
         </div>
       </section>
 
@@ -464,7 +464,7 @@ def update_index_html_main(pages):
         </div>
 
         <div id="threadsListContainer" class="space-y-4">
-          <!-- static/app.js tarafından doldurulur -->
+          <!-- static/app.js?v=20261120v4 tarafından doldurulur -->
         </div>
       </section>
 
@@ -721,7 +721,7 @@ window.handleSearchKeydown = function(e) {{
         txt = txt + stage3_js_snippet
     with open(app_path, "w", encoding="utf-8") as wf:
         wf.write(txt)
-    print("[OK] Updated static/app.js for Stage 3 Hero Search, Autocomplete, Oyunlar Grid, and Forum empty state")
+    print("[OK] Updated static/app.js?v=20261120v4 for Stage 3 Hero Search, Autocomplete, Oyunlar Grid, and Forum empty state")
 
 
 if __name__ == "__main__":

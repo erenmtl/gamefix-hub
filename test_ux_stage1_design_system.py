@@ -56,7 +56,7 @@ def run_stage1_tests():
         level = "AAA" if ratio >= 7.0 else "AA"
         print(f"  [PASS {level}] {label}: {ratio}:1")
 
-    # 2. Check CSS custom properties & 8 shared components in static/styles.css
+    # 2. Check CSS custom properties & 8 shared components in static/styles.css?v=20261120v4
     with open(os.path.join(main.ROOT_DIR, "static", "styles.css"), "r", encoding="utf-8") as f:
         css_txt = f.read()
 

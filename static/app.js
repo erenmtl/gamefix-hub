@@ -1333,8 +1333,16 @@ async function fetchGames() {
   updateHeroBanner();
 }
 
-function renderSidebarGames() {
+window.renderSidebarGames = renderSidebarGames;
+function renderSidebarGames(forceRender = false) {
   const container = document.getElementById('gameNavList');
+  if (!container) return;
+  const megaPanel = document.getElementById('gamesMegaPanel');
+  if (!forceRender && megaPanel && megaPanel.classList.contains('hidden')) {
+    container._needsRender = true;
+    return;
+  }
+  container._needsRender = false;
   const totalIssues = STATE.games.reduce((acc, g) => acc + (g.issue_count || 0), 0);
 
   let html = `
@@ -1426,7 +1434,7 @@ function updateHeroBanner() {
     if (engBadge) engBadge.classList.add('hidden');
     if (acBadge) acBadge.classList.add('hidden');
     if (catBadge) {
-      catBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span><span>CANLI OYUN ARIZA &amp; FPS ÇÖZÜM MERKEZİ</span>';
+      catBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-[#34d399]"></span><span>CANLI OYUN ARIZA &amp; FPS ÇÖZÜM MERKEZİ</span>';
     }
     if (titleEl) {
       titleEl.textContent = 'Hangi hatayı alıyorsun?';
@@ -1861,6 +1869,12 @@ function switchTab(tabName) {
     }
   });
 
+  if (normalized === 'issues') {
+    const ic = document.getElementById('issuesListContainer') || document.getElementById('issuesContainer');
+    if (ic && (ic._needsRender || ic.children.length === 0)) {
+      renderIssues(true);
+    }
+  }
   const catWrapper = document.getElementById('categoryFilterWrapper');
   if (catWrapper) {
     if (normalized === 'issues') {
@@ -2235,17 +2249,22 @@ async function fetchIssues() {
 
   const res = await fetch(`/api/issues?${params.toString()}`, { headers: getAuthHeaders() });
   STATE.issues = await res.json();
-  const badgeEl = document.getElementById('issuesCountBadge');
+  const badgeEl = document.getElementById('issuesCountBadge') || document.getElementById('tabCountIssues');
   if (badgeEl) {
-    badgeEl.textContent = STATE.issues.length > 0 ? String(STATE.issues.length) : '';
-    badgeEl.classList.toggle('hidden', STATE.issues.length === 0);
+    badgeEl.textContent = String(STATE.issues.length);
   }
   renderIssues();
 }
 
-function renderIssues() {
+function renderIssues(forceRender = false) {
   const container = document.getElementById('issuesListContainer') || document.getElementById('issuesContainer');
   if (!container) return;
+  const tabSec = document.getElementById('tabContent-issues');
+  if (!forceRender && tabSec && tabSec.classList.contains('hidden')) {
+    container._needsRender = true;
+    return;
+  }
+  container._needsRender = false;
   if (STATE.issues.length === 0) {
     container.innerHTML = `
       <div class="bg-[#1d2430] border border-white/10 rounded-2xl p-8 text-center space-y-3">
